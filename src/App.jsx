@@ -1,15 +1,22 @@
-import styles from './App.module.css'
+import { Routes, Route } from 'react-router-dom';
+
+import Home from './pages/home';
+import Atividades from './pages/atividades';
+import Exemplos from './pages/exemplos';
+
 
 function App() {
+
   return (
-    <div>
-      <h1>Home</h1>
-      <p>Exemplo paràgrafo</p>
-      <h2 className={styles.titulo2}>Exemplo h2</h2>
-      <h3>Exemplo h3</h3>
-      <label htmlFor=''>Exemplo label</label>
-    </div>
+    <Routes>
+
+      <Route path="/" element={<Home />} />
+
+      <Route path="/atividades" element={<Atividades />} />
+      <Route path="/exemplos" element={<Exemplos />} />
+
+    </Routes>
   )
 }
 
-export default App
+export default App;
