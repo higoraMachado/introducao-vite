@@ -1,22 +1,17 @@
 import { Routes, Route } from 'react-router-dom';
 
-import Home from './pages/home';
-import Atividades from './pages/atividades';
-import Exemplos from './pages/exemplos';
-
+import Login from './pages/login';
+import Agendamento from './pages/agendamento';
 
 function App() {
-
   return (
     <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
 
-      <Route path="/" element={<Home />} />
-
-      <Route path="/atividades" element={<Atividades />} />
-      <Route path="/exemplos" element={<Exemplos />} />
-
+      <Route path="/agendamento" element={<Agendamento />} />
     </Routes>
-  )
+  );
 }
 
 export default App;
