@@ -1,0 +1,839 @@
+/* =========================================
+   HOPE BARBEARIA
+   DASHBOARD DO CLIENTE
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  width: 100%;
+
+  background: #f3f3f3;
+  color: #171717;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.dashboard-header {
+  width: 100%;
+  min-height: 78px;
+
+  background: #111111;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 42px;
+
+  border-bottom: 1px solid #292929;
+}
+
+.dashboard-logo {
+  width: 220px;
+
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-logo img {
+  width: 145px;
+  max-height: 58px;
+
+  object-fit: contain;
+  object-position: left center;
+
+  display: block;
+}
+
+.dashboard-title {
+  text-align: center;
+}
+
+.dashboard-title h1 {
+  margin: 0;
+
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.dashboard-title p {
+  margin: 4px 0 0;
+
+  color: #a9a9a9;
+  font-size: 12px;
+}
+
+.dashboard-user {
+  min-width: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #111111;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info strong {
+  font-size: 13px;
+}
+
+.user-info span {
+  margin-top: 2px;
+
+  color: #999999;
+  font-size: 11px;
+}
+
+/* =========================================
+   CONTEÚDO
+========================================= */
+
+.dashboard-content {
+  width: 100%;
+  max-width: 1450px;
+
+  margin: 0 auto;
+
+  padding: 36px 42px 60px;
+}
+
+.dashboard-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 26px;
+}
+
+.heading-label {
+  display: block;
+
+  color: #777777;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 7px;
+}
+
+.dashboard-heading h2 {
+  margin: 0;
+
+  font-size: 30px;
+  line-height: 1.15;
+
+  font-weight: 750;
+}
+
+.dashboard-heading p {
+  margin: 8px 0 0;
+
+  color: #777777;
+  font-size: 14px;
+}
+
+/* =========================================
+   BOTÃO AGENDAR
+========================================= */
+
+.btn-agendar {
+  min-height: 46px;
+
+  padding: 0 22px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #171717;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  transition: 0.2s;
+}
+
+.btn-agendar:hover {
+  background: #303030;
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.dashboard-card {
+  background: #ffffff;
+
+  border: 1px solid #e1e1e1;
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.035);
+}
+
+/* =========================================
+   PRÓXIMO AGENDAMENTO
+========================================= */
+
+.next-card {
+  overflow: hidden;
+
+  margin-bottom: 20px;
+}
+
+.card-header {
+  padding: 22px;
+
+  background: #171717;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-label {
+  display: block;
+
+  color: #999999;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.card-header h3,
+.section-header h3 {
+  margin: 5px 0 0;
+
+  font-size: 17px;
+}
+
+.card-icon {
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid #555555;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+}
+
+.next-content {
+  padding: 22px;
+
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+
+  gap: 30px;
+
+  align-items: center;
+}
+
+.appointment-date {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+}
+
+.date-icon {
+  width: 55px;
+  height: 55px;
+
+  border-radius: 9px;
+
+  background: #f0f0f0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+}
+
+.appointment-date div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-date small,
+.appointment-info small {
+  color: #999999;
+
+  font-size: 10px;
+
+  margin-bottom: 4px;
+}
+
+.appointment-date strong {
+  font-size: 19px;
+}
+
+.appointment-date span {
+  color: #777777;
+
+  font-size: 12px;
+
+  margin-top: 3px;
+}
+
+.appointment-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+
+  padding-left: 25px;
+
+  border-left: 1px solid #e5e5e5;
+}
+
+.appointment-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-info strong {
+  font-size: 12px;
+}
+
+/* =========================================
+   SEM AGENDAMENTO
+========================================= */
+
+.no-appointment {
+  min-height: 110px;
+
+  padding: 22px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+}
+
+.no-appointment > span {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+
+  background: #f0f0f0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+}
+
+.no-appointment div {
+  flex: 1;
+}
+
+.no-appointment strong {
+  font-size: 13px;
+}
+
+.no-appointment p {
+  margin: 5px 0 0;
+
+  color: #888888;
+
+  font-size: 11px;
+}
+
+.btn-small {
+  min-height: 39px;
+
+  padding: 0 16px;
+
+  border: 1px solid #171717;
+  border-radius: 7px;
+
+  background: #171717;
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.dashboard-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.25fr)
+    minmax(0, 1fr);
+
+  gap: 20px;
+}
+
+/* =========================================
+   HEADER DAS SEÇÕES
+========================================= */
+
+.history-card,
+.promotions-card {
+  padding: 22px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.section-header .card-label {
+  color: #999999;
+}
+
+.section-header h3 {
+  font-size: 16px;
+}
+
+.view-all {
+  border: none;
+
+  background: transparent;
+  color: #777777;
+
+  cursor: pointer;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.view-all:hover {
+  color: #171717;
+}
+
+/* =========================================
+   HISTÓRICO
+========================================= */
+
+.history-list {
+  border-top: 1px solid #eeeeee;
+}
+
+.history-item {
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-icon {
+  width: 36px;
+  height: 36px;
+
+  border-radius: 7px;
+
+  background: #f0f0f0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+}
+
+.history-main {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.history-main strong {
+  font-size: 12px;
+}
+
+.history-main span {
+  margin-top: 4px;
+
+  color: #999999;
+
+  font-size: 10px;
+}
+
+.history-price {
+  font-size: 12px;
+}
+
+/* =========================================
+   PROMOÇÕES
+========================================= */
+
+.promotion-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.promotion-item {
+  min-height: 105px;
+
+  padding: 15px;
+
+  border: 1px solid #e1e1e1;
+  border-radius: 9px;
+
+  display: flex;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  background: #fafafa;
+
+  transition: 0.2s;
+}
+
+.promotion-item:hover {
+  border-color: #999999;
+}
+
+.promotion-content {
+  min-width: 0;
+}
+
+.promotion-tag {
+  color: #777777;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.promotion-content h4 {
+  margin: 5px 0 4px;
+
+  font-size: 13px;
+}
+
+.promotion-content p {
+  margin: 0;
+
+  color: #888888;
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.promotion-price {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-end;
+  justify-content: center;
+
+  white-space: nowrap;
+}
+
+.promotion-price strong {
+  font-size: 15px;
+}
+
+.promotion-price span {
+  margin-top: 3px;
+
+  color: #aaaaaa;
+
+  font-size: 9px;
+
+  text-decoration: line-through;
+}
+
+/* =========================================
+   ACESSO RÁPIDO
+========================================= */
+
+.quick-actions {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.quick-actions button {
+  min-height: 72px;
+
+  padding: 14px;
+
+  border: 1px solid #dedede;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #171717;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  text-align: left;
+
+  transition: 0.2s;
+}
+
+.quick-actions button:hover {
+  background: #fafafa;
+
+  border-color: #999999;
+
+  transform: translateY(-1px);
+}
+
+.quick-actions button > span {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  border-radius: 7px;
+
+  background: #f0f0f0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+}
+
+.quick-actions button div {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-actions strong {
+  font-size: 12px;
+}
+
+.quick-actions small {
+  margin-top: 3px;
+
+  color: #999999;
+
+  font-size: 9px;
+}
+
+.quick-actions b {
+  color: #999999;
+
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 1100px) {
+  .dashboard-header {
+    padding: 0 25px;
+  }
+
+  .dashboard-content {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 850px) {
+  .dashboard-header {
+    padding: 15px 20px;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+  }
+
+  .dashboard-logo {
+    min-width: auto;
+  }
+
+  .dashboard-title {
+    order: 3;
+
+    width: 100%;
+
+    text-align: left;
+  }
+
+  .dashboard-user {
+    min-width: auto;
+
+    margin-left: auto;
+  }
+
+  .dashboard-content {
+    padding: 28px 18px 45px;
+  }
+
+  .dashboard-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .btn-agendar {
+    width: 100%;
+  }
+
+  .next-content {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-info {
+    padding-left: 0;
+
+    padding-top: 20px;
+
+    border-left: none;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-header {
+    min-height: auto;
+  }
+
+  .dashboard-user .user-info {
+    display: none;
+  }
+
+  .dashboard-heading h2 {
+    font-size: 24px;
+  }
+
+  .dashboard-heading p {
+    font-size: 12px;
+  }
+
+  .appointment-info {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .no-appointment {
+    flex-wrap: wrap;
+  }
+
+  .no-appointment .btn-small {
+    width: 100%;
+  }
+
+  .promotion-item {
+    flex-direction: column;
+  }
+
+  .promotion-price {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 400px) {
+  .dashboard-content {
+    padding: 20px 12px 35px;
+  }
+
+  .dashboard-heading h2 {
+    font-size: 21px;
+  }
+
+  .dashboard-card {
+    border-radius: 10px;
+  }
+
+  .card-header,
+  .history-card,
+  .promotions-card {
+    padding: 17px;
+  }
+}
