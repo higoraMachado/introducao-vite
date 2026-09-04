@@ -21,6 +21,58 @@
     sans-serif;
 }
 
+/* ==============================
+   FOTO DO USUÁRIO
+   ============================== */
+
+.input-foto {
+  display: none;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  border: 1px solid #dddddd;
+
+  transition: 0.2s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Letra B */
+
+.user-avatar span {
+  color: #111111;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Foto escolhida */
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
 /* =========================================
    HEADER
 ========================================= */
@@ -74,9 +126,9 @@
   color: #a9a9a9;
   font-size: 12px;
 }
-
 .header-user {
   min-width: 220px;
+  position: relative;
 
   display: flex;
   align-items: center;
@@ -85,20 +137,90 @@
   gap: 10px;
 }
 
+/* Área inteira do usuário */
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  background: transparent !important;
+  border: none;
+
+  padding: 5px;
+
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+/* Foto */
 .user-avatar {
   width: 38px;
   height: 38px;
 
+  min-width: 38px;
+
   border-radius: 50%;
 
   background: #ffffff;
-  color: #111111;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  overflow: hidden;
+
+  cursor: pointer;
+
+  border: 1px solid #dddddd;
+}
+
+/* Imagem */
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+/* Letra B */
+.user-avatar span {
+  color: #111111;
+
+  font-size: 14px;
   font-weight: 700;
+}
+
+/* Informações */
+.user-info {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+}
+
+.user-info strong {
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.user-info span {
+  color: #ffffff;
+
+  font-size: 11px;
+
+  margin-top: 3px;
+}
+
+/* Seta */
+.user-arrow {
+  color: #ffffff;
+
+  font-size: 18px;
 }
 
 .user-info {
@@ -1501,4 +1623,207 @@
   .modal-actions {
     grid-template-columns: 1fr;
   }
+
+/* Não deixar o botão mudar de aparência */
+
+.user-button:hover {
+  background: transparent;
+}
+
+/* Avatar */
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  border: 1px solid #ddd;
+
+  flex-shrink: 0;
+
+  transition: 0.2s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Letra B */
+
+.user-avatar span {
+  color: #111;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Foto */
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+/* Informações */
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  line-height: 1.2;
+}
+
+.user-info strong {
+  color: white;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.user-info span {
+  color: #999;
+
+  font-size: 11px;
+
+  margin-top: 3px;
+}
+
+/* Seta */
+
+.user-arrow {
+  color: white;
+
+  font-size: 18px;
+
+  margin-left: 4px;
+
+  transition: 0.2s;
+}
+
+/* Input escondido */
+
+.input-foto {
+  display: none;
+}
+
+
+/* ==============================
+   MENU DROPDOWN
+   ============================== */
+
+.user-menu {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  right: 0;
+
+  width: 190px;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  padding: 8px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.20);
+
+  border: 1px solid #e5e5e5;
+
+  z-index: 1000;
+
+  animation: menuAparecer 0.15s ease;
+}
+
+@keyframes menuAparecer {
+
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* Itens */
+
+.menu-item {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+
+  color: #222;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 11px 12px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 13px;
+
+  text-align: left;
+
+  box-sizing: border-box;
+
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  background: #f2f2f2;
+}
+
+.menu-item span {
+  flex: 1;
+}
+
+
+/* Separador */
+
+.menu-divider {
+  height: 1px;
+
+  background: #eeeeee;
+
+  margin: 5px 0;
+}
+
+
+/* Sair */
+
+.menu-sair {
+  color: #c62828;
+}
+
+.menu-sair:hover {
+  background: #fff0f0;
+}
 }
