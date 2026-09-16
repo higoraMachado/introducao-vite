@@ -138,6 +138,12 @@ function AppAgendamento() {
   const [servicoSelecionado, setServicoSelecionado] = useState(null);
   const [horarioSelecionado, setHorarioSelecionado] = useState(null);
 
+  const [fotoUsuario, setFotoUsuario] = useState(
+    localStorage.getItem('hope-foto-usuario') || null
+  );
+
+  const [menuUsuario, setMenuUsuario] = useState(false);
+
   const [agendamento, setAgendamento] = useState(null);
 
   const [modalConfirmacao, setModalConfirmacao] = useState(false);
@@ -239,6 +245,29 @@ function AppAgendamento() {
     barbeiroSelecionado,
     agendamento,
   ]);
+
+  function selecionarFotoUsuario(event) {
+  const arquivo = event.target.files[0];
+
+  if (!arquivo) return;
+
+  // Verifica se é realmente uma imagem
+  if (!arquivo.type.startsWith('image/')) {
+    alert('Escolha uma imagem válida.');
+    return;
+  }
+
+  const leitor = new FileReader();
+
+  leitor.onload = () => {
+    const imagem = leitor.result;
+
+    setFotoUsuario(imagem);
+    localStorage.setItem('hope-foto-usuario', imagem);
+  };
+
+  leitor.readAsDataURL(arquivo);
+}
 
   function selecionarData(data) {
     const dataString = dataParaString(data);
@@ -415,13 +444,88 @@ function AppAgendamento() {
         </div>
 
         <div className="header-user">
-          <div className="user-avatar">B</div>
 
-          <div className="user-info">
-            <strong>Barbeiro</strong>
-            <span>Minha conta</span>
-          </div>
-        </div>
+  {/* Input da foto */}
+  <input
+    type="file"
+    id="fotoUsuario"
+    accept="image/*"
+    onChange={selecionarFotoUsuario}
+    className="input-foto"
+  />
+
+  {/* Área clicável do usuário */}
+  <button
+    className="user-button"
+    onClick={() => setMenuUsuario(!menuUsuario)}
+  >
+    <label
+      htmlFor="fotoUsuario"
+      className="user-avatar"
+      onClick={(event) => event.stopPropagation()}
+      title="Alterar foto"
+    >
+      {fotoUsuario ? (
+        <img
+          src={fotoUsuario}
+          alt="Foto do usuário"
+        />
+      ) : (
+        <span>B</span>
+      )}
+    </label>
+
+    <div className="user-info">
+      <strong>Barbeiro</strong>
+      <span>Minha conta</span>
+    </div>
+
+    <span className="user-arrow">
+      {menuUsuario ? '⌃' : '⌄'}
+    </span>
+  </button>
+
+  {/* MENU */}
+  {menuUsuario && (
+    <div className="user-menu">
+
+      <label
+        htmlFor="fotoUsuario"
+        className="menu-item"
+        onClick={() => setMenuUsuario(false)}
+      >
+        📷
+        <span>Alterar foto</span>
+      </label>
+
+      <button
+        className="menu-item"
+        onClick={() => {
+          setMenuUsuario(false);
+          alert('Área de perfil em desenvolvimento.');
+        }}
+      >
+        👤
+        <span>Meu perfil</span>
+      </button>
+
+      <div className="menu-divider"></div>
+
+      <button
+        className="menu-item menu-sair"
+        onClick={() => {
+          setMenuUsuario(false);
+          alert('Saindo da conta...');
+        }}
+      >
+        🚪
+        <span>Sair</span>
+      </button>
+
+    </div>
+  )}
+
+</div>
       </header>
 
       {/* CONTEÚDO */}
