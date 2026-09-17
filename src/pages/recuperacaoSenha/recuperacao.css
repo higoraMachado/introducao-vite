@@ -1,0 +1,479 @@
+/* =========================================
+HOPE BARBEARIA
+TELA DE RECUPERAÇÃO DE SENHA
+========================================= */
+
+* {
+  box-sizing: border-box;
+  }
+
+.recuperacao-page {
+min-height: 100vh;
+width: 100%;
+
+background: #f3f3f3;
+color: #171717;
+
+font-family:
+Inter,
+system-ui,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+sans-serif;
+
+display: flex;
+flex-direction: column;
+}
+
+/* =========================================
+HEADER
+========================================= */
+
+.recuperacao-header {
+width: 100%;
+min-height: 78px;
+
+background: #111111;
+color: #ffffff;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+padding: 0 42px;
+
+border-bottom: 1px solid #292929;
+}
+
+.header-logo {
+width: 220px;
+
+display: flex;
+align-items: center;
+}
+
+.header-logo img {
+width: 145px;
+height: auto;
+
+max-height: 58px;
+
+object-fit: contain;
+object-position: left center;
+
+display: block;
+}
+
+.header-title {
+text-align: center;
+}
+
+.header-title h1 {
+margin: 0;
+
+font-size: 21px;
+font-weight: 700;
+}
+
+.header-title p {
+margin: 4px 0 0;
+
+color: #a9a9a9;
+
+font-size: 12px;
+}
+
+.header-spacer {
+width: 220px;
+}
+
+/* =========================================
+CONTEÚDO
+========================================= */
+
+.recuperacao-content {
+width: 100%;
+flex: 1;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+padding: 50px 20px;
+}
+
+/* =========================================
+CARD
+========================================= */
+
+.recuperacao-card {
+width: 100%;
+max-width: 450px;
+
+background: #ffffff;
+
+border: 1px solid #e1e1e1;
+border-radius: 12px;
+
+padding: 36px;
+
+box-shadow:
+0 3px 12px rgba(0, 0, 0, 0.05);
+
+text-align: center;
+
+animation: entrada 0.25s ease;
+}
+
+@keyframes entrada {
+from {
+opacity: 0;
+transform: translateY(10px);
+}
+
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* =========================================
+ÍCONE
+========================================= */
+
+.recuperacao-icon,
+.confirmacao-icon {
+width: 58px;
+height: 58px;
+
+margin: 0 auto 20px;
+
+border-radius: 50%;
+
+background: #171717;
+color: #ffffff;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+font-size: 24px;
+}
+
+.confirmacao-icon {
+font-size: 25px;
+}
+
+/* =========================================
+TÍTULOS
+========================================= */
+
+.heading-label {
+display: block;
+
+margin-bottom: 8px;
+
+color: #777777;
+
+font-size: 10px;
+font-weight: 800;
+
+letter-spacing: 2px;
+}
+
+.recuperacao-card h2 {
+margin: 0;
+
+font-size: 27px;
+line-height: 1.2;
+
+font-weight: 750;
+}
+
+.descricao {
+margin: 11px auto 26px;
+
+max-width: 350px;
+
+color: #777777;
+
+font-size: 13px;
+line-height: 1.6;
+}
+
+/* =========================================
+FORMULÁRIO
+========================================= */
+
+form {
+text-align: left;
+}
+
+.campo {
+display: flex;
+flex-direction: column;
+
+gap: 7px;
+}
+
+.campo label {
+color: #333333;
+
+font-size: 12px;
+font-weight: 700;
+}
+
+.campo input {
+width: 100%;
+height: 46px;
+
+padding: 0 14px;
+
+border: 1px solid #d8d8d8;
+border-radius: 8px;
+
+background: #ffffff;
+color: #171717;
+
+outline: none;
+
+font-size: 13px;
+
+transition:
+border 0.2s,
+box-shadow 0.2s;
+}
+
+.campo input::placeholder {
+color: #aaaaaa;
+}
+
+.campo input:focus {
+border-color: #171717;
+
+box-shadow:
+0 0 0 3px rgba(23, 23, 23, 0.08);
+}
+
+/* =========================================
+ERRO
+========================================= */
+
+.mensagem-erro {
+margin: 9px 0 0;
+
+color: #555555;
+
+font-size: 11px;
+}
+
+/* =========================================
+BOTÃO PRINCIPAL
+========================================= */
+
+.btn-recuperar {
+width: 100%;
+
+min-height: 46px;
+
+margin-top: 20px;
+
+border: 1px solid #171717;
+border-radius: 8px;
+
+background: #171717;
+color: #ffffff;
+
+cursor: pointer;
+
+font-size: 12px;
+font-weight: 700;
+
+transition:
+background 0.2s,
+transform 0.2s;
+}
+
+.btn-recuperar:hover {
+background: #333333;
+
+transform: translateY(-1px);
+}
+
+/* =========================================
+BOTÃO VOLTAR
+========================================= */
+
+.btn-voltar {
+width: 100%;
+
+margin-top: 13px;
+
+padding: 10px;
+
+border: none;
+
+background: transparent;
+color: #666666;
+
+cursor: pointer;
+
+font-size: 11px;
+font-weight: 600;
+
+transition: color 0.2s;
+}
+
+.btn-voltar:hover {
+color: #171717;
+}
+
+/* =========================================
+CONFIRMAÇÃO
+========================================= */
+
+.confirmacao .descricao {
+margin-bottom: 20px;
+}
+
+.email-confirmacao {
+width: 100%;
+
+margin-bottom: 20px;
+padding: 14px;
+
+background: #f2f2f2;
+
+border-radius: 8px;
+
+display: flex;
+flex-direction: column;
+
+gap: 5px;
+}
+
+.email-confirmacao span {
+color: #999999;
+
+font-size: 10px;
+}
+
+.email-confirmacao strong {
+color: #222222;
+
+font-size: 12px;
+
+word-break: break-word;
+}
+
+/* =========================================
+RODAPÉ
+========================================= */
+
+.recuperacao-footer {
+padding: 18px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+gap: 8px;
+
+color: #999999;
+
+font-size: 10px;
+}
+
+/* =========================================
+RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 850px) {
+
+.recuperacao-header {
+padding: 15px 20px;
+
+
+flex-wrap: wrap;
+
+gap: 15px;
+
+
+}
+
+.header-logo {
+width: auto;
+}
+
+.header-spacer {
+width: auto;
+}
+
+.header-title {
+order: 3;
+
+
+width: 100%;
+
+text-align: left;
+
+
+}
+
+.header-title h1 {
+font-size: 18px;
+}
+
+.recuperacao-content {
+padding: 35px 18px;
+}
+}
+
+@media (max-width: 600px) {
+
+.recuperacao-header {
+min-height: auto;
+}
+
+.header-logo img {
+width: 125px;
+}
+
+.recuperacao-card {
+padding: 28px 22px;
+}
+
+.recuperacao-card h2 {
+font-size: 23px;
+}
+
+.descricao {
+font-size: 12px;
+}
+}
+
+@media (max-width: 400px) {
+
+.recuperacao-content {
+padding: 25px 12px;
+}
+
+.recuperacao-card {
+padding: 25px 18px;
+}
+
+.recuperacao-icon,
+.confirmacao-icon {
+width: 52px;
+height: 52px;
+
+
+font-size: 21px;
+
+}
+
+.recuperacao-card h2 {
+font-size: 21px;
+}
+}
