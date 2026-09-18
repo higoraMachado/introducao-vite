@@ -1,171 +1,186 @@
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './recuperacao.css';
 import logoHope from '../../assets/logo-hope.png';
 
 function RecuperacaoSenha() {
-const [email, setEmail] = useState('');
-const [enviado, setEnviado] = useState(false);
-const [erro, setErro] = useState('');
+  const navigate = useNavigate();
 
-function solicitarRecuperacao(event) {
-event.preventDefault();
+  const [email, setEmail] = useState('');
+  const [enviado, setEnviado] = useState(false);
+  const [erro, setErro] = useState('');
 
-```
-if (!email.trim()) {
-  setErro('Digite seu e-mail para continuar.');
-  return;
-}
+  function solicitarRecuperacao(event) {
+    event.preventDefault();
 
-if (!email.includes('@') || !email.includes('.')) {
-  setErro('Digite um e-mail válido.');
-  return;
-}
+    if (!email.trim()) {
+      setErro('Digite seu e-mail para continuar.');
+      return;
+    }
 
-setErro('');
-setEnviado(true);
-```
+    if (!email.includes('@') || !email.includes('.')) {
+      setErro('Digite um e-mail válido.');
+      return;
+    }
 
-}
+    setErro('');
+    setEnviado(true);
+  }
 
-function voltar() {
-setEmail('');
-setErro('');
-setEnviado(false);
-}
+  function voltar() {
+    navigate('/login');
+  }
 
-return ( <main className="recuperacao-page">
+  return (
+    <main className="recuperacao-page">
 
-```
-  {/* HEADER */}
-  <header className="recuperacao-header">
-    <div className="header-logo">
-      <img
-        src={logoHope}
-        alt="Hope Barbearia"
-      />
-    </div>
+      {/* HEADER */}
+      <header className="recuperacao-header">
 
-    <div className="header-title">
-      <h1>Hope Barbearia</h1>
-      <p>Recuperação de senha</p>
-    </div>
-
-    <div className="header-spacer"></div>
-  </header>
-
-  {/* CONTEÚDO */}
-  <section className="recuperacao-content">
-
-    {!enviado ? (
-      <div className="recuperacao-card">
-
-        <div className="recuperacao-icon">
-          🔑
+        <div className="header-logo">
+          <img
+            src={logoHope}
+            alt="Hope Barbearia"
+          />
         </div>
 
-        <span className="heading-label">
-          RECUPERAÇÃO DE SENHA
-        </span>
+        <div className="header-title">
+          <h1>Hope Barbearia</h1>
+          <p>Recuperação de senha</p>
+        </div>
 
-        <h2>Esqueceu sua senha?</h2>
+        <div className="header-spacer"></div>
 
-        <p className="descricao">
-          Digite o e-mail cadastrado na sua conta.
-          Enviaremos as instruções para você criar
-          uma nova senha.
-        </p>
+      </header>
 
-        <form onSubmit={solicitarRecuperacao}>
+      {/* CONTEÚDO */}
+      <section className="recuperacao-content">
 
-          <div className="campo">
-            <label htmlFor="email">
-              E-mail
-            </label>
+        {!enviado ? (
 
-            <input
-              id="email"
-              type="email"
-              placeholder="Digite seu e-mail"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                setErro('');
-              }}
-            />
+          <div className="recuperacao-card">
+
+            <div className="recuperacao-icon">
+              🔑
+            </div>
+
+            <span className="heading-label">
+              RECUPERAÇÃO DE SENHA
+            </span>
+
+            <h2>Esqueceu sua senha?</h2>
+
+            <p className="descricao">
+              Digite o e-mail cadastrado na sua conta.
+              Enviaremos as instruções para você criar
+              uma nova senha.
+            </p>
+
+            <form onSubmit={solicitarRecuperacao}>
+
+              <div className="campo">
+
+                <label htmlFor="email">
+                  E-mail
+                </label>
+
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Digite seu e-mail"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setErro('');
+                  }}
+                />
+
+              </div>
+
+              {erro && (
+                <p className="mensagem-erro">
+                  {erro}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="btn-recuperar"
+              >
+                Solicitar recuperação
+              </button>
+
+            </form>
+
+            <button
+              type="button"
+              className="btn-voltar"
+              onClick={voltar}
+            >
+              ← Voltar para o login
+            </button>
+
           </div>
 
-          {erro && (
-            <p className="mensagem-erro">
-              {erro}
+        ) : (
+
+          <div className="recuperacao-card confirmacao">
+
+            <div className="confirmacao-icon">
+              ✓
+            </div>
+
+            <span className="heading-label">
+              SOLICITAÇÃO ENVIADA
+            </span>
+
+            <h2>Verifique seu e-mail</h2>
+
+            <p className="descricao">
+              Se o e-mail informado estiver cadastrado,
+              você receberá as instruções para recuperar
+              sua senha.
             </p>
-          )}
 
-          <button
-            type="submit"
-            className="btn-recuperar"
-          >
-            Solicitar recuperação
-          </button>
+            <div className="email-confirmacao">
 
-        </form>
+              <span>E-mail informado</span>
 
-        <button
-          type="button"
-          className="btn-voltar"
-          onClick={voltar}
-        >
-          ← Voltar para o login
-        </button>
+              <strong>
+                {email}
+              </strong>
 
-      </div>
-    ) : (
-      <div className="recuperacao-card confirmacao">
+            </div>
 
-        <div className="confirmacao-icon">
-          ✓
-        </div>
+            <button
+              type="button"
+              className="btn-recuperar"
+              onClick={voltar}
+            >
+              Voltar para o login
+            </button>
 
-        <span className="heading-label">
-          SOLICITAÇÃO ENVIADA
-        </span>
+          </div>
 
-        <h2>Verifique seu e-mail</h2>
+        )}
 
-        <p className="descricao">
-          Se o e-mail informado estiver cadastrado,
-          você receberá as instruções para recuperar
-          sua senha.
-        </p>
+      </section>
 
-        <div className="email-confirmacao">
-          <span>E-mail informado</span>
-          <strong>{email}</strong>
-        </div>
+      {/* RODAPÉ */}
+      <footer className="recuperacao-footer">
 
-        <button
-          type="button"
-          className="btn-recuperar"
-          onClick={voltar}
-        >
-          Voltar para o login
-        </button>
+        <span>Hope Barbearia</span>
 
-      </div>
-    )}
+        <span>•</span>
 
-  </section>
+        <span>Agendamento e controle</span>
 
-  {/* RODAPÉ */}
-  <footer className="recuperacao-footer">
-    <span>Hope Barbearia</span>
-    <span>•</span>
-    <span>Agendamento e controle</span>
-  </footer>
+      </footer>
 
-</main>
-
-
-);
+    </main>
+  );
 }
 
 export default RecuperacaoSenha;
+

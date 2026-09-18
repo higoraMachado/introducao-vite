@@ -343,6 +343,57 @@ body {
     0 0 0 3px rgba(0, 0, 0, 0.06);
 }
 
+/* ========================================
+   CAMPO E-MAIL
+======================================== */
+
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-container input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #d5d5d5;
+  border-radius: 9px;
+  background: #ffffff;
+  padding: 0 50px 0 15px;
+  font-size: 15px;
+  color: #222222;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-container input::placeholder {
+  color: #999999;
+}
+
+.input-container input:focus {
+  border-color: #222222;
+
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ÍCONE DO USUÁRIO */
+
+.email-icon {
+  position: absolute;
+  right: 17px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #888888;
+
+  display: flex;
+  align-items: center;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
 
 /* ========================================
    ÍCONE INPUT
@@ -351,7 +402,7 @@ body {
 .input-icon {
   position: absolute;
 
-  left: 17px;
+  right: 50px;
   top: 50%;
 
   transform: translateY(-50%);
@@ -361,6 +412,8 @@ body {
   display: flex;
 
   pointer-events: none;
+
+  z-index: 2;
 }
 
 
@@ -370,23 +423,32 @@ body {
 
 .password-button {
   position: absolute;
-
   right: 15px;
   top: 50%;
-
   transform: translateY(-50%);
 
+  width: 30px;
+  height: 30px;
+
   border: none;
-
   background: transparent;
-
-  font-size: 21px;
 
   color: #777777;
 
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  cursor: pointer;
   padding: 0;
+}
+
+.password-button:hover {
+  color: #222222;
+}
+
+.password-button svg {
+  display: block;
 }
 
 
