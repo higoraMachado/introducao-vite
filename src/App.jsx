@@ -10,6 +10,7 @@ import CadastroBarbeiro from './pages/CadastroBarbeiro/CadastroBarbeiro';
 import Servicos from './pages/listarServico/Servicos';
 import CadastroServico from './pages/CadastroServico/CadastroServico';
 import Estoque from './pages/estoque/Estoque';
+import PainelAdministracao from './pages/admpainel/adm';
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
      <Route path="/Servicos" element={<Servicos/>}/>
       <Route path="/CadastroServico" element={<CadastroServico/>}/>
       <Route path="/Estoque" element={<Estoque/>}/>
-     
+      <Route path="/PainelAdministracao" element={<PainelAdministracao/>}/>
     </Routes>
   );
 }
