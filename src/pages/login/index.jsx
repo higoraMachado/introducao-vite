@@ -34,7 +34,7 @@ function Login() {
   // ========================================
 
   function recuperarSenha() {
-    navigate('/recuperacao');
+    navigate('/recuperacaoSenha');
   }
 
   // ========================================
@@ -134,62 +134,63 @@ function Login() {
 
           <form onSubmit={handleSubmit}>
 
-           {/* ========================================
-    E-MAIL
-======================================== */}
+            {/* ========================================
+                E-MAIL
+            ======================================== */}
 
-<div className="form-group">
+            <div className="form-group">
 
-  <label htmlFor="email">
-    E-mail
-  </label>
+              <label htmlFor="email">
+                E-mail
+              </label>
 
-  <div className="input-container">
+              <div className="input-container">
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Digite seu e-mail"
-      value={email}
-      onChange={(event) => setEmail(event.target.value)}
-      required
-    />
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Digite seu e-mail"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
 
-    {/* ÍCONE DE USUÁRIO
-        APARECE SOMENTE QUANDO VAZIO */}
+                {/* ÍCONE DE USUÁRIO
+                    APARECE SOMENTE QUANDO VAZIO */}
 
-    {!email && (
-      <span className="email-icon">
+                {!email && (
+                  <span className="email-icon">
 
-        <svg
-          width="21"
-          height="21"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
+                    <svg
+                      width="21"
+                      height="21"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
 
-          <circle
-            cx="12"
-            cy="8"
-            r="4"
-          />
+                      <circle
+                        cx="12"
+                        cy="8"
+                        r="4"
+                      />
 
-          <path
-            d="M4 21c0-4 3.5-7 8-7s8 3 8 7"
-          />
+                      <path
+                        d="M4 21c0-4 3.5-7 8-7s8 3 8 7"
+                      />
 
-        </svg>
+                    </svg>
 
-      </span>
-    )}
+                  </span>
+                )}
 
-  </div>
+              </div>
 
-</div>
+            </div>
+
 
             {/* ========================================
                 SENHA
@@ -256,50 +257,72 @@ function Login() {
                     BOTÃO MOSTRAR / OCULTAR SENHA
                 ======================================== */}
 
-   <button
-  type="button"
-  className="password-button"
-  onClick={() => setMostrarSenha(!mostrarSenha)}
-  aria-label={
-    mostrarSenha
-      ? 'Ocultar senha'
-      : 'Mostrar senha'
-  }
->
-  {mostrarSenha ? (
-    // OLHO FECHADO
-    <svg
-      width="21"
-      height="21"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 3l18 18" />
-      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
-      <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-0.4 1.4-1.2 2.6-2.2 3.7" />
-      <path d="M6.6 6.6C4.7 7.8 3.4 9.5 2 12c1 4 5 8 10 8 1.4 0 2.7-.3 3.9-.9" />
-    </svg>
-  ) : (
-    // OLHO ABERTO
-    <svg
-      width="21"
-      height="21"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  )}
-</button>
+                <button
+                  type="button"
+                  className="password-button"
+                  onClick={() =>
+                    setMostrarSenha(!mostrarSenha)
+                  }
+                  aria-label={
+                    mostrarSenha
+                      ? 'Ocultar senha'
+                      : 'Mostrar senha'
+                  }
+                >
+
+                  {mostrarSenha ? (
+
+                    // OLHO FECHADO
+
+                    <svg
+                      width="21"
+                      height="21"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+
+                      <path d="M3 3l18 18" />
+
+                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+
+                      <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-0.4 1.4-1.2 2.6-2.2 3.7" />
+
+                      <path d="M6.6 6.6C4.7 7.8 3.4 9.5 2 12c1 4 5 8 10 8 1.4 0 2.7-.3 3.9-.9" />
+
+                    </svg>
+
+                  ) : (
+
+                    // OLHO ABERTO
+
+                    <svg
+                      width="21"
+                      height="21"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                      />
+
+                    </svg>
+
+                  )}
+
+                </button>
 
               </div>
 
@@ -333,7 +356,9 @@ function Login() {
               </label>
 
 
-              {/* ESQUECI MINHA SENHA */}
+              {/* ========================================
+                  ESQUECI MINHA SENHA
+              ======================================== */}
 
               <button
                 type="button"

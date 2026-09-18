@@ -1,20 +1,84 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./adm.css";
 import logo from "../../assets/logo-hope.png";
 
 function Administrador() {
+  const navigate = useNavigate();
+
   const [paginaAtiva, setPaginaAtiva] = useState("Dashboard");
 
+  // =========================
+  // MENU DO ADMINISTRADOR
+  // =========================
+
   const menu = [
-    { nome: "Dashboard", icone: "▦" },
-    { nome: "Agendamentos", icone: "▣" },
-    { nome: "Clientes", icone: "♙" },
-    { nome: "Barbeiros", icone: "♟" },
-    { nome: "Serviços", icone: "✂" },
-    { nome: "Financeiro", icone: "R$" },
-    { nome: "Relatórios", icone: "▤" },
-    { nome: "Configurações", icone: "⚙" },
+    {
+      nome: "Dashboard",
+      icone: "▦",
+      rota: "/PainelAdministracao",
+    },
+    {
+      nome: "Agendamentos",
+      icone: "▣",
+      rota: "/agendamento",
+    },
+    {
+      nome: "Clientes",
+      icone: "♙",
+      rota: "/GerenciamentoCliente",
+    },
+    {
+      nome: "Barbeiros",
+      icone: "♟",
+      rota: "/barbeiros",
+    },
+    {
+      nome: "Serviços",
+      icone: "✂",
+      rota: "/Servicos",
+    },
+    {
+      nome: "Estoque",
+      icone: "▣",
+      rota: "/Estoque",
+    },
+    {
+      nome: "Financeiro",
+      icone: "R$",
+      rota: null,
+    },
+    {
+      nome: "Relatórios",
+      icone: "▤",
+      rota: null,
+    },
+    {
+      nome: "Configurações",
+      icone: "⚙",
+      rota: null,
+    },
   ];
+
+  // =========================
+  // FUNÇÃO PARA NAVEGAR
+  // =========================
+
+  function navegar(item) {
+    setPaginaAtiva(item.nome);
+
+    if (item.rota) {
+      navigate(item.rota);
+    }
+  }
+
+  // =========================
+  // LOGOUT
+  // =========================
+
+  function sair() {
+    navigate("/login");
+  }
 
   return (
     <div className="admin-page">
@@ -71,7 +135,7 @@ function Administrador() {
                     ? "sidebar-item active"
                     : "sidebar-item"
                 }
-                onClick={() => setPaginaAtiva(item.nome)}
+                onClick={() => navegar(item)}
               >
 
                 <span className="sidebar-icon">
@@ -88,9 +152,14 @@ function Administrador() {
 
           </nav>
 
+          {/* ================= SAIR ================= */}
+
           <div className="sidebar-footer">
 
-            <button className="logout-button">
+            <button
+              className="logout-button"
+              onClick={sair}
+            >
               <span>↪</span>
               Sair
             </button>
@@ -201,22 +270,26 @@ function Administrador() {
 
           <section className="admin-dashboard-grid">
 
-
-            {/* AGENDAMENTOS */}
+            {/* ================= AGENDAMENTOS ================= */}
 
             <div className="admin-card">
 
               <div className="admin-card-header">
 
                 <div>
+
                   <span className="admin-card-label">
                     AGENDA
                   </span>
 
                   <h3>Próximos agendamentos</h3>
+
                 </div>
 
-                <button className="admin-link">
+                <button
+                  className="admin-link"
+                  onClick={() => navigate("/agendamento")}
+                >
                   Ver todos
                 </button>
 
@@ -305,18 +378,20 @@ function Administrador() {
             </div>
 
 
-            {/* RESUMO */}
+            {/* ================= RESUMO ================= */}
 
             <div className="admin-card">
 
               <div className="admin-card-header">
 
                 <div>
+
                   <span className="admin-card-label">
                     RESUMO
                   </span>
 
                   <h3>Informações da barbearia</h3>
+
                 </div>
 
               </div>
@@ -358,11 +433,13 @@ function Administrador() {
             <div className="admin-card-header">
 
               <div>
+
                 <span className="admin-card-label">
                   ACESSO RÁPIDO
                 </span>
 
                 <h3>Gerenciamento</h3>
+
               </div>
 
             </div>
@@ -370,8 +447,13 @@ function Administrador() {
 
             <div className="quick-grid">
 
+              {/* AGENDAMENTOS */}
+
               <button
-                onClick={() => setPaginaAtiva("Agendamentos")}
+                onClick={() => {
+                  setPaginaAtiva("Agendamentos");
+                  navigate("/agendamento");
+                }}
               >
                 <span>📅</span>
                 <strong>Agendamentos</strong>
@@ -379,8 +461,13 @@ function Administrador() {
               </button>
 
 
+              {/* CLIENTES */}
+
               <button
-                onClick={() => setPaginaAtiva("Clientes")}
+                onClick={() => {
+                  setPaginaAtiva("Clientes");
+                  navigate("/GerenciamentoCliente");
+                }}
               >
                 <span>👤</span>
                 <strong>Clientes</strong>
@@ -388,8 +475,13 @@ function Administrador() {
               </button>
 
 
+              {/* BARBEIROS */}
+
               <button
-                onClick={() => setPaginaAtiva("Barbeiros")}
+                onClick={() => {
+                  setPaginaAtiva("Barbeiros");
+                  navigate("/barbeiros");
+                }}
               >
                 <span>✂</span>
                 <strong>Barbeiros</strong>
@@ -397,8 +489,13 @@ function Administrador() {
               </button>
 
 
+              {/* SERVIÇOS */}
+
               <button
-                onClick={() => setPaginaAtiva("Serviços")}
+                onClick={() => {
+                  setPaginaAtiva("Serviços");
+                  navigate("/Servicos");
+                }}
               >
                 <span>🧴</span>
                 <strong>Serviços</strong>
@@ -406,21 +503,53 @@ function Administrador() {
               </button>
 
 
+              {/* ESTOQUE */}
+
               <button
-                onClick={() => setPaginaAtiva("Financeiro")}
+                onClick={() => {
+                  setPaginaAtiva("Estoque");
+                  navigate("/Estoque");
+                }}
               >
-                <span>R$</span>
-                <strong>Financeiro</strong>
-                <small>Acompanhar valores</small>
+                <span>📦</span>
+                <strong>Estoque</strong>
+                <small>Gerenciar produtos</small>
               </button>
 
 
+              {/* FINANCEIRO */}
+
               <button
-                onClick={() => setPaginaAtiva("Relatórios")}
+                disabled
+                title="Rota ainda não cadastrada"
+              >
+                <span>R$</span>
+                <strong>Financeiro</strong>
+                <small>Em desenvolvimento</small>
+              </button>
+
+
+              {/* RELATÓRIOS */}
+
+              <button
+                disabled
+                title="Rota ainda não cadastrada"
               >
                 <span>▤</span>
                 <strong>Relatórios</strong>
-                <small>Consultar dados</small>
+                <small>Em desenvolvimento</small>
+              </button>
+
+
+              {/* CONFIGURAÇÕES */}
+
+              <button
+                disabled
+                title="Rota ainda não cadastrada"
+              >
+                <span>⚙</span>
+                <strong>Configurações</strong>
+                <small>Em desenvolvimento</small>
               </button>
 
             </div>
