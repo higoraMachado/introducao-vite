@@ -1,0 +1,1183 @@
+/* =====================================================
+   SERVIÇOS
+   DESKTOP FIRST
+===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+.servicos-page {
+  min-height: 100vh;
+  width: 100%;
+
+  background: #f3f3f3;
+  color: #171717;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.servicos-header {
+  width: 100%;
+  height: 78px;
+
+  background: #111111;
+  color: #ffffff;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  padding: 0 42px;
+
+  border-bottom: 1px solid #292929;
+}
+
+
+/* LOGO */
+
+.servicos-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.servicos-logo img {
+  width: 145px;
+  height: 58px;
+
+  object-fit: contain;
+  object-position: left center;
+
+  display: block;
+}
+
+
+/* TÍTULO */
+
+.servicos-title {
+  text-align: center;
+}
+
+.servicos-title h1 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.servicos-title p {
+  margin: 5px 0 0;
+
+  color: #a9a9a9;
+
+  font-size: 12px;
+}
+
+
+/* USUÁRIO */
+
+.servicos-user {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #111111;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.user-info strong {
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.user-info span {
+  color: #999999;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   ÁREA PRINCIPAL
+===================================================== */
+
+.servicos-content {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto;
+
+  padding: 40px 42px 70px;
+}
+
+
+/* =====================================================
+   TÍTULO DA PÁGINA
+===================================================== */
+
+.servicos-heading {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 28px;
+}
+
+.heading-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #777777;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.servicos-heading h2 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 32px;
+  font-weight: 750;
+
+  line-height: 1.15;
+}
+
+.servicos-heading p {
+  margin: 9px 0 0;
+
+  color: #707070;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   BOTÃO NOVO SERVIÇO
+===================================================== */
+
+.btn-novo-servico {
+  height: 46px;
+
+  padding: 0 22px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #111111;
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-novo-servico:hover {
+  background: #292929;
+
+  transform: translateY(-1px);
+}
+
+.btn-novo-servico:active {
+  transform: translateY(0);
+}
+
+
+/* =====================================================
+   CARD PRINCIPAL
+===================================================== */
+
+.servicos-card {
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid #dedede;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.045);
+}
+
+
+/* =====================================================
+   CABEÇALHO DO CARD
+===================================================== */
+
+.card-header {
+  min-height: 82px;
+
+  padding: 18px 24px;
+
+  background: #171717;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #a5a5a5;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.card-header h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.total-servicos {
+  padding: 8px 13px;
+
+  border: 1px solid #484848;
+  border-radius: 7px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   FILTROS
+===================================================== */
+
+.servicos-filtros {
+  width: 100%;
+
+  padding: 18px 22px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-bottom: 1px solid #e3e3e3;
+}
+
+
+/* PESQUISA */
+
+.campo-pesquisa {
+  height: 42px;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 13px;
+
+  background: #ffffff;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 7px;
+
+  transition: 0.2s ease;
+}
+
+.campo-pesquisa:focus-within {
+  border-color: #888888;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.035);
+}
+
+.campo-pesquisa span {
+  color: #777777;
+
+  font-size: 20px;
+}
+
+.campo-pesquisa input {
+  width: 100%;
+  height: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #222222;
+
+  font-family: inherit;
+
+  font-size: 14px;
+}
+
+.campo-pesquisa input::placeholder {
+  color: #999999;
+}
+
+
+/* FILTRO */
+
+.servicos-filtros select {
+  width: 170px;
+  height: 42px;
+
+  padding: 0 12px;
+
+  background: #ffffff;
+
+  border: 1px solid #d5d5d5;
+  border-radius: 7px;
+
+  color: #333333;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   TABELA
+===================================================== */
+
+.tabela-container {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.servicos-tabela {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: auto;
+}
+
+
+/* CABEÇALHO */
+
+.servicos-tabela thead {
+  background: #fafafa;
+}
+
+.servicos-tabela th {
+  height: 48px;
+
+  padding: 0 24px;
+
+  border-bottom: 1px solid #dedede;
+
+  color: #666666;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+
+/* CORPO */
+
+.servicos-tabela td {
+  height: 70px;
+
+  padding: 0 24px;
+
+  border-bottom: 1px solid #e7e7e7;
+
+  color: #333333;
+
+  font-size: 15px;
+
+  vertical-align: middle;
+}
+
+.servicos-tabela tbody tr {
+  transition: background 0.15s ease;
+}
+
+.servicos-tabela tbody tr:hover {
+  background: #fafafa;
+}
+
+.servicos-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =====================================================
+   COLUNAS
+===================================================== */
+
+/* SERVIÇO */
+
+.servicos-tabela th:nth-child(1),
+.servicos-tabela td:nth-child(1) {
+  width: 34%;
+}
+
+
+/* DURAÇÃO */
+
+.servicos-tabela th:nth-child(2),
+.servicos-tabela td:nth-child(2) {
+  width: 17%;
+}
+
+
+/* VALOR */
+
+.servicos-tabela th:nth-child(3),
+.servicos-tabela td:nth-child(3) {
+  width: 17%;
+}
+
+
+/* STATUS */
+
+.servicos-tabela th:nth-child(4),
+.servicos-tabela td:nth-child(4) {
+  width: 14%;
+}
+
+
+/* AÇÕES */
+
+.servicos-tabela th:nth-child(5),
+.servicos-tabela td:nth-child(5) {
+  width: 18%;
+}
+
+
+/* =====================================================
+   NOME
+===================================================== */
+
+.nome-servico {
+  color: #222222;
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+
+/* =====================================================
+   DURAÇÃO
+===================================================== */
+
+.duracao-servico {
+  color: #555555;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   VALOR
+===================================================== */
+
+.valor-servico {
+  color: #222222;
+
+  font-size: 15px;
+  font-weight: 650;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 58px;
+  min-height: 27px;
+
+  padding: 4px 11px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  white-space: nowrap;
+}
+
+.status-ativo {
+  background: #eeeeee;
+
+  color: #222222;
+}
+
+.status-inativo {
+  background: #f6f6f6;
+
+  border: 1px solid #d9d9d9;
+
+  color: #777777;
+}
+
+
+/* =====================================================
+   AÇÕES
+===================================================== */
+
+.acoes {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  white-space: nowrap;
+}
+
+.acoes button {
+  height: 34px;
+
+  padding: 0 13px;
+
+  border-radius: 6px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+/* EDITAR */
+
+.acao-editar {
+  border: 1px solid #111111;
+
+  background: #111111;
+  color: #ffffff;
+}
+
+.acao-editar:hover {
+  background: #2c2c2c;
+}
+
+
+/* DESATIVAR */
+
+.acao-desativar {
+  border: 1px solid #d1d1d1;
+
+  background: #ffffff;
+  color: #555555;
+}
+
+.acao-desativar:hover {
+  background: #f1f1f1;
+}
+
+
+/* ATIVAR */
+
+.acao-ativar {
+  border: 1px solid #222222;
+
+  background: #ffffff;
+  color: #222222;
+}
+
+.acao-ativar:hover {
+  background: #eeeeee;
+}
+
+
+/* =====================================================
+   NENHUM SERVIÇO
+===================================================== */
+
+.nenhum-servico {
+  height: 260px;
+
+  text-align: center !important;
+}
+
+.nenhum-servico > div {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.nenhum-servico span {
+  margin-bottom: 12px;
+
+  color: #777777;
+
+  font-size: 30px;
+}
+
+.nenhum-servico strong {
+  color: #333333;
+
+  font-size: 16px;
+}
+
+.nenhum-servico p {
+  margin: 7px 0 0;
+
+  color: #888888;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  padding: 30px;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  width: 100%;
+  max-width: 700px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =====================================================
+   HEADER MODAL
+===================================================== */
+
+.modal-header {
+  min-height: 82px;
+
+  padding: 18px 24px;
+
+  background: #171717;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.modal-fechar {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font-size: 27px;
+
+  cursor: pointer;
+}
+
+.modal-fechar:hover {
+  background: #2d2d2d;
+}
+
+
+/* =====================================================
+   FORMULÁRIO DO MODAL
+===================================================== */
+
+.servico-form {
+  padding: 30px;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 23px 25px;
+}
+
+.form-full {
+  grid-column: 1 / -1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.form-group label {
+  color: #333333;
+
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.form-group input {
+  width: 100%;
+  height: 45px;
+
+  padding: 0 13px;
+
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #222222;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #777777;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.04);
+}
+
+.form-group input::placeholder {
+  color: #999999;
+}
+
+
+/* =====================================================
+   INPUT DURAÇÃO
+===================================================== */
+
+.input-com-sufixo {
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+.input-com-sufixo:focus-within {
+  border-color: #777777;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.04);
+}
+
+.input-com-sufixo input {
+  flex: 1;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0 13px;
+
+  border: none;
+  outline: none;
+
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.input-com-sufixo span {
+  padding-right: 13px;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   INPUT VALOR
+===================================================== */
+
+.input-com-prefixo {
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  overflow: hidden;
+}
+
+.input-com-prefixo:focus-within {
+  border-color: #777777;
+
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.04);
+}
+
+.input-com-prefixo span {
+  padding-left: 13px;
+
+  color: #555555;
+
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.input-com-prefixo input {
+  flex: 1;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0 10px;
+
+  border: none;
+  outline: none;
+
+  font-family: inherit;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   FOOTER DO MODAL
+===================================================== */
+
+.modal-footer {
+  min-height: 76px;
+
+  padding: 17px 30px;
+
+  border-top: 1px solid #e3e3e3;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+
+/* =====================================================
+   BOTÕES DO MODAL
+===================================================== */
+
+.btn-cancelar,
+.btn-salvar {
+  height: 42px;
+
+  padding: 0 19px;
+
+  border-radius: 7px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.btn-cancelar {
+  border: 1px solid #d0d0d0;
+
+  background: #ffffff;
+  color: #444444;
+}
+
+.btn-cancelar:hover {
+  background: #f2f2f2;
+}
+
+.btn-salvar {
+  border: 1px solid #111111;
+
+  background: #111111;
+  color: #ffffff;
+}
+
+.btn-salvar:hover {
+  background: #2d2d2d;
+}
+
+
+/* =====================================================
+   TELAS MENORES
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .servicos-content {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .servicos-header {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .servicos-tabela th,
+  .servicos-tabela td {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .acoes button {
+    padding: 0 10px;
+  }
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 850px) {
+
+  .servicos-header {
+    grid-template-columns: auto 1fr auto;
+
+    padding: 0 20px;
+  }
+
+  .servicos-logo img {
+    width: 120px;
+  }
+
+  .servicos-title h1 {
+    font-size: 19px;
+  }
+
+  .servicos-content {
+    padding: 30px 20px 50px;
+  }
+
+  .servicos-heading {
+    align-items: flex-start;
+  }
+
+  .servicos-heading h2 {
+    font-size: 28px;
+  }
+
+  .servicos-filtros {
+    flex-direction: row;
+  }
+
+  .servicos-tabela {
+    min-width: 850px;
+  }
+}
+
+
+/* =====================================================
+   CELULAR
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .servicos-header {
+    height: auto;
+    min-height: 72px;
+
+    padding: 12px 15px;
+
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .servicos-logo img {
+    width: 95px;
+  }
+
+  .servicos-title h1 {
+    font-size: 17px;
+  }
+
+  .servicos-title p {
+    display: none;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .servicos-content {
+    padding: 25px 14px 40px;
+  }
+
+  .servicos-heading {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 18px;
+  }
+
+  .servicos-heading h2 {
+    font-size: 25px;
+  }
+
+  .servicos-heading p {
+    font-size: 13px;
+  }
+
+  .btn-novo-servico {
+    width: 100%;
+  }
+
+  .servicos-filtros {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .servicos-filtros select {
+    width: 100%;
+  }
+
+  .modal {
+    max-height: 94vh;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-full {
+    grid-column: auto;
+  }
+}
