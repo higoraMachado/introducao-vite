@@ -1,510 +1,768 @@
 import { useState } from 'react';
 import './Estoque.css';
+
 import logoHope from '../../assets/logo-hope.png';
 
-const estoqueInicial = [
-  {
-    id: 1,
-    produto: 'Pomada',
-    categoria: 'Finalização',
-    quantidade: 15,
-    preco: 25,
-    estoqueMinimo: 5,
-    status: 'Normal',
-  },
-  {
-    id: 2,
-    produto: 'Shampoo',
-    categoria: 'Higiene',
-    quantidade: 3,
-    preco: 30,
-    estoqueMinimo: 5,
-    status: 'Baixo',
-  },
-  {
-    id: 3,
-    produto: 'Condicionador',
-    categoria: 'Higiene',
-    quantidade: 8,
-    preco: 28,
-    estoqueMinimo: 5,
-    status: 'Normal',
-  },
-  {
-    id: 4,
-    produto: 'Óleo para barba',
-    categoria: 'Barba',
-    quantidade: 2,
-    preco: 35,
-    estoqueMinimo: 4,
-    status: 'Baixo',
-  },
-];
-
 function Estoque() {
-  const [estoque, setEstoque] = useState(estoqueInicial);
+
+  // ========================================
+  // PRODUTOS
+  // ========================================
+
+  const [produtos, setProdutos] = useState([
+    {
+      id: 1,
+      nome: 'Pomada Modeladora',
+      descricao: 'Pomada para modelagem dos cabelos',
+      categoria: 'Finalização',
+      quantidade: 15,
+      precoCompra: 15.00,
+      precoVenda: 25.00,
+      estoqueMinimo: 5
+    },
+    {
+      id: 2,
+      nome: 'Shampoo Masculino',
+      descricao: 'Shampoo para uso profissional',
+      categoria: 'Higiene',
+      quantidade: 3,
+      precoCompra: 18.00,
+      precoVenda: 30.00,
+      estoqueMinimo: 5
+    },
+    {
+      id: 3,
+      nome: 'Cera para Barba',
+      descricao: 'Cera para acabamento da barba',
+      categoria: 'Barba',
+      quantidade: 8,
+      precoCompra: 12.00,
+      precoVenda: 22.00,
+      estoqueMinimo: 4
+    },
+    {
+      id: 4,
+      nome: 'Óleo para Barba',
+      descricao: 'Óleo hidratante para barba',
+      categoria: 'Barba',
+      quantidade: 2,
+      precoCompra: 20.00,
+      precoVenda: 35.00,
+      estoqueMinimo: 5
+    }
+  ]);
+
+  // ========================================
+  // ESTADOS
+  // ========================================
 
   const [busca, setBusca] = useState('');
-  const [categoria, setCategoria] = useState('Todas');
-  const [statusFiltro, setStatusFiltro] = useState('Todos');
 
-  const [modalAberto, setModalAberto] = useState(false);
-  const [modoEdicao, setModoEdicao] = useState(false);
-  const [itemSelecionado, setItemSelecionado] = useState(null);
+  const [categoriaFiltro, setCategoriaFiltro] =
+    useState('Todas');
 
-  const [formulario, setFormulario] = useState({
-    produto: '',
+  const [modalProduto, setModalProduto] =
+    useState(false);
+
+  const [modalMovimentacao, setModalMovimentacao] =
+    useState(false);
+
+  const [produtoSelecionado, setProdutoSelecionado] =
+    useState(null);
+
+  const [tipoMovimentacao, setTipoMovimentacao] =
+    useState('entrada');
+
+  // ========================================
+  // FORMULÁRIO PRODUTO
+  // ========================================
+
+  const [produtoForm, setProdutoForm] = useState({
+    nome: '',
+    descricao: '',
     categoria: '',
     quantidade: '',
-    preco: '',
-    estoqueMinimo: '',
+    precoCompra: '',
+    precoVenda: '',
+    estoqueMinimo: ''
   });
 
-  function alterarFormulario(event) {
+  // ========================================
+  // FORMULÁRIO MOVIMENTAÇÃO
+  // ========================================
+
+  const [movimentacaoForm, setMovimentacaoForm] =
+    useState({
+      quantidade: '',
+      motivo: ''
+    });
+
+  // ========================================
+  // ALTERAR FORMULÁRIO
+  // ========================================
+
+  function alterarProduto(event) {
+
     const { name, value } = event.target;
 
-    setFormulario((anterior) => ({
-      ...anterior,
-      [name]: value,
-    }));
-  }
-
-  function abrirNovoProduto() {
-    setModoEdicao(false);
-    setItemSelecionado(null);
-
-    setFormulario({
-      produto: '',
-      categoria: '',
-      quantidade: '',
-      preco: '',
-      estoqueMinimo: '',
+    setProdutoForm({
+      ...produtoForm,
+      [name]: value
     });
-
-    setModalAberto(true);
   }
 
-  function abrirEdicao(item) {
-    setModoEdicao(true);
-    setItemSelecionado(item);
+  function alterarMovimentacao(event) {
 
-    setFormulario({
-      produto: item.produto,
-      categoria: item.categoria,
-      quantidade: item.quantidade,
-      preco: item.preco,
-      estoqueMinimo: item.estoqueMinimo,
+    const { name, value } = event.target;
+
+    setMovimentacaoForm({
+      ...movimentacaoForm,
+      [name]: value
     });
-
-    setModalAberto(true);
   }
 
-  function fecharModal() {
-    setModalAberto(false);
-  }
+  // ========================================
+  // CADASTRAR PRODUTO
+  // ========================================
 
-  function salvarProduto(event) {
+  function cadastrarProduto(event) {
+
     event.preventDefault();
 
-    if (
-      !formulario.produto ||
-      formulario.quantidade === '' ||
-      formulario.preco === '' ||
-      formulario.estoqueMinimo === ''
-    ) {
-      alert('Preencha os campos obrigatórios.');
+    const novoProduto = {
+      id: Date.now(),
+
+      nome: produtoForm.nome,
+
+      descricao: produtoForm.descricao,
+
+      categoria: produtoForm.categoria,
+
+      quantidade: Number(produtoForm.quantidade),
+
+      precoCompra: Number(produtoForm.precoCompra),
+
+      precoVenda: Number(produtoForm.precoVenda),
+
+      estoqueMinimo: Number(produtoForm.estoqueMinimo)
+    };
+
+    setProdutos([
+      ...produtos,
+      novoProduto
+    ]);
+
+    setProdutoForm({
+      nome: '',
+      descricao: '',
+      categoria: '',
+      quantidade: '',
+      precoCompra: '',
+      precoVenda: '',
+      estoqueMinimo: ''
+    });
+
+    setModalProduto(false);
+  }
+
+  // ========================================
+  // MOVIMENTAÇÃO
+  // ========================================
+
+  function registrarMovimentacao(event) {
+
+    event.preventDefault();
+
+    const quantidade =
+      Number(movimentacaoForm.quantidade);
+
+    if (!quantidade || quantidade <= 0) {
+      alert('Informe uma quantidade válida.');
       return;
     }
 
-    const quantidade = Number(formulario.quantidade);
-    const preco = Number(formulario.preco);
-    const estoqueMinimo = Number(formulario.estoqueMinimo);
-
-    const status = quantidade <= estoqueMinimo
-      ? 'Baixo'
-      : 'Normal';
-
-    if (modoEdicao && itemSelecionado) {
-      setEstoque((anterior) =>
-        anterior.map((item) =>
-          item.id === itemSelecionado.id
-            ? {
-                ...item,
-                produto: formulario.produto,
-                categoria:
-                  formulario.categoria || 'Sem categoria',
-                quantidade,
-                preco,
-                estoqueMinimo,
-                status,
-              }
-            : item
-        )
-      );
-
-      alert('Produto atualizado com sucesso.');
-    } else {
-      const novoProduto = {
-        id: Date.now(),
-        produto: formulario.produto,
-        categoria:
-          formulario.categoria || 'Sem categoria',
-        quantidade,
-        preco,
-        estoqueMinimo,
-        status,
-      };
-
-      setEstoque((anterior) => [
-        ...anterior,
-        novoProduto,
-      ]);
-
-      alert('Produto adicionado ao estoque com sucesso.');
+    if (!produtoSelecionado) {
+      return;
     }
 
-    fecharModal();
-  }
+    setProdutos(
+      produtos.map((produto) => {
 
-  function alterarStatus(id) {
-    setEstoque((anterior) =>
-      anterior.map((item) => {
-        if (item.id !== id) {
-          return item;
+        if (produto.id !== produtoSelecionado.id) {
+          return produto;
+        }
+
+        let novaQuantidade =
+          produto.quantidade;
+
+        if (tipoMovimentacao === 'entrada') {
+          novaQuantidade += quantidade;
+        }
+
+        if (tipoMovimentacao === 'saida') {
+
+          novaQuantidade -= quantidade;
+
+          if (novaQuantidade < 0) {
+            alert(
+              'A quantidade de saída não pode ser maior que o estoque.'
+            );
+
+            return produto;
+          }
         }
 
         return {
-          ...item,
-          status:
-            item.status === 'Inativo'
-              ? item.quantidade <= item.estoqueMinimo
-                ? 'Baixo'
-                : 'Normal'
-              : 'Inativo',
+          ...produto,
+          quantidade: novaQuantidade
         };
+
       })
     );
-  }
 
-  function formatarPreco(valor) {
-    return Number(valor).toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
+    setMovimentacaoForm({
+      quantidade: '',
+      motivo: ''
     });
+
+    setModalMovimentacao(false);
   }
 
-  const estoqueFiltrado = estoque.filter((item) => {
-    const correspondeBusca = item.produto
-      .toLowerCase()
-      .includes(busca.toLowerCase());
+  // ========================================
+  // ABRIR MOVIMENTAÇÃO
+  // ========================================
 
-    const correspondeCategoria =
-      categoria === 'Todas' ||
-      item.categoria === categoria;
+  function abrirMovimentacao(produto) {
 
-    const correspondeStatus =
-      statusFiltro === 'Todos' ||
-      item.status === statusFiltro;
+    setProdutoSelecionado(produto);
 
-    return (
-      correspondeBusca &&
-      correspondeCategoria &&
-      correspondeStatus
+    setTipoMovimentacao('entrada');
+
+    setMovimentacaoForm({
+      quantidade: '',
+      motivo: ''
+    });
+
+    setModalMovimentacao(true);
+  }
+
+  // ========================================
+  // STATUS
+  // ========================================
+
+  function obterStatus(produto) {
+
+    if (produto.quantidade === 0) {
+      return 'Esgotado';
+    }
+
+    if (produto.quantidade <= produto.estoqueMinimo) {
+      return 'Baixo';
+    }
+
+    return 'Normal';
+  }
+
+  // ========================================
+  // FILTRO
+  // ========================================
+
+  const produtosFiltrados = produtos.filter(
+    (produto) => {
+
+      const correspondeBusca =
+        produto.nome
+          .toLowerCase()
+          .includes(busca.toLowerCase());
+
+      const correspondeCategoria =
+        categoriaFiltro === 'Todas' ||
+        produto.categoria === categoriaFiltro;
+
+      return (
+        correspondeBusca &&
+        correspondeCategoria
+      );
+    }
+  );
+
+  // ========================================
+  // CATEGORIAS
+  // ========================================
+
+  const categorias = [
+    'Todas',
+    ...new Set(
+      produtos.map(
+        (produto) => produto.categoria
+      )
+    )
+  ];
+
+  // ========================================
+  // ESTATÍSTICAS
+  // ========================================
+
+  const totalProdutos =
+    produtos.length;
+
+  const produtosBaixos =
+    produtos.filter(
+      (produto) =>
+        produto.quantidade <=
+        produto.estoqueMinimo
+    ).length;
+
+  const produtosEsgotados =
+    produtos.filter(
+      (produto) =>
+        produto.quantidade === 0
+    ).length;
+
+  const valorEstoque =
+    produtos.reduce(
+      (total, produto) =>
+        total +
+        produto.quantidade *
+        produto.precoCompra,
+      0
     );
-  });
 
-  const produtosBaixos = estoque.filter(
-    (item) => item.status === 'Baixo'
-  ).length;
+  // ========================================
+  // FORMATAR VALOR
+  // ========================================
+
+  function formatarMoeda(valor) {
+
+    return valor.toLocaleString(
+      'pt-BR',
+      {
+        style: 'currency',
+        currency: 'BRL'
+      }
+    );
+  }
+
+  // ========================================
+  // RETURN
+  // ========================================
 
   return (
+
     <main className="estoque-page">
 
-      {/* HEADER */}
+      {/* ========================================
+          HEADER
+      ======================================== */}
+
       <header className="estoque-header">
 
-        <div className="estoque-logo">
+        <div className="header-logo">
+
           <img
             src={logoHope}
             alt="Hope Barbearia"
           />
+
         </div>
 
-        <div className="estoque-title">
-          <h1>Estoque</h1>
-          <p>Controle de estoque da Hope Barbearia</p>
+        <div className="header-title">
+
+          <h1>
+            Estoque
+          </h1>
+
+          <p>
+            Controle de produtos e movimentações
+          </p>
+
         </div>
 
-        <div className="estoque-user">
+        <div className="header-user">
 
-          <div className="user-avatar">
-            B
-          </div>
+          <button className="user-button">
 
-          <div className="user-info">
-            <strong>Bruno</strong>
-            <span>Minha conta</span>
-          </div>
+            <div className="user-avatar">
+              B
+            </div>
+
+            <div className="user-info">
+
+              <strong>
+                Barbeiro
+              </strong>
+
+              <span>
+                Minha conta
+              </span>
+
+            </div>
+
+            <span className="user-arrow">
+              ⌄
+            </span>
+
+          </button>
 
         </div>
 
       </header>
 
-      {/* CONTEÚDO */}
+
+      {/* ========================================
+          CONTEÚDO
+      ======================================== */}
+
       <section className="estoque-content">
 
-        <div className="estoque-heading">
+        {/* TÍTULO */}
+
+        <div className="page-heading">
 
           <div>
+
             <span className="heading-label">
-              ÁREA DO BARBEIRO
+              CONTROLE DE ESTOQUE
             </span>
 
-            <h2>Estoque</h2>
+            <h2>
+              Produtos
+            </h2>
 
             <p>
-              Gerencie os produtos, quantidades e níveis
-              mínimos de estoque da barbearia.
+              Gerencie seus produtos e acompanhe
+              o estoque da barbearia.
             </p>
+
           </div>
 
           <button
-            className="btn-adicionar"
-            onClick={abrirNovoProduto}
+            className="btn-novo-produto"
+            onClick={() =>
+              setModalProduto(true)
+            }
           >
-            + Adicionar produto
+            <span>+</span>
+
+            Novo produto
+
           </button>
 
         </div>
 
-        {/* CARD */}
-        <section className="estoque-card">
 
-          <div className="card-header">
+        {/* ========================================
+            CARDS DE RESUMO
+        ======================================== */}
+
+        <div className="estoque-stats">
+
+          <div className="stat-card">
+
+            <div className="stat-icon">
+              📦
+            </div>
 
             <div>
-              <span className="card-label">
-                CONTROLE DE ESTOQUE
-              </span>
 
-              <h3>Itens em estoque</h3>
-            </div>
-
-            <div className="card-informacoes">
               <span>
-                {estoque.length} itens
+                Total de produtos
               </span>
 
-              {produtosBaixos > 0 && (
-                <span className="alerta-estoque">
-                  {produtosBaixos} com estoque baixo
+              <strong>
+                {totalProdutos}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div className="stat-card">
+
+            <div className="stat-icon warning">
+              ⚠
+            </div>
+
+            <div>
+
+              <span>
+                Estoque baixo
+              </span>
+
+              <strong>
+                {produtosBaixos}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div className="stat-card">
+
+            <div className="stat-icon danger">
+              !
+            </div>
+
+            <div>
+
+              <span>
+                Esgotados
+              </span>
+
+              <strong>
+                {produtosEsgotados}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div className="stat-card">
+
+            <div className="stat-icon">
+              R$
+            </div>
+
+            <div>
+
+              <span>
+                Valor em estoque
+              </span>
+
+              <strong>
+                {formatarMoeda(valorEstoque)}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        {/* ========================================
+            LISTA DE PRODUTOS
+        ======================================== */}
+
+        <section className="products-card">
+
+          <div className="products-header">
+
+            <div>
+
+              <h3>
+                Produtos cadastrados
+              </h3>
+
+              <p>
+                Consulte e atualize o estoque.
+              </p>
+
+            </div>
+
+            <div className="products-filters">
+
+              <div className="search-box">
+
+                <span>
+                  ⌕
                 </span>
-              )}
-            </div>
 
-          </div>
+                <input
+                  type="text"
+                  placeholder="Buscar produto..."
+                  value={busca}
+                  onChange={(event) =>
+                    setBusca(event.target.value)
+                  }
+                />
 
-          {/* FILTROS */}
-          <div className="estoque-filtros">
-
-            <div className="filtro-busca">
-
-              <label htmlFor="busca">
-                Buscar produto
-              </label>
-
-              <input
-                id="busca"
-                type="text"
-                placeholder="Digite o nome do produto..."
-                value={busca}
-                onChange={(event) =>
-                  setBusca(event.target.value)
-                }
-              />
-
-            </div>
-
-            <div className="filtro-item">
-
-              <label htmlFor="categoria">
-                Categoria
-              </label>
+              </div>
 
               <select
-                id="categoria"
-                value={categoria}
+                value={categoriaFiltro}
                 onChange={(event) =>
-                  setCategoria(event.target.value)
+                  setCategoriaFiltro(
+                    event.target.value
+                  )
                 }
               >
-                <option value="Todas">
-                  Todas
-                </option>
 
-                <option value="Finalização">
-                  Finalização
-                </option>
-
-                <option value="Higiene">
-                  Higiene
-                </option>
-
-                <option value="Barba">
-                  Barba
-                </option>
-
-              </select>
-
-            </div>
-
-            <div className="filtro-item">
-
-              <label htmlFor="status">
-                Status
-              </label>
-
-              <select
-                id="status"
-                value={statusFiltro}
-                onChange={(event) =>
-                  setStatusFiltro(event.target.value)
-                }
-              >
-                <option value="Todos">
-                  Todos
-                </option>
-
-                <option value="Normal">
-                  Normal
-                </option>
-
-                <option value="Baixo">
-                  Baixo
-                </option>
-
-                <option value="Inativo">
-                  Inativo
-                </option>
+                {categorias.map(
+                  (categoria) => (
+                    <option
+                      key={categoria}
+                      value={categoria}
+                    >
+                      {categoria}
+                    </option>
+                  )
+                )}
 
               </select>
 
             </div>
 
           </div>
+
 
           {/* TABELA */}
-          <div className="tabela-container">
 
-            <table className="estoque-tabela">
+          <div className="table-wrapper">
+
+            <table>
 
               <thead>
+
                 <tr>
-                  <th>Produto</th>
-                  <th>Categoria</th>
-                  <th>Quantidade</th>
-                  <th>Preço</th>
-                  <th>Estoque mínimo</th>
-                  <th>Status</th>
-                  <th>Ações</th>
+
+                  <th>
+                    Produto
+                  </th>
+
+                  <th>
+                    Categoria
+                  </th>
+
+                  <th>
+                    Quantidade
+                  </th>
+
+                  <th>
+                    Preço
+                  </th>
+
+                  <th>
+                    Estoque mínimo
+                  </th>
+
+                  <th>
+                    Status
+                  </th>
+
+                  <th>
+                    Ações
+                  </th>
+
                 </tr>
+
               </thead>
 
               <tbody>
 
-                {estoqueFiltrado.length > 0 ? (
+                {produtosFiltrados.length === 0 ? (
 
-                  estoqueFiltrado.map((item) => (
+                  <tr>
 
-                    <tr key={item.id}>
+                    <td
+                      colSpan="7"
+                      className="empty-table"
+                    >
+                      Nenhum produto encontrado.
+                    </td>
 
-                      <td>
-                        <strong>
-                          {item.produto}
-                        </strong>
-                      </td>
-
-                      <td>
-                        <span className="categoria-texto">
-                          {item.categoria}
-                        </span>
-                      </td>
-
-                      <td>
-                        <span
-                          className={
-                            item.quantidade <=
-                            item.estoqueMinimo
-                              ? 'quantidade baixa'
-                              : 'quantidade'
-                          }
-                        >
-                          {item.quantidade}
-                        </span>
-                      </td>
-
-                      <td>
-                        <strong>
-                          {formatarPreco(item.preco)}
-                        </strong>
-                      </td>
-
-                      <td>
-                        {item.estoqueMinimo}
-                      </td>
-
-                      <td>
-
-                        <span
-                          className={`status-badge status-${item.status.toLowerCase()}`}
-                        >
-                          {item.status}
-                        </span>
-
-                      </td>
-
-                      <td>
-
-                        <div className="acoes">
-
-                          <button
-                            className="btn-editar"
-                            onClick={() =>
-                              abrirEdicao(item)
-                            }
-                          >
-                            Editar
-                          </button>
-
-                          <button
-                            className="btn-status"
-                            onClick={() =>
-                              alterarStatus(item.id)
-                            }
-                          >
-                            {item.status === 'Inativo'
-                              ? 'Ativar'
-                              : 'Desativar'}
-                          </button>
-
-                        </div>
-
-                      </td>
-
-                    </tr>
-
-                  ))
+                  </tr>
 
                 ) : (
 
-                  <tr>
-                    <td
-                      colSpan="7"
-                      className="tabela-vazia"
-                    >
-                      Nenhum item encontrado no estoque.
-                    </td>
-                  </tr>
+                  produtosFiltrados.map(
+                    (produto) => {
+
+                      const status =
+                        obterStatus(produto);
+
+                      return (
+
+                        <tr
+                          key={produto.id}
+                        >
+
+                          <td>
+
+                            <div className="product-name">
+
+                              <div className="product-icon">
+                                📦
+                              </div>
+
+                              <div>
+
+                                <strong>
+                                  {produto.nome}
+                                </strong>
+
+                                <span>
+                                  {produto.descricao}
+                                </span>
+
+                              </div>
+
+                            </div>
+
+                          </td>
+
+                          <td>
+                            {produto.categoria}
+                          </td>
+
+                          <td>
+
+                            <strong className="quantity">
+                              {produto.quantidade}
+                            </strong>
+
+                          </td>
+
+                          <td>
+
+                            <strong>
+                              {formatarMoeda(
+                                produto.precoVenda
+                              )}
+                            </strong>
+
+                          </td>
+
+                          <td>
+
+                            {produto.estoqueMinimo}
+
+                          </td>
+
+                          <td>
+
+                            <span
+                              className={`status ${status.toLowerCase()}`}
+                            >
+                              {status}
+                            </span>
+
+                          </td>
+
+                          <td>
+
+                            <button
+                              className="btn-movimentar"
+                              onClick={() =>
+                                abrirMovimentacao(
+                                  produto
+                                )
+                              }
+                            >
+                              Movimentar
+                            </button>
+
+                          </td>
+
+                        </tr>
+
+                      );
+
+                    }
+                  )
 
                 )}
 
@@ -514,225 +772,406 @@ function Estoque() {
 
           </div>
 
-          {/* RODAPÉ */}
-          <div className="tabela-footer">
-
-            <span>
-              Mostrando {estoqueFiltrado.length} de{' '}
-              {estoque.length} itens
-            </span>
-
-            <span>
-              Quantidade total em estoque:{' '}
-              <strong>
-                {estoque.reduce(
-                  (total, item) =>
-                    total +
-                    (item.status !== 'Inativo'
-                      ? item.quantidade
-                      : 0),
-                  0
-                )}
-              </strong>
-            </span>
-
-          </div>
-
         </section>
 
       </section>
 
-      {/* MODAL */}
-      {modalAberto && (
+
+      {/* ========================================
+          MODAL — NOVO PRODUTO
+      ======================================== */}
+
+      {modalProduto && (
 
         <div
           className="modal-overlay"
-          onClick={fecharModal}
+          onClick={() =>
+            setModalProduto(false)
+          }
         >
 
           <div
-            className="estoque-modal"
+            className="modal"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
 
-            <div className="modal-header">
+            <button
+              className="modal-close"
+              onClick={() =>
+                setModalProduto(false)
+              }
+            >
+              ×
+            </button>
 
-              <div>
-                <span className="modal-label">
-                  {modoEdicao
-                    ? 'EDIÇÃO DE ESTOQUE'
-                    : 'ADICIONAR AO ESTOQUE'}
-                </span>
-
-                <h3>
-                  {modoEdicao
-                    ? 'Editar produto'
-                    : 'Adicionar produto'}
-                </h3>
-              </div>
-
-              <button
-                className="btn-fechar"
-                onClick={fecharModal}
-              >
-                ×
-              </button>
-
+            <div className="modal-icon">
+              +
             </div>
 
+            <h3>
+              Cadastrar produto
+            </h3>
+
+            <p>
+              Adicione um novo produto ao estoque.
+            </p>
+
+
             <form
-              className="estoque-form"
-              onSubmit={salvarProduto}
+              onSubmit={cadastrarProduto}
+              className="product-form"
             >
 
-              <div className="form-grid">
+              <div className="form-group">
 
-                <div className="form-group form-full">
+                <label>
+                  Nome
+                </label>
 
-                  <label htmlFor="produto">
-                    Produto *
+                <input
+                  type="text"
+                  name="nome"
+                  placeholder="Nome do produto"
+                  value={produtoForm.nome}
+                  onChange={alterarProduto}
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label>
+                  Descrição
+                </label>
+
+                <input
+                  type="text"
+                  name="descricao"
+                  placeholder="Descrição do produto"
+                  value={produtoForm.descricao}
+                  onChange={alterarProduto}
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label>
+                  Categoria
+                </label>
+
+                <select
+                  name="categoria"
+                  value={produtoForm.categoria}
+                  onChange={alterarProduto}
+                  required
+                >
+
+                  <option value="">
+                    Selecione uma categoria
+                  </option>
+
+                  <option value="Finalização">
+                    Finalização
+                  </option>
+
+                  <option value="Higiene">
+                    Higiene
+                  </option>
+
+                  <option value="Barba">
+                    Barba
+                  </option>
+
+                  <option value="Acessórios">
+                    Acessórios
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div className="form-row">
+
+                <div className="form-group">
+
+                  <label>
+                    Quantidade
                   </label>
 
                   <input
-                    id="produto"
-                    name="produto"
-                    type="text"
-                    placeholder="Ex.: Pomada"
-                    value={formulario.produto}
-                    onChange={alterarFormulario}
-                  />
-
-                </div>
-
-                <div className="form-group">
-
-                  <label htmlFor="categoria-form">
-                    Categoria
-                  </label>
-
-                  <select
-                    id="categoria-form"
-                    name="categoria"
-                    value={formulario.categoria}
-                    onChange={alterarFormulario}
-                  >
-                    <option value="">
-                      Selecione uma categoria
-                    </option>
-
-                    <option value="Finalização">
-                      Finalização
-                    </option>
-
-                    <option value="Higiene">
-                      Higiene
-                    </option>
-
-                    <option value="Barba">
-                      Barba
-                    </option>
-
-                  </select>
-
-                </div>
-
-                <div className="form-group">
-
-                  <label htmlFor="preco">
-                    Preço *
-                  </label>
-
-                  <div className="input-prefixo">
-
-                    <span>R$</span>
-
-                    <input
-                      id="preco"
-                      name="preco"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      placeholder="0,00"
-                      value={formulario.preco}
-                      onChange={alterarFormulario}
-                    />
-
-                  </div>
-
-                </div>
-
-                <div className="form-group">
-
-                  <label htmlFor="quantidade">
-                    Quantidade *
-                  </label>
-
-                  <input
-                    id="quantidade"
+                    type="number"
                     name="quantidade"
-                    type="number"
                     min="0"
-                    placeholder="Ex.: 15"
-                    value={formulario.quantidade}
-                    onChange={alterarFormulario}
+                    placeholder="0"
+                    value={produtoForm.quantidade}
+                    onChange={alterarProduto}
+                    required
                   />
 
                 </div>
+
 
                 <div className="form-group">
 
-                  <label htmlFor="estoqueMinimo">
-                    Estoque mínimo *
+                  <label>
+                    Estoque mínimo
                   </label>
 
                   <input
-                    id="estoqueMinimo"
-                    name="estoqueMinimo"
                     type="number"
+                    name="estoqueMinimo"
                     min="0"
-                    placeholder="Ex.: 5"
-                    value={formulario.estoqueMinimo}
-                    onChange={alterarFormulario}
+                    placeholder="0"
+                    value={produtoForm.estoqueMinimo}
+                    onChange={alterarProduto}
+                    required
                   />
 
                 </div>
 
               </div>
 
-              <div className="form-info">
 
-                <strong>
-                  Controle automático
-                </strong>
+              <div className="form-row">
 
-                <span>
-                  O estoque será identificado como
-                  <b> Baixo </b>
-                  quando a quantidade for igual ou menor
-                  que o estoque mínimo.
-                </span>
+                <div className="form-group">
+
+                  <label>
+                    Preço de compra
+                  </label>
+
+                  <input
+                    type="number"
+                    name="precoCompra"
+                    min="0"
+                    step="0.01"
+                    placeholder="R$ 0,00"
+                    value={produtoForm.precoCompra}
+                    onChange={alterarProduto}
+                    required
+                  />
+
+                </div>
+
+
+                <div className="form-group">
+
+                  <label>
+                    Preço de venda
+                  </label>
+
+                  <input
+                    type="number"
+                    name="precoVenda"
+                    min="0"
+                    step="0.01"
+                    placeholder="R$ 0,00"
+                    value={produtoForm.precoVenda}
+                    onChange={alterarProduto}
+                    required
+                  />
+
+                </div>
 
               </div>
 
-              <div className="form-footer">
+
+              <div className="modal-actions">
 
                 <button
                   type="button"
-                  className="btn-cancelar"
-                  onClick={fecharModal}
+                  className="btn-modal-secondary"
+                  onClick={() =>
+                    setModalProduto(false)
+                  }
                 >
                   Cancelar
                 </button>
 
                 <button
                   type="submit"
-                  className="btn-salvar"
+                  className="btn-modal-primary"
                 >
-                  {modoEdicao
-                    ? 'Salvar alterações'
-                    : 'Adicionar ao estoque'}
+                  Cadastrar produto
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      {/* ========================================
+          MODAL — MOVIMENTAÇÃO
+      ======================================== */}
+
+      {modalMovimentacao && produtoSelecionado && (
+
+        <div
+          className="modal-overlay"
+          onClick={() =>
+            setModalMovimentacao(false)
+          }
+        >
+
+          <div
+            className="modal modal-movimentacao"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            <button
+              className="modal-close"
+              onClick={() =>
+                setModalMovimentacao(false)
+              }
+            >
+              ×
+            </button>
+
+            <div className="modal-icon">
+              ⇅
+            </div>
+
+            <h3>
+              Movimentar estoque
+            </h3>
+
+            <p>
+              Produto: <strong>
+                {produtoSelecionado.nome}
+              </strong>
+            </p>
+
+
+            <div className="current-stock">
+
+              <span>
+                Estoque atual
+              </span>
+
+              <strong>
+                {produtoSelecionado.quantidade}
+                {' '}
+                unidades
+              </strong>
+
+            </div>
+
+
+            <form
+              onSubmit={registrarMovimentacao}
+              className="product-form"
+            >
+
+              <div className="movement-type">
+
+                <button
+                  type="button"
+                  className={
+                    tipoMovimentacao === 'entrada'
+                      ? 'active'
+                      : ''
+                  }
+                  onClick={() =>
+                    setTipoMovimentacao('entrada')
+                  }
+                >
+                  Entrada
+                </button>
+
+                <button
+                  type="button"
+                  className={
+                    tipoMovimentacao === 'saida'
+                      ? 'active'
+                      : ''
+                  }
+                  onClick={() =>
+                    setTipoMovimentacao('saida')
+                  }
+                >
+                  Saída
+                </button>
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label>
+                  Quantidade
+                </label>
+
+                <input
+                  type="number"
+                  name="quantidade"
+                  min="1"
+                  placeholder="Informe a quantidade"
+                  value={
+                    movimentacaoForm.quantidade
+                  }
+                  onChange={
+                    alterarMovimentacao
+                  }
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label>
+                  Motivo
+                </label>
+
+                <input
+                  type="text"
+                  name="motivo"
+                  placeholder="Ex: Compra de produtos"
+                  value={
+                    movimentacaoForm.motivo
+                  }
+                  onChange={
+                    alterarMovimentacao
+                  }
+                  required
+                />
+
+              </div>
+
+
+              <div className="modal-actions">
+
+                <button
+                  type="button"
+                  className="btn-modal-secondary"
+                  onClick={() =>
+                    setModalMovimentacao(false)
+                  }
+                >
+                  Cancelar
+                </button>
+
+                <button
+                  type="submit"
+                  className="btn-modal-primary"
+                >
+                  Registrar movimentação
                 </button>
 
               </div>
