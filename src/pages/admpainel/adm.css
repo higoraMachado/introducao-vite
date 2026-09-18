@@ -1,0 +1,872 @@
+/* =========================================
+   HOPE BARBEARIA
+   PAINEL ADMINISTRATIVO
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.admin-page {
+  min-height: 100vh;
+  width: 100%;
+
+  background: #f3f3f3;
+  color: #171717;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-header {
+  width: 100%;
+  min-height: 78px;
+
+  background: #111111;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 42px;
+
+  border-bottom: 1px solid #292929;
+}
+
+
+/* LOGO */
+
+.admin-header-logo {
+  width: 220px;
+
+  display: flex;
+  align-items: center;
+}
+
+.admin-header-logo img {
+  width: 145px;
+  height: auto;
+
+  max-height: 58px;
+
+  object-fit: contain;
+  object-position: left center;
+
+  display: block;
+}
+
+
+/* TÍTULO */
+
+.admin-header-title {
+  text-align: center;
+}
+
+.admin-header-title h1 {
+  margin: 0;
+
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.admin-header-title p {
+  margin: 4px 0 0;
+
+  color: #a9a9a9;
+
+  font-size: 12px;
+}
+
+
+/* USUÁRIO */
+
+.admin-header-user {
+  min-width: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+.admin-avatar {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #111111;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+}
+
+.admin-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-user-info strong {
+  font-size: 13px;
+}
+
+.admin-user-info span {
+  color: #999999;
+
+  font-size: 11px;
+
+  margin-top: 2px;
+}
+
+
+/* =========================================
+   LAYOUT
+========================================= */
+
+.admin-layout {
+  display: flex;
+
+  min-height: calc(100vh - 78px);
+}
+
+
+/* =========================================
+   MENU LATERAL
+========================================= */
+
+.admin-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+
+  background: #171717;
+  color: #ffffff;
+
+  padding: 30px 18px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* TÍTULO DO MENU */
+
+.sidebar-title {
+  padding: 0 15px 18px;
+
+  border-bottom: 1px solid #303030;
+}
+
+.sidebar-title span {
+  color: #929292;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+
+/* MENU */
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  margin-top: 18px;
+}
+
+.sidebar-item {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+  color: #bdbdbd;
+
+  padding: 13px 15px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  transition: 0.2s;
+}
+
+.sidebar-item:hover {
+  background: #242424;
+  color: #ffffff;
+}
+
+.sidebar-item.active {
+  background: #ffffff;
+  color: #171717;
+
+  font-weight: 700;
+}
+
+.sidebar-icon {
+  width: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+}
+
+
+/* RODAPÉ */
+
+.sidebar-footer {
+  margin-top: auto;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #303030;
+}
+
+.logout-button {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+  color: #999999;
+
+  padding: 12px 15px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  transition: 0.2s;
+}
+
+.logout-button:hover {
+  background: #242424;
+  color: #ffffff;
+}
+
+
+/* =========================================
+   CONTEÚDO
+========================================= */
+
+.admin-content {
+  flex: 1;
+
+  width: 100%;
+
+  max-width: 1450px;
+
+  margin: 0 auto;
+
+  padding: 36px 42px 60px;
+}
+
+
+/* =========================================
+   TÍTULO
+========================================= */
+
+.admin-page-heading {
+  margin-bottom: 26px;
+}
+
+.admin-label {
+  display: block;
+
+  color: #777777;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 7px;
+}
+
+.admin-page-heading h2 {
+  margin: 0;
+
+  font-size: 30px;
+
+  line-height: 1.15;
+
+  font-weight: 750;
+}
+
+.admin-page-heading p {
+  margin: 8px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   CARDS DE ESTATÍSTICAS
+========================================= */
+
+.admin-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 24px;
+}
+
+.admin-stat-card {
+  position: relative;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  min-height: 115px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.035);
+}
+
+.stat-icon {
+  width: 43px;
+  height: 43px;
+
+  flex-shrink: 0;
+
+  border-radius: 8px;
+
+  background: #171717;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.stat-info span {
+  color: #777777;
+
+  font-size: 11px;
+}
+
+.stat-info strong {
+  font-size: 21px;
+}
+
+.admin-stat-card small {
+  position: absolute;
+
+  bottom: 12px;
+  right: 18px;
+
+  color: #999999;
+
+  font-size: 9px;
+}
+
+
+/* =========================================
+   GRID DO DASHBOARD
+========================================= */
+
+.admin-dashboard-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    360px;
+
+  gap: 24px;
+
+  align-items: start;
+
+  margin-bottom: 24px;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.admin-card {
+  background: #ffffff;
+
+  border: 1px solid #e1e1e1;
+
+  border-radius: 12px;
+
+  padding: 25px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.035);
+}
+
+
+/* CABEÇALHO DO CARD */
+
+.admin-card-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 23px;
+}
+
+.admin-card-label {
+  display: block;
+
+  color: #777777;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 5px;
+}
+
+.admin-card-header h3 {
+  margin: 0;
+
+  font-size: 17px;
+}
+
+.admin-link {
+  border: none;
+
+  background: transparent;
+
+  color: #555555;
+
+  cursor: pointer;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.admin-link:hover {
+  color: #111111;
+}
+
+
+/* =========================================
+   AGENDAMENTOS
+========================================= */
+
+.appointment-list {
+  border-top: 1px solid #eeeeee;
+}
+
+.appointment-item {
+  min-height: 70px;
+
+  display: grid;
+
+  grid-template-columns:
+    70px
+    minmax(0, 1fr)
+    85px;
+
+  gap: 15px;
+
+  align-items: center;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.appointment-time {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.appointment-time strong {
+  font-size: 14px;
+}
+
+.appointment-time span {
+  color: #999999;
+
+  font-size: 9px;
+}
+
+.appointment-client {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.appointment-client strong {
+  font-size: 12px;
+}
+
+.appointment-client span {
+  color: #777777;
+
+  font-size: 10px;
+}
+
+
+/* STATUS */
+
+.status {
+  padding: 7px 8px;
+
+  border-radius: 6px;
+
+  text-align: center;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.status.confirmed {
+  background: #eeeeee;
+
+  color: #333333;
+}
+
+.status.pending {
+  background: #171717;
+
+  color: #ffffff;
+}
+
+
+/* =========================================
+   RESUMO
+========================================= */
+
+.summary-list {
+  border-top: 1px solid #eeeeee;
+}
+
+.summary-item {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 17px 0;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-item span {
+  color: #777777;
+
+  font-size: 11px;
+}
+
+.summary-item strong {
+  font-size: 16px;
+}
+
+
+/* =========================================
+   ACESSO RÁPIDO
+========================================= */
+
+.quick-access {
+  margin-bottom: 20px;
+}
+
+.quick-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.quick-grid button {
+  min-height: 125px;
+
+  border: 1px solid #e0e0e0;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #171717;
+
+  cursor: pointer;
+
+  padding: 18px 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  transition: 0.2s;
+}
+
+.quick-grid button:hover {
+  border-color: #171717;
+
+  background: #f3f3f3;
+}
+
+.quick-grid button span {
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  background: #171717;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+}
+
+.quick-grid button strong {
+  font-size: 11px;
+}
+
+.quick-grid button small {
+  color: #888888;
+
+  font-size: 9px;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 1200px) {
+
+  .admin-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 1000px) {
+
+  .admin-sidebar {
+    width: 210px;
+  }
+
+  .admin-header {
+    padding: 0 25px;
+  }
+
+  .admin-content {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 750px) {
+
+  .admin-header {
+    padding: 15px 20px;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+  }
+
+  .admin-header-logo {
+    width: auto;
+  }
+
+  .admin-header-title {
+    order: 3;
+
+    width: 100%;
+
+    text-align: left;
+  }
+
+  .admin-header-user {
+    min-width: auto;
+
+    margin-left: auto;
+  }
+
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+
+    padding: 15px;
+  }
+
+  .sidebar-menu {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 5px;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .admin-content {
+    padding: 28px 18px 45px;
+  }
+
+  .admin-page-heading h2 {
+    font-size: 24px;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .appointment-item {
+    grid-template-columns:
+      60px
+      1fr;
+    
+    padding: 15px 0;
+  }
+
+  .appointment-item .status {
+    grid-column: 2;
+
+    width: fit-content;
+  }
+
+  .admin-card {
+    padding: 18px;
+  }
+
+}
+
+
+@media (max-width: 400px) {
+
+  .admin-header-title h1 {
+    font-size: 18px;
+  }
+
+  .admin-content {
+    padding: 20px 12px 35px;
+  }
+
+  .sidebar-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
