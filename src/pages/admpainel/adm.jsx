@@ -46,7 +46,7 @@ function Administrador() {
     {
       nome: "Financeiro",
       icone: "R$",
-      rota: null,
+      rota: "/MovimentacaoEstoque",
     },
     {
       nome: "Relatórios",

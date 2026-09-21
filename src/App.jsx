@@ -12,6 +12,7 @@ import CadastroServico from './pages/CadastroServico/CadastroServico';
 import Estoque from './pages/estoque/Estoque';
 import PainelAdministracao from './pages/admpainel/adm';
 import CadastroProduto from './pages/cadastroProduto/cadastroProduto';
+import MovimentacaoEstoque from './pages/MovimentacaoEstoque/MovimentacaoEstoque';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
      <Route path="/Servicos" element={<Servicos/>}/>
       <Route path="/CadastroServico" element={<CadastroServico/>}/>
       <Route path="/Estoque" element={<Estoque/>}/>
+      <Route path="/MovimentacaoEstoque" element={<MovimentacaoEstoque/>}/>
       <Route path="/PainelAdministracao" element={<PainelAdministracao/>}/>
       <Route path="/CadastroProduto" element={<CadastroProduto/>}/>
     </Routes>
