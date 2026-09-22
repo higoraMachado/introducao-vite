@@ -1,0 +1,666 @@
+/* =========================================================
+   CADASTRO DE CLIENTE - HOPE BARBEARIA
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    background: #f3f3f3;
+    color: #171717;
+}
+
+
+/* =========================================================
+   PÁGINA
+   ========================================================= */
+
+.cadastro-cliente-page {
+    min-height: 100vh;
+    width: 100%;
+    background: #f3f3f3;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.cadastro-cliente-header {
+    width: 100%;
+    min-height: 78px;
+    padding: 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #111111;
+    color: #ffffff;
+}
+
+
+/* LADO ESQUERDO */
+
+.cadastro-cliente-header-left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.cadastro-cliente-logo-area {
+    width: 220px;
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.cadastro-cliente-logo {
+    width: 145px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   TÍTULO DO HEADER
+   ========================================================= */
+
+.cadastro-cliente-titulo-area {
+    padding-left: 20px;
+    border-left: 1px solid #3a3a3a;
+}
+
+.cadastro-cliente-titulo-area h1 {
+    margin: 0;
+
+    font-size: 21px;
+    line-height: 1.2;
+    font-weight: 600;
+
+    color: #ffffff;
+}
+
+.cadastro-cliente-titulo-area p {
+    margin: 5px 0 0;
+
+    font-size: 13px;
+    color: #a7a7a7;
+}
+
+
+/* =========================================================
+   USUÁRIO
+   ========================================================= */
+
+.cadastro-cliente-usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cadastro-cliente-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #111111;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.cadastro-cliente-usuario-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cadastro-cliente-usuario-info strong {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.cadastro-cliente-usuario-info span {
+    font-size: 12px;
+    color: #999999;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+
+.cadastro-cliente-content {
+    width: 100%;
+    max-width: 1450px;
+
+    margin: 0 auto;
+
+    padding: 36px 42px 60px;
+}
+
+
+/* =========================================================
+   TÍTULO DA PÁGINA
+   ========================================================= */
+
+.cadastro-cliente-heading {
+    margin-bottom: 28px;
+}
+
+.cadastro-cliente-heading > span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+
+    color: #777777;
+}
+
+.cadastro-cliente-heading h2 {
+    margin: 0;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    color: #171717;
+}
+
+.cadastro-cliente-heading p {
+    margin: 8px 0 0;
+
+    font-size: 14px;
+    color: #6f6f6f;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.cadastro-cliente-card {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================================
+   CABEÇALHO DO CARD
+   ========================================================= */
+
+.cadastro-cliente-card-header {
+    min-height: 78px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 18px 28px;
+
+    background: #171717;
+    color: #ffffff;
+}
+
+.cadastro-cliente-card-header h3 {
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.cadastro-cliente-card-header p {
+    margin: 5px 0 0;
+
+    font-size: 12px;
+    color: #9e9e9e;
+}
+
+
+/* =========================================================
+   FORMULÁRIO
+   ========================================================= */
+
+.cadastro-cliente-form {
+    padding: 30px;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 22px 24px;
+}
+
+
+/* =========================================================
+   GRUPO DOS CAMPOS
+   ========================================================= */
+
+.cadastro-cliente-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cadastro-cliente-form-group label {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #333333;
+}
+
+.cadastro-cliente-form-group input {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 13px;
+
+    border: 1px solid #d6d6d6;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #171717;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.cadastro-cliente-form-group input::placeholder {
+    color: #a1a1a1;
+}
+
+.cadastro-cliente-form-group input:hover {
+    border-color: #bcbcbc;
+}
+
+.cadastro-cliente-form-group input:focus {
+    border-color: #171717;
+
+    box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.08);
+}
+
+.cadastro-cliente-form-group input[type="date"] {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TEXTO DE AJUDA
+   ========================================================= */
+
+.cadastro-cliente-form-group small {
+    margin-top: -2px;
+
+    font-size: 11px;
+    line-height: 1.4;
+
+    color: #888888;
+}
+
+
+/* =========================================================
+   INFORMAÇÃO
+   ========================================================= */
+
+.cadastro-cliente-info {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-top: 2px;
+    padding: 15px 16px;
+
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+
+    background: #f8f8f8;
+}
+
+.cadastro-cliente-info-icon {
+    flex-shrink: 0;
+
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #171717;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.cadastro-cliente-info strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 13px;
+    color: #333333;
+}
+
+.cadastro-cliente-info p {
+    margin: 0;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: #777777;
+}
+
+
+/* =========================================================
+   RODAPÉ DO FORMULÁRIO
+   ========================================================= */
+
+.cadastro-cliente-form-footer {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 8px;
+    padding-top: 24px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+
+/* =========================================================
+   BOTÕES
+   ========================================================= */
+
+.cadastro-cliente-btn {
+    min-width: 150px;
+    height: 44px;
+
+    padding: 0 20px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.1s ease;
+}
+
+.cadastro-cliente-btn:active {
+    transform: scale(0.98);
+}
+
+.cadastro-cliente-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* CANCELAR */
+
+.cadastro-cliente-btn-cancelar {
+    background: #ffffff;
+
+    border: 1px solid #d0d0d0;
+
+    color: #333333;
+}
+
+.cadastro-cliente-btn-cancelar:hover:not(:disabled) {
+    background: #f3f3f3;
+    border-color: #bcbcbc;
+}
+
+
+/* CADASTRAR */
+
+.cadastro-cliente-btn-cadastrar {
+    background: #171717;
+
+    border: 1px solid #171717;
+
+    color: #ffffff;
+}
+
+.cadastro-cliente-btn-cadastrar:hover:not(:disabled) {
+    background: #000000;
+    border-color: #000000;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 1100PX
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .cadastro-cliente-content {
+        padding: 32px 30px 50px;
+    }
+
+    .cadastro-cliente-header {
+        padding: 0 30px;
+    }
+
+    .cadastro-cliente-logo-area {
+        width: 180px;
+    }
+
+    .cadastro-cliente-logo {
+        width: 135px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 850PX
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .cadastro-cliente-header {
+        min-height: auto;
+
+        padding: 18px 24px;
+
+        gap: 20px;
+    }
+
+    .cadastro-cliente-header-left {
+        min-width: 0;
+    }
+
+    .cadastro-cliente-logo-area {
+        width: 150px;
+    }
+
+    .cadastro-cliente-logo {
+        width: 125px;
+    }
+
+    .cadastro-cliente-titulo-area {
+        padding-left: 15px;
+    }
+
+    .cadastro-cliente-titulo-area h1 {
+        font-size: 18px;
+    }
+
+    .cadastro-cliente-usuario-info {
+        display: none;
+    }
+
+    .cadastro-cliente-content {
+        padding: 30px 24px 45px;
+    }
+
+    .cadastro-cliente-form {
+        grid-template-columns: 1fr;
+    }
+
+    .cadastro-cliente-info {
+        grid-column: 1;
+    }
+
+    .cadastro-cliente-form-footer {
+        grid-column: 1;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 600PX
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .cadastro-cliente-header {
+        padding: 16px 18px;
+    }
+
+    .cadastro-cliente-logo-area {
+        width: 120px;
+    }
+
+    .cadastro-cliente-logo {
+        width: 105px;
+    }
+
+    .cadastro-cliente-titulo-area {
+        padding-left: 12px;
+    }
+
+    .cadastro-cliente-titulo-area h1 {
+        font-size: 16px;
+    }
+
+    .cadastro-cliente-titulo-area p {
+        font-size: 11px;
+    }
+
+    .cadastro-cliente-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .cadastro-cliente-content {
+        padding: 24px 18px 40px;
+    }
+
+    .cadastro-cliente-heading h2 {
+        font-size: 24px;
+    }
+
+    .cadastro-cliente-card-header {
+        padding: 18px 20px;
+    }
+
+    .cadastro-cliente-form {
+        padding: 22px 20px;
+        gap: 19px;
+    }
+
+    .cadastro-cliente-form-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .cadastro-cliente-btn {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 400PX
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .cadastro-cliente-header-left {
+        width: 100%;
+    }
+
+    .cadastro-cliente-logo-area {
+        width: 100px;
+    }
+
+    .cadastro-cliente-logo {
+        width: 90px;
+    }
+
+    .cadastro-cliente-titulo-area h1 {
+        font-size: 14px;
+    }
+
+    .cadastro-cliente-titulo-area p {
+        display: none;
+    }
+
+    .cadastro-cliente-content {
+        padding: 20px 14px 35px;
+    }
+
+    .cadastro-cliente-heading h2 {
+        font-size: 21px;
+    }
+
+    .cadastro-cliente-heading p {
+        font-size: 13px;
+    }
+
+    .cadastro-cliente-form {
+        padding: 18px 15px;
+    }
+}

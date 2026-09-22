@@ -1,0 +1,123 @@
+.redefinir-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #111;
+
+    padding: 20px;
+}
+
+
+.redefinir-card {
+    width: 100%;
+    max-width: 450px;
+
+    background: #fff;
+
+    padding: 40px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+
+.redefinir-card h1 {
+    margin-bottom: 10px;
+
+    color: #111;
+
+    font-size: 28px;
+}
+
+
+.redefinir-card p {
+    margin-bottom: 25px;
+
+    color: #666;
+
+    line-height: 1.5;
+}
+
+
+.redefinir-card form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.redefinir-card label {
+    font-weight: 600;
+
+    color: #222;
+
+    margin-top: 8px;
+}
+
+
+.redefinir-card input {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+
+.redefinir-card input:focus {
+    border-color: #111;
+}
+
+
+.redefinir-card button {
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #111;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.redefinir-card button:hover {
+    opacity: 0.9;
+}
+
+
+.redefinir-card button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+.erro {
+    color: #c62828;
+
+    font-size: 14px;
+
+    margin-top: 5px;
+}

@@ -1,186 +1,185 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import './recuperacao.css';
+
 import logoHope from '../../assets/logo-hope.png';
 
 function RecuperacaoSenha() {
-  const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [enviado, setEnviado] = useState(false);
-  const [erro, setErro] = useState('');
+    const navigate = useNavigate();
 
-  function solicitarRecuperacao(event) {
-    event.preventDefault();
+    const [email, setEmail] = useState('');
+    const [enviado, setEnviado] = useState(false);
+    const [erro, setErro] = useState('');
+    const [carregando, setCarregando] = useState(false);
 
-    if (!email.trim()) {
-      setErro('Digite seu e-mail para continuar.');
-      return;
+
+const solicitarRecuperacao = async (e) => {
+    e.preventDefault();
+
+    if (!email) {
+        setErro('Digite seu e-mail.');
+        return;
     }
 
-    if (!email.includes('@') || !email.includes('.')) {
-      setErro('Digite um e-mail válido.');
-      return;
+    try {
+        setErro('');
+        setCarregando(true);
+
+        const resposta = await fetch(
+            'http://localhost:3333/recuperacao-senha',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            }
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            setErro(
+                dados.erro ||
+                dados.message ||
+                'Não foi possível solicitar a recuperação.'
+            );
+            return;
+        }
+
+        setEnviado(true);
+
+    } catch (error) {
+        console.error('Erro na recuperação:', error);
+
+        setErro(
+            'Não foi possível conectar ao servidor.'
+        );
+
+    } finally {
+        setCarregando(false);
+    }
+};
+
+
+    function voltarLogin() {
+
+        navigate('/login');
     }
 
-    setErro('');
-    setEnviado(true);
-  }
 
-  function voltar() {
-    navigate('/login');
-  }
+    return (
 
-  return (
-    <main className="recuperacao-page">
+        <main className="recuperacao-page">
 
-      {/* HEADER */}
-      <header className="recuperacao-header">
+            <section className="recuperacao-card">
 
-        <div className="header-logo">
-          <img
-            src={logoHope}
-            alt="Hope Barbearia"
-          />
-        </div>
-
-        <div className="header-title">
-          <h1>Hope Barbearia</h1>
-          <p>Recuperação de senha</p>
-        </div>
-
-        <div className="header-spacer"></div>
-
-      </header>
-
-      {/* CONTEÚDO */}
-      <section className="recuperacao-content">
-
-        {!enviado ? (
-
-          <div className="recuperacao-card">
-
-            <div className="recuperacao-icon">
-              🔑
-            </div>
-
-            <span className="heading-label">
-              RECUPERAÇÃO DE SENHA
-            </span>
-
-            <h2>Esqueceu sua senha?</h2>
-
-            <p className="descricao">
-              Digite o e-mail cadastrado na sua conta.
-              Enviaremos as instruções para você criar
-              uma nova senha.
-            </p>
-
-            <form onSubmit={solicitarRecuperacao}>
-
-              <div className="campo">
-
-                <label htmlFor="email">
-                  E-mail
-                </label>
-
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Digite seu e-mail"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                    setErro('');
-                  }}
+                <img
+                    src={logoHope}
+                    alt="Hope Barbearia"
+                    className="recuperacao-logo"
                 />
 
-              </div>
 
-              {erro && (
-                <p className="mensagem-erro">
-                  {erro}
-                </p>
-              )}
+                {!enviado ? (
 
-              <button
-                type="submit"
-                className="btn-recuperar"
-              >
-                Solicitar recuperação
-              </button>
+                    <>
 
-            </form>
+                        <h1>
+                            Recuperar senha
+                        </h1>
 
-            <button
-              type="button"
-              className="btn-voltar"
-              onClick={voltar}
-            >
-              ← Voltar para o login
-            </button>
 
-          </div>
+                        <p>
+                            Digite o e-mail cadastrado
+                            para receber o link de recuperação.
+                        </p>
 
-        ) : (
 
-          <div className="recuperacao-card confirmacao">
+                        <form
+                            onSubmit={solicitarRecuperacao}
+                        >
 
-            <div className="confirmacao-icon">
-              ✓
-            </div>
+                            <label>
+                                E-mail
+                            </label>
 
-            <span className="heading-label">
-              SOLICITAÇÃO ENVIADA
-            </span>
 
-            <h2>Verifique seu e-mail</h2>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(event) =>
+                                    setEmail(event.target.value)
+                                }
+                                placeholder="Digite seu e-mail"
+                            />
 
-            <p className="descricao">
-              Se o e-mail informado estiver cadastrado,
-              você receberá as instruções para recuperar
-              sua senha.
-            </p>
 
-            <div className="email-confirmacao">
+                            {erro && (
 
-              <span>E-mail informado</span>
+                                <span className="erro">
+                                    {erro}
+                                </span>
 
-              <strong>
-                {email}
-              </strong>
+                            )}
 
-            </div>
 
-            <button
-              type="button"
-              className="btn-recuperar"
-              onClick={voltar}
-            >
-              Voltar para o login
-            </button>
+                            <button
+                                type="submit"
+                                disabled={carregando} >
+                                {carregando
+                                    ? 'Enviando...'
+                                    : 'Enviar link de recuperação'}
+                            </button>
 
-          </div>
+                        </form>
 
-        )}
 
-      </section>
+                        <button
+                            type="button"
+                            className="btn-voltar"
+                            onClick={voltarLogin}
+                        >
+                            Voltar para o login
+                        </button>
 
-      {/* RODAPÉ */}
-      <footer className="recuperacao-footer">
+                    </>
 
-        <span>Hope Barbearia</span>
+                ) : (
 
-        <span>•</span>
+                    <>
 
-        <span>Agendamento e controle</span>
+                        <h1>
+                            E-mail enviado!
+                        </h1>
 
-      </footer>
 
-    </main>
-  );
+                        <p>
+                            Verifique sua caixa de entrada
+                            e clique no link enviado para
+                            redefinir sua senha.
+                        </p>
+
+
+                        <button
+                            type="button"
+                            onClick={voltarLogin}
+                        >
+                            Voltar para o login
+                        </button>
+
+                    </>
+
+                )}
+
+            </section>
+
+        </main>
+    );
 }
 
 export default RecuperacaoSenha;
-

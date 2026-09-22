@@ -21,13 +21,55 @@ function Login() {
   // LOGIN
   // ========================================
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    console.log('Login enviado');
-    console.log('E-mail:', email);
-    console.log('Senha:', senha);
-  }
+    if (!email || !senha) {
+        alert('Preencha o e-mail e a senha.');
+        return;
+    }
+
+    try {
+        const resposta = await fetch('http://localhost:3333/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                senha: senha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            alert(dados.erro || dados.message || 'E-mail ou senha inválidos.');
+            return;
+        }
+
+        // Salva o token para acessar as páginas protegidas
+        localStorage.setItem('token', dados.dados.token);
+
+        // Salva os dados do usuário
+        localStorage.setItem(
+            'usuario',
+            JSON.stringify(dados.dados.usuario)
+        );
+
+        console.log('Login realizado:', dados.dados);
+
+        // Vai para o painel
+        navigate('/dashboardCliente');
+
+    } catch (error) {
+        console.error('Erro ao conectar com o servidor:', error);
+        alert(
+            'Não foi possível conectar ao servidor. ' +
+            'Verifique se o backend está rodando.'
+        );
+    }
+};
 
   // ========================================
   // IR PARA RECUPERAÇÃO DE SENHA
@@ -42,7 +84,7 @@ function Login() {
   // ========================================
 
   function criarConta() {
-    navigate('/cadastro');
+    navigate('/CadastroCliente');
   }
 
   return (
