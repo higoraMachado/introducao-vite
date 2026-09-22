@@ -46,7 +46,7 @@ function Administrador() {
     {
       nome: "Financeiro",
       icone: "R$",
-      rota: null,
+      rota: "/MovimentacaoEstoque",
     },
     {
       nome: "Relatórios",
@@ -520,12 +520,11 @@ function Administrador() {
               {/* FINANCEIRO */}
 
               <button
-                disabled
-                title="Rota ainda não cadastrada"
+                onClick={() => navigate("/ControleFinanceiro")}
               >
                 <span>R$</span>
                 <strong>Financeiro</strong>
-                <small>Em desenvolvimento</small>
+                <small>Visualizar balanço</small>
               </button>
 
 

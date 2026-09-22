@@ -436,18 +436,6 @@ function Estoque() {
 
           </div>
 
-          <button
-            className="btn-novo-produto"
-            onClick={() =>
-              setModalProduto(true)
-            }
-          >
-            <span>+</span>
-
-            Novo produto
-
-          </button>
-
         </div>
 
 
