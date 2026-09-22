@@ -13,6 +13,9 @@ import Estoque from './pages/estoque/Estoque';
 import PainelAdministracao from './pages/admpainel/adm';
 import CadastroProduto from './pages/cadastroProduto/cadastroProduto';
 import MovimentacaoEstoque from './pages/MovimentacaoEstoque/MovimentacaoEstoque';
+import ControleFinanceiro from './pages/ControleFinanceiro/ControleFinanceiro';
+import RegistrarPagamentos from './pages/RegistrarPagamantos/RegistrarPagamentos';
+import Despesas from './pages/Despesas/Despesas';
 
 function App() {
   return (
@@ -32,6 +35,10 @@ function App() {
       <Route path="/MovimentacaoEstoque" element={<MovimentacaoEstoque/>}/>
       <Route path="/PainelAdministracao" element={<PainelAdministracao/>}/>
       <Route path="/CadastroProduto" element={<CadastroProduto/>}/>
+      <Route path="/ControleFinanceiro" element={<ControleFinanceiro/>}/>
+      <Route path="/RegistrarPagamento" element={<RegistrarPagamentos/>}/>
+      <Route path="/RegistrarPagamentos" element={<RegistrarPagamentos/>}/>
+      <Route path="/Despesas" element={<Despesas/>}/>
     </Routes>
   );
 }

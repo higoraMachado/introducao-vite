@@ -520,12 +520,11 @@ function Administrador() {
               {/* FINANCEIRO */}
 
               <button
-                disabled
-                title="Rota ainda não cadastrada"
+                onClick={() => navigate("/ControleFinanceiro")}
               >
                 <span>R$</span>
                 <strong>Financeiro</strong>
-                <small>Em desenvolvimento</small>
+                <small>Visualizar balanço</small>
               </button>
 
 
