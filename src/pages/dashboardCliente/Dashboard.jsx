@@ -81,7 +81,7 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-title">
-          <h1>Dashboard</h1>
+          <h1>Área do Cliente</h1>
           <p>Bem-vindo à Hope Barbearia</p>
         </div>
 

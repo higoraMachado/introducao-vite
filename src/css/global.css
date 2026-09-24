@@ -1,45 +1,414 @@
 html {
-    font-size: 62.5%;
-}
-
-#root {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-    width: 100vw - 1rem;
-    height: 100vh -1rem;
-}
-
-h1 {
-    font-size: 3rem;
+  font-size: 62.5%;
 }
 
 body {
-    font-size: 1.6rem;
+  margin: 0;
+  font-size: 1.6rem;
+  background: #f5f3ef;
+  color: #171717;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+/* =========================================
+   PADRÃO VISUAL DAS PÁGINAS
+   (baseado no dashboard)
+========================================= */
+
+body main[class$="-page"],
+body .perfil-page,
+body .redefinir-page,
+body .recuperacao-page,
+body .login-page {
+  min-height: 100vh;
+  width: 100%;
+  background:
+    linear-gradient(
+      rgba(245, 243, 239, 0.92),
+      rgba(245, 243, 239, 0.95)
+    ),
+    url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=2200&q=85");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #171717;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+body [class$="-header"],
+body .dashboard-header {
+  width: 100%;
+  min-height: 138px;
+  background:
+    radial-gradient(
+      ellipse at center,
+      #222222 0%,
+      #141414 48%,
+      #090909 100%
+    );
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 52px;
+  position: relative;
+  z-index: 10;
+  border-bottom: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+body [class$="-header"]::before,
+body .dashboard-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #75531d 0%,
+    #b98c38 18%,
+    #efd27d 50%,
+    #b98c38 82%,
+    #75531d 100%
+  );
+}
+
+body [class$="-header"]::after,
+body .dashboard-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #6f4e1c 0%,
+    #b98d3e 18%,
+    #e6c56f 50%,
+    #b98d3e 82%,
+    #6f4e1c 100%
+  );
+  box-shadow: 0 -2px 12px rgba(201, 162, 77, 0.22);
+}
+
+body [class$="-header"] .header-logo,
+body [class$="-header"] .dashboard-logo,
+body [class$="-header"] .clientes-logo,
+body [class$="-header"] .admin-header-logo {
+  width: 330px;
+  height: 138px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 2;
+}
+
+body [class$="-header"] .header-logo::before,
+body [class$="-header"] .dashboard-logo::before,
+body [class$="-header"] .clientes-logo::before,
+body [class$="-header"] .admin-header-logo::before {
+  content: "";
+  position: absolute;
+  width: 126px;
+  height: 126px;
+  left: 0;
+  top: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(214, 176, 87, 0.4);
+  box-shadow:
+    0 0 0 6px rgba(201, 162, 77, 0.035),
+    0 0 24px rgba(201, 162, 77, 0.1);
+}
+
+body [class$="-header"] .header-logo::after,
+body [class$="-header"] .dashboard-logo::after,
+body [class$="-header"] .clientes-logo::after,
+body [class$="-header"] .admin-header-logo::after {
+  content: "";
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  left: 7px;
+  top: 13px;
+  border-radius: 50%;
+  border: 1px dashed rgba(214, 176, 87, 0.22);
+}
+
+body [class$="-header"] img,
+body .dashboard-header img,
+body .header-logo img,
+body .dashboard-logo img,
+body .clientes-logo img,
+body .admin-header-logo img {
+  width: 132px !important;
+  height: 124px !important;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  filter: brightness(1.08) contrast(1.06)
+    drop-shadow(0 4px 9px rgba(0, 0, 0, 0.55));
+  transform: scale(1.08);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+  position: relative;
+  z-index: 3;
+}
+
+body [class$="-header"] img:hover,
+body .dashboard-header img:hover,
+body .header-logo img:hover,
+body .dashboard-logo img:hover,
+body .clientes-logo img:hover,
+body .admin-header-logo img:hover {
+  transform: scale(1.13);
+}
+
+body [class$="-header"] .header-title,
+body [class$="-header"] .dashboard-title,
+body [class$="-header"] .clientes-title,
+body [class$="-header"] .admin-header-title {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  min-width: 420px;
+}
+
+body [class$="-header"] .header-title h1,
+body [class$="-header"] .dashboard-title h1,
+body [class$="-header"] .clientes-title h1,
+body [class$="-header"] .admin-header-title h1 {
+  margin: 0;
+  color: #dfbf68;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 14px rgba(201, 162, 77, 0.2);
+}
+
+body [class$="-header"] .header-title h1::before,
+body [class$="-header"] .header-title h1::after,
+body [class$="-header"] .dashboard-title h1::before,
+body [class$="-header"] .dashboard-title h1::after,
+body [class$="-header"] .clientes-title h1::before,
+body [class$="-header"] .clientes-title h1::after,
+body [class$="-header"] .admin-header-title h1::before,
+body [class$="-header"] .admin-header-title h1::after {
+  content: "";
+  display: inline-block;
+  width: 58px;
+  height: 1px;
+  vertical-align: middle;
+  margin: 0 17px;
+  background: linear-gradient(90deg, transparent, #c9a24d);
+}
+
+body [class$="-header"] .header-title h1::after,
+body [class$="-header"] .dashboard-title h1::after,
+body [class$="-header"] .clientes-title h1::after,
+body [class$="-header"] .admin-header-title h1::after {
+  background: linear-gradient(90deg, #c9a24d, transparent);
+}
+
+body [class$="-header"] .header-title p,
+body [class$="-header"] .dashboard-title p,
+body [class$="-header"] .clientes-title p,
+body [class$="-header"] .admin-header-title p {
+  margin: 8px 0 0;
+  color: #b5b5b5;
+  font-size: 13px;
+}
+
+body [class$="-header"] .header-user,
+body [class$="-header"] .dashboard-user,
+body [class$="-header"] .clientes-user,
+body [class$="-header"] .admin-header-user {
+  min-width: 300px;
+  height: 138px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  position: relative;
+  z-index: 3;
+}
+
+body [class$="-header"] .user-avatar,
+body [class$="-header"] .dashboard-avatar,
+body [class$="-header"] .admin-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #efd37d, #b68a35);
+  color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+
+body [class$="-header"] .user-info,
+body [class$="-header"] .dashboard-user-info,
+body [class$="-header"] .admin-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+body [class$="-header"] .user-info strong,
+body [class$="-header"] .dashboard-user-info strong,
+body [class$="-header"] .admin-user-info strong {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+body [class$="-header"] .user-info span,
+body [class$="-header"] .dashboard-user-info span,
+body [class$="-header"] .admin-user-info span {
+  color: #d7d7d7;
+  font-size: 12px;
+}
+
+body .heading-label,
+body .page-heading .heading-label,
+body .dashboard-heading .heading-label,
+body .clientes-heading .heading-label,
+body .estoque-content .heading-label,
+body .perfil-topo .heading-label {
+  display: block;
+  color: #777777;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 7px;
+}
+
+body .page-heading,
+body .dashboard-heading,
+body .clientes-heading,
+body .perfil-topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 26px;
+}
+
+body .page-heading h2,
+body .dashboard-heading h2,
+body .clientes-heading h2,
+body .perfil-topo h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 750;
+  color: #171717;
+}
+
+body .page-heading p,
+body .dashboard-heading p,
+body .clientes-heading p,
+body .perfil-topo p {
+  margin: 8px 0 0;
+  color: #777777;
+  font-size: 14px;
+}
+
+body .btn-agendar,
+body .btn-cadastrar,
+body .btn-small,
+body .btn-photo {
+  min-height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #191919, #0f0f0f);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  transition: 0.2s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+body .btn-agendar:hover,
+body .btn-cadastrar:hover,
+body .btn-small:hover,
+body .btn-photo:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.16);
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    border: solid 0.5rem #ab4;
-    /* margin: 10px; */
-    background-color: #ff0;
-    width: 100%;
-    max-width: 124rem;
-    /* min-width: 500px; */
-    /* height: 120vh; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: solid 0.5rem #ab4;
+  background-color: #ff0;
+  width: 100%;
+  max-width: 124rem;
 }
 
 @media screen and (max-width: 960px) {
-    html {
-        font-size: 50%;
-    }
+  html {
+    font-size: 50%;
+  }
 }
 
 @media screen and (max-width: 600px) {
-    html {
-        font-size: 37.2%;
-    }
+  html {
+    font-size: 37.2%;
+  }
+
+  body [class$="-header"],
+  body .dashboard-header {
+    padding: 0 20px;
+    min-height: 110px;
+  }
+
+  body [class$="-header"] .header-title,
+  body [class$="-header"] .dashboard-title,
+  body [class$="-header"] .clientes-title,
+  body [class$="-header"] .admin-header-title {
+    min-width: 220px;
+  }
+
+  body [class$="-header"] .header-title h1,
+  body [class$="-header"] .dashboard-title h1,
+  body [class$="-header"] .clientes-title h1,
+  body [class$="-header"] .admin-header-title h1 {
+    font-size: 20px;
+  }
 }

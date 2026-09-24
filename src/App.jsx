@@ -12,19 +12,16 @@ import CadastroServico from './pages/CadastroServico/CadastroServico';
 import Estoque from './pages/estoque/Estoque';
 import PainelAdministracao from './pages/admpainel/adm';
 import CadastroProduto from './pages/cadastroProduto/cadastroProduto';
-<<<<<<< HEAD
 import CadastroCliente from './pages/cadastroClientes/cadastroCliente';
-=======
 import MovimentacaoEstoque from './pages/MovimentacaoEstoque/MovimentacaoEstoque';
 import ControleFinanceiro from './pages/ControleFinanceiro/ControleFinanceiro';
 import RegistrarPagamentos from './pages/RegistrarPagamantos/RegistrarPagamentos';
 import Despesas from './pages/Despesas/Despesas';
->>>>>>> de76a14880c1af1052e3acc263ce938465019311
+
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboardCliente" element={<Dashboard />} />
       <Route path="/agendamento" element={<Agendamento />} />
@@ -39,14 +36,7 @@ function App() {
       <Route path="/MovimentacaoEstoque" element={<MovimentacaoEstoque/>}/>
       <Route path="/PainelAdministracao" element={<PainelAdministracao/>}/>
       <Route path="/CadastroProduto" element={<CadastroProduto/>}/>
-<<<<<<< HEAD
       <Route path="/CadastroCliente"element={<CadastroCliente />}/>
-=======
-      <Route path="/ControleFinanceiro" element={<ControleFinanceiro/>}/>
-      <Route path="/RegistrarPagamento" element={<RegistrarPagamentos/>}/>
-      <Route path="/RegistrarPagamentos" element={<RegistrarPagamentos/>}/>
-      <Route path="/Despesas" element={<Despesas/>}/>
->>>>>>> de76a14880c1af1052e3acc263ce938465019311
     </Routes>
   );
 }
