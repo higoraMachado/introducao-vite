@@ -1,186 +1,190 @@
-import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import './RedefinirSenha.css';
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "./redefinirSenha.css";
 
 function RedefinirSenha() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-    const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
 
-    const email = searchParams.get('email');
-    const token = searchParams.get('token');
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
 
-    const [novaSenha, setNovaSenha] = useState('');
-    const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [mensagem, setMensagem] = useState("");
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-    const [erro, setErro] = useState('');
-    const [sucesso, setSucesso] = useState('');
-    const [carregando, setCarregando] = useState(false);
+  async function redefinirSenha(event) {
+    event.preventDefault();
 
-    const redefinirSenha = async (e) => {
-        e.preventDefault();
+    setMensagem("");
+    setErro("");
 
-        setErro('');
-        setSucesso('');
+    if (!token) {
+      setErro(
+        "Token de recuperação não encontrado. Solicite uma nova recuperação de senha."
+      );
+      return;
+    }
 
-        if (!email || !token) {
-            setErro(
-                'Link de recuperação inválido ou incompleto.'
-            );
-            return;
+    if (!novaSenha) {
+      setErro("Digite uma nova senha.");
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      setErro("As senhas não são iguais.");
+      return;
+    }
+
+    try {
+      setCarregando(true);
+
+      const resposta = await fetch(
+        "http://localhost:3333/usuarios/redefinir-senha",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            novaSenha: novaSenha,
+          }),
         }
+      );
 
-        if (!novaSenha || !confirmarSenha) {
-            setErro(
-                'Preencha os dois campos de senha.'
-            );
-            return;
-        }
+      const dados = await resposta.json();
 
-        if (novaSenha !== confirmarSenha) {
-            setErro(
-                'As senhas não coincidem.'
-            );
-            return;
-        }
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+          dados.message ||
+          dados.erro ||
+          "Não foi possível redefinir sua senha."
+        );
+      }
 
-        if (novaSenha.length < 6) {
-            setErro(
-                'A senha deve possuir pelo menos 6 caracteres.'
-            );
-            return;
-        }
+      setMensagem(
+        dados.mensagem ||
+        dados.message ||
+        "Senha redefinida com sucesso!"
+      );
 
-        try {
-            setCarregando(true);
+      setNovaSenha("");
+      setConfirmarSenha("");
 
-            const resposta = await fetch(
-                'http://localhost:3333/redefinir-senha',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        token: token,
-                        novaSenha: novaSenha
-                    })
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+
+    } catch (error) {
+      console.error("Erro ao redefinir senha:", error);
+
+      setErro(
+        error.message ||
+        "Erro ao redefinir senha."
+      );
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  return (
+    <div className="redefinir-senha-page">
+
+      <div className="redefinir-senha-container">
+
+        <div className="redefinir-senha-card">
+
+          <h1>Redefinir senha</h1>
+
+          <p>
+            Digite sua nova senha e confirme para concluir
+            a recuperação da sua conta.
+          </p>
+
+          <form onSubmit={redefinirSenha}>
+
+            <div className="form-group">
+
+              <label htmlFor="novaSenha">
+                Nova senha
+              </label>
+
+              <input
+                id="novaSenha"
+                type="password"
+                value={novaSenha}
+                onChange={(event) =>
+                  setNovaSenha(event.target.value)
                 }
-            );
-
-            const dados = await resposta.json();
-
-            if (!resposta.ok) {
-                setErro(
-                    dados.erro ||
-                    dados.message ||
-                    'Não foi possível alterar a senha.'
-                );
-                return;
-            }
-
-            setSucesso(
-                'Senha alterada com sucesso!'
-            );
-
-            setNovaSenha('');
-            setConfirmarSenha('');
-
-            setTimeout(() => {
-                navigate('/login');
-            }, 2000);
-
-        } catch (error) {
-            console.error(
-                'Erro ao redefinir senha:',
-                error
-            );
-
-            setErro(
-                'Não foi possível conectar ao servidor.'
-            );
-
-        } finally {
-            setCarregando(false);
-        }
-    };
-
-    return (
-        <div className="redefinir-page">
-
-            <div className="redefinir-card">
-
-                <h1>Redefinir senha</h1>
-
-                <p>
-                    Digite sua nova senha abaixo.
-                </p>
-
-                {erro && (
-                    <div className="mensagem erro">
-                        {erro}
-                    </div>
-                )}
-
-                {sucesso && (
-                    <div className="mensagem sucesso">
-                        {sucesso}
-                    </div>
-                )}
-
-                <form onSubmit={redefinirSenha}>
-
-                    <label>
-                        Nova senha
-                    </label>
-
-                    <input
-                        type="password"
-                        value={novaSenha}
-                        onChange={(e) =>
-                            setNovaSenha(e.target.value)
-                        }
-                        placeholder="Digite sua nova senha"
-                    />
-
-                    <label>
-                        Confirmar senha
-                    </label>
-
-                    <input
-                        type="password"
-                        value={confirmarSenha}
-                        onChange={(e) =>
-                            setConfirmarSenha(e.target.value)
-                        }
-                        placeholder="Digite novamente sua senha"
-                    />
-
-                    <button
-                        type="submit"
-                        disabled={carregando}
-                    >
-                        {carregando
-                            ? 'Alterando...'
-                            : 'Redefinir senha'
-                        }
-                    </button>
-
-                </form>
-
-                <button
-                    type="button"
-                    className="voltar-login"
-                    onClick={() => navigate('/login')}
-                >
-                    Voltar para o login
-                </button>
+                placeholder="Digite sua nova senha"
+                disabled={carregando}
+                required
+              />
 
             </div>
 
+            <div className="form-group">
+
+              <label htmlFor="confirmarSenha">
+                Confirmar nova senha
+              </label>
+
+              <input
+                id="confirmarSenha"
+                type="password"
+                value={confirmarSenha}
+                onChange={(event) =>
+                  setConfirmarSenha(event.target.value)
+                }
+                placeholder="Confirme sua nova senha"
+                disabled={carregando}
+                required
+              />
+
+            </div>
+
+            {erro && (
+              <p className="mensagem-erro">
+                {erro}
+              </p>
+            )}
+
+            {mensagem && (
+              <p className="mensagem-sucesso">
+                {mensagem}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={carregando}
+            >
+              {carregando
+                ? "Redefinindo..."
+                : "Redefinir senha"}
+            </button>
+
+          </form>
+
+          <button
+            type="button"
+            className="btn-voltar"
+            onClick={() => navigate("/login")}
+            disabled={carregando}
+          >
+            Voltar para o login
+          </button>
+
         </div>
-    );
+
+      </div>
+
+    </div>
+  );
 }
 
 export default RedefinirSenha;

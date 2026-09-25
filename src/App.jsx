@@ -3,6 +3,7 @@ import Dashboard from './pages/dashboardCliente/Dashboard';
 import Login from './pages/login/login';
 import Agendamento from './pages/agendamento';
 import RecuperacaoSenha from './pages/recuperacaoSenha/recuperacao';
+import RedefinirSenha from './pages/redefinirSenha.jsx/redefinirSenha';
 import Clientes from './pages/clientesGerenciamento/Clientes';
 import Barbeiros from './pages/barbeiros/Barbeiros';
 import Perfil from './pages/perfil/Perfil';
@@ -41,6 +42,7 @@ function App() {
       <Route path="/ControleFinanceiro" element={<ControleFinanceiro />} />
       <Route path="/RegistrarPagamentos" element={<RegistrarPagamentos />} />
       <Route path="/Despesas" element={<Despesas />} />
+      <Route path="/redefinir-senha" element={<RedefinirSenha />} />
     </Routes>
   );
 }
