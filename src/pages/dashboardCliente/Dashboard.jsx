@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import logoHope from '../../assets/logo-hope.png';
 
@@ -44,21 +45,33 @@ const promocoes = [
 ];
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [agendamento, setAgendamento] = useState(null);
+  const [usuario, setUsuario] = useState(null);
 
-  useEffect(() => {
-    const agendamentoSalvo = localStorage.getItem(
-      'hope-barbearia-agendamento'
-    );
+useEffect(() => {
+  const usuarioSalvo = localStorage.getItem('usuario');
 
-    if (agendamentoSalvo) {
-      try {
-        setAgendamento(JSON.parse(agendamentoSalvo));
-      } catch (error) {
-        console.error('Erro ao carregar agendamento:', error);
-      }
+  if (usuarioSalvo) {
+    try {
+      setUsuario(JSON.parse(usuarioSalvo));
+    } catch (error) {
+      console.error('Erro ao carregar usuário:', error);
     }
-  }, []);
+  }
+
+  const agendamentoSalvo = localStorage.getItem(
+    'hope-barbearia-agendamento'
+  );
+
+  if (agendamentoSalvo) {
+    try {
+      setAgendamento(JSON.parse(agendamentoSalvo));
+    } catch (error) {
+      console.error('Erro ao carregar agendamento:', error);
+    }
+  }
+}, []);
 
   function formatarData(data) {
     if (!data) return '';
@@ -85,14 +98,19 @@ function Dashboard() {
           <p>Bem-vindo à Hope Barbearia</p>
         </div>
 
-        <div className="dashboard-user">
-          <div className="user-avatar">B</div>
+<button
+  className="dashboard-user"
+  onClick={() => navigate('/perfil')}
+>
+  <div className="user-avatar">
+    {usuario?.usuario_nome?.charAt(0).toUpperCase() || '?'}
+  </div>
 
-          <div className="user-info">
-            <strong>Bruno</strong>
-            <span>Minha conta</span>
-          </div>
-        </div>
+  <div className="user-info">
+    <strong>{usuario?.usuario_nome || 'Cliente'}</strong>
+    <span>Ver meu perfil</span>
+  </div>
+</button>
       </header>
 
       {/* CONTEÚDO */}
@@ -103,7 +121,7 @@ function Dashboard() {
           <div>
             <span className="heading-label">ÁREA DO CLIENTE</span>
 
-            <h2>Olá, Bruno!</h2>
+            <h2>Olá, {usuario?.usuario_nome || 'Cliente'}!</h2>
 
             <p>
               Confira seus próximos atendimentos e o histórico da sua conta.

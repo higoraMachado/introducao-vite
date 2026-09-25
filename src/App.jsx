@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/dashboardCliente/Dashboard';
 import Login from './pages/login/login';
 import Agendamento from './pages/agendamento';
@@ -22,6 +22,7 @@ import Despesas from './pages/Despesas/Despesas';
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboardCliente" element={<Dashboard />} />
       <Route path="/agendamento" element={<Agendamento />} />
@@ -37,6 +38,9 @@ function App() {
       <Route path="/PainelAdministracao" element={<PainelAdministracao/>}/>
       <Route path="/CadastroProduto" element={<CadastroProduto/>}/>
       <Route path="/CadastroCliente"element={<CadastroCliente />}/>
+      <Route path="/ControleFinanceiro" element={<ControleFinanceiro />} />
+      <Route path="/RegistrarPagamentos" element={<RegistrarPagamentos />} />
+      <Route path="/Despesas" element={<Despesas />} />
     </Routes>
   );
 }

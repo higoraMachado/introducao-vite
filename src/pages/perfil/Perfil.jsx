@@ -1,20 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Perfil.css";
 import logo from "../../assets/logo-hope.png";
 
 function Perfil() {
+  const navigate = useNavigate();
+
   const [editando, setEditando] = useState(false);
   const [modalSenha, setModalSenha] = useState(false);
-
-  const [usuario, setUsuario] = useState({
-    nome: "Bruno",
-    telefone: "(18) 99999-9999",
-    email: "bruno@email.com",
-    nascimento: "2000-01-01",
-    tipo: "Cliente",
-  });
-
-  const [dadosEditados, setDadosEditados] = useState(usuario);
+  const [usuario, setUsuario] = useState(null);
+  const [dadosEditados, setDadosEditados] = useState(null);
 
   const historico = [
     {
@@ -43,6 +38,112 @@ function Perfil() {
     },
   ];
 
+useEffect(() => {
+  async function carregarPerfil() {
+    const token = localStorage.getItem("token");
+    const usuarioSalvo = localStorage.getItem("usuario");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const resposta = await fetch(
+        "http://localhost:3333/usuarios/perfil",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+          dados.message ||
+          "Erro ao carregar perfil"
+        );
+      }
+
+      const usuarioAPI = dados.dados;
+
+      const usuarioFormatado = {
+        id: usuarioAPI.usuario_id,
+        nome: usuarioAPI.usuario_nome || "",
+        telefone: usuarioAPI.usuario_telefone || "",
+        email: usuarioAPI.usuario_email || "",
+        nascimento: usuarioAPI.usuario_dt_nascimento
+          ? String(usuarioAPI.usuario_dt_nascimento).substring(0, 10)
+          : "",
+        tipo:
+          usuarioAPI.usuario_tipo === 1
+            ? "Administrador"
+            : usuarioAPI.usuario_tipo === 2
+              ? "Barbeiro"
+              : "Cliente",
+      };
+
+      setUsuario(usuarioFormatado);
+      setDadosEditados(usuarioFormatado);
+
+      // Mantém o localStorage atualizado com os dados reais da API
+      if (usuarioSalvo) {
+        const usuarioAtual = JSON.parse(usuarioSalvo);
+
+        localStorage.setItem(
+          "usuario",
+          JSON.stringify({
+            ...usuarioAtual,
+            ...usuarioAPI,
+          })
+        );
+      }
+
+    } catch (error) {
+      console.error("Erro ao carregar perfil:", error);
+
+      // Se a API falhar, tenta usar os dados salvos no login
+      if (usuarioSalvo) {
+        try {
+          const usuarioLocal = JSON.parse(usuarioSalvo);
+
+          const usuarioFormatado = {
+            id: usuarioLocal.usuario_id,
+            nome: usuarioLocal.usuario_nome || "",
+            telefone: usuarioLocal.usuario_telefone || "",
+            email: usuarioLocal.usuario_email || "",
+            nascimento: usuarioLocal.usuario_dt_nascimento
+              ? String(usuarioLocal.usuario_dt_nascimento).substring(0, 10)
+              : "",
+            tipo:
+              usuarioLocal.usuario_tipo === 1
+                ? "Administrador"
+                : usuarioLocal.usuario_tipo === 2
+                  ? "Barbeiro"
+                  : "Cliente",
+          };
+
+          setUsuario(usuarioFormatado);
+          setDadosEditados(usuarioFormatado);
+
+        } catch (erroLocal) {
+          console.error(
+            "Erro ao recuperar usuário do localStorage:",
+            erroLocal
+          );
+        }
+      }
+    }
+  }
+
+  carregarPerfil();
+}, [navigate]);
+
   function alterarCampo(event) {
     const { name, value } = event.target;
 
@@ -52,14 +153,75 @@ function Perfil() {
     }));
   }
 
-  function salvarAlteracoes() {
+ async function salvarAlteracoes() {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const resposta = await fetch(
+      `http://localhost:3333/usuarios/${usuario.id}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          usuario_nome: dadosEditados.nome,
+          usuario_email: dadosEditados.email,
+          usuario_telefone: dadosEditados.telefone.replace(/\D/g, ""),
+          usuario_dt_nascimento: dadosEditados.nascimento,
+        }),
+      }
+    );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.mensagem || "Erro ao atualizar os dados"
+      );
+    }
+
+    // Atualiza os dados exibidos na tela
     setUsuario(dadosEditados);
+
+    // Atualiza também o localStorage
+    localStorage.setItem(
+      "usuario",
+      JSON.stringify({
+        ...JSON.parse(localStorage.getItem("usuario")),
+        usuario_nome: dadosEditados.nome,
+        usuario_email: dadosEditados.email,
+        usuario_telefone: dadosEditados.telefone,
+        usuario_dt_nascimento: dadosEditados.nascimento,
+      })
+    );
+
     setEditando(false);
+
+    alert("Dados atualizados com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar perfil:", error);
+    alert(error.message || "Erro ao atualizar perfil.");
   }
+}
 
   function cancelarEdicao() {
     setDadosEditados(usuario);
     setEditando(false);
+  }
+
+  if (!usuario || !dadosEditados) {
+    return (
+      <div className="perfil-page">
+        <p>Carregando dados do perfil...</p>
+      </div>
+    );
   }
 
   return (
