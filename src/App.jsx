@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, } from 'react-router-dom';
+
 import Dashboard from './pages/dashboardCliente/Dashboard';
 import Login from './pages/login/login';
 import Agendamento from './pages/agendamento';
@@ -18,12 +19,13 @@ import MovimentacaoEstoque from './pages/MovimentacaoEstoque/MovimentacaoEstoque
 import ControleFinanceiro from './pages/ControleFinanceiro/ControleFinanceiro';
 import RegistrarPagamentos from './pages/RegistrarPagamantos/RegistrarPagamentos';
 import Despesas from './pages/Despesas/Despesas';
+import Landing from './pages/landing/Landing';
 
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboardCliente" element={<Dashboard />} />
       <Route path="/agendamento" element={<Agendamento />} />
@@ -42,7 +44,7 @@ function App() {
       <Route path="/ControleFinanceiro" element={<ControleFinanceiro />} />
       <Route path="/RegistrarPagamentos" element={<RegistrarPagamentos />} />
       <Route path="/Despesas" element={<Despesas />} />
-      <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+      <Route path="/redefinirSenha" element={<RedefinirSenha />} />
     </Routes>
   );
 }

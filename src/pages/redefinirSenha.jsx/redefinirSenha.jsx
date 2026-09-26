@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./redefinirSenha.css";
@@ -6,7 +7,9 @@ function RedefinirSenha() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
+  // Pega os dados enviados no link do e-mail
   const token = searchParams.get("token");
+  const email = searchParams.get("email");
 
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
@@ -21,6 +24,7 @@ function RedefinirSenha() {
     setMensagem("");
     setErro("");
 
+    // Verifica se o token existe
     if (!token) {
       setErro(
         "Token de recuperação não encontrado. Solicite uma nova recuperação de senha."
@@ -28,11 +32,27 @@ function RedefinirSenha() {
       return;
     }
 
+    // Verifica se o e-mail existe
+    if (!email) {
+      setErro(
+        "E-mail de recuperação não encontrado. Solicite uma nova recuperação de senha."
+      );
+      return;
+    }
+
+    // Verifica a senha
     if (!novaSenha) {
       setErro("Digite uma nova senha.");
       return;
     }
 
+    // Senha mínima
+    if (novaSenha.length < 6) {
+      setErro("A senha deve possuir pelo menos 6 caracteres.");
+      return;
+    }
+
+    // Confirmação da senha
     if (novaSenha !== confirmarSenha) {
       setErro("As senhas não são iguais.");
       return;
@@ -45,10 +65,13 @@ function RedefinirSenha() {
         "http://localhost:3333/usuarios/redefinir-senha",
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
+            email: email,
             token: token,
             novaSenha: novaSenha,
           }),
@@ -60,21 +83,22 @@ function RedefinirSenha() {
       if (!resposta.ok) {
         throw new Error(
           dados.mensagem ||
-          dados.message ||
-          dados.erro ||
-          "Não foi possível redefinir sua senha."
+            dados.message ||
+            dados.erro ||
+            "Não foi possível redefinir sua senha."
         );
       }
 
       setMensagem(
         dados.mensagem ||
-        dados.message ||
-        "Senha redefinida com sucesso!"
+          dados.message ||
+          "Senha redefinida com sucesso!"
       );
 
       setNovaSenha("");
       setConfirmarSenha("");
 
+      // Depois de 2 segundos volta para o login
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -84,8 +108,9 @@ function RedefinirSenha() {
 
       setErro(
         error.message ||
-        "Erro ao redefinir senha."
+          "Erro ao redefinir senha."
       );
+
     } finally {
       setCarregando(false);
     }
