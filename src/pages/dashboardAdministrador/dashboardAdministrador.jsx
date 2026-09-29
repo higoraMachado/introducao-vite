@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./adm.css";
+import "./dashboardAdministrador.css";
 import logo from "../../assets/logo-hope.png";
 
-function Administrador() {
+function DashboardAdministrador() {
   const navigate = useNavigate();
 
   const [paginaAtiva, setPaginaAtiva] = useState("Dashboard");
@@ -563,4 +563,4 @@ function Administrador() {
   );
 }
 
-export default Administrador;
+export default DashboardAdministrador;

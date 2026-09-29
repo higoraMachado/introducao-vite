@@ -1,4 +1,5 @@
 import { Routes, Route, } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 
 import Dashboard from './pages/dashboardCliente/Dashboard';
 import Login from './pages/login/login';
@@ -6,13 +7,13 @@ import Agendamento from './pages/agendamento';
 import RecuperacaoSenha from './pages/recuperacaoSenha/recuperacao';
 import RedefinirSenha from './pages/redefinirSenha.jsx/redefinirSenha';
 import Clientes from './pages/clientesGerenciamento/Clientes';
-import Barbeiros from './pages/barbeiros/Barbeiros';
+import DashboardBarbeiro from './pages/dashboardBarbeiro/dashboardBarbeiro';
 import Perfil from './pages/perfil/Perfil';
 import CadastroBarbeiro from './pages/CadastroBarbeiro/CadastroBarbeiro';
 import Servicos from './pages/listarServico/Servicos';
 import CadastroServico from './pages/CadastroServico/CadastroServico';
 import Estoque from './pages/estoque/Estoque';
-import PainelAdministracao from './pages/admpainel/adm';
+import DashboardAdministrador from './pages/dashboardAdministrador/dashboardAdministrador';
 import CadastroProduto from './pages/cadastroProduto/cadastroProduto';
 import CadastroCliente from './pages/cadastroClientes/cadastroCliente';
 import MovimentacaoEstoque from './pages/MovimentacaoEstoque/MovimentacaoEstoque';
@@ -23,30 +24,192 @@ import Landing from './pages/landing/Landing';
 
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/dashboardCliente" element={<Dashboard />} />
-      <Route path="/agendamento" element={<Agendamento />} />
-      <Route path="/recuperacaoSenha" element={<RecuperacaoSenha/>} />
-      <Route path="/GerenciamentoCliente" element={<Clientes/>} />
-      <Route path="/perfil" element={<Perfil/>} />
-      <Route path="/barbeiros" element={<Barbeiros/>}/>
-      <Route path="/CadastroBarbeiro" element={<CadastroBarbeiro/>}/>
-      <Route path="/Servicos" element={<Servicos/>}/>
-      <Route path="/CadastroServico" element={<CadastroServico/>}/>
-      <Route path="/Estoque" element={<Estoque/>}/>
-      <Route path="/MovimentacaoEstoque" element={<MovimentacaoEstoque/>}/>
-      <Route path="/PainelAdministracao" element={<PainelAdministracao/>}/>
-      <Route path="/CadastroProduto" element={<CadastroProduto/>}/>
-      <Route path="/CadastroCliente"element={<CadastroCliente />}/>
-      <Route path="/ControleFinanceiro" element={<ControleFinanceiro />} />
-      <Route path="/RegistrarPagamentos" element={<RegistrarPagamentos />} />
-      <Route path="/Despesas" element={<Despesas />} />
-      <Route path="/redefinirSenha" element={<RedefinirSenha />} />
-    </Routes>
-  );
+    return (
+        <Routes>
+
+            {/* PÚBLICAS */}
+
+            <Route
+                path="/"
+                element={<Landing />}
+            />
+
+            <Route
+                path="/login"
+                element={<Login />}
+            />
+
+            <Route
+                path="/recuperacaoSenha"
+                element={<RecuperacaoSenha />}
+            />
+
+            <Route
+                path="/redefinirSenha"
+                element={<RedefinirSenha />}
+            />
+
+            {/* CLIENTE */}
+
+            <Route
+                path="/dashboardCliente"
+                element={
+                    <ProtectedRoute tiposPermitidos={[3]}>
+                        <Dashboard />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/agendamento"
+                element={
+                    <ProtectedRoute tiposPermitidos={[3]}>
+                        <Agendamento />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/perfil"
+                element={
+                    <ProtectedRoute tiposPermitidos={[3]}>
+                        <Perfil />
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* BARBEIRO */}
+
+            <Route
+                path="/dashboardBarbeiro"
+                element={
+                    <ProtectedRoute tiposPermitidos={[2]}>
+                        <DashboardBarbeiro />
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* ADMINISTRADOR */}
+      
+            <Route
+                path="/dashboardAdministrador"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <DashboardAdministrador />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/PainelAdministracao"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <DashboardAdministrador />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/GerenciamentoCliente"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <Clientes />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/CadastroCliente"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <CadastroCliente />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/CadastroBarbeiro"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <CadastroBarbeiro />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/Servicos"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <Servicos />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/CadastroServico"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <CadastroServico />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/Estoque"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <Estoque />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/MovimentacaoEstoque"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <MovimentacaoEstoque />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/CadastroProduto"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <CadastroProduto />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/ControleFinanceiro"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <ControleFinanceiro />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/RegistrarPagamentos"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <RegistrarPagamentos />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/Despesas"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <Despesas />
+                    </ProtectedRoute>
+                }
+            />
+
+        </Routes>
+    );
 }
 
 export default App;

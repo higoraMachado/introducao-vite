@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './Barbeiros.css';
+import './dashboardBarbeiro.css';
 import logoHope from '../../assets/logo-hope.png';
 
 const barbeirosIniciais = [

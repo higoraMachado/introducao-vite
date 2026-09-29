@@ -50,14 +50,30 @@ function CadastroCliente() {
             alert('A senha deve possuir pelo menos 8 caracteres.');
             return;
         }
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('Sessão expirada. Faça login novamente.');
+            navigate('/login');
+            return;
+        }
 
         setCarregando(true);
 
         try {
+               const token = localStorage.getItem('token');
+
+               if (!token) {
+               alert('Sessão expirada. Faça login novamente.');
+               navigate('/login');
+               return;
+        }
+
             const resposta = await fetch('http://localhost:3333/clientes', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     usuario_nome: formulario.nome,
@@ -68,13 +84,29 @@ function CadastroCliente() {
                 })
             });
 
-            const dados = await resposta.json();
+           const textoResposta = await resposta.text();
 
-            if (!resposta.ok || !dados.sucesso) {
-                throw new Error(
-                    dados.message || 'Não foi possível cadastrar o cliente.'
-                );
-            }
+console.log('Status da API:', resposta.status);
+console.log('Resposta da API:', textoResposta);
+
+let dados;
+
+try {
+    dados = JSON.parse(textoResposta);
+} catch {
+    throw new Error(
+        `A API retornou uma resposta inválida. Status: ${resposta.status}`
+    );
+}
+
+if (!resposta.ok || !dados.sucesso) {
+    throw new Error(
+        dados.message ||
+        dados.mensagem ||
+        dados.erro ||
+        'Não foi possível cadastrar o cliente.'
+    );
+}
 
             alert('Cliente cadastrado com sucesso!');
 
