@@ -1,52 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Clientes.css';
 import logoHope from '../../assets/logo-hope.png';
 
-const clientesIniciais = [
-  {
-    id: 1,
-    nome: 'João Silva',
-    email: 'joao@email.com',
-    senha: '123456',
-    telefone: '(14) 99999-1111',
-    nascimento: '15/03/1998',
-    foto: '',
-    status: 'Ativo',
-  },
-  {
-    id: 2,
-    nome: 'Pedro Souza',
-    email: 'pedro@email.com',
-    senha: '123456',
-    telefone: '(14) 98888-2222',
-    nascimento: '21/07/1995',
-    foto: '',
-    status: 'Ativo',
-  },
-  {
-    id: 3,
-    nome: 'Carlos Oliveira',
-    email: 'carlos@email.com',
-    senha: '123456',
-    telefone: '(14) 97777-3333',
-    nascimento: '09/11/2000',
-    foto: '',
-    status: 'Ativo',
-  },
-  {
-    id: 4,
-    nome: 'Lucas Santos',
-    email: 'lucas@email.com',
-    senha: '123456',
-    telefone: '(14) 96666-4444',
-    nascimento: '02/05/1992',
-    foto: '',
-    status: 'Inativo',
-  },
-];
-
 function Clientes() {
-  const [clientes, setClientes] = useState(clientesIniciais);
+  // =====================================================
+  // CONFIGURACAO DA API
+  // =====================================================
+
+  const API_URL = 'http://localhost:3333';
+
+  // =====================================================
+  // FUNCAO PARA FAZER REQUISICOES NA API
+  // =====================================================
+
+  async function requisicaoAPI(endpoint, options = {}) {
+    const token = localStorage.getItem('token');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(options.headers || {}),
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const resposta = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers,
+    });
+
+    let dados = {};
+
+    try {
+      dados = await resposta.json();
+    } catch {
+      dados = {};
+    }
+
+    console.log('Resposta API:', endpoint, dados);
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados?.message ||
+        dados?.mensagem ||
+        dados?.erro ||
+        'Erro na comunicacao com a API.'
+      );
+    }
+
+    return dados;
+  }
+
+  // =====================================================
+  // ESTADOS
+  // =====================================================
+
+  const [clientes, setClientes] = useState([]);
 
   const [pesquisa, setPesquisa] = useState('');
   const [filtro, setFiltro] = useState('Todos');
@@ -55,6 +65,7 @@ function Clientes() {
   const [modalVisualizar, setModalVisualizar] = useState(false);
 
   const [clienteSelecionado, setClienteSelecionado] = useState(null);
+
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const [formulario, setFormulario] = useState({
@@ -66,30 +77,179 @@ function Clientes() {
     foto: '',
   });
 
-  /* =========================================
-     PESQUISA E FILTRO
-  ========================================= */
+  // =====================================================
+  // BUSCAR CLIENTES NA API
+  // =====================================================
+
+ async function carregarClientes() {
+  try {
+    const resposta = await requisicaoAPI('/clientes');
+
+    // =================================================
+    // MOSTRAR A RESPOSTA COMPLETA DA API
+    // =================================================
+
+    console.log(
+      '========== RESPOSTA COMPLETA DA API =========='
+    );
+
+    console.log(
+      JSON.stringify(resposta, null, 2)
+    );
+
+    console.log(
+      '=============================================='
+    );
+
+    // =================================================
+    // IDENTIFICAR ONDE ESTA A LISTA DE CLIENTES
+    // =================================================
+
+    let listaClientes = [];
+
+    if (Array.isArray(resposta)) {
+      listaClientes = resposta;
+    } else if (Array.isArray(resposta?.dados)) {
+      listaClientes = resposta.dados;
+    } else if (
+      Array.isArray(resposta?.dados?.clientes)
+    ) {
+      listaClientes = resposta.dados.clientes;
+    } else if (
+      Array.isArray(resposta?.clientes)
+    ) {
+      listaClientes = resposta.clientes;
+    }
+
+    console.log(
+      '========== CLIENTES ENCONTRADOS =========='
+    );
+
+    console.log(
+      JSON.stringify(listaClientes, null, 2)
+    );
+
+    console.log(
+      '=========================================='
+    );
+
+    // =================================================
+    // NORMALIZAR OS CLIENTES
+    // =================================================
+
+    const clientesFormatados = listaClientes.map(
+  (cliente) => ({
+   
+    id: cliente?.usuario_id ?? 0,
+
+    nome: cliente?.usuario_nome ?? '',
+
+    email: cliente?.usuario_email ?? '',
+
+    telefone: cliente?.usuario_telefone ?? '',
+
+    nascimento:
+      cliente?.usuario_dt_nascimento ?? '',
+
+ 
+    foto: '',
+
+    status:
+      Number(cliente?.usuario_ativo) === 1
+        ? 'Ativo'
+        : 'Inativo',
+
+    // A API nao retorna senha
+    senha: '',
+  })
+);
+
+    console.log(
+      '========== CLIENTES FORMATADOS =========='
+    );
+
+    console.log(
+      JSON.stringify(
+        clientesFormatados,
+        null,
+        2
+      )
+    );
+
+    console.log(
+      '========================================='
+    );
+
+    setClientes(clientesFormatados);
+
+  } catch (error) {
+    console.error(
+      'Erro ao carregar clientes:',
+      error
+    );
+
+    alert(
+      error?.message ||
+      'Erro ao carregar clientes.'
+    );
+  }
+}
+
+  // =====================================================
+  // CARREGAR CLIENTES AO ABRIR A TELA
+  // =====================================================
+
+  useEffect(() => {
+    carregarClientes();
+  }, []);
+
+  // =====================================================
+  // PESQUISA E FILTRO
+  // =====================================================
 
   const clientesFiltrados = clientes.filter((cliente) => {
-    const termo = pesquisa.toLowerCase();
+    const termo = String(
+      pesquisa ?? ''
+    ).toLowerCase();
+
+    const nome = String(
+      cliente?.nome ?? ''
+    );
+
+    const email = String(
+      cliente?.email ?? ''
+    );
+
+    const telefone = String(
+      cliente?.telefone ?? ''
+    );
+
+    const status = String(
+      cliente?.status ?? 'Ativo'
+    );
 
     const correspondePesquisa =
-      cliente.nome.toLowerCase().includes(termo) ||
-      cliente.email.toLowerCase().includes(termo) ||
-      cliente.telefone.includes(termo);
+      nome.toLowerCase().includes(termo) ||
+      email.toLowerCase().includes(termo) ||
+      telefone.includes(termo);
 
     const correspondeFiltro =
-      filtro === 'Todos' || cliente.status === filtro;
+      filtro === 'Todos' ||
+      status === filtro;
 
-    return correspondePesquisa && correspondeFiltro;
+    return (
+      correspondePesquisa &&
+      correspondeFiltro
+    );
   });
 
-  /* =========================================
-     FORMULÁRIO
-  ========================================= */
+  // =====================================================
+  // ABRIR CADASTRO
+  // =====================================================
 
   function abrirCadastro() {
     setModoEdicao(false);
+    setClienteSelecionado(null);
 
     setFormulario({
       nome: '',
@@ -103,29 +263,53 @@ function Clientes() {
     setModalFormulario(true);
   }
 
+  // =====================================================
+  // ABRIR EDICAO
+  // =====================================================
+
   function abrirEdicao(cliente) {
     setModoEdicao(true);
     setClienteSelecionado(cliente);
 
     setFormulario({
-      nome: cliente.nome,
-      email: cliente.email,
-      senha: cliente.senha,
-      telefone: cliente.telefone,
-      nascimento: cliente.nascimento,
-      foto: cliente.foto,
+      nome: cliente?.nome ?? '',
+      email: cliente?.email ?? '',
+      senha: '',
+      telefone: cliente?.telefone ?? '',
+      nascimento: cliente?.nascimento ?? '',
+      foto: cliente?.foto ?? '',
     });
 
     setModalFormulario(true);
   }
 
+  // =====================================================
+  // FECHAR FORMULARIO
+  // =====================================================
+
   function fecharFormulario() {
     setModalFormulario(false);
     setClienteSelecionado(null);
+
+    setFormulario({
+      nome: '',
+      email: '',
+      senha: '',
+      telefone: '',
+      nascimento: '',
+      foto: '',
+    });
   }
 
+  // =====================================================
+  // ALTERAR FORMULARIO
+  // =====================================================
+
   function alterarFormulario(event) {
-    const { name, value } = event.target;
+    const {
+      name,
+      value,
+    } = event.target;
 
     setFormulario((anterior) => ({
       ...anterior,
@@ -133,101 +317,263 @@ function Clientes() {
     }));
   }
 
-  function salvarCliente(event) {
+  // =====================================================
+  // SALVAR CLIENTE
+  // =====================================================
+
+  async function salvarCliente(event) {
     event.preventDefault();
 
-    if (
-      !formulario.nome ||
-      !formulario.email ||
-      !formulario.senha ||
-      !formulario.telefone
-    ) {
-      alert('Preencha os campos obrigatórios.');
+    // ---------------------------------------------
+    // VALIDACAO
+    // ---------------------------------------------
+
+    if (!formulario.nome.trim()) {
+      alert('Digite o nome do cliente.');
       return;
     }
 
-    if (modoEdicao) {
-      setClientes((anterior) =>
-        anterior.map((cliente) =>
-          cliente.id === clienteSelecionado.id
-            ? {
-                ...cliente,
-                ...formulario,
-              }
-            : cliente
-        )
-      );
-
-      alert('Cliente atualizado com sucesso!');
-    } else {
-      const novoCliente = {
-        id:
-          clientes.length > 0
-            ? Math.max(...clientes.map((cliente) => cliente.id)) + 1
-            : 1,
-
-        ...formulario,
-
-        status: 'Ativo',
-      };
-
-      setClientes((anterior) => [...anterior, novoCliente]);
-
-      alert('Cliente cadastrado com sucesso!');
+    if (!formulario.email.trim()) {
+      alert('Digite o e-mail do cliente.');
+      return;
     }
 
-    fecharFormulario();
+    if (!formulario.telefone.trim()) {
+      alert('Digite o telefone do cliente.');
+      return;
+    }
+
+    /*
+     * No cadastro a senha e obrigatoria.
+     *
+     * Na edicao nao obrigamos a senha porque
+     * normalmente ela nao e retornada pela API.
+     */
+
+    if (
+      !modoEdicao &&
+      !formulario.senha.trim()
+    ) {
+      alert('Digite a senha do cliente.');
+      return;
+    }
+
+    try {
+      // =================================================
+      // EDITAR
+      // =================================================
+
+      if (modoEdicao) {
+        /*
+         * Montamos os dados da alteracao.
+         */
+
+        const dadosCliente = {
+          nome: formulario.nome,
+          email: formulario.email,
+          telefone: formulario.telefone,
+          nascimento: formulario.nascimento,
+          foto: formulario.foto,
+        };
+
+        /*
+         * Se o usuario digitou uma nova senha,
+         * enviamos tambem.
+         */
+
+        if (formulario.senha.trim()) {
+          dadosCliente.senha =
+            formulario.senha;
+        }
+
+        const resposta =
+          await requisicaoAPI(
+            `/clientes/${clienteSelecionado.id}`,
+            {
+              method: 'PUT',
+              body: JSON.stringify(
+                dadosCliente
+              ),
+            }
+          );
+
+        console.log(
+          'Cliente atualizado:',
+          resposta
+        );
+
+        alert(
+          'Cliente atualizado com sucesso!'
+        );
+      }
+
+      // =================================================
+      // CADASTRAR
+      // =================================================
+
+      else {
+        const dadosCliente = {
+          nome: formulario.nome,
+          email: formulario.email,
+          senha: formulario.senha,
+          telefone: formulario.telefone,
+          nascimento: formulario.nascimento,
+          foto: formulario.foto,
+        };
+
+        const resposta =
+          await requisicaoAPI(
+            '/clientes',
+            {
+              method: 'POST',
+              body: JSON.stringify(
+                dadosCliente
+              ),
+            }
+          );
+
+        console.log(
+          'Cliente cadastrado:',
+          resposta
+        );
+
+        alert(
+          'Cliente cadastrado com sucesso!'
+        );
+      }
+
+      // =================================================
+      // ATUALIZAR LISTA
+      // =================================================
+
+      await carregarClientes();
+
+      fecharFormulario();
+
+    } catch (error) {
+      console.error(
+        'Erro ao salvar cliente:',
+        error
+      );
+
+      alert(
+        error?.message ||
+        'Erro ao salvar cliente.'
+      );
+    }
   }
 
-  /* =========================================
-     VISUALIZAR
-  ========================================= */
+  // =====================================================
+  // VISUALIZAR CLIENTE
+  // =====================================================
 
   function visualizarCliente(cliente) {
     setClienteSelecionado(cliente);
     setModalVisualizar(true);
   }
 
+  // =====================================================
+  // FECHAR VISUALIZACAO
+  // =====================================================
+
   function fecharVisualizacao() {
     setClienteSelecionado(null);
     setModalVisualizar(false);
   }
 
-  /* =========================================
-     ATIVAR / DESATIVAR
-  ========================================= */
+  // =====================================================
+  // ATIVAR / DESATIVAR
+  // =====================================================
 
-  function alterarStatus(cliente) {
+  async function alterarStatus(cliente) {
     const novoStatus =
-      cliente.status === 'Ativo' ? 'Inativo' : 'Ativo';
+      cliente.status === 'Ativo'
+        ? 'Inativo'
+        : 'Ativo';
 
     const mensagem =
       novoStatus === 'Inativo'
         ? `Deseja desativar o cliente ${cliente.nome}?`
         : `Deseja ativar o cliente ${cliente.nome}?`;
 
-    if (!window.confirm(mensagem)) {
+    const confirmou =
+      window.confirm(mensagem);
+
+    if (!confirmou) {
       return;
     }
 
-    setClientes((anterior) =>
-      anterior.map((item) =>
-        item.id === cliente.id
-          ? {
-              ...item,
-              status: novoStatus,
+    // =================================================
+    // DESATIVAR
+    // =================================================
+
+    if (novoStatus === 'Inativo') {
+      try {
+        const resposta =
+          await requisicaoAPI(
+            `/clientes/${cliente.id}/ocultar`,
+            {
+              method: 'PATCH',
             }
-          : item
-      )
+          );
+
+        console.log(
+          'Cliente desativado:',
+          resposta
+        );
+
+        await carregarClientes();
+
+        alert(
+          'Cliente desativado com sucesso!'
+        );
+
+      } catch (error) {
+        console.error(
+          'Erro ao desativar cliente:',
+          error
+        );
+
+        alert(
+          error?.message ||
+          'Erro ao desativar cliente.'
+        );
+      }
+
+      return;
+    }
+
+    // =================================================
+    // ATIVAR
+    // =================================================
+
+    /*
+     * Pela rota da API que temos atualmente,
+     * existe a rota de ocultar/desativar:
+     *
+     * PATCH /clientes/:id/ocultar
+     *
+     * Mas nao temos uma rota de reativacao
+     * confirmada.
+     *
+     * Portanto nao fazemos uma falsa requisicao.
+     */
+
+    alert(
+      'A API ainda nao possui uma rota de reativacao do cliente.'
     );
   }
+
+  // =====================================================
+  // TELA
+  // =====================================================
 
   return (
     <main className="clientes-page">
 
-      {/* =========================================
+      {/* =================================================
           HEADER
-      ========================================= */}
+      ================================================= */}
 
       <header className="clientes-header">
 
@@ -239,8 +585,15 @@ function Clientes() {
         </div>
 
         <div className="clientes-title">
-          <h1>Clientes</h1>
-          <p>Gerenciamento de clientes</p>
+
+          <h1>
+            Clientes
+          </h1>
+
+          <p>
+            Gerenciamento de clientes
+          </p>
+
         </div>
 
         <div className="clientes-user">
@@ -250,31 +603,40 @@ function Clientes() {
           </div>
 
           <div className="user-info">
-            <strong>Bruno</strong>
-            <span>Barbeiro</span>
+
+            <strong>
+              Bruno
+            </strong>
+
+            <span>
+              Barbeiro
+            </span>
+
           </div>
 
         </div>
 
       </header>
 
-      {/* =========================================
-          CONTEÚDO
-      ========================================= */}
+      {/* =================================================
+          CONTEUDO
+      ================================================= */}
 
       <section className="clientes-content">
 
-        {/* CABEÇALHO DA PÁGINA */}
+        {/* CABECALHO */}
 
         <div className="clientes-heading">
 
           <div>
 
             <span className="heading-label">
-              ÁREA DO BARBEIRO
+              AREA DO BARBEIRO
             </span>
 
-            <h2>Meus clientes</h2>
+            <h2>
+              Meus clientes
+            </h2>
 
             <p>
               Cadastre, consulte e gerencie os clientes
@@ -292,9 +654,9 @@ function Clientes() {
 
         </div>
 
-        {/* =========================================
-            CARD PRINCIPAL
-        ========================================= */}
+        {/* =================================================
+            CARD
+        ================================================= */}
 
         <section className="clientes-card">
 
@@ -318,22 +680,26 @@ function Clientes() {
 
           </div>
 
-          {/* =========================================
+          {/* =================================================
               FILTROS
-          ========================================= */}
+          ================================================= */}
 
           <div className="clientes-filtros">
 
             <div className="campo-pesquisa">
 
-              <span>⌕</span>
+              <span>
+                ⌕
+              </span>
 
               <input
                 type="text"
                 placeholder="Pesquisar cliente..."
                 value={pesquisa}
                 onChange={(event) =>
-                  setPesquisa(event.target.value)
+                  setPesquisa(
+                    event.target.value
+                  )
                 }
               />
 
@@ -342,9 +708,12 @@ function Clientes() {
             <select
               value={filtro}
               onChange={(event) =>
-                setFiltro(event.target.value)
+                setFiltro(
+                  event.target.value
+                )
               }
             >
+
               <option value="Todos">
                 Todos os clientes
               </option>
@@ -356,13 +725,14 @@ function Clientes() {
               <option value="Inativo">
                 Inativos
               </option>
+
             </select>
 
           </div>
 
-          {/* =========================================
+          {/* =================================================
               TABELA
-          ========================================= */}
+          ================================================= */}
 
           <div className="tabela-container">
 
@@ -371,12 +741,31 @@ function Clientes() {
               <thead>
 
                 <tr>
-                  <th>ID</th>
-                  <th>Nome</th>
-                  <th>Telefone</th>
-                  <th>E-mail</th>
-                  <th>Status</th>
-                  <th>Ações</th>
+
+                  <th>
+                    ID
+                  </th>
+
+                  <th>
+                    Nome
+                  </th>
+
+                  <th>
+                    Telefone
+                  </th>
+
+                  <th>
+                    E-mail
+                  </th>
+
+                  <th>
+                    Status
+                  </th>
+
+                  <th>
+                    Ações
+                  </th>
+
                 </tr>
 
               </thead>
@@ -385,114 +774,155 @@ function Clientes() {
 
                 {clientesFiltrados.length > 0 ? (
 
-                  clientesFiltrados.map((cliente) => (
+                  clientesFiltrados.map(
+                    (cliente) => (
 
-                    <tr key={cliente.id}>
+                      <tr
+                        key={cliente.id}
+                      >
 
-                      <td className="cliente-id">
-                        {String(cliente.id).padStart(2, '0')}
-                      </td>
+                        <td className="cliente-id">
 
-                      <td>
+                          {String(
+                            cliente.id ?? ''
+                          ).padStart(
+                            2,
+                            '0'
+                          )}
 
-                        <div className="cliente-nome">
+                        </td>
 
-                          <div className="cliente-avatar">
+                        <td>
 
-                            {cliente.foto ? (
-                              <img
-                                src={cliente.foto}
-                                alt={cliente.nome}
-                              />
-                            ) : (
-                              cliente.nome
-                                .charAt(0)
-                                .toUpperCase()
-                            )}
+                          <div className="cliente-nome">
+
+                            <div className="cliente-avatar">
+
+                              {cliente.foto ? (
+
+                                <img
+                                  src={cliente.foto}
+                                  alt={
+                                    cliente.nome
+                                  }
+                                />
+
+                              ) : (
+
+                                String(
+                                  cliente.nome ??
+                                  '?'
+                                )
+                                  .charAt(0)
+                                  .toUpperCase()
+
+                              )}
+
+                            </div>
+
+                            <strong>
+                              {cliente.nome ||
+                                'Sem nome'}
+                            </strong>
 
                           </div>
 
-                          <strong>
-                            {cliente.nome}
-                          </strong>
+                        </td>
 
-                        </div>
+                        <td>
 
-                      </td>
+                          {cliente.telefone ||
+                            'Não informado'}
 
-                      <td>
-                        {cliente.telefone}
-                      </td>
+                        </td>
 
-                      <td>
-                        {cliente.email}
-                      </td>
+                        <td>
 
-                      <td>
+                          {cliente.email ||
+                            'Não informado'}
 
-                        <span
-                          className={`status ${
-                            cliente.status === 'Ativo'
-                              ? 'status-ativo'
-                              : 'status-inativo'
-                          }`}
-                        >
-                          {cliente.status}
-                        </span>
+                        </td>
 
-                      </td>
+                        <td>
 
-                      <td>
-
-                        <div className="acoes">
-
-                          <button
-                            className="acao-visualizar"
-                            onClick={() =>
-                              visualizarCliente(cliente)
-                            }
-                            title="Visualizar"
+                          <span
+                            className={`status ${
+                              cliente.status ===
+                              'Ativo'
+                                ? 'status-ativo'
+                                : 'status-inativo'
+                            }`}
                           >
-                            Visualizar
-                          </button>
 
-                          <button
-                            className="acao-editar"
-                            onClick={() =>
-                              abrirEdicao(cliente)
-                            }
-                            title="Editar"
-                          >
-                            Editar
-                          </button>
+                            {cliente.status}
 
-                          <button
-                            className={
-                              cliente.status === 'Ativo'
-                                ? 'acao-desativar'
-                                : 'acao-ativar'
-                            }
-                            onClick={() =>
-                              alterarStatus(cliente)
-                            }
-                            title={
-                              cliente.status === 'Ativo'
+                          </span>
+
+                        </td>
+
+                        <td>
+
+                          <div className="acoes">
+
+                            <button
+                              className="acao-visualizar"
+                              onClick={() =>
+                                visualizarCliente(
+                                  cliente
+                                )
+                              }
+                              title="Visualizar"
+                            >
+                              Visualizar
+                            </button>
+
+                            <button
+                              className="acao-editar"
+                              onClick={() =>
+                                abrirEdicao(
+                                  cliente
+                                )
+                              }
+                              title="Editar"
+                            >
+                              Editar
+                            </button>
+
+                            <button
+                              className={
+                                cliente.status ===
+                                'Ativo'
+                                  ? 'acao-desativar'
+                                  : 'acao-ativar'
+                              }
+                              onClick={() =>
+                                alterarStatus(
+                                  cliente
+                                )
+                              }
+                              title={
+                                cliente.status ===
+                                'Ativo'
+                                  ? 'Desativar'
+                                  : 'Ativar'
+                              }
+                            >
+
+                              {cliente.status ===
+                              'Ativo'
                                 ? 'Desativar'
-                                : 'Ativar'
-                            }
-                          >
-                            {cliente.status === 'Ativo'
-                              ? 'Desativar'
-                              : 'Ativar'}
-                          </button>
+                                : 'Ativar'}
 
-                        </div>
+                            </button>
 
-                      </td>
+                          </div>
 
-                    </tr>
+                        </td>
 
-                  ))
+                      </tr>
+
+                    )
+                  )
 
                 ) : (
 
@@ -502,18 +932,24 @@ function Clientes() {
                       colSpan="6"
                       className="nenhum-cliente"
                     >
+
                       <div>
-                        <span>⌕</span>
+
+                        <span>
+                          ⌕
+                        </span>
 
                         <strong>
                           Nenhum cliente encontrado
                         </strong>
 
                         <p>
-                          Tente alterar sua pesquisa ou
-                          o filtro selecionado.
+                          Tente alterar sua pesquisa
+                          ou o filtro selecionado.
                         </p>
+
                       </div>
+
                     </td>
 
                   </tr>
@@ -530,18 +966,23 @@ function Clientes() {
 
       </section>
 
-      {/* =========================================
-          MODAL — CADASTRO / EDIÇÃO
-      ========================================= */}
+      {/* =================================================
+          MODAL - CADASTRO / EDICAO
+      ================================================= */}
 
       {modalFormulario && (
 
         <div
           className="modal-overlay"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
+
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
               fecharFormulario();
             }
+
           }}
         >
 
@@ -552,22 +993,29 @@ function Clientes() {
               <div>
 
                 <span className="card-label">
+
                   {modoEdicao
                     ? 'CLIENTE'
                     : 'NOVO CLIENTE'}
+
                 </span>
 
                 <h3>
+
                   {modoEdicao
                     ? 'Editar cliente'
                     : 'Cadastrar cliente'}
+
                 </h3>
 
               </div>
 
               <button
+                type="button"
                 className="modal-fechar"
-                onClick={fecharFormulario}
+                onClick={
+                  fecharFormulario
+                }
               >
                 ×
               </button>
@@ -576,7 +1024,9 @@ function Clientes() {
 
             <form
               className="cliente-form"
-              onSubmit={salvarCliente}
+              onSubmit={
+                salvarCliente
+              }
             >
 
               <div className="form-grid">
@@ -593,13 +1043,17 @@ function Clientes() {
                     type="text"
                     name="nome"
                     placeholder="Digite o nome completo"
-                    value={formulario.nome}
-                    onChange={alterarFormulario}
+                    value={
+                      formulario.nome
+                    }
+                    onChange={
+                      alterarFormulario
+                    }
                   />
 
                 </div>
 
-                {/* E-MAIL */}
+                {/* EMAIL */}
 
                 <div className="form-group">
 
@@ -611,8 +1065,12 @@ function Clientes() {
                     type="email"
                     name="email"
                     placeholder="cliente@email.com"
-                    value={formulario.email}
-                    onChange={alterarFormulario}
+                    value={
+                      formulario.email
+                    }
+                    onChange={
+                      alterarFormulario
+                    }
                   />
 
                 </div>
@@ -622,15 +1080,24 @@ function Clientes() {
                 <div className="form-group">
 
                   <label>
-                    Senha *
+                    Senha
+                    {!modoEdicao && ' *'}
                   </label>
 
                   <input
                     type="password"
                     name="senha"
-                    placeholder="Digite a senha"
-                    value={formulario.senha}
-                    onChange={alterarFormulario}
+                    placeholder={
+                      modoEdicao
+                        ? 'Deixe vazio para manter'
+                        : 'Digite a senha'
+                    }
+                    value={
+                      formulario.senha
+                    }
+                    onChange={
+                      alterarFormulario
+                    }
                   />
 
                 </div>
@@ -647,13 +1114,17 @@ function Clientes() {
                     type="tel"
                     name="telefone"
                     placeholder="(00) 00000-0000"
-                    value={formulario.telefone}
-                    onChange={alterarFormulario}
+                    value={
+                      formulario.telefone
+                    }
+                    onChange={
+                      alterarFormulario
+                    }
                   />
 
                 </div>
 
-                {/* DATA DE NASCIMENTO */}
+                {/* DATA */}
 
                 <div className="form-group">
 
@@ -664,8 +1135,12 @@ function Clientes() {
                   <input
                     type="date"
                     name="nascimento"
-                    value={formulario.nascimento}
-                    onChange={alterarFormulario}
+                    value={
+                      formulario.nascimento
+                    }
+                    onChange={
+                      alterarFormulario
+                    }
                   />
 
                 </div>
@@ -682,8 +1157,12 @@ function Clientes() {
                     type="text"
                     name="foto"
                     placeholder="URL da foto (opcional)"
-                    value={formulario.foto}
-                    onChange={alterarFormulario}
+                    value={
+                      formulario.foto
+                    }
+                    onChange={
+                      alterarFormulario
+                    }
                   />
 
                   <small>
@@ -699,7 +1178,9 @@ function Clientes() {
                 <button
                   type="button"
                   className="btn-cancelar"
-                  onClick={fecharFormulario}
+                  onClick={
+                    fecharFormulario
+                  }
                 >
                   Cancelar
                 </button>
@@ -708,9 +1189,11 @@ function Clientes() {
                   type="submit"
                   className="btn-salvar"
                 >
+
                   {modoEdicao
                     ? 'Salvar alterações'
                     : 'Salvar cliente'}
+
                 </button>
 
               </div>
@@ -723,149 +1206,219 @@ function Clientes() {
 
       )}
 
-      {/* =========================================
-          MODAL — VISUALIZAÇÃO
-      ========================================= */}
+      {/* =================================================
+          MODAL - VISUALIZACAO
+      ================================================= */}
 
-      {modalVisualizar && clienteSelecionado && (
+      {modalVisualizar &&
+        clienteSelecionado && (
 
-        <div
-          className="modal-overlay"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              fecharVisualizacao();
-            }
-          }}
-        >
+          <div
+            className="modal-overlay"
+            onMouseDown={(event) => {
 
-          <div className="modal modal-visualizacao">
+              if (
+                event.target ===
+                event.currentTarget
+              ) {
+                fecharVisualizacao();
+              }
 
-            <div className="modal-header">
+            }}
+          >
 
-              <div>
+            <div className="modal modal-visualizacao">
 
-                <span className="card-label">
-                  CLIENTE
-                </span>
-
-                <h3>
-                  Dados do cliente
-                </h3>
-
-              </div>
-
-              <button
-                className="modal-fechar"
-                onClick={fecharVisualizacao}
-              >
-                ×
-              </button>
-
-            </div>
-
-            <div className="cliente-detalhes">
-
-              <div className="cliente-detalhe-topo">
-
-                <div className="cliente-avatar grande">
-
-                  {clienteSelecionado.foto ? (
-
-                    <img
-                      src={clienteSelecionado.foto}
-                      alt={clienteSelecionado.nome}
-                    />
-
-                  ) : (
-
-                    clienteSelecionado.nome
-                      .charAt(0)
-                      .toUpperCase()
-
-                  )}
-
-                </div>
+              <div className="modal-header">
 
                 <div>
 
-                  <h4>
-                    {clienteSelecionado.nome}
-                  </h4>
-
-                  <span
-                    className={`status ${
-                      clienteSelecionado.status === 'Ativo'
-                        ? 'status-ativo'
-                        : 'status-inativo'
-                    }`}
-                  >
-                    {clienteSelecionado.status}
+                  <span className="card-label">
+                    CLIENTE
                   </span>
 
+                  <h3>
+                    Dados do cliente
+                  </h3>
+
+                </div>
+
+                <button
+                  type="button"
+                  className="modal-fechar"
+                  onClick={
+                    fecharVisualizacao
+                  }
+                >
+                  ×
+                </button>
+
+              </div>
+
+              <div className="cliente-detalhes">
+
+                <div className="cliente-detalhe-topo">
+
+                  <div className="cliente-avatar grande">
+
+                    {clienteSelecionado.foto ? (
+
+                      <img
+                        src={
+                          clienteSelecionado.foto
+                        }
+                        alt={
+                          clienteSelecionado.nome
+                        }
+                      />
+
+                    ) : (
+
+                      String(
+                        clienteSelecionado.nome ??
+                        '?'
+                      )
+                        .charAt(0)
+                        .toUpperCase()
+
+                    )}
+
+                  </div>
+
+                  <div>
+
+                    <h4>
+                      {clienteSelecionado.nome ||
+                        'Sem nome'}
+                    </h4>
+
+                    <span
+                      className={`status ${
+                        clienteSelecionado.status ===
+                        'Ativo'
+                          ? 'status-ativo'
+                          : 'status-inativo'
+                      }`}
+                    >
+
+                      {
+                        clienteSelecionado.status
+                      }
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+                <div className="detalhes-grid">
+
+                  <div>
+
+                    <small>
+                      ID
+                    </small>
+
+                    <strong>
+                      #
+                      {String(
+                        clienteSelecionado.id ??
+                        ''
+                      ).padStart(
+                        2,
+                        '0'
+                      )}
+                    </strong>
+
+                  </div>
+
+                  <div>
+
+                    <small>
+                      Telefone
+                    </small>
+
+                    <strong>
+                      {
+                        clienteSelecionado.telefone ||
+                        'Não informado'
+                      }
+                    </strong>
+
+                  </div>
+
+                  <div>
+
+                    <small>
+                      E-mail
+                    </small>
+
+                    <strong>
+                      {
+                        clienteSelecionado.email ||
+                        'Não informado'
+                      }
+                    </strong>
+
+                  </div>
+
+                  <div>
+
+                    <small>
+                      Data de nascimento
+                    </small>
+
+                    <strong>
+                      {
+                        clienteSelecionado.nascimento ||
+                        'Não informado'
+                      }
+                    </strong>
+
+                  </div>
+
                 </div>
 
               </div>
 
-              <div className="detalhes-grid">
+              <div className="modal-footer">
 
-                <div>
-                  <small>ID</small>
-                  <strong>
-                    #{String(clienteSelecionado.id).padStart(2, '0')}
-                  </strong>
-                </div>
+                <button
+                  type="button"
+                  className="btn-cancelar"
+                  onClick={
+                    fecharVisualizacao
+                  }
+                >
+                  Fechar
+                </button>
 
-                <div>
-                  <small>Telefone</small>
-                  <strong>
-                    {clienteSelecionado.telefone}
-                  </strong>
-                </div>
+                <button
+                  type="button"
+                  className="btn-salvar"
+                  onClick={() => {
 
-                <div>
-                  <small>E-mail</small>
-                  <strong>
-                    {clienteSelecionado.email}
-                  </strong>
-                </div>
+                    const cliente =
+                      clienteSelecionado;
 
-                <div>
-                  <small>Data de nascimento</small>
-                  <strong>
-                    {clienteSelecionado.nascimento || 'Não informado'}
-                  </strong>
-                </div>
+                    fecharVisualizacao();
+
+                    abrirEdicao(
+                      cliente
+                    );
+
+                  }}
+                >
+                  Editar cliente
+                </button>
 
               </div>
-
-            </div>
-
-            <div className="modal-footer">
-
-              <button
-                className="btn-cancelar"
-                onClick={fecharVisualizacao}
-              >
-                Fechar
-              </button>
-
-              <button
-                className="btn-salvar"
-                onClick={() => {
-                  fecharVisualizacao();
-                  abrirEdicao(clienteSelecionado);
-                }}
-              >
-                Editar cliente
-              </button>
 
             </div>
 
           </div>
 
-        </div>
-
-      )}
+        )}
 
     </main>
   );
