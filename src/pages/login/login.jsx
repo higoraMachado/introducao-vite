@@ -17,6 +17,9 @@ function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [lembrar, setLembrar] = useState(false);
 
+  // Controle da escolha de cadastro
+  const [mostrarCadastro, setMostrarCadastro] = useState(false);
+
   // ========================================
   // LOGIN
   // ========================================
@@ -25,51 +28,83 @@ function Login() {
     e.preventDefault();
 
     if (!email || !senha) {
-        alert('Preencha o e-mail e a senha.');
-        return;
+      alert('Preencha o e-mail e a senha.');
+      return;
     }
 
     try {
-        const resposta = await fetch('http://localhost:3333/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                senha: senha
-            })
-        });
+      const resposta = await fetch('http://localhost:3333/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          senha: senha
+        })
+      });
 
-        const dados = await resposta.json();
+      const dados = await resposta.json();
 
-        if (!resposta.ok) {
-            alert(dados.erro || dados.message || 'E-mail ou senha inválidos.');
-            return;
-        }
-
-        // Salva o token para acessar as páginas protegidas
-        localStorage.setItem('token', dados.dados.token);
-
-        // Salva os dados do usuário
-        localStorage.setItem(
-            'usuario',
-            JSON.stringify(dados.dados.usuario)
+      if (!resposta.ok) {
+        alert(
+          dados.erro ||
+          dados.message ||
+          'E-mail ou senha inválidos.'
         );
+        return;
+      }
 
-        console.log('Login realizado:', dados.dados);
+      // Salva o token para acessar as páginas protegidas
+      localStorage.setItem('token', dados.dados.token);
 
-        // Vai para o painel
-        navigate('/dashboardCliente');
+      // Salva os dados do usuário
+      localStorage.setItem(
+        'usuario',
+        JSON.stringify(dados.dados.usuario)
+      );
+
+      console.log('Login realizado:', dados.dados);
+
+      // ========================================
+      // REDIRECIONAMENTO POR TIPO DE USUÁRIO
+      // ========================================
+
+      const usuario = dados.dados.usuario;
+
+      switch (Number(usuario.usuario_tipo)) {
+        case 1:
+          // Administrador
+          navigate('/dashboardAdministrador');
+          break;
+
+        case 2:
+          // Barbeiro
+          navigate('/dashboardBarbeiro');
+          break;
+
+        case 3:
+          // Cliente
+          navigate('/dashboardCliente');
+          break;
+
+        default:
+          alert('Tipo de usuário inválido.');
+          break;
+      }
 
     } catch (error) {
-        console.error('Erro ao conectar com o servidor:', error);
-        alert(
-            'Não foi possível conectar ao servidor. ' +
-            'Verifique se o backend está rodando.'
-        );
+      console.error(
+        'Erro ao conectar com o servidor:',
+        error
+      );
+
+      alert(
+        'Não foi possível conectar ao servidor. ' +
+        'Verifique se o backend está rodando.'
+      );
     }
-};
+  };
 
   // ========================================
   // IR PARA RECUPERAÇÃO DE SENHA
@@ -80,11 +115,37 @@ function Login() {
   }
 
   // ========================================
-  // IR PARA CADASTRO
+  // ABRIR ESCOLHA DE CADASTRO
   // ========================================
 
   function criarConta() {
+    setMostrarCadastro(true);
+  }
+
+  // ========================================
+  // IR PARA CADASTRO DE CLIENTE
+  // ========================================
+
+  function cadastrarCliente() {
+    setMostrarCadastro(false);
     navigate('/CadastroCliente');
+  }
+
+  // ========================================
+  // IR PARA CADASTRO DE BARBEIRO
+  // ========================================
+
+  function cadastrarBarbeiro() {
+    setMostrarCadastro(false);
+    navigate('/CadastroBarbeiro');
+  }
+
+  // ========================================
+  // FECHAR ESCOLHA DE CADASTRO
+  // ========================================
+
+  function fecharCadastro() {
+    setMostrarCadastro(false);
   }
 
   return (
@@ -112,14 +173,11 @@ function Login() {
           {/* LOGO */}
 
           <div className="brand-logo">
-
             <img
               src={logoHope}
               alt="Hope Barbearia"
             />
-
           </div>
-
 
           {/* TEXTO */}
 
@@ -193,7 +251,9 @@ function Login() {
                   type="email"
                   placeholder="Digite seu e-mail"
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) =>
+                    setEmail(event.target.value)
+                  }
                   required
                 />
 
@@ -329,11 +389,17 @@ function Login() {
 
                       <path d="M3 3l18 18" />
 
-                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+                      <path
+                        d="M10.6 10.6a2 2 0 0 0 2.8 2.8"
+                      />
 
-                      <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-0.4 1.4-1.2 2.6-2.2 3.7" />
+                      <path
+                        d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-0.4 1.4-1.2 2.6-2.2 3.7"
+                      />
 
-                      <path d="M6.6 6.6C4.7 7.8 3.4 9.5 2 12c1 4 5 8 10 8 1.4 0 2.7-.3 3.9-.9" />
+                      <path
+                        d="M6.6 6.6C4.7 7.8 3.4 9.5 2 12c1 4 5 8 10 8 1.4 0 2.7-.3 3.9-.9"
+                      />
 
                     </svg>
 
@@ -352,7 +418,9 @@ function Login() {
                       strokeLinejoin="round"
                     >
 
-                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                      <path
+                        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                      />
 
                       <circle
                         cx="12"
@@ -498,6 +566,102 @@ function Login() {
         </div>
 
       </section>
+
+
+      {/* ========================================
+          MODAL - ESCOLHA DE CADASTRO
+      ======================================== */}
+
+      {mostrarCadastro && (
+
+        <div className="cadastro-modal-overlay">
+
+          <div className="cadastro-modal">
+
+            {/* FECHAR */}
+
+            <button
+              type="button"
+              className="cadastro-modal-fechar"
+              onClick={fecharCadastro}
+              aria-label="Fechar"
+            >
+              ×
+            </button>
+
+
+            {/* ÍCONE */}
+
+            <div className="cadastro-modal-icon">
+              ✂
+            </div>
+
+
+            {/* TÍTULO */}
+
+            <h2>
+              Crie sua conta
+            </h2>
+
+            <p>
+              Como você deseja se cadastrar?
+            </p>
+
+
+            {/* OPÇÕES */}
+
+            <div className="cadastro-opcoes">
+
+              {/* CLIENTE */}
+
+              <button
+                type="button"
+                onClick={cadastrarCliente}
+              >
+
+                <span className="cadastro-opcao-icon">
+                  👤
+                </span>
+
+                <strong>
+                  Cliente
+                </strong>
+
+                <small>
+                  Quero agendar meus serviços
+                </small>
+
+              </button>
+
+
+              {/* BARBEIRO */}
+
+              <button
+                type="button"
+                onClick={cadastrarBarbeiro}
+              >
+
+                <span className="cadastro-opcao-icon">
+                  ✂️
+                </span>
+
+                <strong>
+                  Barbeiro
+                </strong>
+
+                <small>
+                  Quero trabalhar na Hope
+                </small>
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
     </main>
   );

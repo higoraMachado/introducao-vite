@@ -865,6 +865,300 @@ body {
     font-size: 23px;
   }
 }
+/* =========================================================
+   MODAL - ESCOLHA DE CADASTRO
+   ========================================================= */
+
+.cadastro-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  z-index: 9999;
+
+  backdrop-filter: blur(5px);
+}
+
+
+/* =========================================================
+   CARD DO MODAL
+   ========================================================= */
+
+.cadastro-modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 520px;
+
+  background: #111111;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 18px;
+
+  padding: 40px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.65),
+    0 0 30px rgba(212, 175, 55, 0.08);
+
+  animation: cadastroModalEntrada 0.25s ease;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO
+   ========================================================= */
+
+@keyframes cadastroModalEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================================
+   BOTÃO FECHAR
+   ========================================================= */
+
+.cadastro-modal-fechar {
+  position: absolute;
+
+  top: 14px;
+  right: 16px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+
+  color: #aaa;
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cadastro-modal-fechar:hover {
+  color: #d4af37;
+  transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   ÍCONE DO MODAL
+   ========================================================= */
+
+.cadastro-modal-icon {
+  width: 64px;
+  height: 64px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+
+  color: #d4af37;
+
+  font-size: 28px;
+
+  box-shadow:
+    0 0 20px rgba(212, 175, 55, 0.08);
+}
+
+
+/* =========================================================
+   TÍTULO
+   ========================================================= */
+
+.cadastro-modal h2 {
+  margin: 0 0 8px;
+
+  color: #d4af37;
+
+  font-size: 26px;
+  font-weight: 600;
+}
+
+
+.cadastro-modal > p {
+  margin: 0 0 30px;
+
+  color: #b8b8b8;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   OPÇÕES DE CADASTRO
+   ========================================================= */
+
+.cadastro-opcoes {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+}
+
+
+/* =========================================================
+   BOTÕES CLIENTE / BARBEIRO
+   ========================================================= */
+
+.cadastro-opcoes button {
+  min-height: 190px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 25px 18px;
+
+  background: #181818;
+
+  border: 1px solid #333;
+  border-radius: 14px;
+
+  color: #fff;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.cadastro-opcoes button:hover {
+  transform: translateY(-4px);
+
+  background: #1d1d1d;
+
+  border-color: #d4af37;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(212, 175, 55, 0.10);
+}
+
+
+/* =========================================================
+   ÍCONE DAS OPÇÕES
+   ========================================================= */
+
+.cadastro-opcao-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 5px;
+
+  border-radius: 50%;
+
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+
+  font-size: 27px;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+.cadastro-opcoes button:hover .cadastro-opcao-icon {
+  background: rgba(212, 175, 55, 0.14);
+  border-color: #d4af37;
+}
+
+
+/* =========================================================
+   NOME DA OPÇÃO
+   ========================================================= */
+
+.cadastro-opcoes button strong {
+  color: #d4af37;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   DESCRIÇÃO DA OPÇÃO
+   ========================================================= */
+
+.cadastro-opcoes button small {
+  max-width: 170px;
+
+  color: #999;
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .cadastro-modal {
+    padding: 35px 20px 25px;
+    max-width: 420px;
+  }
+
+  .cadastro-modal h2 {
+    font-size: 23px;
+  }
+
+  .cadastro-opcoes {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cadastro-opcoes button {
+    min-height: 145px;
+  }
+
+}
 /* ========================================
    ACABAMENTO PRETO + DOURADO
    Apenas estilo — nenhuma lógica foi alterada
