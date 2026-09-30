@@ -10,7 +10,7 @@ function Clientes() {
   const API_URL = 'http://localhost:3333';
 
   // =====================================================
-  // FUNCAO PARA FAZER REQUISICOES NA API
+  // REQUISICAO PARA A API
   // =====================================================
 
   async function requisicaoAPI(endpoint, options = {}) {
@@ -25,10 +25,13 @@ function Clientes() {
       headers.Authorization = `Bearer ${token}`;
     }
 
-    const resposta = await fetch(`${API_URL}${endpoint}`, {
-      ...options,
-      headers,
-    });
+    const resposta = await fetch(
+      `${API_URL}${endpoint}`,
+      {
+        ...options,
+        headers,
+      }
+    );
 
     let dados = {};
 
@@ -38,7 +41,11 @@ function Clientes() {
       dados = {};
     }
 
-    console.log('Resposta API:', endpoint, dados);
+    console.log(
+      'Resposta API:',
+      endpoint,
+      dados
+    );
 
     if (!resposta.ok) {
       throw new Error(
@@ -53,6 +60,24 @@ function Clientes() {
   }
 
   // =====================================================
+  // FORMATAR DATA
+  // =====================================================
+
+  function formatarDataParaInput(data) {
+    if (!data) {
+      return '';
+    }
+
+    const valor = String(data);
+
+    if (valor.length >= 10) {
+      return valor.substring(0, 10);
+    }
+
+    return valor;
+  }
+
+  // =====================================================
   // ESTADOS
   // =====================================================
 
@@ -61,12 +86,17 @@ function Clientes() {
   const [pesquisa, setPesquisa] = useState('');
   const [filtro, setFiltro] = useState('Todos');
 
-  const [modalFormulario, setModalFormulario] = useState(false);
-  const [modalVisualizar, setModalVisualizar] = useState(false);
+  const [modalFormulario, setModalFormulario] =
+    useState(false);
 
-  const [clienteSelecionado, setClienteSelecionado] = useState(null);
+  const [modalVisualizar, setModalVisualizar] =
+    useState(false);
 
-  const [modoEdicao, setModoEdicao] = useState(false);
+  const [clienteSelecionado, setClienteSelecionado] =
+    useState(null);
+
+  const [modoEdicao, setModoEdicao] =
+    useState(false);
 
   const [formulario, setFormulario] = useState({
     nome: '',
@@ -78,125 +108,66 @@ function Clientes() {
   });
 
   // =====================================================
-  // BUSCAR CLIENTES NA API
+  // BUSCAR CLIENTES
   // =====================================================
 
- async function carregarClientes() {
-  try {
-    const resposta = await requisicaoAPI('/clientes');
+  async function carregarClientes() {
+    try {
+      const resposta =
+        await requisicaoAPI('/clientes');
 
-    // =================================================
-    // MOSTRAR A RESPOSTA COMPLETA DA API
-    // =================================================
+      const listaClientes =
+        Array.isArray(resposta?.dados)
+          ? resposta.dados
+          : [];
 
-    console.log(
-      '========== RESPOSTA COMPLETA DA API =========='
-    );
+      const clientesFormatados =
+        listaClientes.map((cliente) => ({
+          id: cliente?.usuario_id ?? 0,
 
-    console.log(
-      JSON.stringify(resposta, null, 2)
-    );
+          nome:
+            cliente?.usuario_nome ?? '',
 
-    console.log(
-      '=============================================='
-    );
+          email:
+            cliente?.usuario_email ?? '',
 
-    // =================================================
-    // IDENTIFICAR ONDE ESTA A LISTA DE CLIENTES
-    // =================================================
+          telefone:
+            cliente?.usuario_telefone ?? '',
 
-    let listaClientes = [];
+          nascimento:
+            formatarDataParaInput(
+              cliente?.usuario_dt_nascimento
+            ),
 
-    if (Array.isArray(resposta)) {
-      listaClientes = resposta;
-    } else if (Array.isArray(resposta?.dados)) {
-      listaClientes = resposta.dados;
-    } else if (
-      Array.isArray(resposta?.dados?.clientes)
-    ) {
-      listaClientes = resposta.dados.clientes;
-    } else if (
-      Array.isArray(resposta?.clientes)
-    ) {
-      listaClientes = resposta.clientes;
+          foto: '',
+
+          status:
+            Number(
+              cliente?.usuario_ativo
+            ) === 1
+              ? 'Ativo'
+              : 'Inativo',
+
+          senha: '',
+        }));
+
+      setClientes(clientesFormatados);
+
+    } catch (error) {
+      console.error(
+        'Erro ao carregar clientes:',
+        error
+      );
+
+      alert(
+        error?.message ||
+        'Erro ao carregar clientes.'
+      );
     }
-
-    console.log(
-      '========== CLIENTES ENCONTRADOS =========='
-    );
-
-    console.log(
-      JSON.stringify(listaClientes, null, 2)
-    );
-
-    console.log(
-      '=========================================='
-    );
-
-    // =================================================
-    // NORMALIZAR OS CLIENTES
-    // =================================================
-
-    const clientesFormatados = listaClientes.map(
-  (cliente) => ({
-   
-    id: cliente?.usuario_id ?? 0,
-
-    nome: cliente?.usuario_nome ?? '',
-
-    email: cliente?.usuario_email ?? '',
-
-    telefone: cliente?.usuario_telefone ?? '',
-
-    nascimento:
-      cliente?.usuario_dt_nascimento ?? '',
-
- 
-    foto: '',
-
-    status:
-      Number(cliente?.usuario_ativo) === 1
-        ? 'Ativo'
-        : 'Inativo',
-
-    // A API nao retorna senha
-    senha: '',
-  })
-);
-
-    console.log(
-      '========== CLIENTES FORMATADOS =========='
-    );
-
-    console.log(
-      JSON.stringify(
-        clientesFormatados,
-        null,
-        2
-      )
-    );
-
-    console.log(
-      '========================================='
-    );
-
-    setClientes(clientesFormatados);
-
-  } catch (error) {
-    console.error(
-      'Erro ao carregar clientes:',
-      error
-    );
-
-    alert(
-      error?.message ||
-      'Erro ao carregar clientes.'
-    );
   }
-}
 
   // =====================================================
-  // CARREGAR CLIENTES AO ABRIR A TELA
+  // CARREGAR AO ABRIR A PAGINA
   // =====================================================
 
   useEffect(() => {
@@ -207,41 +178,46 @@ function Clientes() {
   // PESQUISA E FILTRO
   // =====================================================
 
-  const clientesFiltrados = clientes.filter((cliente) => {
-    const termo = String(
-      pesquisa ?? ''
-    ).toLowerCase();
+  const clientesFiltrados =
+    clientes.filter((cliente) => {
+      const termo = String(
+        pesquisa ?? ''
+      ).toLowerCase();
 
-    const nome = String(
-      cliente?.nome ?? ''
-    );
+      const nome = String(
+        cliente?.nome ?? ''
+      );
 
-    const email = String(
-      cliente?.email ?? ''
-    );
+      const email = String(
+        cliente?.email ?? ''
+      );
 
-    const telefone = String(
-      cliente?.telefone ?? ''
-    );
+      const telefone = String(
+        cliente?.telefone ?? ''
+      );
 
-    const status = String(
-      cliente?.status ?? 'Ativo'
-    );
+      const status = String(
+        cliente?.status ?? 'Ativo'
+      );
 
-    const correspondePesquisa =
-      nome.toLowerCase().includes(termo) ||
-      email.toLowerCase().includes(termo) ||
-      telefone.includes(termo);
+      const correspondePesquisa =
+        nome
+          .toLowerCase()
+          .includes(termo) ||
+        email
+          .toLowerCase()
+          .includes(termo) ||
+        telefone.includes(termo);
 
-    const correspondeFiltro =
-      filtro === 'Todos' ||
-      status === filtro;
+      const correspondeFiltro =
+        filtro === 'Todos' ||
+        status === filtro;
 
-    return (
-      correspondePesquisa &&
-      correspondeFiltro
-    );
-  });
+      return (
+        correspondePesquisa &&
+        correspondeFiltro
+      );
+    });
 
   // =====================================================
   // ABRIR CADASTRO
@@ -276,7 +252,10 @@ function Clientes() {
       email: cliente?.email ?? '',
       senha: '',
       telefone: cliente?.telefone ?? '',
-      nascimento: cliente?.nascimento ?? '',
+      nascimento:
+        formatarDataParaInput(
+          cliente?.nascimento
+        ),
       foto: cliente?.foto ?? '',
     });
 
@@ -324,65 +303,72 @@ function Clientes() {
   async function salvarCliente(event) {
     event.preventDefault();
 
-    // ---------------------------------------------
-    // VALIDACAO
-    // ---------------------------------------------
+    // =================================================
+    // VALIDACOES
+    // =================================================
 
     if (!formulario.nome.trim()) {
-      alert('Digite o nome do cliente.');
+      alert(
+        'Digite o nome do cliente.'
+      );
       return;
     }
 
     if (!formulario.email.trim()) {
-      alert('Digite o e-mail do cliente.');
+      alert(
+        'Digite o e-mail do cliente.'
+      );
       return;
     }
 
     if (!formulario.telefone.trim()) {
-      alert('Digite o telefone do cliente.');
+      alert(
+        'Digite o telefone do cliente.'
+      );
       return;
     }
-
-    /*
-     * No cadastro a senha e obrigatoria.
-     *
-     * Na edicao nao obrigamos a senha porque
-     * normalmente ela nao e retornada pela API.
-     */
 
     if (
       !modoEdicao &&
       !formulario.senha.trim()
     ) {
-      alert('Digite a senha do cliente.');
+      alert(
+        'Digite a senha do cliente.'
+      );
       return;
     }
 
     try {
       // =================================================
-      // EDITAR
+      // EDITAR CLIENTE
       // =================================================
 
       if (modoEdicao) {
         /*
-         * Montamos os dados da alteracao.
+         * A API espera os campos usuario_*.
          */
 
         const dadosCliente = {
-          nome: formulario.nome,
-          email: formulario.email,
-          telefone: formulario.telefone,
-          nascimento: formulario.nascimento,
-          foto: formulario.foto,
+          usuario_nome:
+            formulario.nome,
+
+          usuario_email:
+            formulario.email,
+
+          usuario_telefone:
+            formulario.telefone,
+
+          usuario_dt_nascimento:
+            formulario.nascimento,
         };
 
         /*
-         * Se o usuario digitou uma nova senha,
-         * enviamos tambem.
+         * A senha somente sera enviada
+         * se o usuario preencher uma nova senha.
          */
 
         if (formulario.senha.trim()) {
-          dadosCliente.senha =
+          dadosCliente.usuario_senha =
             formulario.senha;
         }
 
@@ -391,6 +377,7 @@ function Clientes() {
             `/clientes/${clienteSelecionado.id}`,
             {
               method: 'PUT',
+
               body: JSON.stringify(
                 dadosCliente
               ),
@@ -408,17 +395,29 @@ function Clientes() {
       }
 
       // =================================================
-      // CADASTRAR
+      // CADASTRAR CLIENTE
       // =================================================
 
       else {
+        /*
+         * A API espera os campos usuario_*.
+         */
+
         const dadosCliente = {
-          nome: formulario.nome,
-          email: formulario.email,
-          senha: formulario.senha,
-          telefone: formulario.telefone,
-          nascimento: formulario.nascimento,
-          foto: formulario.foto,
+          usuario_nome:
+            formulario.nome,
+
+          usuario_email:
+            formulario.email,
+
+          usuario_senha:
+            formulario.senha,
+
+          usuario_telefone:
+            formulario.telefone,
+
+          usuario_dt_nascimento:
+            formulario.nascimento,
         };
 
         const resposta =
@@ -426,6 +425,7 @@ function Clientes() {
             '/clientes',
             {
               method: 'POST',
+
               body: JSON.stringify(
                 dadosCliente
               ),
@@ -485,84 +485,46 @@ function Clientes() {
   // ATIVAR / DESATIVAR
   // =====================================================
 
-  async function alterarStatus(cliente) {
-    const novoStatus =
-      cliente.status === 'Ativo'
-        ? 'Inativo'
-        : 'Ativo';
+ async function alterarStatus(cliente) {
+  try {
+    if (cliente.status === 'Ativo') {
 
-    const mensagem =
-      novoStatus === 'Inativo'
-        ? `Deseja desativar o cliente ${cliente.nome}?`
-        : `Deseja ativar o cliente ${cliente.nome}?`;
+      await requisicaoAPI(
+        `/clientes/${cliente.id}/ocultar`,
+        {
+          method: 'PATCH',
+        }
+      );
 
-    const confirmou =
-      window.confirm(mensagem);
+      alert('Cliente desativado com sucesso.');
 
-    if (!confirmou) {
-      return;
+    } else {
+
+      await requisicaoAPI(
+        `/clientes/${cliente.id}/reativar`,
+        {
+          method: 'PATCH',
+        }
+      );
+
+      alert('Cliente ativado com sucesso.');
     }
 
-    // =================================================
-    // DESATIVAR
-    // =================================================
+    await carregarClientes();
 
-    if (novoStatus === 'Inativo') {
-      try {
-        const resposta =
-          await requisicaoAPI(
-            `/clientes/${cliente.id}/ocultar`,
-            {
-              method: 'PATCH',
-            }
-          );
+  } catch (error) {
 
-        console.log(
-          'Cliente desativado:',
-          resposta
-        );
-
-        await carregarClientes();
-
-        alert(
-          'Cliente desativado com sucesso!'
-        );
-
-      } catch (error) {
-        console.error(
-          'Erro ao desativar cliente:',
-          error
-        );
-
-        alert(
-          error?.message ||
-          'Erro ao desativar cliente.'
-        );
-      }
-
-      return;
-    }
-
-    // =================================================
-    // ATIVAR
-    // =================================================
-
-    /*
-     * Pela rota da API que temos atualmente,
-     * existe a rota de ocultar/desativar:
-     *
-     * PATCH /clientes/:id/ocultar
-     *
-     * Mas nao temos uma rota de reativacao
-     * confirmada.
-     *
-     * Portanto nao fazemos uma falsa requisicao.
-     */
+    console.error(
+      'Erro ao alterar status do cliente:',
+      error
+    );
 
     alert(
-      'A API ainda nao possui uma rota de reativacao do cliente.'
+      error?.message ||
+      'Erro ao alterar status do cliente.'
     );
   }
+}
 
   // =====================================================
   // TELA
@@ -578,10 +540,12 @@ function Clientes() {
       <header className="clientes-header">
 
         <div className="clientes-logo">
+
           <img
             src={logoHope}
             alt="Hope Barbearia"
           />
+
         </div>
 
         <div className="clientes-title">
@@ -624,8 +588,6 @@ function Clientes() {
 
       <section className="clientes-content">
 
-        {/* CABECALHO */}
-
         <div className="clientes-heading">
 
           <div>
@@ -639,8 +601,8 @@ function Clientes() {
             </h2>
 
             <p>
-              Cadastre, consulte e gerencie os clientes
-              da Hope Barbearia.
+              Cadastre, consulte e gerencie
+              os clientes da Hope Barbearia.
             </p>
 
           </div>
@@ -801,7 +763,9 @@ function Clientes() {
                               {cliente.foto ? (
 
                                 <img
-                                  src={cliente.foto}
+                                  src={
+                                    cliente.foto
+                                  }
                                   alt={
                                     cliente.nome
                                   }
@@ -1166,7 +1130,7 @@ function Clientes() {
                   />
 
                   <small>
-                    Campo opcional para a foto do cliente.
+                    Campo opcional para foto do cliente.
                   </small>
 
                 </div>
