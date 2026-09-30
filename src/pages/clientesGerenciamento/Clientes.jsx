@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Clientes.css';
 import logoHope from '../../assets/logo-hope.png';
 
 function Clientes() {
+
+  const navigate = useNavigate();
+
   // =====================================================
   // CONFIGURACAO DA API
   // =====================================================
@@ -14,6 +18,7 @@ function Clientes() {
   // =====================================================
 
   async function requisicaoAPI(endpoint, options = {}) {
+
     const token = localStorage.getItem('token');
 
     const headers = {
@@ -64,6 +69,7 @@ function Clientes() {
   // =====================================================
 
   function formatarDataParaInput(data) {
+
     if (!data) {
       return '';
     }
@@ -112,7 +118,9 @@ function Clientes() {
   // =====================================================
 
   async function carregarClientes() {
+
     try {
+
       const resposta =
         await requisicaoAPI('/clientes');
 
@@ -123,6 +131,7 @@ function Clientes() {
 
       const clientesFormatados =
         listaClientes.map((cliente) => ({
+
           id: cliente?.usuario_id ?? 0,
 
           nome:
@@ -154,6 +163,7 @@ function Clientes() {
       setClientes(clientesFormatados);
 
     } catch (error) {
+
       console.error(
         'Erro ao carregar clientes:',
         error
@@ -180,6 +190,7 @@ function Clientes() {
 
   const clientesFiltrados =
     clientes.filter((cliente) => {
+
       const termo = String(
         pesquisa ?? ''
       ).toLowerCase();
@@ -204,9 +215,11 @@ function Clientes() {
         nome
           .toLowerCase()
           .includes(termo) ||
+
         email
           .toLowerCase()
           .includes(termo) ||
+
         telefone.includes(termo);
 
       const correspondeFiltro =
@@ -224,7 +237,9 @@ function Clientes() {
   // =====================================================
 
   function abrirCadastro() {
+
     setModoEdicao(false);
+
     setClienteSelecionado(null);
 
     setFormulario({
@@ -244,19 +259,31 @@ function Clientes() {
   // =====================================================
 
   function abrirEdicao(cliente) {
+
     setModoEdicao(true);
+
     setClienteSelecionado(cliente);
 
     setFormulario({
-      nome: cliente?.nome ?? '',
-      email: cliente?.email ?? '',
+
+      nome:
+        cliente?.nome ?? '',
+
+      email:
+        cliente?.email ?? '',
+
       senha: '',
-      telefone: cliente?.telefone ?? '',
+
+      telefone:
+        cliente?.telefone ?? '',
+
       nascimento:
         formatarDataParaInput(
           cliente?.nascimento
         ),
-      foto: cliente?.foto ?? '',
+
+      foto:
+        cliente?.foto ?? '',
     });
 
     setModalFormulario(true);
@@ -267,7 +294,9 @@ function Clientes() {
   // =====================================================
 
   function fecharFormulario() {
+
     setModalFormulario(false);
+
     setClienteSelecionado(null);
 
     setFormulario({
@@ -285,14 +314,18 @@ function Clientes() {
   // =====================================================
 
   function alterarFormulario(event) {
+
     const {
       name,
       value,
     } = event.target;
 
     setFormulario((anterior) => ({
+
       ...anterior,
+
       [name]: value,
+
     }));
   }
 
@@ -301,6 +334,7 @@ function Clientes() {
   // =====================================================
 
   async function salvarCliente(event) {
+
     event.preventDefault();
 
     // =================================================
@@ -308,23 +342,29 @@ function Clientes() {
     // =================================================
 
     if (!formulario.nome.trim()) {
+
       alert(
         'Digite o nome do cliente.'
       );
+
       return;
     }
 
     if (!formulario.email.trim()) {
+
       alert(
         'Digite o e-mail do cliente.'
       );
+
       return;
     }
 
     if (!formulario.telefone.trim()) {
+
       alert(
         'Digite o telefone do cliente.'
       );
+
       return;
     }
 
@@ -332,23 +372,24 @@ function Clientes() {
       !modoEdicao &&
       !formulario.senha.trim()
     ) {
+
       alert(
         'Digite a senha do cliente.'
       );
+
       return;
     }
 
     try {
+
       // =================================================
       // EDITAR CLIENTE
       // =================================================
 
       if (modoEdicao) {
-        /*
-         * A API espera os campos usuario_*.
-         */
 
         const dadosCliente = {
+
           usuario_nome:
             formulario.nome,
 
@@ -360,14 +401,11 @@ function Clientes() {
 
           usuario_dt_nascimento:
             formulario.nascimento,
+
         };
 
-        /*
-         * A senha somente sera enviada
-         * se o usuario preencher uma nova senha.
-         */
-
         if (formulario.senha.trim()) {
+
           dadosCliente.usuario_senha =
             formulario.senha;
         }
@@ -399,11 +437,9 @@ function Clientes() {
       // =================================================
 
       else {
-        /*
-         * A API espera os campos usuario_*.
-         */
 
         const dadosCliente = {
+
           usuario_nome:
             formulario.nome,
 
@@ -418,6 +454,7 @@ function Clientes() {
 
           usuario_dt_nascimento:
             formulario.nascimento,
+
         };
 
         const resposta =
@@ -451,6 +488,7 @@ function Clientes() {
       fecharFormulario();
 
     } catch (error) {
+
       console.error(
         'Erro ao salvar cliente:',
         error
@@ -468,7 +506,9 @@ function Clientes() {
   // =====================================================
 
   function visualizarCliente(cliente) {
+
     setClienteSelecionado(cliente);
+
     setModalVisualizar(true);
   }
 
@@ -477,7 +517,9 @@ function Clientes() {
   // =====================================================
 
   function fecharVisualizacao() {
+
     setClienteSelecionado(null);
+
     setModalVisualizar(false);
   }
 
@@ -485,52 +527,77 @@ function Clientes() {
   // ATIVAR / DESATIVAR
   // =====================================================
 
- async function alterarStatus(cliente) {
-  try {
-    if (cliente.status === 'Ativo') {
+  async function alterarStatus(cliente) {
 
-      await requisicaoAPI(
-        `/clientes/${cliente.id}/ocultar`,
-        {
-          method: 'PATCH',
-        }
+    try {
+
+      if (cliente.status === 'Ativo') {
+
+        await requisicaoAPI(
+          `/clientes/${cliente.id}/ocultar`,
+          {
+            method: 'PATCH',
+          }
+        );
+
+        alert(
+          'Cliente desativado com sucesso.'
+        );
+
+      } else {
+
+        await requisicaoAPI(
+          `/clientes/${cliente.id}/reativar`,
+          {
+            method: 'PATCH',
+          }
+        );
+
+        alert(
+          'Cliente ativado com sucesso.'
+        );
+      }
+
+      await carregarClientes();
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao alterar status do cliente:',
+        error
       );
 
-      alert('Cliente desativado com sucesso.');
-
-    } else {
-
-      await requisicaoAPI(
-        `/clientes/${cliente.id}/reativar`,
-        {
-          method: 'PATCH',
-        }
+      alert(
+        error?.message ||
+        'Erro ao alterar status do cliente.'
       );
-
-      alert('Cliente ativado com sucesso.');
     }
-
-    await carregarClientes();
-
-  } catch (error) {
-
-    console.error(
-      'Erro ao alterar status do cliente:',
-      error
-    );
-
-    alert(
-      error?.message ||
-      'Erro ao alterar status do cliente.'
-    );
   }
-}
+
+  // =====================================================
+  // IR PARA O PAINEL ADMINISTRATIVO
+  // =====================================================
+
+  function irParaPainel() {
+
+    navigate('/PainelAdministracao');
+  }
+
+  // =====================================================
+  // IR PARA O PERFIL
+  // =====================================================
+
+  function irParaPerfil() {
+
+    navigate('/perfil');
+  }
 
   // =====================================================
   // TELA
   // =====================================================
 
   return (
+
     <main className="clientes-page">
 
       {/* =================================================
@@ -539,7 +606,13 @@ function Clientes() {
 
       <header className="clientes-header">
 
-        <div className="clientes-logo">
+        {/* LOGO */}
+
+        <div
+          className="clientes-logo"
+          onClick={irParaPainel}
+          title="Voltar para o painel"
+        >
 
           <img
             src={logoHope}
@@ -547,6 +620,8 @@ function Clientes() {
           />
 
         </div>
+
+        {/* TITULO */}
 
         <div className="clientes-title">
 
@@ -560,7 +635,13 @@ function Clientes() {
 
         </div>
 
-        <div className="clientes-user">
+        {/* PERFIL */}
+
+        <div
+          className="clientes-user"
+          onClick={irParaPerfil}
+          title="Abrir perfil"
+        >
 
           <div className="user-avatar">
             B
@@ -944,7 +1025,9 @@ function Clientes() {
               event.target ===
               event.currentTarget
             ) {
+
               fecharFormulario();
+
             }
 
           }}
@@ -1185,7 +1268,9 @@ function Clientes() {
                 event.target ===
                 event.currentTarget
               ) {
+
                 fecharVisualizacao();
+
               }
 
             }}
