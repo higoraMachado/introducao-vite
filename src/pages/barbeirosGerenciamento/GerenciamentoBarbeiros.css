@@ -1,0 +1,610 @@
+/* ===================================================== 
+    PÁGINA 
+===================================================== */
+
+.gerenciamento-barbeiros-page {
+  min-height: 100vh;
+  background: #0b0b0b;
+  color: #f5f5f5;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.gerenciamento-header {
+  height: 105px;
+  display: flex;
+  align-items: center;
+  padding: 0 45px;
+  background: #101010;
+  border-bottom: 1px solid #292929;
+}
+
+.gerenciamento-logo img {
+  width: 75px;
+  display: block;
+}
+
+.gerenciamento-title {
+  margin-left: 25px;
+}
+
+.gerenciamento-title h1 {
+  margin: 0;
+  color: #d4af37;
+  font-size: 25px;
+}
+
+.gerenciamento-title p {
+  margin: 5px 0 0;
+  color: #999;
+  font-size: 14px;
+}
+
+.gerenciamento-user {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gerenciamento-user strong {
+  display: block;
+  color: #fff;
+}
+
+.gerenciamento-user span {
+  display: block;
+  margin-top: 3px;
+  color: #999;
+  font-size: 13px;
+}
+
+.gerenciamento-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4af37;
+  color: #0b0b0b;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+/* =====================================================
+   CONTEÚDO
+===================================================== */
+
+.gerenciamento-content {
+  padding: 40px 50px 60px;
+}
+
+.gerenciamento-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+}
+
+.gerenciamento-heading span {
+  color: #d4af37;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.gerenciamento-heading h2 {
+  margin: 8px 0;
+  font-size: 32px;
+}
+
+.gerenciamento-heading p {
+  margin: 0;
+  color: #999;
+}
+
+.btn-voltar {
+  padding: 11px 18px;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  background: #151515;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.btn-voltar:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+
+/* =====================================================
+   ESTATÍSTICAS
+===================================================== */
+
+.barbeiro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.barbeiro-stat {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 22px;
+  background: #121212;
+  border: 1px solid #292929;
+  border-radius: 12px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.12);
+  color: #d4af37;
+  font-size: 20px;
+}
+
+.barbeiro-stat span {
+  display: block;
+  color: #999;
+  font-size: 13px;
+}
+
+.barbeiro-stat strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 25px;
+  color: #fff;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.gerenciamento-card {
+  background: #121212;
+  border: 1px solid #292929;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.card-top {
+  padding: 25px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #292929;
+}
+
+.card-top > div span {
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.card-top h3 {
+  margin: 7px 0 0;
+  font-size: 20px;
+}
+
+.btn-novo-barbeiro {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #d4af37;
+  color: #080808;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-novo-barbeiro:hover {
+  background: #e5c45a;
+}
+
+
+/* =====================================================
+   BUSCA
+===================================================== */
+
+.barra-filtros {
+  padding: 20px 28px;
+  border-bottom: 1px solid #292929;
+}
+
+.campo-busca {
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 15px;
+  height: 45px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #0d0d0d;
+}
+
+.campo-busca span {
+  color: #d4af37;
+}
+
+.campo-busca input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+}
+
+.campo-busca input::placeholder {
+  color: #666;
+}
+
+
+/* =====================================================
+   TABELA
+===================================================== */
+
+.tabela-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabela-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-container th {
+  padding: 15px 20px;
+  text-align: left;
+  color: #777;
+  font-size: 11px;
+  letter-spacing: 1px;
+  background: #0e0e0e;
+}
+
+.tabela-container td {
+  padding: 18px 20px;
+  border-top: 1px solid #242424;
+  vertical-align: middle;
+}
+
+.tabela-container tbody tr:hover {
+  background: #171717;
+}
+
+
+/* =====================================================
+   INFORMAÇÕES
+===================================================== */
+
+.barbeiro-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.barbeiro-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4af37;
+  color: #0b0b0b;
+  font-weight: bold;
+}
+
+.barbeiro-info strong {
+  display: block;
+}
+
+.barbeiro-info span {
+  display: block;
+  margin-top: 4px;
+  color: #777;
+  font-size: 12px;
+}
+
+.contato-info span {
+  display: block;
+  color: #ddd;
+}
+
+.contato-info small {
+  display: block;
+  margin-top: 5px;
+  color: #777;
+}
+
+.especialidade {
+  color: #d4af37;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+  display: inline-flex;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.ativo {
+  background: rgba(50, 180, 100, 0.12);
+  color: #65d68a;
+}
+
+.status.inativo {
+  background: rgba(200, 70, 70, 0.12);
+  color: #e87979;
+}
+
+
+/* =====================================================
+   AÇÕES
+===================================================== */
+
+.acoes {
+  display: flex;
+  gap: 7px;
+}
+
+.acoes button {
+  width: 35px;
+  height: 35px;
+  border-radius: 7px;
+  border: 1px solid #333;
+  background: #171717;
+  cursor: pointer;
+}
+
+.acao-editar {
+  color: #d4af37;
+}
+
+.acao-inativar {
+  color: #e4a65c;
+}
+
+.acao-excluir {
+  color: #e56b6b;
+}
+
+.acoes button:hover {
+  border-color: #d4af37;
+}
+
+
+/* =====================================================
+   ESTADO VAZIO
+===================================================== */
+
+.estado-tabela {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #888;
+}
+
+.estado-tabela div {
+  font-size: 35px;
+  color: #d4af37;
+}
+
+.estado-tabela strong {
+  color: #ddd;
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.barbeiro-modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #121212;
+  border: 1px solid #333;
+  border-radius: 14px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 25px 28px;
+  border-bottom: 1px solid #292929;
+}
+
+.modal-header span {
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.modal-header h2 {
+  margin: 7px 0 0;
+}
+
+.modal-fechar {
+  border: none;
+  background: transparent;
+  color: #aaa;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-fechar:hover {
+  color: #d4af37;
+}
+
+
+/* =====================================================
+   FORMULÁRIO MODAL
+===================================================== */
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  padding: 28px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.campo-full {
+  grid-column: 1 / -1;
+}
+
+.campo label {
+  color: #bbb;
+  font-size: 13px;
+}
+
+.campo input {
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid #333;
+  border-radius: 7px;
+  outline: none;
+  background: #0c0c0c;
+  color: #fff;
+}
+
+.campo input:focus {
+  border-color: #d4af37;
+}
+
+.campo input::placeholder {
+  color: #666;
+}
+
+
+/* =====================================================
+   RODAPÉ MODAL
+===================================================== */
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid #292929;
+}
+
+.btn-modal-cancelar {
+  padding: 11px 18px;
+  border: 1px solid #444;
+  border-radius: 7px;
+  background: transparent;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.btn-modal-salvar {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 7px;
+  background: #d4af37;
+  color: #090909;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-modal-salvar:hover {
+  background: #e5c45a;
+}
+
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .gerenciamento-content {
+    padding: 30px 20px;
+  }
+
+  .gerenciamento-header {
+    padding: 0 20px;
+  }
+
+  .barbeiro-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .gerenciamento-heading {
+    align-items: flex-start;
+    gap: 20px;
+    flex-direction: column;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .gerenciamento-header {
+    height: auto;
+    padding: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .gerenciamento-user {
+    margin-left: 0;
+  }
+
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .campo-full {
+    grid-column: auto;
+  }
+
+}
+

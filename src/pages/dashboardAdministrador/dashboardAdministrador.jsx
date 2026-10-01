@@ -29,6 +29,11 @@ function DashboardAdministrador() {
       rota: "/GerenciamentoCliente",
     },
     {
+      nome: "Cadastrar Cliente",
+      icone: "👤",
+      rota: "/CadastroCliente",
+    },
+    {
       nome: "Barbeiros",
       icone: "♟",
       rota: "/barbeiros",
@@ -39,14 +44,39 @@ function DashboardAdministrador() {
       rota: "/Servicos",
     },
     {
+      nome: "Cadastrar Serviço",
+      icone: "➕",
+      rota: "/CadastroServico",
+    },
+    {
       nome: "Estoque",
-      icone: "▣",
+      icone: "📦",
       rota: "/Estoque",
+    },
+    {
+      nome: "Movimentação de Estoque",
+      icone: "🔄",
+      rota: "/MovimentacaoEstoque",
+    },
+    {
+      nome: "Cadastrar Produto",
+      icone: "🛒",
+      rota: "/CadastroProduto",
     },
     {
       nome: "Financeiro",
       icone: "R$",
-      rota: "/MovimentacaoEstoque",
+      rota: "/ControleFinanceiro",
+    },
+    {
+      nome: "Registrar Pagamentos",
+      icone: "💳",
+      rota: "/RegistrarPagamentos",
+    },
+    {
+      nome: "Despesas",
+      icone: "📋",
+      rota: "/Despesas",
     },
     {
       nome: "Relatórios",
@@ -58,6 +88,11 @@ function DashboardAdministrador() {
       icone: "⚙",
       rota: null,
     },
+    {
+      nome: "Minha Conta",
+      icone: "👤",
+      rota: "/perfil",
+    },
   ];
 
   // =========================
@@ -65,11 +100,12 @@ function DashboardAdministrador() {
   // =========================
 
   function navegar(item) {
-    setPaginaAtiva(item.nome);
-
-    if (item.rota) {
-      navigate(item.rota);
+    if (!item.rota) {
+      return;
     }
+
+    setPaginaAtiva(item.nome);
+    navigate(item.rota);
   }
 
   // =========================
@@ -77,7 +113,19 @@ function DashboardAdministrador() {
   // =========================
 
   function sair() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+
     navigate("/login");
+  }
+
+  // =========================
+  // ACESSO RÁPIDO
+  // =========================
+
+  function acessar(nome, rota) {
+    setPaginaAtiva(nome);
+    navigate(rota);
   }
 
   return (
@@ -96,7 +144,11 @@ function DashboardAdministrador() {
           <p>Gerencie a Hope Barbearia</p>
         </div>
 
-        <div className="admin-header-user">
+        <div
+          className="admin-header-user"
+          onClick={() => acessar("Minha Conta", "/perfil")}
+          style={{ cursor: "pointer" }}
+        >
 
           <div className="admin-avatar">
             A
@@ -136,6 +188,12 @@ function DashboardAdministrador() {
                     : "sidebar-item"
                 }
                 onClick={() => navegar(item)}
+                disabled={!item.rota}
+                title={
+                  !item.rota
+                    ? "Esta tela ainda está em desenvolvimento"
+                    : ""
+                }
               >
 
                 <span className="sidebar-icon">
@@ -151,6 +209,7 @@ function DashboardAdministrador() {
             ))}
 
           </nav>
+
 
           {/* ================= SAIR ================= */}
 
@@ -288,7 +347,9 @@ function DashboardAdministrador() {
 
                 <button
                   className="admin-link"
-                  onClick={() => navigate("/agendamento")}
+                  onClick={() =>
+                    acessar("Agendamentos", "/agendamento")
+                  }
                 >
                   Ver todos
                 </button>
@@ -450,10 +511,9 @@ function DashboardAdministrador() {
               {/* AGENDAMENTOS */}
 
               <button
-                onClick={() => {
-                  setPaginaAtiva("Agendamentos");
-                  navigate("/agendamento");
-                }}
+                onClick={() =>
+                  acessar("Agendamentos", "/agendamento")
+                }
               >
                 <span>📅</span>
                 <strong>Agendamentos</strong>
@@ -464,10 +524,9 @@ function DashboardAdministrador() {
               {/* CLIENTES */}
 
               <button
-                onClick={() => {
-                  setPaginaAtiva("Clientes");
-                  navigate("/GerenciamentoCliente");
-                }}
+                onClick={() =>
+                  acessar("Clientes", "/GerenciamentoCliente")
+                }
               >
                 <span>👤</span>
                 <strong>Clientes</strong>
@@ -475,13 +534,25 @@ function DashboardAdministrador() {
               </button>
 
 
+              {/* CADASTRO CLIENTE */}
+
+              <button
+                onClick={() =>
+                  acessar("Cadastrar Cliente", "/CadastroCliente")
+                }
+              >
+                <span>➕</span>
+                <strong>Cadastrar Cliente</strong>
+                <small>Novo cliente</small>
+              </button>
+
+
               {/* BARBEIROS */}
 
               <button
-                onClick={() => {
-                  setPaginaAtiva("Barbeiros");
-                  navigate("/barbeiros");
-                }}
+                onClick={() =>
+                  acessar("Barbeiros", "/barbeiros")
+                }
               >
                 <span>✂</span>
                 <strong>Barbeiros</strong>
@@ -492,10 +563,9 @@ function DashboardAdministrador() {
               {/* SERVIÇOS */}
 
               <button
-                onClick={() => {
-                  setPaginaAtiva("Serviços");
-                  navigate("/Servicos");
-                }}
+                onClick={() =>
+                  acessar("Serviços", "/Servicos")
+                }
               >
                 <span>🧴</span>
                 <strong>Serviços</strong>
@@ -503,13 +573,25 @@ function DashboardAdministrador() {
               </button>
 
 
+              {/* CADASTRO SERVIÇO */}
+
+              <button
+                onClick={() =>
+                  acessar("Cadastrar Serviço", "/CadastroServico")
+                }
+              >
+                <span>➕</span>
+                <strong>Cadastrar Serviço</strong>
+                <small>Novo serviço</small>
+              </button>
+
+
               {/* ESTOQUE */}
 
               <button
-                onClick={() => {
-                  setPaginaAtiva("Estoque");
-                  navigate("/Estoque");
-                }}
+                onClick={() =>
+                  acessar("Estoque", "/Estoque")
+                }
               >
                 <span>📦</span>
                 <strong>Estoque</strong>
@@ -517,14 +599,74 @@ function DashboardAdministrador() {
               </button>
 
 
+              {/* MOVIMENTAÇÃO */}
+
+              <button
+                onClick={() =>
+                  acessar(
+                    "Movimentação de Estoque",
+                    "/MovimentacaoEstoque"
+                  )
+                }
+              >
+                <span>🔄</span>
+                <strong>Movimentação</strong>
+                <small>Movimentar estoque</small>
+              </button>
+
+
+              {/* PRODUTOS */}
+
+              <button
+                onClick={() =>
+                  acessar("Cadastrar Produto", "/CadastroProduto")
+                }
+              >
+                <span>🛒</span>
+                <strong>Cadastrar Produto</strong>
+                <small>Novo produto</small>
+              </button>
+
+
               {/* FINANCEIRO */}
 
               <button
-                onClick={() => navigate("/ControleFinanceiro")}
+                onClick={() =>
+                  acessar("Financeiro", "/ControleFinanceiro")
+                }
               >
                 <span>R$</span>
                 <strong>Financeiro</strong>
                 <small>Visualizar balanço</small>
+              </button>
+
+
+              {/* PAGAMENTOS */}
+
+              <button
+                onClick={() =>
+                  acessar(
+                    "Registrar Pagamentos",
+                    "/RegistrarPagamentos"
+                  )
+                }
+              >
+                <span>💳</span>
+                <strong>Pagamentos</strong>
+                <small>Registrar pagamentos</small>
+              </button>
+
+
+              {/* DESPESAS */}
+
+              <button
+                onClick={() =>
+                  acessar("Despesas", "/Despesas")
+                }
+              >
+                <span>📋</span>
+                <strong>Despesas</strong>
+                <small>Controlar despesas</small>
               </button>
 
 
@@ -564,3 +706,4 @@ function DashboardAdministrador() {
 }
 
 export default DashboardAdministrador;
+

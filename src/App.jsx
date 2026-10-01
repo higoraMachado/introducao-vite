@@ -21,6 +21,7 @@ import ControleFinanceiro from './pages/ControleFinanceiro/ControleFinanceiro';
 import RegistrarPagamentos from './pages/RegistrarPagamantos/RegistrarPagamentos';
 import Despesas from './pages/Despesas/Despesas';
 import Landing from './pages/landing/Landing';
+import GerenciamentoBarbeiros from './pages/barbeirosGerenciamento/GerenciamentoBarbeiros';
 
 
 function App() {
@@ -119,21 +120,22 @@ function App() {
             />
 
             <Route
-                path="/CadastroCliente"
+                path="/barbeiros"
                 element={
                     <ProtectedRoute tiposPermitidos={[1]}>
-                        <CadastroCliente />
+                        <GerenciamentoBarbeiros />
                     </ProtectedRoute>
                 }
             />
 
             <Route
+                path="/CadastroCliente"
+                element={<CadastroCliente />}
+            />
+
+            <Route
                 path="/CadastroBarbeiro"
-                element={
-                    <ProtectedRoute tiposPermitidos={[1]}>
-                        <CadastroBarbeiro />
-                    </ProtectedRoute>
-                }
+                element={<CadastroBarbeiro />}
             />
 
             <Route
