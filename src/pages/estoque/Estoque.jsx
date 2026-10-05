@@ -1,56 +1,125 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Estoque.css';
-
 import logoHope from '../../assets/logo-hope.png';
+import { useNavigate } from 'react-router-dom';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333';
 
 function Estoque() {
+  const navigate = useNavigate();
+  const [produtos, setProdutos] = useState([]);
+  
+async function request(endpoint, options = {}) {
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token
+        ? {
+            Authorization: `Bearer ${token}`
+          }
+        : {}),
+      ...(options.headers || {})
+    }
+  });
+
+  let data = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.mensagem ||
+        data?.message ||
+        data?.erro ||
+        'Erro ao realizar operação.'
+    );
+  }
+
+  return data;
+}
+
+function normalizarProduto(produto) {
+  return {
+    ...produto,
+
+    id: produto.id ?? produto._id,
+
+    nome: produto.nome ?? '',
+
+    descricao: produto.descricao ?? '',
+
+    categoria: produto.categoria ?? '',
+
+    quantidade: Number(
+      produto.quantidade ??
+        produto.estoqueAtual ??
+        produto.estoque ??
+        0
+    ),
+
+    precoCompra: Number(
+      produto.precoCompra ??
+        produto.custo ??
+        produto.preco_custo ??
+        0
+    ),
+
+    precoVenda: Number(
+      produto.precoVenda ??
+        produto.preco ??
+        0
+    ),
+
+    estoqueMinimo: Number(
+      produto.estoqueMinimo ??
+        produto.estoque_minimo ??
+        0
+    )
+  };
+}
+async function carregarProdutos() {
+  try {
+     setCarregando(true);
+
+    const resposta = await request('/produtos');
+
+    const lista = Array.isArray(resposta)
+      ? resposta
+      : Array.isArray(resposta?.dados)
+        ? resposta.dados
+        : Array.isArray(resposta?.produtos)
+          ? resposta.produtos
+          : [];
+
+    setProdutos(lista.map(normalizarProduto));
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error);
+
+    alert(
+      error.message ||
+        'Não foi possível carregar os produtos.'
+    );
+  }finally {
+    setCarregando(false);
+  }
+}
+
+useEffect(() => {
+  carregarProdutos();
+}, []);
 
   // ========================================
   // PRODUTOS
   // ========================================
 
-  const [produtos, setProdutos] = useState([
-    {
-      id: 1,
-      nome: 'Pomada Modeladora',
-      descricao: 'Pomada para modelagem dos cabelos',
-      categoria: 'Finalização',
-      quantidade: 15,
-      precoCompra: 15.00,
-      precoVenda: 25.00,
-      estoqueMinimo: 5
-    },
-    {
-      id: 2,
-      nome: 'Shampoo Masculino',
-      descricao: 'Shampoo para uso profissional',
-      categoria: 'Higiene',
-      quantidade: 3,
-      precoCompra: 18.00,
-      precoVenda: 30.00,
-      estoqueMinimo: 5
-    },
-    {
-      id: 3,
-      nome: 'Cera para Barba',
-      descricao: 'Cera para acabamento da barba',
-      categoria: 'Barba',
-      quantidade: 8,
-      precoCompra: 12.00,
-      precoVenda: 22.00,
-      estoqueMinimo: 4
-    },
-    {
-      id: 4,
-      nome: 'Óleo para Barba',
-      descricao: 'Óleo hidratante para barba',
-      categoria: 'Barba',
-      quantidade: 2,
-      precoCompra: 20.00,
-      precoVenda: 35.00,
-      estoqueMinimo: 5
-    }
-  ]);
+  const [carregando, setCarregando] = useState(true);
 
   // ========================================
   // ESTADOS
@@ -125,32 +194,47 @@ function Estoque() {
   // CADASTRAR PRODUTO
   // ========================================
 
-  function cadastrarProduto(event) {
+  async function cadastrarProduto(event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  try {
+    const quantidade = Number(produtoForm.quantidade);
+    const precoCompra = Number(produtoForm.precoCompra);
+    const precoVenda = Number(produtoForm.precoVenda);
+    const estoqueMinimo = Number(produtoForm.estoqueMinimo);
 
-    const novoProduto = {
-      id: Date.now(),
+    const resposta = await request('/produtos', {
+      method: 'POST',
 
-      nome: produtoForm.nome,
+      body: JSON.stringify({
+        nome: produtoForm.nome,
+        descricao: produtoForm.descricao,
+        categoria: produtoForm.categoria,
 
-      descricao: produtoForm.descricao,
+        quantidade,
 
-      categoria: produtoForm.categoria,
+        // Caso sua API utilize esses nomes:
+        precoCompra,
+        precoVenda,
+        estoqueMinimo
+      })
+    });
 
-      quantidade: Number(produtoForm.quantidade),
+    const produtoCriado =
+      resposta?.produto ||
+      resposta?.dados ||
+      resposta;
 
-      precoCompra: Number(produtoForm.precoCompra),
-
-      precoVenda: Number(produtoForm.precoVenda),
-
-      estoqueMinimo: Number(produtoForm.estoqueMinimo)
-    };
-
-    setProdutos([
-      ...produtos,
-      novoProduto
-    ]);
+    if (produtoCriado?.id || produtoCriado?._id) {
+      setProdutos((produtosAtuais) => [
+        ...produtosAtuais,
+        normalizarProduto(produtoCriado)
+      ]);
+    } else {
+      // Se a API não devolve o produto criado,
+      // busca novamente.
+      await carregarProdutos();
+    }
 
     setProdutoForm({
       nome: '',
@@ -163,62 +247,67 @@ function Estoque() {
     });
 
     setModalProduto(false);
+
+    alert('Produto cadastrado com sucesso!');
+  } catch (error) {
+    console.error('Erro ao cadastrar produto:', error);
+
+    alert(
+      error.message ||
+        'Não foi possível cadastrar o produto.'
+    );
   }
+}
 
   // ========================================
   // MOVIMENTAÇÃO
   // ========================================
 
-  function registrarMovimentacao(event) {
+ async function registrarMovimentacao(event) {
+  event.preventDefault();
 
-    event.preventDefault();
+  const quantidade = Number(
+    movimentacaoForm.quantidade
+  );
 
-    const quantidade =
-      Number(movimentacaoForm.quantidade);
+  if (!quantidade || quantidade <= 0) {
+    alert('Informe uma quantidade válida.');
+    return;
+  }
 
-    if (!quantidade || quantidade <= 0) {
-      alert('Informe uma quantidade válida.');
-      return;
-    }
+  if (!produtoSelecionado) {
+    return;
+  }
 
-    if (!produtoSelecionado) {
-      return;
-    }
-
-    setProdutos(
-      produtos.map((produto) => {
-
-        if (produto.id !== produtoSelecionado.id) {
-          return produto;
-        }
-
-        let novaQuantidade =
-          produto.quantidade;
-
-        if (tipoMovimentacao === 'entrada') {
-          novaQuantidade += quantidade;
-        }
-
-        if (tipoMovimentacao === 'saida') {
-
-          novaQuantidade -= quantidade;
-
-          if (novaQuantidade < 0) {
-            alert(
-              'A quantidade de saída não pode ser maior que o estoque.'
-            );
-
-            return produto;
-          }
-        }
-
-        return {
-          ...produto,
-          quantidade: novaQuantidade
-        };
-
-      })
+  if (
+    tipoMovimentacao === 'saida' &&
+    quantidade > produtoSelecionado.quantidade
+  ) {
+    alert(
+      'A quantidade de saída não pode ser maior que o estoque.'
     );
+    return;
+  }
+
+  try {
+    let endpoint = '';
+
+    if (tipoMovimentacao === 'entrada') {
+      endpoint = `/produtos/${produtoSelecionado.id}/entrada`;
+    } else {
+      endpoint = `/produtos/${produtoSelecionado.id}/saida`;
+    }
+
+    await request(endpoint, {
+      method: 'POST',
+
+      body: JSON.stringify({
+        quantidade,
+        motivo: movimentacaoForm.motivo
+      })
+    });
+
+    await carregarProdutos();
 
     setMovimentacaoForm({
       quantidade: '',
@@ -226,7 +315,25 @@ function Estoque() {
     });
 
     setModalMovimentacao(false);
+    setProdutoSelecionado(null);
+
+    alert(
+      tipoMovimentacao === 'entrada'
+        ? 'Entrada registrada com sucesso!'
+        : 'Saída registrada com sucesso!'
+    );
+  } catch (error) {
+    console.error(
+      'Erro ao registrar movimentação:',
+      error
+    );
+
+    alert(
+      error.message ||
+        'Não foi possível registrar a movimentação.'
+    );
   }
+}
 
   // ========================================
   // ABRIR MOVIMENTAÇÃO
@@ -418,6 +525,14 @@ function Estoque() {
         {/* TÍTULO */}
 
         <div className="page-heading">
+
+          <button
+    type="button"
+    className="btn-cadastrar-produto"
+    onClick={() => navigate('/CadastroProduto')}
+>
+    + Cadastrar Produto
+</button>
 
           <div>
 
@@ -639,34 +754,39 @@ function Estoque() {
 
               </thead>
 
-              <tbody>
+    <tbody>
 
-                {produtosFiltrados.length === 0 ? (
+      {carregando ? (
 
-                  <tr>
+        <tr>
+          <td
+            colSpan="7"
+            className="empty-table"
+        >
+            Carregando produtos...
+      </td>
+    </tr>
 
-                    <td
-                      colSpan="7"
-                      className="empty-table"
-                    >
-                      Nenhum produto encontrado.
-                    </td>
+  ) : produtosFiltrados.length === 0 ? (
 
-                  </tr>
+    <tr>
+      <td
+        colSpan="7"
+        className="empty-table"
+      >
+        Nenhum produto encontrado.
+      </td>
+    </tr>
 
-                ) : (
+  ) : (
 
-                  produtosFiltrados.map(
-                    (produto) => {
+    produtosFiltrados.map(
+      (produto) => {
 
-                      const status =
-                        obterStatus(produto);
+        const status = obterStatus(produto);
 
-                      return (
-
-                        <tr
-                          key={produto.id}
-                        >
+        return (
+          <tr key={produto.id}>
 
                           <td>
 

@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CadastroProduto.css';
 import logoHope from '../../assets/logo-hope.png';
 
 function CadastroProduto() {
+  const navigate = useNavigate();
   const [formulario, setFormulario] = useState({
     nome: '',
     descricao: '',
@@ -22,23 +24,60 @@ function CadastroProduto() {
     }));
   }
 
-  function cadastrarProduto(event) {
-    event.preventDefault();
+async function cadastrarProduto(event) {
+  event.preventDefault();
 
-    if (
-      !formulario.nome ||
-      !formulario.descricao ||
-      !formulario.categoria ||
-      !formulario.quantidade ||
-      !formulario.precoCompra ||
-      !formulario.precoVenda ||
-      !formulario.estoqueMinimo
-    ) {
-      alert('Preencha todos os campos obrigatórios.');
+  if (
+    !formulario.nome ||
+    !formulario.descricao ||
+    !formulario.categoria ||
+    formulario.quantidade === '' ||
+    formulario.precoCompra === '' ||
+    formulario.precoVenda === '' ||
+    formulario.estoqueMinimo === ''
+  ) {
+    alert('Preencha todos os campos obrigatórios.');
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('Sua sessão expirou. Faça login novamente.');
+      navigate('/login');
       return;
     }
 
-    console.log('Produto cadastrado:', formulario);
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_URL || 'http://localhost:3333'}/produtos`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nome: formulario.nome,
+          descricao: formulario.descricao,
+          categoria: formulario.categoria,
+          quantidade: Number(formulario.quantidade),
+          custo: Number(formulario.precoCompra),
+          preco: Number(formulario.precoVenda),
+          estoqueMinimo: Number(formulario.estoqueMinimo),
+        }),
+      }
+    );
+
+    const dados = await resposta.json().catch(() => ({}));
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.mensagem ||
+        dados.message ||
+        'Não foi possível cadastrar o produto.'
+      );
+    }
 
     alert('Produto cadastrado com sucesso!');
 
@@ -51,10 +90,21 @@ function CadastroProduto() {
       precoVenda: '',
       estoqueMinimo: '',
     });
+
+    navigate('/Estoque');
+
+  } catch (error) {
+    console.error('Erro ao cadastrar produto:', error);
+
+    alert(
+      error.message ||
+      'Ocorreu um erro ao cadastrar o produto.'
+    );
   }
+}
 
   function voltar() {
-    window.history.back();
+    navigate('/Estoque');
   }
 
   return (

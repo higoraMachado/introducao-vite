@@ -104,6 +104,9 @@ function DashboardAdministrador() {
       return;
     }
 
+    console.log("CLICOU:", item.nome);
+    console.log("NAVEGANDO PARA:", item.rota);
+
     setPaginaAtiva(item.nome);
     navigate(item.rota);
   }
