@@ -38,111 +38,143 @@ function Perfil() {
     },
   ];
 
-useEffect(() => {
-  async function carregarPerfil() {
-    const token = localStorage.getItem("token");
-    const usuarioSalvo = localStorage.getItem("usuario");
+  // =====================================================
+  // VOLTAR PARA O DASHBOARD
+  // =====================================================
 
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const resposta = await fetch(
-        "http://localhost:3333/usuarios/perfil",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-          dados.message ||
-          "Erro ao carregar perfil"
-        );
-      }
-
-      const usuarioAPI = dados.dados;
-
-      const usuarioFormatado = {
-        id: usuarioAPI.usuario_id,
-        nome: usuarioAPI.usuario_nome || "",
-        telefone: usuarioAPI.usuario_telefone || "",
-        email: usuarioAPI.usuario_email || "",
-        nascimento: usuarioAPI.usuario_dt_nascimento
-          ? String(usuarioAPI.usuario_dt_nascimento).substring(0, 10)
-          : "",
-        tipo:
-          usuarioAPI.usuario_tipo === 1
-            ? "Administrador"
-            : usuarioAPI.usuario_tipo === 2
-              ? "Barbeiro"
-              : "Cliente",
-      };
-
-      setUsuario(usuarioFormatado);
-      setDadosEditados(usuarioFormatado);
-
-      // Mantém o localStorage atualizado com os dados reais da API
-      if (usuarioSalvo) {
-        const usuarioAtual = JSON.parse(usuarioSalvo);
-
-        localStorage.setItem(
-          "usuario",
-          JSON.stringify({
-            ...usuarioAtual,
-            ...usuarioAPI,
-          })
-        );
-      }
-
-    } catch (error) {
-      console.error("Erro ao carregar perfil:", error);
-
-      // Se a API falhar, tenta usar os dados salvos no login
-      if (usuarioSalvo) {
-        try {
-          const usuarioLocal = JSON.parse(usuarioSalvo);
-
-          const usuarioFormatado = {
-            id: usuarioLocal.usuario_id,
-            nome: usuarioLocal.usuario_nome || "",
-            telefone: usuarioLocal.usuario_telefone || "",
-            email: usuarioLocal.usuario_email || "",
-            nascimento: usuarioLocal.usuario_dt_nascimento
-              ? String(usuarioLocal.usuario_dt_nascimento).substring(0, 10)
-              : "",
-            tipo:
-              usuarioLocal.usuario_tipo === 1
-                ? "Administrador"
-                : usuarioLocal.usuario_tipo === 2
-                  ? "Barbeiro"
-                  : "Cliente",
-          };
-
-          setUsuario(usuarioFormatado);
-          setDadosEditados(usuarioFormatado);
-
-        } catch (erroLocal) {
-          console.error(
-            "Erro ao recuperar usuário do localStorage:",
-            erroLocal
-          );
-        }
-      }
-    }
+  function voltarDashboard() {
+    navigate("/dashboardBarbeiro");
   }
 
-  carregarPerfil();
-}, [navigate]);
+  // =====================================================
+  // CARREGAR PERFIL
+  // =====================================================
+
+  useEffect(() => {
+    async function carregarPerfil() {
+      const token = localStorage.getItem("token");
+      const usuarioSalvo = localStorage.getItem("usuario");
+
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const resposta = await fetch(
+          "http://localhost:3333/usuarios/perfil",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.mensagem ||
+              dados.message ||
+              "Erro ao carregar perfil"
+          );
+        }
+
+        const usuarioAPI = dados.dados;
+
+        const usuarioFormatado = {
+          id: usuarioAPI.usuario_id,
+          nome: usuarioAPI.usuario_nome || "",
+          telefone: usuarioAPI.usuario_telefone || "",
+          email: usuarioAPI.usuario_email || "",
+          nascimento: usuarioAPI.usuario_dt_nascimento
+            ? String(usuarioAPI.usuario_dt_nascimento).substring(0, 10)
+            : "",
+          tipo:
+            Number(usuarioAPI.usuario_tipo) === 1
+              ? "Administrador"
+              : Number(usuarioAPI.usuario_tipo) === 2
+                ? "Barbeiro"
+                : "Cliente",
+          ativo:
+            Number(usuarioAPI.usuario_ativo) === 1,
+        };
+
+        setUsuario(usuarioFormatado);
+        setDadosEditados(usuarioFormatado);
+
+        // Mantém o localStorage atualizado
+        if (usuarioSalvo) {
+          const usuarioAtual = JSON.parse(usuarioSalvo);
+
+          localStorage.setItem(
+            "usuario",
+            JSON.stringify({
+              ...usuarioAtual,
+              ...usuarioAPI,
+            })
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Erro ao carregar perfil:",
+          error
+        );
+
+        // Se a API falhar, tenta usar os dados do login
+        if (usuarioSalvo) {
+          try {
+            const usuarioLocal =
+              JSON.parse(usuarioSalvo);
+
+            const usuarioFormatado = {
+              id: usuarioLocal.usuario_id,
+              nome:
+                usuarioLocal.usuario_nome || "",
+              telefone:
+                usuarioLocal.usuario_telefone || "",
+              email:
+                usuarioLocal.usuario_email || "",
+              nascimento:
+                usuarioLocal.usuario_dt_nascimento
+                  ? String(
+                      usuarioLocal.usuario_dt_nascimento
+                    ).substring(0, 10)
+                  : "",
+              tipo:
+                Number(usuarioLocal.usuario_tipo) === 1
+                  ? "Administrador"
+                  : Number(
+                        usuarioLocal.usuario_tipo
+                      ) === 2
+                    ? "Barbeiro"
+                    : "Cliente",
+              ativo:
+                Number(
+                  usuarioLocal.usuario_ativo
+                ) === 1,
+            };
+
+            setUsuario(usuarioFormatado);
+            setDadosEditados(usuarioFormatado);
+          } catch (erroLocal) {
+            console.error(
+              "Erro ao recuperar usuário do localStorage:",
+              erroLocal
+            );
+          }
+        }
+      }
+    }
+
+    carregarPerfil();
+  }, [navigate]);
+
+  // =====================================================
+  // ALTERAR CAMPO
+  // =====================================================
 
   function alterarCampo(event) {
     const { name, value } = event.target;
@@ -153,106 +185,178 @@ useEffect(() => {
     }));
   }
 
- async function salvarAlteracoes() {
-  try {
-    const token = localStorage.getItem("token");
+  // =====================================================
+  // SALVAR ALTERACOES
+  // =====================================================
 
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+  async function salvarAlteracoes() {
+    try {
+      const token = localStorage.getItem("token");
 
-    const resposta = await fetch(
-      `http://localhost:3333/usuarios/${usuario.id}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          usuario_nome: dadosEditados.nome,
-          usuario_email: dadosEditados.email,
-          usuario_telefone: dadosEditados.telefone.replace(/\D/g, ""),
-          usuario_dt_nascimento: dadosEditados.nascimento,
-        }),
+      if (!token) {
+        navigate("/login");
+        return;
       }
-    );
 
-    const dados = await resposta.json();
+      const resposta = await fetch(
+        `http://localhost:3333/usuarios/${usuario.id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            usuario_nome: dadosEditados.nome,
+            usuario_email: dadosEditados.email,
+            usuario_telefone:
+              dadosEditados.telefone.replace(/\D/g, ""),
+            usuario_dt_nascimento:
+              dadosEditados.nascimento,
+          }),
+        }
+      );
 
-    if (!resposta.ok) {
-      throw new Error(
-        dados.mensagem || "Erro ao atualizar os dados"
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+            dados.message ||
+            "Erro ao atualizar os dados"
+        );
+      }
+
+      // Atualiza os dados exibidos
+      setUsuario(dadosEditados);
+
+      // Atualiza o localStorage
+      const usuarioAtual =
+        JSON.parse(
+          localStorage.getItem("usuario")
+        ) || {};
+
+      localStorage.setItem(
+        "usuario",
+        JSON.stringify({
+          ...usuarioAtual,
+          usuario_nome:
+            dadosEditados.nome,
+          usuario_email:
+            dadosEditados.email,
+          usuario_telefone:
+            dadosEditados.telefone,
+          usuario_dt_nascimento:
+            dadosEditados.nascimento,
+        })
+      );
+
+      setEditando(false);
+
+      alert(
+        "Dados atualizados com sucesso!"
+      );
+    } catch (error) {
+      console.error(
+        "Erro ao atualizar perfil:",
+        error
+      );
+
+      alert(
+        error.message ||
+          "Erro ao atualizar perfil."
       );
     }
-
-    // Atualiza os dados exibidos na tela
-    setUsuario(dadosEditados);
-
-    // Atualiza também o localStorage
-    localStorage.setItem(
-      "usuario",
-      JSON.stringify({
-        ...JSON.parse(localStorage.getItem("usuario")),
-        usuario_nome: dadosEditados.nome,
-        usuario_email: dadosEditados.email,
-        usuario_telefone: dadosEditados.telefone,
-        usuario_dt_nascimento: dadosEditados.nascimento,
-      })
-    );
-
-    setEditando(false);
-
-    alert("Dados atualizados com sucesso!");
-  } catch (error) {
-    console.error("Erro ao atualizar perfil:", error);
-    alert(error.message || "Erro ao atualizar perfil.");
   }
-}
+
+  // =====================================================
+  // CANCELAR EDICAO
+  // =====================================================
 
   function cancelarEdicao() {
     setDadosEditados(usuario);
     setEditando(false);
   }
 
+  // =====================================================
+  // CARREGANDO
+  // =====================================================
+
   if (!usuario || !dadosEditados) {
     return (
-      <div className="perfil-page">
-        <p>Carregando dados do perfil...</p>
-      </div>
+      <main className="perfil-page">
+        <div className="perfil-loading">
+          <div className="perfil-loading-card">
+            <span>HOPE BARBEARIA</span>
+            <strong>
+              Carregando perfil...
+            </strong>
+          </div>
+        </div>
+      </main>
     );
   }
 
-  return (
-    <div className="perfil-page">
+  // =====================================================
+  // TELA
+  // =====================================================
 
-      {/* ================= HEADER ================= */}
+  return (
+    <main className="perfil-page">
+
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
       <header className="dashboard-header">
 
         <div className="dashboard-left">
-          <img
-            src={logo}
-            alt="Hope Barbearia"
-            className="dashboard-logo"
-          />
+
+          <button
+            type="button"
+            className="dashboard-logo-button"
+            onClick={voltarDashboard}
+            title="Voltar para o Dashboard"
+          >
+            <img
+              src={logo}
+              alt="Hope Barbearia"
+              className="dashboard-logo"
+            />
+          </button>
+
         </div>
 
         <div className="dashboard-center">
-          <h1>Meu Perfil</h1>
-          <p>Bem-vindo à Hope Barbearia</p>
+
+          <h1>Meu perfil</h1>
+
+          <p>
+            Dados da minha conta
+          </p>
+
         </div>
 
         <div className="dashboard-right">
 
           <div className="dashboard-avatar">
-            {usuario.nome.charAt(0).toUpperCase()}
+
+            {usuario.nome
+              .charAt(0)
+              .toUpperCase()}
+
           </div>
 
           <div className="dashboard-user-info">
-            <strong>{usuario.nome}</strong>
-            <span>Minha conta</span>
+
+            <strong>
+              {usuario.nome}
+            </strong>
+
+            <span>
+              {usuario.tipo}
+            </span>
+
           </div>
 
         </div>
@@ -260,36 +364,58 @@ useEffect(() => {
       </header>
 
 
-      {/* ================= CONTEÚDO ================= */}
+      {/* =================================================
+          CONTEUDO
+      ================================================= */}
 
-      <main className="perfil-content">
+      <section className="perfil-content">
+
+        {/* =================================================
+            CABECALHO DA PAGINA
+        ================================================= */}
 
         <section className="perfil-topo">
 
-          <span className="heading-label">
-            PERFIL
-          </span>
+          <div>
 
-          <h2>Meu Perfil</h2>
+            <span className="heading-label">
+              PERFIL DO BARBEIRO
+            </span>
+
+            <h2>
+              Minha conta
+            </h2>
+
+          </div>
 
           <p>
-            Gerencie suas informações pessoais e configurações da sua conta.
+            Gerencie suas informações pessoais,
+            fotos e dados da sua conta.
           </p>
 
         </section>
 
 
-        {/* ================= CARD PRINCIPAL ================= */}
+        {/* =================================================
+            CARD PRINCIPAL
+        ================================================= */}
 
         <section className="profile-hero-card">
 
           <div className="profile-photo-section">
 
             <div className="profile-photo">
-              {usuario.nome.charAt(0).toUpperCase()}
+
+              {usuario.nome
+                .charAt(0)
+                .toUpperCase()}
+
             </div>
 
-            <button className="btn-photo">
+            <button
+              type="button"
+              className="btn-photo"
+            >
               Alterar foto
             </button>
 
@@ -302,16 +428,24 @@ useEffect(() => {
               USUÁRIO
             </span>
 
-            <h2>{usuario.nome}</h2>
+            <h2>
+              {usuario.nome}
+            </h2>
 
             <div className="user-type-badge">
+
               {usuario.tipo === "Barbeiro"
                 ? "💈 BARBEIRO"
-                : "👤 CLIENTE"}
+                : usuario.tipo ===
+                    "Administrador"
+                  ? "⚙️ ADMINISTRADOR"
+                  : "👤 CLIENTE"}
+
             </div>
 
             <p>
-              Conta cadastrada na plataforma Hope Barbearia.
+              Conta cadastrada na plataforma
+              Hope Barbearia.
             </p>
 
           </div>
@@ -319,12 +453,15 @@ useEffect(() => {
         </section>
 
 
-        {/* ================= GRID ================= */}
+        {/* =================================================
+            GRID
+        ================================================= */}
 
         <div className="perfil-grid">
 
-
-          {/* INFORMAÇÕES */}
+          {/* =================================================
+              INFORMACOES PESSOAIS
+          ================================================= */}
 
           <section className="card profile-info-card">
 
@@ -335,11 +472,15 @@ useEffect(() => {
               </div>
 
               <div>
-                <h3>Informações pessoais</h3>
+
+                <h3>
+                  Informações pessoais
+                </h3>
 
                 <p>
                   Mantenha seus dados atualizados.
                 </p>
+
               </div>
 
             </div>
@@ -347,10 +488,13 @@ useEffect(() => {
 
             <div className="profile-form">
 
+              {/* NOME */}
 
               <div className="form-group">
 
-                <label>Nome</label>
+                <label>
+                  Nome
+                </label>
 
                 <input
                   type="text"
@@ -367,9 +511,13 @@ useEffect(() => {
               </div>
 
 
+              {/* TELEFONE */}
+
               <div className="form-group">
 
-                <label>Telefone</label>
+                <label>
+                  Telefone
+                </label>
 
                 <input
                   type="text"
@@ -386,9 +534,13 @@ useEffect(() => {
               </div>
 
 
+              {/* EMAIL */}
+
               <div className="form-group">
 
-                <label>E-mail</label>
+                <label>
+                  E-mail
+                </label>
 
                 <input
                   type="email"
@@ -405,9 +557,13 @@ useEffect(() => {
               </div>
 
 
+              {/* NASCIMENTO */}
+
               <div className="form-group">
 
-                <label>Data de nascimento</label>
+                <label>
+                  Data de nascimento
+                </label>
 
                 <input
                   type="date"
@@ -424,40 +580,56 @@ useEffect(() => {
               </div>
 
 
+              {/* TIPO */}
+
               <div className="form-group">
 
-                <label>Tipo de usuário</label>
+                <label>
+                  Tipo de usuário
+                </label>
 
-                <select
-                  name="tipo"
-                  value={
-                    editando
-                      ? dadosEditados.tipo
-                      : usuario.tipo
-                  }
-                  onChange={alterarCampo}
-                  disabled={!editando}
-                >
-                  <option value="Cliente">
-                    Cliente
-                  </option>
-
-                  <option value="Barbeiro">
-                    Barbeiro
-                  </option>
-
-                </select>
+                <input
+                  type="text"
+                  value={usuario.tipo}
+                  disabled
+                />
 
               </div>
 
+
+              {/* STATUS */}
+
+              <div className="form-group">
+
+                <label>
+                  Status
+                </label>
+
+                <input
+                  type="text"
+                  value={
+                    usuario.ativo
+                      ? "Ativo"
+                      : "Inativo"
+                  }
+                  disabled
+                />
+
+              </div>
+
+
+              {/* BOTOES */}
 
               <div className="profile-actions">
 
                 {!editando ? (
 
                   <button
+                    type="button"
                     className="btn-confirmar"
-                    onClick={() => setEditando(true)}
+                    onClick={() =>
+                      setEditando(true)
+                    }
                   >
                     Editar informações
                   </button>
@@ -465,19 +637,27 @@ useEffect(() => {
                 ) : (
 
                   <>
+
                     <button
+                      type="button"
                       className="btn-cancelar"
-                      onClick={cancelarEdicao}
+                      onClick={
+                        cancelarEdicao
+                      }
                     >
                       Cancelar
                     </button>
 
                     <button
+                      type="button"
                       className="btn-confirmar"
-                      onClick={salvarAlteracoes}
+                      onClick={
+                        salvarAlteracoes
+                      }
                     >
                       Salvar alterações
                     </button>
+
                   </>
 
                 )}
@@ -489,12 +669,13 @@ useEffect(() => {
           </section>
 
 
-          {/* SIDEBAR */}
+          {/* =================================================
+              SIDEBAR
+          ================================================= */}
 
           <aside className="perfil-sidebar">
 
-
-            {/* SEGURANÇA */}
+            {/* SEGURANCA */}
 
             <section className="security-card">
 
@@ -506,15 +687,21 @@ useEffect(() => {
                 SEGURANÇA
               </span>
 
-              <h3>Alterar senha</h3>
+              <h3>
+                Alterar senha
+              </h3>
 
               <p>
-                Atualize sua senha para manter sua conta protegida.
+                Atualize sua senha para manter
+                sua conta protegida.
               </p>
 
               <button
+                type="button"
                 className="btn-security"
-                onClick={() => setModalSenha(true)}
+                onClick={() =>
+                  setModalSenha(true)
+                }
               >
                 Alterar senha
               </button>
@@ -532,27 +719,60 @@ useEffect(() => {
 
               <div className="profile-summary-item">
 
-                <span>Tipo de usuário</span>
+                <span>
+                  Tipo de usuário
+                </span>
 
-                <strong>{usuario.tipo}</strong>
-
-              </div>
-
-
-              <div className="profile-summary-item">
-
-                <span>Agendamentos</span>
-
-                <strong>{historico.length}</strong>
+                <strong>
+                  {usuario.tipo}
+                </strong>
 
               </div>
 
 
               <div className="profile-summary-item">
 
-                <span>Status</span>
+                <span>
+                  Usuário
+                </span>
 
-                <strong>Ativo</strong>
+                <strong>
+                  # {usuario.id}
+                </strong>
+
+              </div>
+
+
+              <div className="profile-summary-item">
+
+                <span>
+                  Agendamentos
+                </span>
+
+                <strong>
+                  {historico.length}
+                </strong>
+
+              </div>
+
+
+              <div className="profile-summary-item">
+
+                <span>
+                  Status
+                </span>
+
+                <strong
+                  className={
+                    usuario.ativo
+                      ? "status-ativo"
+                      : "status-inativo"
+                  }
+                >
+                  {usuario.ativo
+                    ? "Ativo"
+                    : "Inativo"}
+                </strong>
 
               </div>
 
@@ -563,7 +783,9 @@ useEffect(() => {
         </div>
 
 
-        {/* ================= HISTÓRICO ================= */}
+        {/* =================================================
+            HISTORICO
+        ================================================= */}
 
         <section className="card history-card">
 
@@ -575,7 +797,9 @@ useEffect(() => {
 
             <div>
 
-              <h3>Histórico de agendamentos</h3>
+              <h3>
+                Histórico de agendamentos
+              </h3>
 
               <p>
                 Consulte seus agendamentos realizados.
@@ -588,64 +812,73 @@ useEffect(() => {
 
           <div className="history-list">
 
-            {historico.map((agendamento) => (
+            {historico.map(
+              (agendamento) => (
 
-              <div
-                className="history-item"
-                key={agendamento.id}
-              >
+                <div
+                  className="history-item"
+                  key={agendamento.id}
+                >
 
-                <div className="history-date">
+                  <div className="history-date">
 
-                  <span>DATA</span>
+                    <span>
+                      DATA
+                    </span>
 
-                  <strong>
-                    {agendamento.data}
-                  </strong>
+                    <strong>
+                      {agendamento.data}
+                    </strong>
+
+                  </div>
+
+
+                  <div className="history-info">
+
+                    <strong>
+                      {agendamento.servico}
+                    </strong>
+
+                    <span>
+                      Barbeiro:{" "}
+                      {agendamento.barbeiro}
+                    </span>
+
+                  </div>
+
+
+                  <div className="history-time">
+
+                    <span>
+                      HORÁRIO
+                    </span>
+
+                    <strong>
+                      {agendamento.horario}
+                    </strong>
+
+                  </div>
+
+
+                  <div className="history-status">
+                    {agendamento.status}
+                  </div>
 
                 </div>
 
-
-                <div className="history-info">
-
-                  <strong>
-                    {agendamento.servico}
-                  </strong>
-
-                  <span>
-                    Barbeiro: {agendamento.barbeiro}
-                  </span>
-
-                </div>
-
-
-                <div className="history-time">
-
-                  <span>HORÁRIO</span>
-
-                  <strong>
-                    {agendamento.horario}
-                  </strong>
-
-                </div>
-
-
-                <div className="history-status">
-                  {agendamento.status}
-                </div>
-
-              </div>
-
-            ))}
+              )
+            )}
 
           </div>
 
         </section>
 
-      </main>
+      </section>
 
 
-      {/* ================= MODAL SENHA ================= */}
+      {/* =================================================
+          MODAL ALTERAR SENHA
+      ================================================= */}
 
       {modalSenha && (
 
@@ -654,20 +887,28 @@ useEffect(() => {
           <div className="modal">
 
             <button
+              type="button"
               className="modal-close"
-              onClick={() => setModalSenha(false)}
+              onClick={() =>
+                setModalSenha(false)
+              }
             >
               ×
             </button>
+
 
             <div className="modal-icon">
               🔒
             </div>
 
-            <h3>Alterar senha</h3>
+
+            <h3>
+              Alterar senha
+            </h3>
 
             <p>
-              Informe sua senha atual e escolha uma nova senha.
+              Informe sua senha atual e escolha
+              uma nova senha.
             </p>
 
 
@@ -675,7 +916,9 @@ useEffect(() => {
 
               <div className="form-group">
 
-                <label>Senha atual</label>
+                <label>
+                  Senha atual
+                </label>
 
                 <input
                   type="password"
@@ -687,7 +930,9 @@ useEffect(() => {
 
               <div className="form-group">
 
-                <label>Nova senha</label>
+                <label>
+                  Nova senha
+                </label>
 
                 <input
                   type="password"
@@ -699,7 +944,9 @@ useEffect(() => {
 
               <div className="form-group">
 
-                <label>Confirmar nova senha</label>
+                <label>
+                  Confirmar nova senha
+                </label>
 
                 <input
                   type="password"
@@ -714,16 +961,22 @@ useEffect(() => {
             <div className="modal-actions">
 
               <button
+                type="button"
                 className="modal-secondary"
-                onClick={() => setModalSenha(false)}
+                onClick={() =>
+                  setModalSenha(false)
+                }
               >
                 Cancelar
               </button>
 
 
               <button
+                type="button"
                 className="modal-primary"
-                onClick={() => setModalSenha(false)}
+                onClick={() =>
+                  setModalSenha(false)
+                }
               >
                 Salvar senha
               </button>
@@ -736,7 +989,7 @@ useEffect(() => {
 
       )}
 
-    </div>
+    </main>
   );
 }
 

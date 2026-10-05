@@ -509,10 +509,9 @@ function DashboardBarbeiro() {
           <p>Painel do barbeiro</p>
         </div>
 
-        <button
-          type="button"
+        <Link
+          to="/perfil"
           className="barbeiro-dashboard-user"
-          onClick={irParaPerfil}
           title="Abrir meu perfil"
         >
           <div className="user-avatar">
@@ -536,7 +535,7 @@ function DashboardBarbeiro() {
             </strong>
             <span>Minha conta</span>
           </div>
-        </button>
+        </Link>
       </header>
 
       <section className="barbeiro-dashboard-content">
@@ -717,7 +716,7 @@ function DashboardBarbeiro() {
                     className="btn-small-dark"
                     onClick={abrirModalAgendamento}
                   >
-                    + Adicionar agendamento
+                    Adicionar agendamento
                   </button>
                 </div>
               )}

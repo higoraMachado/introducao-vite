@@ -1,945 +1,1454 @@
-/* =========================================
-   PÁGINA
-========================================= */
+/* =========================================================
+   HOPE BARBEARIA
+   PERFIL DO USUARIO
+========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
-.barbeiros-page {
-  min-height: 100vh;
-  background: #f3f3f3;
-  color: #171717;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-.barbeiros-header {
-  min-height: 78px;
-  background: #111111;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 0 42px;
-  border-bottom: 1px solid #292929;
-  position: relative;
-}
-
-.barbeiros-logo {
-  width: 220px;
-  display: flex;
-  align-items: center;
-}
-
-.barbeiros-logo img {
-  width: 145px;
-  max-height: 58px;
-  object-fit: contain;
-}
-
-.barbeiros-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.barbeiros-title h1 {
+html,
+body,
+#root {
   margin: 0;
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1.2;
+  min-height: 100%;
 }
 
-.barbeiros-title p {
-  margin: 5px 0 0;
-  color: #bcbcbc;
-  font-size: 12px;
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: #f3f1ed;
+  color: #171717;
 }
 
-.barbeiros-user {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 11px;
+/* =========================================================
+   PAGINA
+========================================================= */
+
+.perfil-page {
+  min-height: 100vh;
+  width: 100%;
+
+  background:
+    linear-gradient(
+      rgba(245, 243, 239, 0.96),
+      rgba(245, 243, 239, 0.98)
+    );
+
+  color: #171717;
 }
 
-.user-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #ffffff;
-  color: #111111;
+/* =========================================================
+   LOADING
+========================================================= */
+
+.perfil-loading {
+  min-height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      #242424 0%,
+      #151515 50%,
+      #090909 100%
+    );
+}
+
+.perfil-loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 35px 50px;
+
+  border: 1px solid #6f531d;
+  border-radius: 14px;
+
+  background: #171717;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.perfil-loading-card span {
+  color: #dfbf68;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+.perfil-loading-card strong {
+  color: #ffffff;
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.dashboard-header {
+  width: 100%;
+  min-height: 118px;
+
+  position: relative;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 52px;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      #242424 0%,
+      #151515 48%,
+      #090909 100%
+    );
+
+  color: #ffffff;
+
+  border-top: 3px solid #b98c38;
+
+  border-bottom: 4px solid #d4af37;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.dashboard-left {
+  width: 260px;
+
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-logo-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.dashboard-logo-button:focus {
+  outline: none;
+}
+
+.dashboard-logo {
+  width: 125px;
+  height: 92px;
+
+  object-fit: contain;
+
+  display: block;
+
+  filter:
+    brightness(1.08)
+    contrast(1.06)
+    drop-shadow(
+      0 4px 8px rgba(0, 0, 0, 0.55)
+    );
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+
+  pointer-events: none;
+}
+
+.dashboard-logo-button:hover .dashboard-logo {
+  transform: scale(1.03);
+
+  filter:
+    brightness(1.12)
+    contrast(1.08)
+    drop-shadow(
+      0 5px 10px rgba(0, 0, 0, 0.60)
+    );
+}
+
+/* =========================================================
+   TITULO CENTRAL
+========================================================= */
+
+.dashboard-center {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  text-align: center;
+
+  min-width: 300px;
+}
+
+.dashboard-center h1 {
+  margin: 0;
+
+  color: #dfbf68;
+
+  font-size: 28px;
+  font-weight: 900;
+
+  letter-spacing: 0.4px;
+}
+
+.dashboard-center p {
+  margin: 7px 0 0;
+
+  color: #b8b8b8;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   USUARIO HEADER
+========================================================= */
+
+.dashboard-right {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 230px;
+
+  justify-content: flex-end;
+}
+
+.dashboard-avatar {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #efd37d,
+      #b68a35
+    );
+
+  color: #111111;
+
+  border: 2px solid #f0d890;
+
+  font-size: 16px;
+  font-weight: 900;
+
+  box-shadow:
+    0 4px 16px rgba(201, 162, 77, 0.22);
+}
+
+.dashboard-user-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.dashboard-user-info strong {
+  color: #ffffff;
+
   font-size: 14px;
   font-weight: 700;
 }
 
-.user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
+.dashboard-user-info span {
+  color: #b8b8b8;
 
-.user-info strong {
-  font-size: 13px;
-  color: #ffffff;
-}
-
-.user-info span {
   font-size: 11px;
-  color: #aaaaaa;
 }
 
+/* =========================================================
+   CONTEUDO
+========================================================= */
 
-/* =========================================
-   CONTEÚDO
-========================================= */
-
-.barbeiros-content {
+.perfil-content {
   width: 100%;
   max-width: 1450px;
+
   margin: 0 auto;
-  padding: 36px 42px 60px;
+
+  padding: 42px 52px 70px;
 }
 
-.barbeiros-heading {
+/* =========================================================
+   TOPO DA PAGINA
+========================================================= */
+
+.perfil-topo {
+  min-height: 65px;
+
   display: flex;
-  align-items: flex-end;
+
+  align-items: flex-start;
   justify-content: space-between;
+
   gap: 30px;
+
   margin-bottom: 25px;
+}
+
+.perfil-topo > div {
+  flex: 1;
+}
+
+.perfil-topo > p {
+  max-width: 430px;
+
+  margin: 8px 0 0;
+
+  color: #777777;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  text-align: right;
 }
 
 .heading-label {
   display: block;
-  margin-bottom: 8px;
-  color: #777777;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+
+  margin-bottom: 7px;
+
+  color: #a17c31;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
 }
 
-.barbeiros-heading h2 {
+.perfil-topo h2 {
   margin: 0;
-  font-size: 30px;
-  line-height: 1.2;
-  font-weight: 700;
+
   color: #171717;
+
+  font-size: 30px;
+  font-weight: 900;
+
+  line-height: 1.2;
 }
 
-.barbeiros-heading p {
-  margin: 8px 0 0;
-  color: #666666;
-  font-size: 14px;
+/* =========================================================
+   CARD PRINCIPAL
+========================================================= */
+
+.profile-hero-card {
+  width: 100%;
+
+  min-height: 190px;
+
+  display: grid;
+
+  grid-template-columns: 180px minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 35px;
+
+  padding: 32px 38px;
+
+  margin-bottom: 25px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfd9ca;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
+/* =========================================================
+   FOTO
+========================================================= */
 
-/* =========================================
-   BOTÃO NOVO BARBEIRO
-========================================= */
+.profile-photo-section {
+  display: flex;
 
-.btn-novo-barbeiro {
-  min-height: 46px;
-  padding: 0 22px;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.profile-photo {
+  width: 108px;
+  height: 108px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #efd37d,
+      #b68a35
+    );
+
+  color: #171717;
+
+  border: 3px solid #f0d890;
+
+  font-size: 38px;
+  font-weight: 900;
+
+  box-shadow:
+    0 8px 25px rgba(201, 162, 77, 0.20);
+}
+
+.btn-photo {
+  min-height: 36px;
+
+  padding: 0 16px;
+
   border: none;
-  border-radius: 8px;
-  background: #111111;
+
+  border-radius: 7px;
+
+  background: #171717;
+
   color: #ffffff;
-  font-size: 13px;
-  font-weight: 700;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 800;
+
   cursor: pointer;
+
   transition: 0.2s ease;
-  white-space: nowrap;
 }
 
-.btn-novo-barbeiro:hover {
-  background: #292929;
+.btn-photo:hover {
+  background: #2b2b2b;
+
   transform: translateY(-1px);
 }
 
-.btn-novo-barbeiro:active {
-  transform: translateY(0);
+/* =========================================================
+   INFORMACOES DO USUARIO
+========================================================= */
+
+.profile-main-info {
+  min-width: 0;
 }
 
+.profile-main-info h2 {
+  margin: 4px 0 12px;
 
-/* =========================================
-   CARD PRINCIPAL
-========================================= */
+  color: #171717;
 
-.barbeiros-card {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
-}
-
-
-/* =========================================
-   CABEÇALHO DO CARD
-========================================= */
-
-.card-header {
-  min-height: 80px;
-  padding: 17px 20px;
-  background: #171717;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.card-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #bcbcbc;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-}
-
-.card-header h3 {
-  margin: 0;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.total-barbeiros {
-  padding: 7px 12px;
-  border: 1px solid #454545;
-  border-radius: 7px;
-  color: #ffffff;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-
-/* =========================================
-   FILTROS
-========================================= */
-
-.barbeiros-filtros {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 17px 19px;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.campo-pesquisa {
-  height: 38px;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 12px;
-  border: 1px solid #d9d9d9;
-  border-radius: 7px;
-  background: #ffffff;
-  transition: 0.2s ease;
-}
-
-.campo-pesquisa:focus-within {
-  border-color: #999999;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
-}
-
-.campo-pesquisa span {
-  color: #777777;
-  font-size: 19px;
-  line-height: 1;
-}
-
-.campo-pesquisa input {
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #222222;
-  font-size: 14px;
-}
-
-.campo-pesquisa input::placeholder {
-  color: #999999;
-}
-
-.barbeiros-filtros select {
-  width: 150px;
-  height: 38px;
-  padding: 0 10px;
-  border: 1px solid #d9d9d9;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #333333;
-  font-size: 14px;
-  outline: none;
-  cursor: pointer;
-}
-
-.barbeiros-filtros select:focus {
-  border-color: #999999;
-}
-
-
-/* =========================================
-   TABELA
-========================================= */
-
-.tabela-container {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.barbeiros-tabela {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto;
-  font-size: 14px;
-}
-
-.barbeiros-tabela thead {
-  background: #fafafa;
-}
-
-.barbeiros-tabela th {
-  padding: 13px 18px;
-  border-bottom: 1px solid #dddddd;
-  color: #666666;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.barbeiros-tabela td {
-  padding: 14px 18px;
-  border-bottom: 1px solid #e6e6e6;
-  color: #333333;
-  font-size: 14px;
-  vertical-align: middle;
-}
-
-.barbeiros-tabela tbody tr {
-  transition: background 0.15s ease;
-}
-
-.barbeiros-tabela tbody tr:hover {
-  background: #fafafa;
-}
-
-.barbeiros-tabela tbody tr:last-child td {
-  border-bottom: none;
-}
-
-
-/* =========================================
-   FOTO DO BARBEIRO
-========================================= */
-
-.barbeiro-foto {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #eeeeee;
-  color: #555555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.barbeiro-foto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.barbeiro-foto.grande {
-  width: 80px;
-  height: 80px;
-  font-size: 25px;
-}
-
-
-/* =========================================
-   NOME
-========================================= */
-
-.nome-barbeiro {
-  display: inline-block;
-  color: #222222;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-
-/* =========================================
-   ESPECIALIDADE
-========================================= */
-
-.especialidade {
-  color: #555555;
-  font-size: 14px;
-}
-
-
-/* =========================================
-   STATUS
-========================================= */
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 25px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.status-ativo {
-  background: #eeeeee;
-  color: #222222;
-}
-
-.status-inativo {
-  background: #f7f7f7;
-  color: #777777;
-  border: 1px solid #dddddd;
-}
-
-
-/* =========================================
-   AÇÕES
-========================================= */
-
-.acoes {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.acoes button {
-  min-height: 32px;
-  padding: 0 11px;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.15s ease;
-}
-
-.acao-visualizar {
-  border: 1px solid #d8d8d8;
-  background: #ffffff;
-  color: #333333;
-}
-
-.acao-visualizar:hover {
-  background: #f4f4f4;
-}
-
-.acao-editar {
-  border: 1px solid #111111;
-  background: #111111;
-  color: #ffffff;
-}
-
-.acao-editar:hover {
-  background: #2b2b2b;
-}
-
-.acao-desativar {
-  border: 1px solid #d8d8d8;
-  background: #ffffff;
-  color: #555555;
-}
-
-.acao-desativar:hover {
-  background: #f4f4f4;
-}
-
-.acao-ativar {
-  border: 1px solid #222222;
-  background: #ffffff;
-  color: #222222;
-}
-
-.acao-ativar:hover {
-  background: #eeeeee;
-}
-
-
-/* =========================================
-   NENHUM BARBEIRO
-========================================= */
-
-.nenhum-barbeiro {
-  height: 220px;
-  text-align: center !important;
-  color: #777777 !important;
-}
-
-.nenhum-barbeiro > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.nenhum-barbeiro span {
-  margin-bottom: 10px;
-  font-size: 28px;
-}
-
-.nenhum-barbeiro strong {
-  color: #333333;
-  font-size: 15px;
-}
-
-.nenhum-barbeiro p {
-  margin: 6px 0 0;
-  font-size: 13px;
-}
-
-
-/* =========================================
-   MODAL
-========================================= */
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  padding: 25px;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal {
-  width: 100%;
-  max-width: 620px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-  min-height: 75px;
-  padding: 17px 21px;
-  background: #171717;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.modal-fechar {
-  width: 34px;
-  height: 34px;
-  border: none;
-  background: transparent;
-  color: #ffffff;
   font-size: 27px;
-  line-height: 1;
-  cursor: pointer;
-  border-radius: 5px;
+  font-weight: 800;
 }
 
-.modal-fechar:hover {
-  background: #292929;
+.profile-main-info p {
+  margin: 12px 0 0;
+
+  color: #777777;
+
+  font-size: 13px;
 }
 
+.user-type-badge {
+  display: inline-flex;
 
-/* =========================================
-   FORMULÁRIO
-========================================= */
+  align-items: center;
+  justify-content: center;
 
-.barbeiro-form {
-  padding: 25px;
+  min-height: 30px;
+
+  padding: 0 13px;
+
+  border-radius: 20px;
+
+  background: #f5ecd2;
+
+  border: 1px solid #dfc77d;
+
+  color: #70571d;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 0.8px;
 }
 
-.form-grid {
+/* =========================================================
+   GRID PRINCIPAL
+========================================================= */
+
+.perfil-grid {
+  width: 100%;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 19px;
+
+  grid-template-columns:
+    minmax(0, 1.75fr)
+    minmax(300px, 0.85fr);
+
+  gap: 22px;
+
+  align-items: start;
+
+  margin-bottom: 25px;
+}
+
+/* =========================================================
+   CARD GENERICO
+========================================================= */
+
+.card {
+  background: #ffffff;
+
+  border: 1px solid #dfd9ca;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   TITULO DOS CARDS
+========================================================= */
+
+.card-title {
+  min-height: 82px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 18px 25px;
+
+  border-bottom: 1px solid #e8e4da;
+
+  background: #ffffff;
+}
+
+.card-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #171717;
+
+  color: #dfbf68;
+
+  font-size: 17px;
+}
+
+.card-title h3 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.card-title p {
+  margin: 4px 0 0;
+
+  color: #888888;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.profile-form {
+  padding: 25px;
 }
 
 .form-group {
   display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
 
-.form-group.form-full {
-  grid-column: 1 / -1;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin-bottom: 18px;
 }
 
 .form-group label {
   color: #333333;
-  font-size: 14px;
-  font-weight: 600;
-}
 
-.form-group input {
-  width: 100%;
-  height: 43px;
-  padding: 0 12px;
-  border: 1px solid #d6d6d6;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #222222;
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s ease;
-}
-
-.form-group input:focus {
-  border-color: #777777;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
-}
-
-.form-group input::placeholder {
-  color: #999999;
-}
-
-.form-group small {
-  color: #888888;
   font-size: 12px;
+  font-weight: 800;
 }
 
+.form-group input,
+.form-group select {
+  width: 100%;
 
-/* =========================================
-   FOOTER DOS MODAIS
-========================================= */
+  min-height: 46px;
 
-.modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 9px;
-  padding: 18px 25px;
-  border-top: 1px solid #e5e5e5;
-}
+  padding: 0 13px;
 
-.btn-cancelar,
-.btn-salvar {
-  min-height: 40px;
-  padding: 0 17px;
-  border-radius: 7px;
+  border: 1px solid #d9d5cc;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #222222;
+
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
+
+  font-size: 13px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #c7a64d;
+
+  box-shadow:
+    0 0 0 3px rgba(201, 162, 77, 0.12);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  background: #f7f6f3;
+
+  color: #4c4c4c;
+
+  cursor: default;
+}
+
+/* =========================================================
+   ACOES
+========================================================= */
+
+.profile-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding-top: 5px;
+}
+
+.btn-confirmar,
+.btn-cancelar {
+  min-height: 42px;
+
+  padding: 0 19px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
   cursor: pointer;
+
   transition: 0.2s ease;
+}
+
+.btn-confirmar {
+  border: 1px solid #c49d39;
+
+  background: #d4af37;
+
+  color: #171717;
+}
+
+.btn-confirmar:hover {
+  background: #e0be4e;
+
+  transform: translateY(-1px);
 }
 
 .btn-cancelar {
-  border: 1px solid #d5d5d5;
+  border: 1px solid #d2cec4;
+
   background: #ffffff;
-  color: #444444;
+
+  color: #555555;
 }
 
 .btn-cancelar:hover {
-  background: #f4f4f4;
+  background: #f4f3ef;
 }
 
-.btn-salvar {
-  border: 1px solid #111111;
-  background: #111111;
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.perfil-sidebar {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+/* =========================================================
+   SEGURANCA
+========================================================= */
+
+.security-card {
+  padding: 25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #171717,
+      #242424
+    );
+
   color: #ffffff;
+
+  border: 1px solid #343434;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.10);
 }
 
-.btn-salvar:hover {
-  background: #2b2b2b;
-}
+.security-icon {
+  width: 42px;
+  height: 42px;
 
+  margin-bottom: 17px;
 
-/* =========================================
-   DETALHES DO BARBEIRO
-========================================= */
-
-.barbeiro-detalhes {
-  padding: 27px 25px;
-}
-
-.barbeiro-detalhe-topo {
   display: flex;
   align-items: center;
-  gap: 19px;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(212, 175, 55, 0.14);
+
+  color: #dfbf68;
+
+  font-size: 18px;
+
+  border: 1px solid rgba(212, 175, 55, 0.25);
 }
 
-.barbeiro-detalhe-topo h4 {
-  margin: 0 0 6px;
+.security-card .security-label {
+  color: #d4af37;
+
+  margin-bottom: 7px;
+}
+
+.security-card h3 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.security-card p {
+  margin: 9px 0 18px;
+
+  color: #b9b9b9;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+.btn-security {
+  width: 100%;
+
+  min-height: 42px;
+
+  border: 1px solid #c49d39;
+
+  border-radius: 8px;
+
+  background: #d4af37;
+
+  color: #171717;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.btn-security:hover {
+  background: #e0be4e;
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   RESUMO
+========================================================= */
+
+.profile-summary {
+  padding: 25px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfd9ca;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.profile-summary > .heading-label {
+  margin-bottom: 15px;
+
+  color: #9b7931;
+}
+
+.profile-summary-item {
+  min-height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-bottom: 1px solid #eeeae1;
+}
+
+.profile-summary-item:last-child {
+  border-bottom: none;
+}
+
+.profile-summary-item span {
+  color: #777777;
+
+  font-size: 12px;
+}
+
+.profile-summary-item strong {
   color: #222222;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-align: right;
+}
+
+.status-ativo {
+  color: #4f713c !important;
+}
+
+.status-inativo {
+  color: #a54848 !important;
+}
+
+/* =========================================================
+   HISTORICO
+========================================================= */
+
+.history-card {
+  width: 100%;
+
+  margin-top: 0;
+}
+
+.history-list {
+  width: 100%;
+}
+
+.history-item {
+  min-height: 82px;
+
+  display: grid;
+
+  grid-template-columns:
+    150px
+    minmax(0, 1fr)
+    120px
+    105px;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 16px 25px;
+
+  border-bottom: 1px solid #eeeae1;
+
+  transition: background 0.2s ease;
+}
+
+.history-item:hover {
+  background: #faf9f6;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-date,
+.history-time {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.history-date span,
+.history-time span {
+  color: #9a9a9a;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+}
+
+.history-date strong,
+.history-time strong {
+  color: #222222;
+
+  font-size: 13px;
+}
+
+.history-info {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.history-info strong {
+  color: #222222;
+
+  font-size: 13px;
+}
+
+.history-info span {
+  color: #888888;
+
+  font-size: 11px;
+}
+
+.history-status {
+  min-height: 28px;
+
+  padding: 0 10px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  justify-self: end;
+
+  border-radius: 20px;
+
+  background: #eef5e9;
+
+  border: 1px solid #c9ddbc;
+
+  color: #4f713c;
+
+  font-size: 10px;
+
+  font-weight: 900;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 25px;
+
+  background:
+    rgba(0, 0, 0, 0.58);
+
+  backdrop-filter: blur(3px);
+}
+
+.modal {
+  width: 100%;
+
+  max-width: 480px;
+
+  position: relative;
+
+  padding: 30px;
+
+  background: #ffffff;
+
+  border: 1px solid #ded8c9;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.28);
+}
+
+.modal-close {
+  position: absolute;
+
+  top: 14px;
+  right: 15px;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f3f1ed;
+
+  color: #555555;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: #e8e5de;
+}
+
+.modal-icon {
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f5ecd2;
+
+  color: #8c6a20;
+
   font-size: 20px;
-  font-weight: 700;
 }
 
-.especialidade-detalhe {
-  display: inline-block;
-  margin-bottom: 10px;
-  color: #666666;
-  font-size: 14px;
+.modal h3 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 21px;
 }
 
+.modal > p {
+  margin: 8px 0 22px;
 
-/* =========================================
+  color: #777777;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+.password-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0;
+}
+
+.modal-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.modal-secondary,
+.modal-primary {
+  min-height: 40px;
+
+  padding: 0 16px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.modal-secondary {
+  border: 1px solid #d2cec4;
+
+  background: #ffffff;
+
+  color: #555555;
+}
+
+.modal-secondary:hover {
+  background: #f4f3ef;
+}
+
+.modal-primary {
+  border: 1px solid #c49d39;
+
+  background: #d4af37;
+
+  color: #171717;
+}
+
+.modal-primary:hover {
+  background: #e0be4e;
+}
+
+/* =========================================================
    RESPONSIVIDADE
-========================================= */
+========================================================= */
 
 @media (max-width: 1100px) {
-  .barbeiros-content {
-    padding-left: 28px;
-    padding-right: 28px;
+
+  .dashboard-header {
+    padding: 0 30px;
   }
 
-  .barbeiros-logo {
-    width: 180px;
+  .perfil-content {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
-  .barbeiros-logo img {
-    width: 130px;
+  .perfil-grid {
+    grid-template-columns:
+      minmax(0, 1.5fr)
+      minmax(280px, 0.8fr);
   }
 
-  .acoes {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .acoes button {
-    width: 100%;
+  .history-item {
+    grid-template-columns:
+      120px
+      minmax(0, 1fr)
+      100px
+      95px;
   }
 }
 
-
 @media (max-width: 850px) {
-  .barbeiros-header {
-    padding: 0 22px;
+
+  .dashboard-header {
+    min-height: 95px;
+
+    padding: 0 20px;
   }
 
-  .barbeiros-logo {
-    width: 150px;
+  .dashboard-left {
+    width: 160px;
   }
 
-  .barbeiros-logo img {
-    width: 115px;
+  .dashboard-logo {
+    width: 100px;
+    height: 75px;
   }
 
-  .barbeiros-title h1 {
-    font-size: 18px;
+  .dashboard-center h1 {
+    font-size: 22px;
   }
 
-  .barbeiros-title p {
-    font-size: 11px;
+  .dashboard-center p {
+    font-size: 10px;
   }
 
-  .user-info {
+  .dashboard-right {
+    min-width: auto;
+  }
+
+  .dashboard-user-info {
     display: none;
   }
 
-  .barbeiros-content {
-    padding: 28px 20px 45px;
+  .perfil-content {
+    padding: 30px 20px 50px;
   }
 
-  .barbeiros-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .btn-novo-barbeiro {
-    width: 100%;
-  }
-
-  .form-grid {
+  .perfil-grid {
     grid-template-columns: 1fr;
   }
 
-  .form-group.form-full {
-    grid-column: auto;
+  .perfil-sidebar {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .history-item {
+    grid-template-columns:
+      110px
+      minmax(0, 1fr)
+      90px;
+  }
+
+  .history-status {
+    grid-column: 3;
   }
 }
 
+@media (max-width: 650px) {
 
-@media (max-width: 600px) {
-  .barbeiros-header {
-    min-height: 70px;
+  .dashboard-header {
+    min-height: 82px;
+
     padding: 0 15px;
   }
 
-  .barbeiros-logo {
+  .dashboard-left {
     width: auto;
   }
 
-  .barbeiros-logo img {
-    width: 95px;
+  .dashboard-logo {
+    width: 82px;
+    height: 62px;
   }
 
-  .barbeiros-title {
+  .dashboard-center {
     position: static;
+
     transform: none;
+
+    min-width: 0;
+
     margin-left: auto;
     margin-right: 15px;
   }
 
-  .barbeiros-title h1 {
-    font-size: 16px;
+  .dashboard-center h1 {
+    font-size: 18px;
   }
 
-  .barbeiros-title p {
+  .dashboard-center p {
     display: none;
   }
 
-  .user-avatar {
-    width: 34px;
-    height: 34px;
+  .dashboard-avatar {
+    width: 38px;
+    height: 38px;
+
+    font-size: 13px;
   }
 
-  .barbeiros-content {
-    padding: 24px 14px 35px;
+  .perfil-content {
+    padding: 25px 14px 40px;
   }
 
-  .barbeiros-heading h2 {
+  .perfil-topo {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .perfil-topo > p {
+    max-width: none;
+
+    margin: 0;
+
+    text-align: left;
+  }
+
+  .perfil-topo h2 {
     font-size: 25px;
   }
 
-  .barbeiros-heading p {
-    font-size: 13px;
+  .profile-hero-card {
+    grid-template-columns: 1fr;
+
+    text-align: center;
+
+    gap: 20px;
+
+    padding: 25px 20px;
   }
 
-  .card-header {
-    min-height: 72px;
-    padding: 15px;
+  .profile-photo-section {
+    justify-self: center;
   }
 
-  .barbeiros-filtros {
-    padding: 14px;
+  .profile-main-info {
+    display: flex;
+
     flex-direction: column;
+
+    align-items: center;
   }
 
-  .campo-pesquisa {
-    width: 100%;
-  }
-
-  .barbeiros-filtros select {
-    width: 100%;
-  }
-
-  .barbeiros-tabela th,
-  .barbeiros-tabela td {
-    padding: 12px 13px;
-  }
-
-  .barbeiros-tabela th {
-    font-size: 11px;
-  }
-
-  .barbeiros-tabela td {
-    font-size: 13px;
-  }
-
-  .nome-barbeiro {
-    font-size: 14px;
-  }
-
-  .acoes {
-    flex-direction: row;
-  }
-
-  .acoes button {
-    width: auto;
-    font-size: 12px;
-  }
-
-  .modal-overlay {
-    padding: 12px;
-  }
-
-  .barbeiro-form {
-    padding: 20px;
-  }
-
-  .modal-footer {
-    padding: 15px 20px;
-  }
-}
-
-
-@media (max-width: 400px) {
-  .barbeiros-title {
-    display: none;
-  }
-
-  .barbeiros-content {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .barbeiros-heading h2 {
+  .profile-main-info h2 {
     font-size: 23px;
   }
 
-  .card-header h3 {
-    font-size: 15px;
+  .profile-actions {
+    flex-direction: column;
   }
 
-  .total-barbeiros {
-    font-size: 11px;
+  .btn-confirmar,
+  .btn-cancelar {
+    width: 100%;
   }
 
-  .barbeiros-tabela th,
-  .barbeiros-tabela td {
-    padding: 10px;
+  .perfil-sidebar {
+    grid-template-columns: 1fr;
   }
 
-  .acoes button {
-    padding: 0 8px;
-    font-size: 11px;
+  .history-item {
+    grid-template-columns:
+      1fr 1fr;
+
+    gap: 15px;
   }
 
-  .barbeiro-form {
+  .history-info {
+    grid-column: 1 / -1;
+
+    grid-row: 1;
+  }
+
+  .history-date {
+    grid-column: 1;
+  }
+
+  .history-time {
+    grid-column: 2;
+
+    align-items: flex-end;
+  }
+
+  .history-status {
+    grid-column: 1 / -1;
+
+    grid-row: 3;
+
+    justify-self: start;
+  }
+}
+
+@media (max-width: 430px) {
+
+  .dashboard-center {
+    display: none;
+  }
+
+  .perfil-topo h2 {
+    font-size: 23px;
+  }
+
+  .profile-form {
+    padding: 20px 16px;
+  }
+
+  .card-title {
     padding: 16px;
   }
 
-  .modal-footer {
-    padding: 14px 16px;
+  .history-item {
+    padding: 15px 16px;
   }
 
-  .btn-cancelar,
-  .btn-salvar {
-    font-size: 13px;
-    padding: 0 13px;
+  .modal {
+    padding: 25px 20px;
   }
 }

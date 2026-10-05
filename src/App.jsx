@@ -73,7 +73,7 @@ function App() {
             <Route
                 path="/perfil"
                 element={
-                    <ProtectedRoute tiposPermitidos={[3]}>
+                    <ProtectedRoute tiposPermitidos={[2, 3]}>
                         <Perfil />
                     </ProtectedRoute>
                 }

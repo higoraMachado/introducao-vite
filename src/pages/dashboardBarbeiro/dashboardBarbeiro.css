@@ -224,9 +224,11 @@
   transform-origin: left center;
 }
 
-/* IMPORTANTE: a logo nao e um botao neste dashboard. */
-.barbeiro-dashboard-logo img:hover {
-  transform: scale(1.08);
+/* A logo e apenas visual neste dashboard. */
+.barbeiro-dashboard-logo,
+.barbeiro-dashboard-logo img {
+  cursor: default;
+  pointer-events: none;
 }
 
 .barbeiro-dashboard-title {
@@ -301,6 +303,7 @@
 
 .barbeiro-dashboard-user {
   min-width: 300px;
+  text-decoration: none;
   height: 138px;
 
   display: flex;
@@ -816,8 +819,9 @@
 
 .btn-small-dark {
   min-height: 35px;
+  min-width: 170px;
 
-  padding: 0 13px;
+  padding: 0 18px;
 
   border: 1px solid #171717;
   border-radius: 6px;
