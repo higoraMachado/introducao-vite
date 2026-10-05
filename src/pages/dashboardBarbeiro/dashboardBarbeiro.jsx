@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './dashboardBarbeiro.css';
 import logoHope from '../../assets/logo-hope.png';
 
