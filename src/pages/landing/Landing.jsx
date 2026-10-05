@@ -8,67 +8,88 @@ function Landing() {
   const navigate = useNavigate();
   const [menuAberto, setMenuAberto] = useState(false);
 
+  // Sempre leva para o login antes de agendar
+  const irParaLoginAgendamento = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="landing-page">
 
-      {/* ================= HEADER ================= */}
-     <header className="landing-header">
+      {/* HEADER */}
+      <header className="landing-header">
 
-  <div className="header-logo">
-    <img src={logo} alt="Hope Barbearia" />
-  </div>
+        <div className="header-logo">
+          <img src={logo} alt="Hope Barbearia" />
+        </div>
 
-  <nav className={`landing-nav ${menuAberto ? "menu-aberto" : ""}`}>
+        <nav className={`landing-nav ${menuAberto ? "menu-aberto" : ""}`}>
 
-    <a href="#inicio" onClick={() => setMenuAberto(false)}>
-      Início
-    </a>
+          <a
+            href="#inicio"
+            onClick={() => setMenuAberto(false)}
+          >
+            Início
+          </a>
 
-    <a href="#servicos" onClick={() => setMenuAberto(false)}>
-      Serviços
-    </a>
+          <a
+            href="#servicos"
+            onClick={() => setMenuAberto(false)}
+          >
+            Serviços
+          </a>
 
-    <a href="#sobre" onClick={() => setMenuAberto(false)}>
-      Sobre nós
-    </a>
+          <a
+            href="#sobre"
+            onClick={() => setMenuAberto(false)}
+          >
+            Sobre nós
+          </a>
 
-    <a href="#equipe" onClick={() => setMenuAberto(false)}>
-      Equipe
-    </a>
+          <a
+            href="#equipe"
+            onClick={() => setMenuAberto(false)}
+          >
+            Equipe
+          </a>
 
-    <a href="#contato" onClick={() => setMenuAberto(false)}>
-      Contato
-    </a>
+          <a
+            href="#contato"
+            onClick={() => setMenuAberto(false)}
+          >
+            Contato
+          </a>
 
-  </nav>
+        </nav>
 
-  <button
-    className="btn-login"
-    onClick={() => navigate("/login")}
-  >
-    Entrar
-  </button>
+        <button
+          className="btn-login"
+          onClick={() => navigate("/login")}
+        >
+          Entrar
+        </button>
 
-  <button
-    className={`menu-mobile ${menuAberto ? "ativo" : ""}`}
-    onClick={() => setMenuAberto(!menuAberto)}
-    aria-label="Abrir menu"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+        <button
+          className={`menu-mobile ${menuAberto ? "ativo" : ""}`}
+          onClick={() => setMenuAberto(!menuAberto)}
+          aria-label="Abrir menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-</header>
+      </header>
 
 
-      {/* ================= HERO ================= */}
+      {/* HERO */}
       <section
         className="hero"
         id="inicio"
-        style={{ backgroundImage: `url(${heroImage})` }}>
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
 
-  <div className="hero-overlay"></div>
+        <div className="hero-overlay"></div>
 
         <div className="hero-content">
 
@@ -89,9 +110,10 @@ function Landing() {
 
           <div className="hero-buttons">
 
+            {/* SEMPRE VAI PARA O LOGIN */}
             <button
               className="btn-primary"
-              onClick={() => navigate("/agendamento")}
+              onClick={irParaLoginAgendamento}
             >
               Agendar horário
             </button>
@@ -116,8 +138,11 @@ function Landing() {
       </section>
 
 
-      {/* ================= SERVIÇOS ================= */}
-      <section className="services-section" id="servicos">
+      {/* SERVIÇOS */}
+      <section
+        className="services-section"
+        id="servicos"
+      >
 
         <div className="section-header">
 
@@ -130,12 +155,10 @@ function Landing() {
           </h2>
 
           <p>
-            Tudo o que você precisa para manter seu estilo
-            sempre em dia.
+            Tudo o que você precisa para manter seu estilo sempre em dia.
           </p>
 
         </div>
-
 
         <div className="services-grid">
 
@@ -145,11 +168,12 @@ function Landing() {
               ✂
             </div>
 
-            <h3>Corte Masculino</h3>
+            <h3>
+              Corte Masculino
+            </h3>
 
             <p>
-              Cortes modernos e tradicionais feitos
-              de acordo com seu estilo.
+              Cortes modernos e tradicionais feitos de acordo com seu estilo.
             </p>
 
           </div>
@@ -161,11 +185,12 @@ function Landing() {
               ◈
             </div>
 
-            <h3>Barba</h3>
+            <h3>
+              Barba
+            </h3>
 
             <p>
-              Modelagem e acabamento para deixar
-              sua barba impecável.
+              Modelagem e acabamento para deixar sua barba impecável.
             </p>
 
           </div>
@@ -177,11 +202,12 @@ function Landing() {
               ✂
             </div>
 
-            <h3>Corte + Barba</h3>
+            <h3>
+              Corte + Barba
+            </h3>
 
             <p>
-              O combo completo para renovar
-              completamente seu visual.
+              O combo completo para renovar completamente seu visual.
             </p>
 
           </div>
@@ -193,11 +219,12 @@ function Landing() {
               ◆
             </div>
 
-            <h3>Tratamentos</h3>
+            <h3>
+              Tratamentos
+            </h3>
 
             <p>
-              Cuidados especiais para cabelo,
-              barba e aparência.
+              Cuidados especiais para cabelo, barba e aparência.
             </p>
 
           </div>
@@ -207,14 +234,24 @@ function Landing() {
       </section>
 
 
-      {/* ================= SOBRE ================= */}
-      <section className="about-section" id="sobre">
+      {/* SOBRE */}
+      <section
+        className="about-section"
+        id="sobre"
+      >
 
         <div className="about-image">
 
           <div className="about-image-content">
-            <span>HOPE</span>
-            <strong>BARBEARIA</strong>
+
+            <span>
+              HOPE
+            </span>
+
+            <strong>
+              BARBEARIA
+            </strong>
+
           </div>
 
         </div>
@@ -233,8 +270,8 @@ function Landing() {
           </h2>
 
           <p>
-            Na Hope Barbearia, acreditamos que cuidar do visual
-            é também cuidar da autoestima.
+            Na Hope Barbearia, acreditamos que cuidar do
+            visual é também cuidar da autoestima.
           </p>
 
           <p>
@@ -243,9 +280,10 @@ function Landing() {
             encontrar seu próprio estilo.
           </p>
 
+          {/* SEMPRE VAI PARA O LOGIN */}
           <button
             className="btn-primary"
-            onClick={() => navigate("/agendamento")}
+            onClick={irParaLoginAgendamento}
           >
             Agendar horário
           </button>
@@ -255,8 +293,11 @@ function Landing() {
       </section>
 
 
-      {/* ================= EQUIPE ================= */}
-      <section className="team-section" id="equipe">
+      {/* EQUIPE */}
+      <section
+        className="team-section"
+        id="equipe"
+      >
 
         <div className="section-header">
 
@@ -280,12 +321,21 @@ function Landing() {
           <div className="team-card">
 
             <div className="team-photo">
-              <span>BARBEIRO</span>
+              <span>
+                BARBEIRO
+              </span>
             </div>
 
             <div className="team-info">
-              <h3>Nosso Barbeiro</h3>
-              <p>Especialista em cortes</p>
+
+              <h3>
+                Nosso Barbeiro
+              </h3>
+
+              <p>
+                Especialista em cortes
+              </p>
+
             </div>
 
           </div>
@@ -294,12 +344,21 @@ function Landing() {
           <div className="team-card">
 
             <div className="team-photo">
-              <span>BARBEIRO</span>
+              <span>
+                BARBEIRO
+              </span>
             </div>
 
             <div className="team-info">
-              <h3>Nosso Barbeiro</h3>
-              <p>Especialista em barba</p>
+
+              <h3>
+                Nosso Barbeiro
+              </h3>
+
+              <p>
+                Especialista em barba
+              </p>
+
             </div>
 
           </div>
@@ -308,12 +367,21 @@ function Landing() {
           <div className="team-card">
 
             <div className="team-photo">
-              <span>BARBEIRO</span>
+              <span>
+                BARBEIRO
+              </span>
             </div>
 
             <div className="team-info">
-              <h3>Nosso Barbeiro</h3>
-              <p>Especialista em estilo</p>
+
+              <h3>
+                Nosso Barbeiro
+              </h3>
+
+              <p>
+                Especialista em estilo
+              </p>
+
             </div>
 
           </div>
@@ -323,7 +391,7 @@ function Landing() {
       </section>
 
 
-      {/* ================= CTA ================= */}
+      {/* CTA */}
       <section className="cta-section">
 
         <div className="cta-content">
@@ -339,13 +407,14 @@ function Landing() {
           </h2>
 
           <p>
-            Escolha o horário que funciona para você
-            e deixe o resto com a gente.
+            Escolha o horário que funciona para você e
+            deixe o resto com a gente.
           </p>
 
+          {/* SEMPRE VAI PARA O LOGIN */}
           <button
             className="btn-primary"
-            onClick={() => navigate("/agendamento")}
+            onClick={irParaLoginAgendamento}
           >
             Agendar agora
           </button>
@@ -355,14 +424,20 @@ function Landing() {
       </section>
 
 
-      {/* ================= FOOTER ================= */}
-      <footer className="landing-footer" id="contato">
+      {/* FOOTER */}
+      <footer
+        className="landing-footer"
+        id="contato"
+      >
 
         <div className="footer-content">
 
           <div className="footer-brand">
 
-            <img src={logo} alt="Hope Barbearia" />
+            <img
+              src={logo}
+              alt="Hope Barbearia"
+            />
 
             <p>
               Estilo, precisão e tradição.
@@ -373,23 +448,46 @@ function Landing() {
 
           <div className="footer-column">
 
-            <h3>Navegação</h3>
+            <h3>
+              Navegação
+            </h3>
 
-            <a href="#inicio">Início</a>
-            <a href="#servicos">Serviços</a>
-            <a href="#sobre">Sobre nós</a>
-            <a href="#equipe">Equipe</a>
+            <a href="#inicio">
+              Início
+            </a>
+
+            <a href="#servicos">
+              Serviços
+            </a>
+
+            <a href="#sobre">
+              Sobre nós
+            </a>
+
+            <a href="#equipe">
+              Equipe
+            </a>
 
           </div>
 
 
           <div className="footer-column">
 
-            <h3>Contato</h3>
+            <h3>
+              Contato
+            </h3>
 
-            <span>📍 Nossa localização</span>
-            <span>📞 (00) 00000-0000</span>
-            <span>✉ contato@hopebarbearia.com</span>
+            <span>
+              📍 Nossa localização
+            </span>
+
+            <span>
+              📞 (00) 00000-0000
+            </span>
+
+            <span>
+              ✉ contato@hopebarbearia.com
+            </span>
 
           </div>
 

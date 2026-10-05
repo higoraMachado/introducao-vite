@@ -1,12 +1,30 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 function ProtectedRoute({ children, tiposPermitidos }) {
+    const location = useLocation();
+
     const token = localStorage.getItem('token');
     const usuarioSalvo = localStorage.getItem('usuario');
 
+    // =====================================================
+    // NAO ESTA LOGADO
+    // =====================================================
+
     if (!token || !usuarioSalvo) {
-        return <Navigate to="/login" replace />;
+        return (
+            <Navigate
+                to="/login"
+                state={{
+                    from: location.pathname,
+                }}
+                replace
+            />
+        );
     }
+
+    // =====================================================
+    // TENTA LER O USUARIO
+    // =====================================================
 
     let usuario;
 
@@ -16,31 +34,69 @@ function ProtectedRoute({ children, tiposPermitidos }) {
         localStorage.removeItem('usuario');
         localStorage.removeItem('token');
 
-        return <Navigate to="/login" replace />;
+        return (
+            <Navigate
+                to="/login"
+                replace
+            />
+        );
     }
+
+    // =====================================================
+    // TIPO DO USUARIO
+    // =====================================================
 
     const tipoUsuario = Number(usuario.usuario_tipo);
 
-    // ADMINISTRADOR TEM ACESSO A TUDO
+    // =====================================================
+    // ADMINISTRADOR
+    // =====================================================
+
     if (tipoUsuario === 1) {
         return children;
     }
 
-    // Verifica os outros tipos
+    // =====================================================
+    // VERIFICA SE O TIPO PODE ACESSAR A PAGINA
+    // =====================================================
+
     if (!tiposPermitidos.includes(tipoUsuario)) {
-        switch (tipoUsuario) {
-            case 2:
-                return <Navigate to="/dashboardBarbeiro" replace />;
 
-            case 3:
-                return <Navigate to="/dashboardCliente" replace />;
-
-            default:
-                localStorage.removeItem('usuario');
-                localStorage.removeItem('token');
-                return <Navigate to="/login" replace />;
+        // BARBEIRO
+        if (tipoUsuario === 2) {
+            return (
+                <Navigate
+                    to="/dashboardBarbeiro"
+                    replace
+                />
+            );
         }
+
+        // CLIENTE
+        if (tipoUsuario === 3) {
+            return (
+                <Navigate
+                    to="/dashboardCliente"
+                    replace
+                />
+            );
+        }
+
+        // TIPO DESCONHECIDO
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('token');
+
+        return (
+            <Navigate
+                to="/login"
+                replace
+            />
+        );
     }
+
+    // =====================================================
+    // ACESSO LIBERADO
+    // =====================================================
 
     return children;
 }

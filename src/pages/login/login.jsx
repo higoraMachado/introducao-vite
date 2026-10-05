@@ -1,30 +1,40 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
 import './login.css';
 
 import logoHope from '../../assets/logo-hope.png';
 import barbearia from '../../assets/barbearia.jpg';
 
 function Login() {
-  const navigate = useNavigate();
 
-  // ========================================
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // =====================================================
+  // ROTA DE ORIGEM
+  // =====================================================
+
+  const destino = location.state?.from || null;
+
+  // =====================================================
   // ESTADOS
-  // ========================================
+  // =====================================================
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [lembrar, setLembrar] = useState(false);
 
-  // Controle da escolha de cadastro
-  const [mostrarCadastro, setMostrarCadastro] = useState(false);
-
-  // ========================================
+  // =====================================================
   // LOGIN
-  // ========================================
+  // =====================================================
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     if (!email || !senha) {
@@ -33,67 +43,160 @@ function Login() {
     }
 
     try {
-      const resposta = await fetch('http://localhost:3333/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          senha: senha
-        })
-      });
+
+      const resposta = await fetch(
+        'http://localhost:3333/login',
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify({
+            email: email,
+            senha: senha,
+          }),
+        }
+      );
 
       const dados = await resposta.json();
 
+      // =================================================
+      // ERRO NO LOGIN
+      // =================================================
+
       if (!resposta.ok) {
+
         alert(
           dados.erro ||
           dados.message ||
           'E-mail ou senha inválidos.'
         );
+
         return;
       }
 
-      // Salva o token para acessar as páginas protegidas
-      localStorage.setItem('token', dados.dados.token);
+      // =================================================
+      // SALVA TOKEN
+      // =================================================
 
-      // Salva os dados do usuário
       localStorage.setItem(
-        'usuario',
-        JSON.stringify(dados.dados.usuario)
+        'token',
+        dados.dados.token
       );
 
-      console.log('Login realizado:', dados.dados);
+      // =================================================
+      // SALVA USUARIO
+      // =================================================
 
-      // ========================================
-      // REDIRECIONAMENTO POR TIPO DE USUÁRIO
-      // ========================================
+      localStorage.setItem(
+        'usuario',
+        JSON.stringify(
+          dados.dados.usuario
+        )
+      );
 
-      const usuario = dados.dados.usuario;
+      console.log(
+        'Login realizado:',
+        dados.dados
+      );
 
-      switch (Number(usuario.usuario_tipo)) {
-        case 1:
-          // Administrador
-          navigate('/dashboardAdministrador');
-          break;
+      // =================================================
+      // IDENTIFICA TIPO DO USUARIO
+      // =================================================
 
-        case 2:
-          // Barbeiro
-          navigate('/dashboardBarbeiro');
-          break;
+      const tipoUsuario = Number(
+        dados.dados.usuario?.usuario_tipo
+      );
 
-        case 3:
-          // Cliente
-          navigate('/dashboardCliente');
-          break;
+      // =================================================
+      // CLIENTE
+      // =================================================
 
-        default:
-          alert('Tipo de usuário inválido.');
-          break;
+      if (tipoUsuario === 3) {
+
+        /*
+         * Se o cliente tentou acessar uma página
+         * protegida antes de fazer login,
+         * voltamos para aquela página.
+         *
+         * Exemplo:
+         *
+         * Landing
+         * ↓
+         * Agendar horário
+         * ↓
+         * Login
+         * ↓
+         * Agendamento
+         */
+
+        if (destino) {
+
+          navigate(
+            destino,
+            {
+              replace: true,
+            }
+          );
+
+          return;
+        }
+
+        // Caso tenha entrado normalmente
+        navigate(
+          '/dashboardCliente',
+          {
+            replace: true,
+          }
+        );
+
+        return;
       }
 
+      // =================================================
+      // BARBEIRO
+      // =================================================
+
+      if (tipoUsuario === 2) {
+
+        navigate(
+          '/dashboardBarbeiro',
+          {
+            replace: true,
+          }
+        );
+
+        return;
+      }
+
+      // =================================================
+      // ADMINISTRADOR
+      // =================================================
+
+      if (tipoUsuario === 1) {
+
+        navigate(
+          '/dashboardAdministrador',
+          {
+            replace: true,
+          }
+        );
+
+        return;
+      }
+
+      // =================================================
+      // TIPO DESCONHECIDO
+      // =================================================
+
+      alert(
+        'Tipo de usuário não reconhecido.'
+      );
+
     } catch (error) {
+
       console.error(
         'Erro ao conectar com o servidor:',
         error
@@ -106,54 +209,39 @@ function Login() {
     }
   };
 
-  // ========================================
-  // IR PARA RECUPERAÇÃO DE SENHA
-  // ========================================
+  // =====================================================
+  // RECUPERAR SENHA
+  // =====================================================
 
   function recuperarSenha() {
-    navigate('/recuperacaoSenha');
+
+    navigate(
+      '/recuperacaoSenha'
+    );
   }
 
-  // ========================================
-  // ABRIR ESCOLHA DE CADASTRO
-  // ========================================
+  // =====================================================
+  // CRIAR CONTA
+  // =====================================================
 
   function criarConta() {
-    setMostrarCadastro(true);
+
+    navigate(
+      '/CadastroCliente'
+    );
   }
 
-  // ========================================
-  // IR PARA CADASTRO DE CLIENTE
-  // ========================================
-
-  function cadastrarCliente() {
-    setMostrarCadastro(false);
-    navigate('/CadastroCliente');
-  }
-
-  // ========================================
-  // IR PARA CADASTRO DE BARBEIRO
-  // ========================================
-
-  function cadastrarBarbeiro() {
-    setMostrarCadastro(false);
-    navigate('/CadastroBarbeiro');
-  }
-
-  // ========================================
-  // FECHAR ESCOLHA DE CADASTRO
-  // ========================================
-
-  function fecharCadastro() {
-    setMostrarCadastro(false);
-  }
+  // =====================================================
+  // TELA
+  // =====================================================
 
   return (
+
     <main className="login-page">
 
-      {/* ========================================
+      {/* =================================================
           LADO ESQUERDO
-      ======================================== */}
+      ================================================= */}
 
       <section
         className="login-brand"
@@ -164,7 +252,7 @@ function Login() {
               rgba(10, 10, 10, 0.82)
             ),
             url(${barbearia})
-          `
+          `,
         }}
       >
 
@@ -173,10 +261,12 @@ function Login() {
           {/* LOGO */}
 
           <div className="brand-logo">
+
             <img
               src={logoHope}
               alt="Hope Barbearia"
             />
+
           </div>
 
           {/* TEXTO */}
@@ -198,29 +288,33 @@ function Login() {
       </section>
 
 
-      {/* ========================================
+      {/* =================================================
           LADO DIREITO
-      ======================================== */}
+      ================================================= */}
 
       <section className="login-container">
 
         <div className="login-card">
 
-          {/* ========================================
+          {/* =================================================
               ÍCONE
-          ======================================== */}
+          ================================================= */}
 
           <div className="barber-icon">
-            <span>✂</span>
+
+            <span>
+              ✂
+            </span>
+
           </div>
 
 
-          {/* ========================================
+          {/* =================================================
               TÍTULO
-          ======================================== */}
+          ================================================= */}
 
           <h2>
-            Login do Barbeiro
+            Login
           </h2>
 
           <p className="login-description">
@@ -228,15 +322,15 @@ function Login() {
           </p>
 
 
-          {/* ========================================
+          {/* =================================================
               FORMULÁRIO
-          ======================================== */}
+          ================================================= */}
 
           <form onSubmit={handleSubmit}>
 
-            {/* ========================================
+            {/* =================================================
                 E-MAIL
-            ======================================== */}
+            ================================================= */}
 
             <div className="form-group">
 
@@ -252,15 +346,15 @@ function Login() {
                   placeholder="Digite seu e-mail"
                   value={email}
                   onChange={(event) =>
-                    setEmail(event.target.value)
+                    setEmail(
+                      event.target.value
+                    )
                   }
                   required
                 />
 
-                {/* ÍCONE DE USUÁRIO
-                    APARECE SOMENTE QUANDO VAZIO */}
-
                 {!email && (
+
                   <span className="email-icon">
 
                     <svg
@@ -287,6 +381,7 @@ function Login() {
                     </svg>
 
                   </span>
+
                 )}
 
               </div>
@@ -294,9 +389,9 @@ function Login() {
             </div>
 
 
-            {/* ========================================
+            {/* =================================================
                 SENHA
-            ======================================== */}
+            ================================================= */}
 
             <div className="form-group">
 
@@ -306,10 +401,8 @@ function Login() {
 
               <div className="input-wrapper">
 
-                {/* ÍCONE DE CADEADO
-                    APARECE SOMENTE QUANDO VAZIO */}
-
                 {!senha && (
+
                   <span className="input-icon">
 
                     <svg
@@ -336,8 +429,8 @@ function Login() {
                     </svg>
 
                   </span>
-                )}
 
+                )}
 
                 <input
                   id="senha"
@@ -349,21 +442,24 @@ function Login() {
                   placeholder="Digite sua senha"
                   value={senha}
                   onChange={(event) =>
-                    setSenha(event.target.value)
+                    setSenha(
+                      event.target.value
+                    )
                   }
                   required
                 />
 
-
-                {/* ========================================
-                    BOTÃO MOSTRAR / OCULTAR SENHA
-                ======================================== */}
+                {/* =================================================
+                    MOSTRAR / OCULTAR SENHA
+                ================================================= */}
 
                 <button
                   type="button"
                   className="password-button"
                   onClick={() =>
-                    setMostrarSenha(!mostrarSenha)
+                    setMostrarSenha(
+                      !mostrarSenha
+                    )
                   }
                   aria-label={
                     mostrarSenha
@@ -373,8 +469,6 @@ function Login() {
                 >
 
                   {mostrarSenha ? (
-
-                    // OLHO FECHADO
 
                     <svg
                       width="21"
@@ -405,8 +499,6 @@ function Login() {
 
                   ) : (
 
-                    // OLHO ABERTO
-
                     <svg
                       width="21"
                       height="21"
@@ -418,9 +510,7 @@ function Login() {
                       strokeLinejoin="round"
                     >
 
-                      <path
-                        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
-                      />
+                      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
 
                       <circle
                         cx="12"
@@ -439,13 +529,13 @@ function Login() {
             </div>
 
 
-            {/* ========================================
+            {/* =================================================
                 OPÇÕES
-            ======================================== */}
+            ================================================= */}
 
             <div className="login-options">
 
-              {/* LEMBRAR-ME */}
+              {/* LEMBRAR */}
 
               <label className="remember">
 
@@ -453,7 +543,9 @@ function Login() {
                   type="checkbox"
                   checked={lembrar}
                   onChange={(event) =>
-                    setLembrar(event.target.checked)
+                    setLembrar(
+                      event.target.checked
+                    )
                   }
                 />
 
@@ -466,9 +558,7 @@ function Login() {
               </label>
 
 
-              {/* ========================================
-                  ESQUECI MINHA SENHA
-              ======================================== */}
+              {/* ESQUECI SENHA */}
 
               <button
                 type="button"
@@ -481,9 +571,9 @@ function Login() {
             </div>
 
 
-            {/* ========================================
+            {/* =================================================
                 ENTRAR
-            ======================================== */}
+            ================================================= */}
 
             <button
               type="submit"
@@ -495,24 +585,26 @@ function Login() {
           </form>
 
 
-          {/* ========================================
+          {/* =================================================
               DIVISOR
-          ======================================== */}
+          ================================================= */}
 
           <div className="divider">
 
             <span></span>
 
-            <p>OU</p>
+            <p>
+              OU
+            </p>
 
             <span></span>
 
           </div>
 
 
-          {/* ========================================
+          {/* =================================================
               CRIAR CONTA
-          ======================================== */}
+          ================================================= */}
 
           <button
             type="button"
@@ -554,114 +646,20 @@ function Login() {
           </button>
 
 
-          {/* ========================================
+          {/* =================================================
               RODAPÉ
-          ======================================== */}
+          ================================================= */}
 
           <footer>
-            © 2024 Hope Barbearia.
+
+            © 2026 Hope Barbearia.
             Todos os direitos reservados.
+
           </footer>
 
         </div>
 
       </section>
-
-
-      {/* ========================================
-          MODAL - ESCOLHA DE CADASTRO
-      ======================================== */}
-
-      {mostrarCadastro && (
-
-        <div className="cadastro-modal-overlay">
-
-          <div className="cadastro-modal">
-
-            {/* FECHAR */}
-
-            <button
-              type="button"
-              className="cadastro-modal-fechar"
-              onClick={fecharCadastro}
-              aria-label="Fechar"
-            >
-              ×
-            </button>
-
-
-            {/* ÍCONE */}
-
-            <div className="cadastro-modal-icon">
-              ✂
-            </div>
-
-
-            {/* TÍTULO */}
-
-            <h2>
-              Crie sua conta
-            </h2>
-
-            <p>
-              Como você deseja se cadastrar?
-            </p>
-
-
-            {/* OPÇÕES */}
-
-            <div className="cadastro-opcoes">
-
-              {/* CLIENTE */}
-
-              <button
-                type="button"
-                onClick={cadastrarCliente}
-              >
-
-                <span className="cadastro-opcao-icon">
-                  👤
-                </span>
-
-                <strong>
-                  Cliente
-                </strong>
-
-                <small>
-                  Quero agendar meus serviços
-                </small>
-
-              </button>
-
-
-              {/* BARBEIRO */}
-
-              <button
-                type="button"
-                onClick={cadastrarBarbeiro}
-              >
-
-                <span className="cadastro-opcao-icon">
-                  ✂️
-                </span>
-
-                <strong>
-                  Barbeiro
-                </strong>
-
-                <small>
-                  Quero trabalhar na Hope
-                </small>
-
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
 
     </main>
   );
