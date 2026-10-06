@@ -15,6 +15,10 @@ function CadastroProduto() {
     estoqueMinimo: '',
   });
 
+  const [imagem, setImagem] = useState(null);
+  const [previewImagem, setPreviewImagem] = useState(null);
+  const [carregando, setCarregando] = useState(false);
+
   function alterarFormulario(event) {
     const { name, value } = event.target;
 
@@ -22,6 +26,40 @@ function CadastroProduto() {
       ...anterior,
       [name]: value,
     }));
+  }
+
+    function alterarImagem(event) {
+    const arquivo = event.target.files[0];
+
+    if (!arquivo) return;
+
+        const tiposPermitidos = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/webp'
+    ];
+
+    // Verifica se é realmente uma imagem
+    if (!tiposPermitidos.includes(arquivo.type)) {
+        alert('Selecione uma imagem JPG, PNG ou WEBP.');
+        event.target.value = '';
+        return;
+    }
+
+    // Limite de 5 MB
+    if (arquivo.size > 5 * 1024 * 1024) {
+      alert('A imagem deve ter no máximo 5 MB.');
+      event.target.value = '';
+      return;
+    }
+
+    setImagem(arquivo);
+    setPreviewImagem(URL.createObjectURL(arquivo));
+
+    // Cria preview da imagem
+    const urlImagem = URL.createObjectURL(arquivo);
+    setPreviewImagem(urlImagem);
   }
 
 async function cadastrarProduto(event) {
@@ -41,6 +79,8 @@ async function cadastrarProduto(event) {
   }
 
   try {
+    setCarregando(true);
+
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -49,23 +89,41 @@ async function cadastrarProduto(event) {
       return;
     }
 
+          const dadosFormulario = new FormData();
+
+      dadosFormulario.append('nome', formulario.nome);
+      dadosFormulario.append('descricao', formulario.descricao);
+      dadosFormulario.append('categoria', formulario.categoria);
+      dadosFormulario.append(
+        'quantidade',
+        formulario.quantidade
+      );
+      dadosFormulario.append(
+        'custo',
+        formulario.precoCompra
+      );
+      dadosFormulario.append(
+        'preco',
+        formulario.precoVenda
+      );
+      dadosFormulario.append(
+        'estoqueMinimo',
+        formulario.estoqueMinimo
+      );
+
+      // Só envia imagem se o usuário selecionou uma
+      if (imagem) {
+        dadosFormulario.append('imagem', imagem);
+      }
+
     const resposta = await fetch(
       `${import.meta.env.VITE_API_URL || 'http://localhost:3333'}/produtos`,
       {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          nome: formulario.nome,
-          descricao: formulario.descricao,
-          categoria: formulario.categoria,
-          quantidade: Number(formulario.quantidade),
-          custo: Number(formulario.precoCompra),
-          preco: Number(formulario.precoVenda),
-          estoqueMinimo: Number(formulario.estoqueMinimo),
-        }),
+        body: dadosFormulario,
       }
     );
 
@@ -81,6 +139,7 @@ async function cadastrarProduto(event) {
 
     alert('Produto cadastrado com sucesso!');
 
+    // Limpa formulário
     setFormulario({
       nome: '',
       descricao: '',
@@ -91,6 +150,10 @@ async function cadastrarProduto(event) {
       estoqueMinimo: '',
     });
 
+    // Limpa imagem
+    setImagem(null);
+    setPreviewImagem(null);
+
     navigate('/Estoque');
 
   } catch (error) {
@@ -100,6 +163,8 @@ async function cadastrarProduto(event) {
       error.message ||
       'Ocorreu um erro ao cadastrar o produto.'
     );
+  } finally {
+    setCarregando(false);
   }
 }
 
@@ -185,6 +250,41 @@ async function cadastrarProduto(event) {
           >
 
             <div className="form-grid">
+
+          {/* IMAGEM */}
+          <div className="campo-formulario campo-imagem">
+              <label>Imagem do produto</label>
+
+              <input
+                  id="imagem"
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg, image/webp"
+                  onChange={alterarImagem}
+                  hidden
+              />
+
+              <label htmlFor="imagem" className="botao-upload">
+                  <span className="icone-upload">📷</span>
+                  <span>
+                      {imagem ? 'Alterar imagem' : 'Adicionar imagem'}
+                  </span>
+              </label>
+
+              {imagem &&  (
+                  <p className="nome-arquivo">
+                      {imagem.name}
+                  </p>
+              )}
+
+              {previewImagem && (
+                  <div className="preview-imagem">
+                      <img
+                          src={previewImagem}
+                          alt="Pré-visualização do produto"
+                      />
+                  </div>
+              )}
+          </div>
 
               {/* NOME */}
               <div className="form-group">
@@ -357,6 +457,7 @@ async function cadastrarProduto(event) {
                 type="button"
                 className="btn-cancelar"
                 onClick={voltar}
+                disabled={carregando}
               >
                 Cancelar
               </button>
@@ -364,8 +465,11 @@ async function cadastrarProduto(event) {
               <button
                 type="submit"
                 className="btn-cadastrar"
+                disabled={carregando}
               >
-                Cadastrar produto
+                {carregando
+                  ? 'Cadastrando...'
+                  : 'Cadastrar produto'}
               </button>
 
             </div>

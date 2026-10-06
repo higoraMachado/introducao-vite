@@ -214,9 +214,7 @@
 }
 
 
-/* =========================================
-   HEADER DO CARD
-========================================= */
+/* HEADER DO CARD*/
 
 .card-header {
   min-height: 80px;
@@ -312,6 +310,30 @@
   color: #999999;
 }
 
+.campo-imagem {
+    grid-column: 1 / -1;
+}
+
+.campo-imagem input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.preview-imagem {
+    margin-top: 15px;
+}
+
+.preview-imagem img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
 
 /* =========================================
    SELECT
@@ -348,6 +370,66 @@
 /* =========================================
    BOTÕES
 ========================================= */
+
+.botao-upload {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 12px 22px;
+
+    background: #1f1f1f;
+    color: #fff;
+
+    border: 1px solid #333;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.botao-upload:hover {
+    background: #2b2b2b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.botao-upload:active {
+    transform: translateY(0);
+}
+
+.icone-upload {
+    font-size: 18px;
+}
+
+.nome-arquivo {
+    margin-top: 8px;
+    color: #666;
+    font-size: 13px;
+}
+
+.preview-imagem {
+    margin-top: 15px;
+}
+
+.preview-imagem img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+
+    border-radius: 10px;
+    border: 1px solid #ddd;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
 
 .btn-cancelar,
 .btn-cadastrar {
