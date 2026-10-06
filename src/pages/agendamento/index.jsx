@@ -1,80 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Agendamento.css';
 import logoHope from '../../assets/logo-hope.png';
 
-const barbeiros = [
-  {
-    id: 1,
-    nome: 'João',
-    especialidade: 'Cortes clássicos',
-  },
-  {
-    id: 2,
-    nome: 'Carlos',
-    especialidade: 'Degradê e estilos modernos',
-  },
-  {
-    id: 3,
-    nome: 'Marcos',
-    especialidade: 'Barba e acabamento',
-  },
-];
+const API_URL = 'http://localhost:3333';
 
-const servicos = [
-  {
-    id: 1,
-    nome: 'Corte Masculino',
-    duracao: 45,
-    preco: 35,
-  },
-  {
-    id: 2,
-    nome: 'Barba',
-    duracao: 30,
-    preco: 25,
-  },
-  {
-    id: 3,
-    nome: 'Corte + Barba',
-    duracao: 60,
-    preco: 50,
-  },
-  {
-    id: 4,
-    nome: 'Degradê',
-    duracao: 50,
-    preco: 40,
-  },
-  {
-    id: 5,
-    nome: 'Sobrancelha',
-    duracao: 15,
-    preco: 15,
-  },
-];
-
-const horariosBase = [
-  '09:00',
-  '09:30',
-  '10:00',
-  '10:30',
-  '11:00',
-  '11:30',
-  '13:00',
-  '13:30',
-  '14:00',
-  '14:30',
-  '15:00',
-  '15:30',
-  '16:00',
-  '16:30',
-  '17:00',
-  '17:30',
-  '18:00',
-  '18:30',
-];
-
-const STORAGE_KEY = 'hope-barbearia-agendamento';
+/* =========================================================
+   FUNÇÕES AUXILIARES
+========================================================= */
 
 function formatarData(data) {
   if (!data) return '';
@@ -92,8 +25,14 @@ function criarDataLocal(data) {
 
 function dataParaString(data) {
   const ano = data.getFullYear();
-  const mes = String(data.getMonth() + 1).padStart(2, '0');
-  const dia = String(data.getDate()).padStart(2, '0');
+
+  const mes = String(
+    data.getMonth() + 1
+  ).padStart(2, '0');
+
+  const dia = String(
+    data.getDate()
+  ).padStart(2, '0');
 
   return `${ano}-${mes}-${dia}`;
 }
@@ -102,178 +41,1033 @@ function gerarCalendario(mesAtual) {
   const ano = mesAtual.getFullYear();
   const mes = mesAtual.getMonth();
 
-  const primeiroDia = new Date(ano, mes, 1);
-  const ultimoDia = new Date(ano, mes + 1, 0);
+  const primeiroDia = new Date(
+    ano,
+    mes,
+    1
+  );
 
-  const diasNoMes = ultimoDia.getDate();
+  const ultimoDia = new Date(
+    ano,
+    mes + 1,
+    0
+  );
 
-  // Converte domingo = 0 para segunda = 0
-  const primeiroDiaSemana = (primeiroDia.getDay() + 6) % 7;
+  const diasNoMes =
+    ultimoDia.getDate();
+
+  const primeiroDiaSemana =
+    (primeiroDia.getDay() + 6) % 7;
 
   const dias = [];
 
-  for (let i = 0; i < primeiroDiaSemana; i++) {
+  for (
+    let i = 0;
+    i < primeiroDiaSemana;
+    i++
+  ) {
     dias.push(null);
   }
 
-  for (let dia = 1; dia <= diasNoMes; dia++) {
-    dias.push(new Date(ano, mes, dia));
+  for (
+    let dia = 1;
+    dia <= diasNoMes;
+    dia++
+  ) {
+    dias.push(
+      new Date(
+        ano,
+        mes,
+        dia
+      )
+    );
   }
 
   return dias;
 }
 
-function AppAgendamento() {
-  const hoje = new Date();
+function converterDuracaoParaMinutos(
+  duracao
+) {
+  if (!duracao) {
+    return 30;
+  }
 
-  const [mesAtual, setMesAtual] = useState(
-    new Date(hoje.getFullYear(), hoje.getMonth(), 1)
+  if (
+    typeof duracao === 'number'
+  ) {
+    return duracao;
+  }
+
+  const texto =
+    String(duracao);
+
+  if (!texto.includes(':')) {
+    return Number(texto) || 30;
+  }
+
+  const partes =
+    texto
+      .split(':')
+      .map(Number);
+
+  const horas =
+    partes[0] || 0;
+
+  const minutos =
+    partes[1] || 0;
+
+  return (
+    horas * 60 +
+    minutos
+  );
+}
+
+function montarDataHora(
+  data,
+  hora
+) {
+  if (!data || !hora) {
+    return null;
+  }
+
+  const horaCompleta =
+    hora.length === 5
+      ? `${hora}:00`
+      : hora;
+
+  return `${data} ${horaCompleta}`;
+}
+
+function formatarPreco(valor) {
+  const numero =
+    Number(valor) || 0;
+
+  return numero.toLocaleString(
+    'pt-BR',
+    {
+      style: 'currency',
+      currency: 'BRL',
+    }
+  );
+}
+
+function extrairDataBanco(
+  dataHora
+) {
+  if (!dataHora) {
+    return '';
+  }
+
+  const texto =
+    String(dataHora);
+
+  return texto.slice(0, 10);
+}
+
+function extrairHoraBanco(
+  dataHora
+) {
+  if (!dataHora) {
+    return '';
+  }
+
+  const texto =
+    String(dataHora);
+
+  if (texto.includes('T')) {
+    return texto
+      .split('T')[1]
+      .slice(0, 5);
+  }
+
+  if (texto.includes(' ')) {
+    return texto
+      .split(' ')[1]
+      .slice(0, 5);
+  }
+
+  return '';
+}
+
+/* =========================================================
+   COMPONENTE
+========================================================= */
+
+function AppAgendamento() {
+  const navigate =
+    useNavigate();
+
+  const hoje =
+    new Date();
+
+  /* =======================================================
+     DADOS DA API
+  ======================================================= */
+
+  const [
+    barbeiros,
+    setBarbeiros,
+  ] = useState([]);
+
+  const [
+    servicos,
+    setServicos,
+  ] = useState([]);
+
+  const [
+    barbeirosServicos,
+    setBarbeirosServicos,
+  ] = useState([]);
+
+  const [
+    horariosDisponiveis,
+    setHorariosDisponiveis,
+  ] = useState([]);
+
+  /* =======================================================
+     CARREGAMENTOS
+  ======================================================= */
+
+  const [
+    carregandoDados,
+    setCarregandoDados,
+  ] = useState(true);
+
+  const [
+    carregandoHorarios,
+    setCarregandoHorarios,
+  ] = useState(false);
+
+  const [
+    salvandoAgendamento,
+    setSalvandoAgendamento,
+  ] = useState(false);
+
+  const [
+    cancelandoAgendamento,
+    setCancelandoAgendamento,
+  ] = useState(false);
+
+  /* =======================================================
+     CALENDÁRIO
+  ======================================================= */
+
+  const [
+    mesAtual,
+    setMesAtual,
+  ] = useState(
+    new Date(
+      hoje.getFullYear(),
+      hoje.getMonth(),
+      1
+    )
   );
 
-  const [dataSelecionada, setDataSelecionada] = useState(
+  const [
+    dataSelecionada,
+    setDataSelecionada,
+  ] = useState(
     dataParaString(hoje)
   );
 
-  const [barbeiroSelecionado, setBarbeiroSelecionado] = useState(null);
-  const [servicoSelecionado, setServicoSelecionado] = useState(null);
-  const [horarioSelecionado, setHorarioSelecionado] = useState(null);
+  /* =======================================================
+     SELEÇÕES
+  ======================================================= */
 
-  const [fotoUsuario, setFotoUsuario] = useState(
-    localStorage.getItem('hope-foto-usuario') || null
+  const [
+    barbeiroSelecionado,
+    setBarbeiroSelecionado,
+  ] = useState(null);
+
+  const [
+    servicoSelecionado,
+    setServicoSelecionado,
+  ] = useState(null);
+
+  const [
+    horarioSelecionado,
+    setHorarioSelecionado,
+  ] = useState(null);
+
+  /* =======================================================
+     USUÁRIO
+  ======================================================= */
+
+  const [
+    fotoUsuario,
+    setFotoUsuario,
+  ] = useState(
+    localStorage.getItem(
+      'hope-foto-usuario'
+    ) || null
   );
 
-  const [menuUsuario, setMenuUsuario] = useState(false);
+  const [
+    menuUsuario,
+    setMenuUsuario,
+  ] = useState(false);
 
-  const [agendamento, setAgendamento] = useState(null);
+  /* =======================================================
+     AGENDAMENTO
+  ======================================================= */
 
-  const [modalConfirmacao, setModalConfirmacao] = useState(false);
-  const [modalCancelamento, setModalCancelamento] = useState(false);
+  const [
+    agendamento,
+    setAgendamento,
+  ] = useState(null);
 
-  const [modoReagendamento, setModoReagendamento] = useState(false);
+  const [
+    modalConfirmacao,
+    setModalConfirmacao,
+  ] = useState(false);
 
-  const diasCalendario = useMemo(
-    () => gerarCalendario(mesAtual),
-    [mesAtual]
-  );
+  const [
+    modalCancelamento,
+    setModalCancelamento,
+  ] = useState(false);
 
-  const nomeMes = mesAtual.toLocaleDateString('pt-BR', {
-    month: 'long',
-    year: 'numeric',
-  });
+  const [
+    modoReagendamento,
+    setModoReagendamento,
+  ] = useState(false);
 
-  const servicoAtual = servicos.find(
-    (servico) => servico.id === servicoSelecionado
-  );
+  /* =======================================================
+     CALENDÁRIO
+  ======================================================= */
 
-  const barbeiroAtual = barbeiros.find(
-    (barbeiro) => barbeiro.id === barbeiroSelecionado
-  );
+  const diasCalendario =
+    useMemo(
+      () =>
+        gerarCalendario(
+          mesAtual
+        ),
+      [mesAtual]
+    );
 
-  /*
-   * Carrega o último agendamento salvo.
-   */
-  useEffect(() => {
-    const agendamentoSalvo = localStorage.getItem(STORAGE_KEY);
-
-    if (agendamentoSalvo) {
-      try {
-        setAgendamento(JSON.parse(agendamentoSalvo));
-      } catch (error) {
-        console.error('Erro ao carregar agendamento:', error);
+  const nomeMes =
+    mesAtual.toLocaleDateString(
+      'pt-BR',
+      {
+        month: 'long',
+        year: 'numeric',
       }
+    );
+
+  /* =======================================================
+     USUÁRIO LOGADO
+  ======================================================= */
+
+  function obterUsuarioLogado() {
+    try {
+      const usuarioSalvo =
+        localStorage.getItem(
+          'usuario'
+        );
+
+      if (!usuarioSalvo) {
+        return null;
+      }
+
+      return JSON.parse(
+        usuarioSalvo
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao ler usuário:',
+        error
+      );
+
+      return null;
     }
+  }
+
+  const usuarioLogado =
+    obterUsuarioLogado();
+
+  const nomeUsuario =
+    usuarioLogado?.usuario_nome ||
+    usuarioLogado?.nome ||
+    'Cliente';
+
+  /* =======================================================
+     SERVIÇO E BARBEIRO ATUAIS
+  ======================================================= */
+
+  const servicoAtual =
+    servicos.find(
+      (servico) =>
+        Number(servico.id) ===
+        Number(
+          servicoSelecionado
+        )
+    );
+
+  const barbeiroAtual =
+    barbeiros.find(
+      (barbeiro) =>
+        Number(barbeiro.id) ===
+        Number(
+          barbeiroSelecionado
+        )
+    );
+
+  /* =======================================================
+     SERVIÇOS DO BARBEIRO
+  ======================================================= */
+
+  const servicosDoBarbeiro =
+    useMemo(() => {
+      if (
+        !barbeiroSelecionado
+      ) {
+        return [];
+      }
+
+      const idsServicos =
+        barbeirosServicos
+          .filter(
+            (item) =>
+              Number(
+                item.usuario_id
+              ) ===
+              Number(
+                barbeiroSelecionado
+              )
+          )
+          .map(
+            (item) =>
+              Number(
+                item.servico_id
+              )
+          );
+
+      return servicos.filter(
+        (servico) =>
+          idsServicos.includes(
+            Number(servico.id)
+          )
+      );
+    }, [
+      barbeiroSelecionado,
+      barbeirosServicos,
+      servicos,
+    ]);
+
+  /* =======================================================
+     TOKEN
+  ======================================================= */
+
+  function pegarToken() {
+    return localStorage.getItem(
+      'token'
+    );
+  }
+
+  /* =======================================================
+     HEADERS
+  ======================================================= */
+
+  function criarHeaders() {
+    const token =
+      pegarToken();
+
+    return {
+      'Content-Type':
+        'application/json',
+
+      Authorization:
+        `Bearer ${token}`,
+    };
+  }
+
+  /* =======================================================
+     TRATAR ERRO DE AUTENTICAÇÃO
+  ======================================================= */
+
+  function verificarAutenticacao(
+    resposta
+  ) {
+    if (
+      resposta.status === 401 ||
+      resposta.status === 403
+    ) {
+      localStorage.removeItem(
+        'token'
+      );
+
+      localStorage.removeItem(
+        'usuario'
+      );
+
+      navigate('/login');
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /* =======================================================
+     CARREGAR DADOS INICIAIS
+  ======================================================= */
+
+  async function carregarDadosIniciais() {
+    try {
+      setCarregandoDados(true);
+
+      const token =
+        pegarToken();
+
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const headers =
+        criarHeaders();
+
+      const [
+        respostaBarbeiros,
+        respostaServicos,
+        respostaVinculos,
+      ] = await Promise.all([
+        fetch(
+          `${API_URL}/barbeiros`,
+          {
+            method: 'GET',
+            headers,
+          }
+        ),
+
+        fetch(
+          `${API_URL}/servicos`,
+          {
+            method: 'GET',
+            headers,
+          }
+        ),
+
+        fetch(
+          `${API_URL}/barbeiros_servicos`,
+          {
+            method: 'GET',
+            headers,
+          }
+        ),
+      ]);
+
+      if (
+        !verificarAutenticacao(
+          respostaBarbeiros
+        )
+      ) {
+        return;
+      }
+
+      if (
+        !verificarAutenticacao(
+          respostaServicos
+        )
+      ) {
+        return;
+      }
+
+      if (
+        !verificarAutenticacao(
+          respostaVinculos
+        )
+      ) {
+        return;
+      }
+
+      const dadosBarbeiros =
+        await respostaBarbeiros.json();
+
+      const dadosServicos =
+        await respostaServicos.json();
+
+      const dadosVinculos =
+        await respostaVinculos.json();
+
+      if (
+        !respostaBarbeiros.ok
+      ) {
+        throw new Error(
+          dadosBarbeiros.message ||
+          dadosBarbeiros.mensagem ||
+          'Erro ao carregar barbeiros.'
+        );
+      }
+
+      if (
+        !respostaServicos.ok
+      ) {
+        throw new Error(
+          dadosServicos.message ||
+          dadosServicos.mensagem ||
+          'Erro ao carregar serviços.'
+        );
+      }
+
+      if (
+        !respostaVinculos.ok
+      ) {
+        throw new Error(
+          dadosVinculos.message ||
+          dadosVinculos.mensagem ||
+          'Erro ao carregar os serviços dos barbeiros.'
+        );
+      }
+
+      const listaBarbeiros =
+        Array.isArray(
+          dadosBarbeiros.dados
+        )
+          ? dadosBarbeiros.dados
+          : [];
+
+      const listaServicos =
+        Array.isArray(
+          dadosServicos.dados
+        )
+          ? dadosServicos.dados
+          : [];
+
+      const listaVinculos =
+        Array.isArray(
+          dadosVinculos.dados
+        )
+          ? dadosVinculos.dados
+          : [];
+
+      setBarbeiros(
+        listaBarbeiros.map(
+          (barbeiro) => ({
+            id: Number(
+              barbeiro.usuario_id
+            ),
+
+            nome:
+              barbeiro.usuario_nome,
+
+            especialidade:
+              barbeiro.barbeiro_especialidade ||
+              'Barbeiro',
+
+            foto:
+              barbeiro.barbeiro_foto ||
+              null,
+          })
+        )
+      );
+
+      setServicos(
+        listaServicos
+          .filter(
+            (servico) =>
+              Number(
+                servico.servico_ativo
+              ) === 1
+          )
+          .map(
+            (servico) => ({
+              id: Number(
+                servico.servico_id
+              ),
+
+              nome:
+                servico.servico_nome,
+
+              duracao:
+                converterDuracaoParaMinutos(
+                  servico.servico_duracao
+                ),
+
+              preco:
+                Number(
+                  servico.servico_preco
+                ) || 0,
+
+              descricao:
+                servico.servico_descricao ||
+                '',
+            })
+          )
+      );
+
+      setBarbeirosServicos(
+        listaVinculos
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao carregar dados:',
+        error
+      );
+
+      alert(
+        error.message
+      );
+    } finally {
+      setCarregandoDados(false);
+    }
+  }
+
+  /* =======================================================
+     CARREGAR AGENDAMENTO DO CLIENTE
+  ======================================================= */
+
+  async function carregarAgendamentoCliente() {
+    try {
+      const token =
+        pegarToken();
+
+      const usuario =
+        obterUsuarioLogado();
+
+      if (
+        !token ||
+        !usuario
+      ) {
+        return;
+      }
+
+      const usuarioId =
+        Number(
+          usuario.usuario_id ||
+          usuario.id
+        );
+
+      if (!usuarioId) {
+        return;
+      }
+
+      const resposta =
+        await fetch(
+          `${API_URL}/agendamentos`,
+          {
+            method: 'GET',
+            headers:
+              criarHeaders(),
+          }
+        );
+
+      if (
+        !verificarAutenticacao(
+          resposta
+        )
+      ) {
+        return;
+      }
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.message ||
+          'Erro ao carregar agendamentos.'
+        );
+      }
+
+      const lista =
+        Array.isArray(
+          dados.dados
+        )
+          ? dados.dados
+          : [];
+
+      const meusAgendamentos =
+        lista
+          .filter(
+            (item) =>
+              Number(
+                item.usuario_id
+              ) ===
+              usuarioId
+          )
+          .filter(
+            (item) =>
+              item.agendamento_status !==
+              'cancelado'
+          )
+          .sort(
+            (a, b) =>
+              new Date(
+                a.agendamento_dt_hr_inicio
+              ) -
+              new Date(
+                b.agendamento_dt_hr_inicio
+              )
+          );
+
+      const agora =
+        new Date();
+
+      const proximo =
+        meusAgendamentos.find(
+          (item) =>
+            new Date(
+              item.agendamento_dt_hr_inicio
+            ) >= agora
+        );
+
+      if (!proximo) {
+        setAgendamento(null);
+        return;
+      }
+
+      const barbeiro =
+        barbeiros.find(
+          (item) =>
+            Number(item.id) ===
+            Number(
+              proximo.barbeiro_id
+            )
+        );
+
+      setAgendamento({
+        id:
+          proximo.agendamento_id,
+
+        data:
+          extrairDataBanco(
+            proximo.agendamento_dt_hr_inicio
+          ),
+
+        horario:
+          extrairHoraBanco(
+            proximo.agendamento_dt_hr_inicio
+          ),
+
+        barbeiroId:
+          Number(
+            proximo.barbeiro_id
+          ),
+
+        barbeiroNome:
+          barbeiro?.nome ||
+          proximo.barbeiro_nome ||
+          'Barbeiro',
+
+        servicoId:
+          Number(
+            proximo.servico_id
+          ),
+
+        servicoNome:
+          proximo.servico_nome,
+
+        preco:
+          Number(
+            proximo.servico_preco
+          ) || 0,
+
+        duracao:
+          converterDuracaoParaMinutos(
+            proximo.servico_duracao
+          ),
+      });
+    } catch (error) {
+      console.error(
+        'Erro ao carregar agendamento:',
+        error
+      );
+    }
+  }
+
+  /* =======================================================
+     USE EFFECT INICIAL
+  ======================================================= */
+
+  useEffect(() => {
+    carregarDadosIniciais();
   }, []);
 
-  /*
-   * Simula horários ocupados.
-   *
-   * Quando existir backend, esta parte poderá ser substituída
-   * por uma consulta ao banco de dados.
-   */
-  const horariosOcupados = useMemo(() => {
-    if (!dataSelecionada || !barbeiroSelecionado) {
-      return [];
-    }
-
-    const dia = criarDataLocal(dataSelecionada).getDate();
-
-    const ocupados = [];
-
-    if (barbeiroSelecionado === 1) {
-      if (dia % 2 === 0) {
-        ocupados.push('10:00', '14:00', '17:00');
-      } else {
-        ocupados.push('09:30', '15:30');
-      }
-    }
-
-    if (barbeiroSelecionado === 2) {
-      if (dia % 2 === 0) {
-        ocupados.push('09:00', '11:30', '16:00');
-      } else {
-        ocupados.push('10:30', '14:30', '18:00');
-      }
-    }
-
-    if (barbeiroSelecionado === 3) {
-      if (dia % 2 === 0) {
-        ocupados.push('09:30', '13:30', '17:30');
-      } else {
-        ocupados.push('11:00', '15:00');
-      }
-    }
-
-    /*
-     * Se o horário pertence ao agendamento salvo,
-     * ele continua disponível durante o reagendamento.
-     */
+  useEffect(() => {
     if (
-      agendamento &&
-      agendamento.data === dataSelecionada &&
-      agendamento.barbeiroId === barbeiroSelecionado
+      barbeiros.length > 0
     ) {
-      const index = ocupados.indexOf(agendamento.horario);
+      carregarAgendamentoCliente();
+    }
+  }, [barbeiros]);
 
-      if (index !== -1) {
-        ocupados.splice(index, 1);
-      }
+  /* =======================================================
+     CARREGAR HORÁRIOS
+  ======================================================= */
+
+  async function carregarHorariosDisponiveis() {
+    if (
+      !dataSelecionada ||
+      !barbeiroSelecionado ||
+      !servicoSelecionado
+    ) {
+      setHorariosDisponiveis([]);
+      return;
     }
 
-    return ocupados;
+    try {
+      setCarregandoHorarios(
+        true
+      );
+
+      const token =
+        pegarToken();
+
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const parametros =
+        new URLSearchParams({
+          data:
+            dataSelecionada,
+
+          barbeiro_id:
+            String(
+              barbeiroSelecionado
+            ),
+
+          servico_id:
+            String(
+              servicoSelecionado
+            ),
+        });
+
+      const resposta =
+        await fetch(
+          `${API_URL}/agendamentos/disponibilidade?${parametros.toString()}`,
+          {
+            method: 'GET',
+
+            headers:
+              criarHeaders(),
+          }
+        );
+
+      if (
+        !verificarAutenticacao(
+          resposta
+        )
+      ) {
+        return;
+      }
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ||
+          dados.message ||
+          'Erro ao consultar horários disponíveis.'
+        );
+      }
+
+      const lista =
+        Array.isArray(
+          dados.dados
+        )
+          ? dados.dados
+          : [];
+
+      setHorariosDisponiveis(
+        lista
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao carregar horários:',
+        error
+      );
+
+      setHorariosDisponiveis(
+        []
+      );
+    } finally {
+      setCarregandoHorarios(
+        false
+      );
+    }
+  }
+
+  useEffect(() => {
+    carregarHorariosDisponiveis();
   }, [
     dataSelecionada,
     barbeiroSelecionado,
-    agendamento,
+    servicoSelecionado,
   ]);
 
-  function selecionarFotoUsuario(event) {
-  const arquivo = event.target.files[0];
+  /* =======================================================
+     FOTO DO USUÁRIO
+  ======================================================= */
 
-  if (!arquivo) return;
+  function selecionarFotoUsuario(
+    event
+  ) {
+    const arquivo =
+      event.target.files[0];
 
-  // Verifica se é realmente uma imagem
-  if (!arquivo.type.startsWith('image/')) {
-    alert('Escolha uma imagem válida.');
-    return;
+    if (!arquivo) {
+      return;
+    }
+
+    if (
+      !arquivo.type.startsWith(
+        'image/'
+      )
+    ) {
+      alert(
+        'Escolha uma imagem válida.'
+      );
+
+      return;
+    }
+
+    const leitor =
+      new FileReader();
+
+    leitor.onload = () => {
+      const imagem =
+        leitor.result;
+
+      setFotoUsuario(
+        imagem
+      );
+
+      localStorage.setItem(
+        'hope-foto-usuario',
+        imagem
+      );
+    };
+
+    leitor.readAsDataURL(
+      arquivo
+    );
   }
 
-  const leitor = new FileReader();
+  /* =======================================================
+     CALENDÁRIO
+  ======================================================= */
 
-  leitor.onload = () => {
-    const imagem = leitor.result;
+  function selecionarData(
+    data
+  ) {
+    const dataString =
+      dataParaString(data);
 
-    setFotoUsuario(imagem);
-    localStorage.setItem('hope-foto-usuario', imagem);
-  };
+    setDataSelecionada(
+      dataString
+    );
 
-  leitor.readAsDataURL(arquivo);
-}
+    setHorarioSelecionado(
+      null
+    );
 
-  function selecionarData(data) {
-    const dataString = dataParaString(data);
-
-    setDataSelecionada(dataString);
-    setHorarioSelecionado(null);
+    setHorariosDisponiveis(
+      []
+    );
   }
 
   function mesAnterior() {
@@ -296,23 +1090,96 @@ function AppAgendamento() {
     );
   }
 
-  function selecionarBarbeiro(id) {
-    setBarbeiroSelecionado(id);
-    setHorarioSelecionado(null);
+  /* =======================================================
+     BARBEIRO
+  ======================================================= */
+
+  function selecionarBarbeiro(
+    id
+  ) {
+    setBarbeiroSelecionado(
+      Number(id)
+    );
+
+    setServicoSelecionado(
+      null
+    );
+
+    setHorarioSelecionado(
+      null
+    );
+
+    setHorariosDisponiveis(
+      []
+    );
   }
 
-  function selecionarServico(id) {
-    setServicoSelecionado(id);
-    setHorarioSelecionado(null);
+  /* =======================================================
+     SERVIÇO
+  ======================================================= */
+
+  function selecionarServico(
+    id
+  ) {
+    setServicoSelecionado(
+      Number(id)
+    );
+
+    setHorarioSelecionado(
+      null
+    );
+
+    setHorariosDisponiveis(
+      []
+    );
   }
 
-  function selecionarHorario(horario) {
-    if (horariosOcupados.includes(horario)) {
-      return;
+  /* =======================================================
+     HORÁRIO
+  ======================================================= */
+
+  function selecionarHorario(
+    horario
+  ) {
+    setHorarioSelecionado(
+      horario
+    );
+  }
+
+  /* =======================================================
+     BARBEIRO SERVIÇO ID
+  ======================================================= */
+
+  function encontrarBarbeiroServicoId() {
+    const vinculo =
+      barbeirosServicos.find(
+        (item) =>
+          Number(
+            item.usuario_id
+          ) ===
+            Number(
+              barbeiroSelecionado
+            ) &&
+          Number(
+            item.servico_id
+          ) ===
+            Number(
+              servicoSelecionado
+            )
+      );
+
+    if (!vinculo) {
+      return null;
     }
 
-    setHorarioSelecionado(horario);
+    return Number(
+      vinculo.barbeiro_servico_id
+    );
   }
+
+  /* =======================================================
+     ABRIR CONFIRMAÇÃO
+  ======================================================= */
 
   function abrirConfirmacao() {
     if (
@@ -321,56 +1188,330 @@ function AppAgendamento() {
       !servicoSelecionado ||
       !horarioSelecionado
     ) {
+      alert(
+        'Complete todas as etapas antes de confirmar.'
+      );
+
       return;
     }
 
-    setModalConfirmacao(true);
-  }
-
-  function confirmarAgendamento() {
-    const novoAgendamento = {
-      id: Date.now(),
-      data: dataSelecionada,
-      horario: horarioSelecionado,
-      barbeiroId: barbeiroAtual.id,
-      barbeiroNome: barbeiroAtual.nome,
-      servicoId: servicoAtual.id,
-      servicoNome: servicoAtual.nome,
-      preco: servicoAtual.preco,
-      duracao: servicoAtual.duracao,
-    };
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(novoAgendamento)
-    );
-
-    setAgendamento(novoAgendamento);
-
-    setModalConfirmacao(false);
-
-    setModoReagendamento(false);
-
-    limparFormulario();
-
-    alert(
-      modoReagendamento
-        ? 'Agendamento reagendado com sucesso!'
-        : 'Agendamento confirmado com sucesso!'
+    setModalConfirmacao(
+      true
     );
   }
+
+  /* =======================================================
+     CONFIRMAR AGENDAMENTO
+  ======================================================= */
+
+  async function confirmarAgendamento() {
+    try {
+      setSalvandoAgendamento(
+        true
+      );
+
+      const token =
+        pegarToken();
+
+      const usuario =
+        obterUsuarioLogado();
+
+      if (
+        !token ||
+        !usuario
+      ) {
+        alert(
+          'Você precisa estar logado para agendar.'
+        );
+
+        navigate('/login');
+
+        return;
+      }
+
+      const usuarioId =
+        Number(
+          usuario.usuario_id ||
+          usuario.id
+        );
+
+      if (!usuarioId) {
+        throw new Error(
+          'Não foi possível identificar o cliente logado.'
+        );
+      }
+
+      const barbeiroServicoId =
+        encontrarBarbeiroServicoId();
+
+      if (
+        !barbeiroServicoId
+      ) {
+        throw new Error(
+          'O serviço selecionado não está vinculado a este barbeiro.'
+        );
+      }
+
+      const horario =
+        horariosDisponiveis.find(
+          (item) =>
+            item.inicio ===
+            horarioSelecionado
+        );
+
+      /*
+       * Durante reagendamento o horário antigo
+       * pode não estar na lista porque já está ocupado
+       * pelo próprio agendamento.
+       */
+      let horarioInicio =
+        horario?.inicio ||
+        horarioSelecionado;
+
+      let horarioFim =
+        horario?.fim;
+
+      if (!horarioFim) {
+        const [
+          horas,
+          minutos,
+        ] =
+          horarioInicio
+            .split(':')
+            .map(Number);
+
+        const dataHora =
+          new Date(
+            2000,
+            0,
+            1,
+            horas,
+            minutos
+          );
+
+        dataHora.setMinutes(
+          dataHora.getMinutes() +
+          (
+            servicoAtual?.duracao ||
+            30
+          )
+        );
+
+        horarioFim =
+          `${String(
+            dataHora.getHours()
+          ).padStart(
+            2,
+            '0'
+          )}:${String(
+            dataHora.getMinutes()
+          ).padStart(
+            2,
+            '0'
+          )}`;
+      }
+
+      const corpo = {
+        agendamento_dt_hr_inicio:
+          montarDataHora(
+            dataSelecionada,
+            horarioInicio
+          ),
+
+        agendamento_dt_hr_fim:
+          montarDataHora(
+            dataSelecionada,
+            horarioFim
+          ),
+
+        agendamento_status:
+          'agendado',
+
+        agendamento_observacoes:
+          null,
+
+        agendamento_forma_pagamento:
+          null,
+
+        barbeiro_servico_id:
+          barbeiroServicoId,
+
+        usuario_id:
+          usuarioId,
+      };
+
+      const eraReagendamento =
+        modoReagendamento &&
+        agendamento?.id;
+
+      let resposta;
+
+      if (
+        eraReagendamento
+      ) {
+        resposta =
+          await fetch(
+            `${API_URL}/agendamentos/${agendamento.id}`,
+            {
+              method: 'PUT',
+
+              headers:
+                criarHeaders(),
+
+              body:
+                JSON.stringify(
+                  corpo
+                ),
+            }
+          );
+      } else {
+        resposta =
+          await fetch(
+            `${API_URL}/agendamentos`,
+            {
+              method: 'POST',
+
+              headers:
+                criarHeaders(),
+
+              body:
+                JSON.stringify(
+                  corpo
+                ),
+            }
+          );
+      }
+
+      if (
+        !verificarAutenticacao(
+          resposta
+        )
+      ) {
+        return;
+      }
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.dados ||
+          dados.message ||
+          dados.mensagem ||
+          'Erro ao salvar agendamento.'
+        );
+      }
+
+      const salvo =
+        dados.dados;
+
+      const novoAgendamento = {
+        id:
+          salvo.agendamento_id,
+
+        data:
+          dataSelecionada,
+
+        horario:
+          horarioInicio,
+
+        barbeiroId:
+          barbeiroAtual.id,
+
+        barbeiroNome:
+          barbeiroAtual.nome,
+
+        servicoId:
+          servicoAtual.id,
+
+        servicoNome:
+          servicoAtual.nome,
+
+        preco:
+          Number(
+            servicoAtual.preco
+          ),
+
+        duracao:
+          servicoAtual.duracao,
+      };
+
+      setAgendamento(
+        novoAgendamento
+      );
+
+      setModalConfirmacao(
+        false
+      );
+
+      setModoReagendamento(
+        false
+      );
+
+      setHorarioSelecionado(
+        null
+      );
+
+      await carregarHorariosDisponiveis();
+
+      alert(
+        eraReagendamento
+          ? 'Agendamento reagendado com sucesso!'
+          : 'Agendamento confirmado com sucesso!'
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao confirmar agendamento:',
+        error
+      );
+
+      alert(
+        error.message
+      );
+    } finally {
+      setSalvandoAgendamento(
+        false
+      );
+    }
+  }
+
+  /* =======================================================
+     REAGENDAR
+  ======================================================= */
 
   function iniciarReagendamento() {
-    if (!agendamento) return;
+    if (!agendamento) {
+      return;
+    }
 
-    setModoReagendamento(true);
+    setModoReagendamento(
+      true
+    );
 
-    setDataSelecionada(agendamento.data);
-    setBarbeiroSelecionado(agendamento.barbeiroId);
-    setServicoSelecionado(agendamento.servicoId);
-    setHorarioSelecionado(agendamento.horario);
+    setDataSelecionada(
+      agendamento.data
+    );
 
-    const data = criarDataLocal(agendamento.data);
+    setBarbeiroSelecionado(
+      Number(
+        agendamento.barbeiroId
+      )
+    );
+
+    setServicoSelecionado(
+      Number(
+        agendamento.servicoId
+      )
+    );
+
+    setHorarioSelecionado(
+      null
+    );
+
+    const data =
+      criarDataLocal(
+        agendamento.data
+      );
 
     setMesAtual(
       new Date(
@@ -386,28 +1527,120 @@ function AppAgendamento() {
     });
   }
 
+  /* =======================================================
+     CANCELAMENTO
+  ======================================================= */
+
   function abrirCancelamento() {
-    setModalCancelamento(true);
+    if (!agendamento) {
+      return;
+    }
+
+    setModalCancelamento(
+      true
+    );
   }
 
-  function confirmarCancelamento() {
-    localStorage.removeItem(STORAGE_KEY);
+  async function confirmarCancelamento() {
+    if (!agendamento?.id) {
+      return;
+    }
 
-    setAgendamento(null);
+    try {
+      setCancelandoAgendamento(
+        true
+      );
 
-    setModalCancelamento(false);
+      const resposta =
+        await fetch(
+          `${API_URL}/agendamentos/${agendamento.id}`,
+          {
+            method: 'DELETE',
 
-    limparFormulario();
+            headers:
+              criarHeaders(),
+          }
+        );
 
-    alert('Agendamento cancelado com sucesso!');
+      if (
+        !verificarAutenticacao(
+          resposta
+        )
+      ) {
+        return;
+      }
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.message ||
+          dados.mensagem ||
+          dados.dados ||
+          'Erro ao cancelar agendamento.'
+        );
+      }
+
+      setAgendamento(
+        null
+      );
+
+      setModalCancelamento(
+        false
+      );
+
+      limparFormulario();
+
+      await carregarHorariosDisponiveis();
+
+      alert(
+        'Agendamento cancelado com sucesso!'
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao cancelar agendamento:',
+        error
+      );
+
+      alert(
+        error.message
+      );
+    } finally {
+      setCancelandoAgendamento(
+        false
+      );
+    }
   }
+
+  /* =======================================================
+     LIMPAR FORMULÁRIO
+  ======================================================= */
 
   function limparFormulario() {
-    setDataSelecionada(dataParaString(hoje));
-    setBarbeiroSelecionado(null);
-    setServicoSelecionado(null);
-    setHorarioSelecionado(null);
-    setModoReagendamento(false);
+    setDataSelecionada(
+      dataParaString(hoje)
+    );
+
+    setBarbeiroSelecionado(
+      null
+    );
+
+    setServicoSelecionado(
+      null
+    );
+
+    setHorarioSelecionado(
+      null
+    );
+
+    setHorariosDisponiveis(
+      []
+    );
+
+    setModoReagendamento(
+      false
+    );
 
     setMesAtual(
       new Date(
@@ -418,630 +1651,1189 @@ function AppAgendamento() {
     );
   }
 
+  /* =======================================================
+     SAIR
+  ======================================================= */
+
+  function sair() {
+    localStorage.removeItem(
+      'token'
+    );
+
+    localStorage.removeItem(
+      'usuario'
+    );
+
+    setMenuUsuario(
+      false
+    );
+
+    navigate('/');
+  }
+
+  /* =======================================================
+     FORMULÁRIO COMPLETO
+  ======================================================= */
+
   const formularioCompleto =
-    dataSelecionada &&
-    barbeiroSelecionado &&
-    servicoSelecionado &&
-    horarioSelecionado;
+    Boolean(
+      dataSelecionada &&
+      barbeiroSelecionado &&
+      servicoSelecionado &&
+      horarioSelecionado
+    );
+
+  /* =======================================================
+     TELA
+  ======================================================= */
 
   return (
     <main className="agendamento-page">
-      {/* HEADER */}
+
+      {/* ===================================================
+          HEADER
+      =================================================== */}
+
       <header className="agendamento-header">
-        <div className="header-logo">
-          <img src={logoHope}
-               alt="Hope Barbearia"
+
+        <div
+          className="header-logo"
+          onClick={() =>
+            navigate(
+              '/dashboardCliente'
+            )
+          }
+          style={{
+            cursor: 'pointer',
+          }}
+          title="Voltar para o painel"
+        >
+          <img
+            src={logoHope}
+            alt="Hope Barbearia"
           />
         </div>
 
         <div className="header-title">
-          <h1>Agendamento</h1>
+
+          <h1>
+            Agendamento
+          </h1>
+
           <p>
             {modoReagendamento
               ? 'Reagende seu atendimento'
               : 'Agende seu próximo atendimento'}
           </p>
+
         </div>
 
         <div className="header-user">
 
-  {/* Input da foto */}
-  <input
-    type="file"
-    id="fotoUsuario"
-    accept="image/*"
-    onChange={selecionarFotoUsuario}
-    className="input-foto"
-  />
+          <input
+            type="file"
+            id="fotoUsuario"
+            accept="image/*"
+            onChange={
+              selecionarFotoUsuario
+            }
+            className="input-foto"
+          />
 
-  {/* Área clicável do usuário */}
-  <button
-    className="user-button"
-    onClick={() => setMenuUsuario(!menuUsuario)}
-  >
-    <label
-      htmlFor="fotoUsuario"
-      className="user-avatar"
-      onClick={(event) => event.stopPropagation()}
-      title="Alterar foto"
-    >
-      {fotoUsuario ? (
-        <img
-          src={fotoUsuario}
-          alt="Foto do usuário"
-        />
-      ) : (
-        <span>B</span>
-      )}
-    </label>
+          <button
+            type="button"
+            className="user-button"
+            onClick={() =>
+              setMenuUsuario(
+                !menuUsuario
+              )
+            }
+          >
 
-    <div className="user-info">
-      <strong>Barbeiro</strong>
-      <span>Minha conta</span>
-    </div>
+            <label
+              htmlFor="fotoUsuario"
+              className="user-avatar"
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+              title="Alterar foto"
+            >
 
-    <span className="user-arrow">
-      {menuUsuario ? '⌃' : '⌄'}
-    </span>
-  </button>
+              {fotoUsuario ? (
 
-  {/* MENU */}
-  {menuUsuario && (
-    <div className="user-menu">
+                <img
+                  src={fotoUsuario}
+                  alt="Foto do usuário"
+                />
 
-      <label
-        htmlFor="fotoUsuario"
-        className="menu-item"
-        onClick={() => setMenuUsuario(false)}
-      >
-        📷
-        <span>Alterar foto</span>
-      </label>
+              ) : (
 
-      <button
-        className="menu-item"
-        onClick={() => {
-          setMenuUsuario(false);
-          alert('Área de perfil em desenvolvimento.');
-        }}
-      >
-        👤
-        <span>Meu perfil</span>
-      </button>
+                <span>
+                  {nomeUsuario
+                    .charAt(0)
+                    .toUpperCase()}
+                </span>
 
-      <div className="menu-divider"></div>
+              )}
 
-      <button
-        className="menu-item menu-sair"
-        onClick={() => {
-          setMenuUsuario(false);
-          alert('Saindo da conta...');
-        }}
-      >
-        🚪
-        <span>Sair</span>
-      </button>
+            </label>
 
-    </div>
-  )}
+            <div className="user-info">
 
-</div>
+              <strong>
+                {nomeUsuario}
+              </strong>
+
+              <span>
+                Minha conta
+              </span>
+
+            </div>
+
+            <span className="user-arrow">
+              {menuUsuario
+                ? '⌃'
+                : '⌄'}
+            </span>
+
+          </button>
+
+          {menuUsuario && (
+
+            <div className="user-menu">
+
+              <label
+                htmlFor="fotoUsuario"
+                className="menu-item"
+                onClick={() =>
+                  setMenuUsuario(
+                    false
+                  )
+                }
+              >
+                📷
+                <span>
+                  Alterar foto
+                </span>
+              </label>
+
+              <button
+                type="button"
+                className="menu-item"
+                onClick={() => {
+                  setMenuUsuario(
+                    false
+                  );
+
+                  navigate(
+                    '/perfil'
+                  );
+                }}
+              >
+                👤
+
+                <span>
+                  Meu perfil
+                </span>
+
+              </button>
+
+              <div className="menu-divider" />
+
+              <button
+                type="button"
+                className="menu-item menu-sair"
+                onClick={sair}
+              >
+                🚪
+
+                <span>
+                  Sair
+                </span>
+
+              </button>
+
+            </div>
+
+          )}
+
+        </div>
+
       </header>
 
-      {/* CONTEÚDO */}
+      {/* ===================================================
+          CONTEÚDO
+      =================================================== */}
+
       <section className="agendamento-content">
+
         <div className="page-heading">
+
           <div>
+
             <span className="heading-label">
+
               {modoReagendamento
                 ? 'REAGENDAMENTO'
                 : 'NOVO AGENDAMENTO'}
+
             </span>
 
             <h2>
+
               {modoReagendamento
                 ? 'Escolha uma nova data e horário'
                 : 'Agende seu atendimento'}
+
             </h2>
 
             <p>
-              Escolha o dia, barbeiro, serviço e horário
-              que deseja.
+              Escolha o dia, barbeiro,
+              serviço e horário que deseja.
             </p>
+
           </div>
 
           {modoReagendamento && (
+
             <button
+              type="button"
               className="btn-cancelar-modo"
-              onClick={limparFormulario}
+              onClick={
+                limparFormulario
+              }
             >
               Cancelar reagendamento
             </button>
+
           )}
+
         </div>
 
-        <div className="agendamento-grid">
-          {/* COLUNA PRINCIPAL */}
-          <div className="agendamento-main">
-            {/* CALENDÁRIO */}
-            <section className="card">
-              <div className="card-title">
-                <div className="step-number">1</div>
+        {carregandoDados ? (
 
-                <div>
-                  <h3>Escolha a data</h3>
-                  <p>Selecione o melhor dia para você.</p>
+          <section className="card">
+
+            <div className="empty-state">
+
+              <strong>
+                Carregando...
+              </strong>
+
+              <p>
+                Buscando barbeiros e
+                serviços disponíveis.
+              </p>
+
+            </div>
+
+          </section>
+
+        ) : (
+
+          <div className="agendamento-grid">
+
+            {/* =============================================
+                COLUNA PRINCIPAL
+            ============================================= */}
+
+            <div className="agendamento-main">
+
+              {/* ===========================================
+                  ETAPA 1 - DATA
+              =========================================== */}
+
+              <section className="card">
+
+                <div className="card-title">
+
+                  <div className="step-number">
+                    1
+                  </div>
+
+                  <div>
+
+                    <h3>
+                      Escolha a data
+                    </h3>
+
+                    <p>
+                      Selecione o melhor
+                      dia para você.
+                    </p>
+
+                  </div>
+
                 </div>
-              </div>
 
-              <div className="calendar">
-                <div className="calendar-header">
-                  <button
-                    className="month-button"
-                    onClick={mesAnterior}
-                    aria-label="Mês anterior"
-                  >
-                    ‹
-                  </button>
+                <div className="calendar">
 
-                  <h4>
-                    {nomeMes.charAt(0).toUpperCase() +
-                      nomeMes.slice(1)}
-                  </h4>
+                  <div className="calendar-header">
 
-                  <button
-                    className="month-button"
-                    onClick={proximoMes}
-                    aria-label="Próximo mês"
-                  >
-                    ›
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      className="month-button"
+                      onClick={
+                        mesAnterior
+                      }
+                      aria-label="Mês anterior"
+                    >
+                      ‹
+                    </button>
 
-                <div className="week-days">
-                  <span>SEG</span>
-                  <span>TER</span>
-                  <span>QUA</span>
-                  <span>QUI</span>
-                  <span>SEX</span>
-                  <span>SÁB</span>
-                  <span>DOM</span>
-                </div>
+                    <h4>
 
-                <div className="calendar-days">
-                  {diasCalendario.map((dia, index) => {
-                    if (!dia) {
-                      return (
-                        <div
-                          key={`vazio-${index}`}
-                          className="calendar-empty"
-                        />
-                      );
-                    }
+                      {nomeMes
+                        .charAt(0)
+                        .toUpperCase() +
+                        nomeMes.slice(1)}
 
-                    const dataString =
-                      dataParaString(dia);
+                    </h4>
 
-                    const selecionado =
-                      dataSelecionada === dataString;
+                    <button
+                      type="button"
+                      className="month-button"
+                      onClick={
+                        proximoMes
+                      }
+                      aria-label="Próximo mês"
+                    >
+                      ›
+                    </button>
 
-                    const hojeString =
-                      dataParaString(hoje);
+                  </div>
 
-                    const passado =
-                      dataString < hojeString;
+                  <div className="week-days">
 
-                    const domingo =
-                      dia.getDay() === 0;
+                    <span>SEG</span>
+                    <span>TER</span>
+                    <span>QUA</span>
+                    <span>QUI</span>
+                    <span>SEX</span>
+                    <span>SÁB</span>
+                    <span>DOM</span>
 
-                    const desabilitado =
-                      passado || domingo;
+                  </div>
 
-                    return (
-                      <button
-                        key={dataString}
-                        className={`calendar-day ${
-                          selecionado ? 'selected' : ''
-                        } ${
-                          desabilitado
-                            ? 'disabled'
-                            : ''
-                        }`}
-                        disabled={desabilitado}
-                        onClick={() =>
-                          selecionarData(dia)
+                  <div className="calendar-days">
+
+                    {diasCalendario.map(
+                      (
+                        dia,
+                        index
+                      ) => {
+
+                        if (!dia) {
+                          return (
+                            <div
+                              key={`vazio-${index}`}
+                              className="calendar-empty"
+                            />
+                          );
                         }
-                      >
-                        {dia.getDate()}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </section>
 
-            {/* BARBEIROS */}
-            <section className="card">
-              <div className="card-title">
-                <div className="step-number">2</div>
+                        const dataString =
+                          dataParaString(
+                            dia
+                          );
 
-                <div>
-                  <h3>Escolha o barbeiro</h3>
-                  <p>Selecione seu profissional.</p>
-                </div>
-              </div>
+                        const selecionado =
+                          dataSelecionada ===
+                          dataString;
 
-              <div className="barbeiros-grid">
-                {barbeiros.map((barbeiro) => (
-                  <button
-                    key={barbeiro.id}
-                    className={`barbeiro-card ${
-                      barbeiroSelecionado ===
-                      barbeiro.id
-                        ? 'selected'
-                        : ''
-                    }`}
-                    onClick={() =>
-                      selecionarBarbeiro(
-                        barbeiro.id
-                      )
-                    }
-                  >
-                    <div className="barbeiro-avatar">
-                      {barbeiro.nome.charAt(0)}
-                    </div>
+                        const hojeString =
+                          dataParaString(
+                            hoje
+                          );
 
-                    <div className="barbeiro-info">
-                      <strong>{barbeiro.nome}</strong>
-                      <span>
-                        {barbeiro.especialidade}
-                      </span>
-                    </div>
+                        const passado =
+                          dataString <
+                          hojeString;
 
-                    {barbeiroSelecionado ===
-                      barbeiro.id && (
-                      <div className="check">
-                        ✓
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </section>
+                        const domingo =
+                          dia.getDay() ===
+                          0;
 
-            {/* SERVIÇOS */}
-            <section className="card">
-              <div className="card-title">
-                <div className="step-number">3</div>
+                        const desabilitado =
+                          passado ||
+                          domingo;
 
-                <div>
-                  <h3>Escolha o serviço</h3>
-                  <p>Selecione o serviço desejado.</p>
-                </div>
-              </div>
+                        return (
 
-              <div className="servicos-grid">
-                {servicos.map((servico) => (
-                  <button
-                    key={servico.id}
-                    className={`servico-card ${
-                      servicoSelecionado ===
-                      servico.id
-                        ? 'selected'
-                        : ''
-                    }`}
-                    onClick={() =>
-                      selecionarServico(
-                        servico.id
-                      )
-                    }
-                  >
-                    <div className="servico-top">
-                      <strong>{servico.nome}</strong>
+                          <button
+                            type="button"
+                            key={
+                              dataString
+                            }
+                            className={`calendar-day ${
+                              selecionado
+                                ? 'selected'
+                                : ''
+                            } ${
+                              desabilitado
+                                ? 'disabled'
+                                : ''
+                            }`}
+                            disabled={
+                              desabilitado
+                            }
+                            onClick={() =>
+                              selecionarData(
+                                dia
+                              )
+                            }
+                          >
+                            {dia.getDate()}
+                          </button>
 
-                      {servicoSelecionado ===
-                        servico.id && (
-                        <span className="check">
-                          ✓
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="servico-bottom">
-                      <span>
-                        {servico.duracao} min
-                      </span>
-
-                      <strong>
-                        R${' '}
-                        {servico.preco.toFixed(2)}
-                      </strong>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            {/* HORÁRIOS */}
-            <section className="card">
-              <div className="card-title">
-                <div className="step-number">4</div>
-
-                <div>
-                  <h3>Horários disponíveis</h3>
-                  <p>
-                    {barbeiroSelecionado
-                      ? 'Selecione um horário disponível.'
-                      : 'Primeiro escolha um barbeiro.'}
-                  </p>
-                </div>
-              </div>
-
-              {!barbeiroSelecionado ? (
-                <div className="empty-message">
-                  <span>💈</span>
-                  <p>
-                    Escolha um barbeiro para visualizar
-                    os horários.
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="horarios-grid">
-                    {horariosBase.map((horario) => {
-                      const ocupado =
-                        horariosOcupados.includes(
-                          horario
                         );
+                      }
+                    )}
 
-                      return (
+                  </div>
+
+                </div>
+
+              </section>
+
+              {/* ===========================================
+                  ETAPA 2 - BARBEIRO
+              =========================================== */}
+
+              <section className="card">
+
+                <div className="card-title">
+
+                  <div className="step-number">
+                    2
+                  </div>
+
+                  <div>
+
+                    <h3>
+                      Escolha o barbeiro
+                    </h3>
+
+                    <p>
+                      Selecione o
+                      profissional desejado.
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {barbeiros.length === 0 ? (
+
+                  <div className="empty-state">
+
+                    <strong>
+                      Nenhum barbeiro disponível
+                    </strong>
+
+                    <p>
+                      Não existem barbeiros
+                      ativos cadastrados.
+                    </p>
+
+                  </div>
+
+                ) : (
+
+                  <div className="barbers-grid">
+
+                    {barbeiros.map(
+                      (barbeiro) => (
+
                         <button
-                          key={horario}
-                          disabled={ocupado}
-                          className={`horario-button ${
-                            horarioSelecionado ===
-                            horario
+                          type="button"
+                          key={
+                            barbeiro.id
+                          }
+                          className={`barber-card ${
+                            Number(
+                              barbeiroSelecionado
+                            ) ===
+                            Number(
+                              barbeiro.id
+                            )
                               ? 'selected'
                               : ''
-                          } ${
-                            ocupado ? 'occupied' : ''
                           }`}
                           onClick={() =>
-                            selecionarHorario(
-                              horario
+                            selecionarBarbeiro(
+                              barbeiro.id
                             )
                           }
                         >
-                          {horario}
 
-                          {ocupado && (
-                            <small>
-                              Ocupado
-                            </small>
-                          )}
+                          <div className="barber-avatar">
+
+                            {barbeiro.foto ? (
+
+                              <img
+                                src={
+                                  barbeiro.foto.startsWith(
+                                    'http'
+                                  )
+                                    ? barbeiro.foto
+                                    : `${API_URL}${barbeiro.foto}`
+                                }
+                                alt={
+                                  barbeiro.nome
+                                }
+                              />
+
+                            ) : (
+
+                              <span>
+                                {barbeiro.nome
+                                  ?.charAt(
+                                    0
+                                  )
+                                  .toUpperCase()}
+                              </span>
+
+                            )}
+
+                          </div>
+
+                          <div className="barber-info">
+
+                            <strong>
+                              {barbeiro.nome}
+                            </strong>
+
+                            <span>
+                              {
+                                barbeiro.especialidade
+                              }
+                            </span>
+
+                          </div>
+
+                          <div className="selection-check">
+                            ✓
+                          </div>
+
                         </button>
-                      );
-                    })}
+
+                      )
+                    )}
+
                   </div>
 
-                  <div className="horario-legenda">
+                )}
+
+              </section>
+
+              {/* ===========================================
+                  ETAPA 3 - SERVIÇO
+              =========================================== */}
+
+              <section className="card">
+
+                <div className="card-title">
+
+                  <div className="step-number">
+                    3
+                  </div>
+
+                  <div>
+
+                    <h3>
+                      Escolha o serviço
+                    </h3>
+
+                    <p>
+                      Selecione o serviço
+                      que deseja realizar.
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {!barbeiroSelecionado ? (
+
+                  <div className="empty-state">
+
+                    <strong>
+                      Escolha um barbeiro
+                    </strong>
+
+                    <p>
+                      Primeiro selecione
+                      um profissional.
+                    </p>
+
+                  </div>
+
+                ) : servicosDoBarbeiro.length ===
+                  0 ? (
+
+                  <div className="empty-state">
+
+                    <strong>
+                      Nenhum serviço disponível
+                    </strong>
+
+                    <p>
+                      Este barbeiro ainda
+                      não possui serviços
+                      vinculados.
+                    </p>
+
+                  </div>
+
+                ) : (
+
+                  <div className="services-grid">
+
+                    {servicosDoBarbeiro.map(
+                      (servico) => (
+
+                        <button
+                          type="button"
+                          key={
+                            servico.id
+                          }
+                          className={`service-option ${
+                            Number(
+                              servicoSelecionado
+                            ) ===
+                            Number(
+                              servico.id
+                            )
+                              ? 'selected'
+                              : ''
+                          }`}
+                          onClick={() =>
+                            selecionarServico(
+                              servico.id
+                            )
+                          }
+                        >
+
+                          <div className="service-option-main">
+
+                            <div className="service-icon">
+                              ✂
+                            </div>
+
+                            <div>
+
+                              <strong>
+                                {servico.nome}
+                              </strong>
+
+                              <span>
+                                {
+                                  servico.duracao
+                                }{' '}
+                                min
+                              </span>
+
+                            </div>
+
+                          </div>
+
+                          <div className="service-price">
+
+                            {formatarPreco(
+                              servico.preco
+                            )}
+
+                          </div>
+
+                        </button>
+
+                      )
+                    )}
+
+                  </div>
+
+                )}
+
+              </section>
+
+              {/* ===========================================
+                  ETAPA 4 - HORÁRIO
+              =========================================== */}
+
+              <section className="card">
+
+                <div className="card-title">
+
+                  <div className="step-number">
+                    4
+                  </div>
+
+                  <div>
+
+                    <h3>
+                      Escolha o horário
+                    </h3>
+
+                    <p>
+                      Horários disponíveis
+                      para a data escolhida.
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {!barbeiroSelecionado ||
+                !servicoSelecionado ? (
+
+                  <div className="empty-state">
+
+                    <strong>
+                      Selecione barbeiro e serviço
+                    </strong>
+
+                    <p>
+                      Depois disso os
+                      horários disponíveis
+                      aparecerão aqui.
+                    </p>
+
+                  </div>
+
+                ) : carregandoHorarios ? (
+
+                  <div className="empty-state">
+
+                    <strong>
+                      Carregando horários...
+                    </strong>
+
+                    <p>
+                      Consultando disponibilidade.
+                    </p>
+
+                  </div>
+
+                ) : horariosDisponiveis.length ===
+                  0 ? (
+
+                  <div className="empty-state">
+
+                    <strong>
+                      Nenhum horário disponível
+                    </strong>
+
+                    <p>
+                      Escolha outra data
+                      ou outro barbeiro.
+                    </p>
+
+                  </div>
+
+                ) : (
+
+                  <>
+
+                    <div className="time-grid">
+
+                      {horariosDisponiveis.map(
+                        (
+                          horario,
+                          index
+                        ) => (
+
+                          <button
+                            type="button"
+                            key={`${horario.horario_disponivel_id}-${horario.inicio}-${index}`}
+                            className={`time-button ${
+                              horarioSelecionado ===
+                              horario.inicio
+                                ? 'selected'
+                                : ''
+                            }`}
+                            onClick={() =>
+                              selecionarHorario(
+                                horario.inicio
+                              )
+                            }
+                          >
+                            {
+                              horario.inicio
+                            }
+                          </button>
+
+                        )
+                      )}
+
+                    </div>
+
+                    <div className="time-legend">
+
+                      <span>
+
+                        <i className="legend available" />
+
+                        Disponível
+
+                      </span>
+
+                      <span>
+
+                        <i className="legend selected" />
+
+                        Selecionado
+
+                      </span>
+
+                    </div>
+
+                  </>
+
+                )}
+
+              </section>
+
+            </div>
+
+            {/* =============================================
+                SIDEBAR
+            ============================================= */}
+
+            <aside className="agendamento-sidebar">
+
+              <section className="summary-card">
+
+                <div className="summary-header">
+
+                  <div>
+
                     <span>
-                      <i className="legend available" />
-                      Disponível
+                      RESUMO
                     </span>
 
-                    <span>
-                      <i className="legend selected" />
-                      Selecionado
-                    </span>
+                    <h3>
+                      Seu agendamento
+                    </h3>
 
-                    <span>
-                      <i className="legend occupied" />
-                      Ocupado
-                    </span>
-                  </div>
-                </>
-              )}
-            </section>
-          </div>
-
-          {/* SIDEBAR */}
-          <aside className="agendamento-sidebar">
-            <section className="summary-card">
-              <div className="summary-header">
-                <div>
-                  <span>RESUMO</span>
-                  <h3>Seu agendamento</h3>
-                </div>
-
-                <div className="summary-icon">
-                  ✓
-                </div>
-              </div>
-
-              <div className="summary-content">
-                <div className="summary-item">
-                  <span className="summary-icon-small">
-                    📅
-                  </span>
-
-                  <div>
-                    <small>Data</small>
-                    <strong>
-                      {dataSelecionada
-                        ? formatarData(
-                            dataSelecionada
-                          )
-                        : 'Não selecionada'}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="summary-item">
-                  <span className="summary-icon-small">
-                    💈
-                  </span>
-
-                  <div>
-                    <small>Barbeiro</small>
-                    <strong>
-                      {barbeiroAtual
-                        ? barbeiroAtual.nome
-                        : 'Não selecionado'}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="summary-item">
-                  <span className="summary-icon-small">
-                    ✂
-                  </span>
-
-                  <div>
-                    <small>Serviço</small>
-                    <strong>
-                      {servicoAtual
-                        ? servicoAtual.nome
-                        : 'Não selecionado'}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="summary-item">
-                  <span className="summary-icon-small">
-                    🕐
-                  </span>
-
-                  <div>
-                    <small>Horário</small>
-                    <strong>
-                      {horarioSelecionado ||
-                        'Não selecionado'}
-                    </strong>
-                  </div>
-                </div>
-              </div>
-
-              <div className="summary-price">
-                <span>Total</span>
-
-                <strong>
-                  R${' '}
-                  {servicoAtual
-                    ? servicoAtual.preco.toFixed(2)
-                    : '0,00'}
-                </strong>
-              </div>
-
-              <button
-                className="btn-confirmar"
-                disabled={!formularioCompleto}
-                onClick={abrirConfirmacao}
-              >
-                {modoReagendamento
-                  ? 'Reagendar atendimento'
-                  : 'Confirmar agendamento'}
-              </button>
-
-              {!formularioCompleto && (
-                <p className="summary-warning">
-                  Complete todas as etapas para
-                  continuar.
-                </p>
-              )}
-            </section>
-
-            {/* PRÓXIMO AGENDAMENTO */}
-            {agendamento && (
-              <section className="next-appointment">
-                <div className="next-header">
-                  <div>
-                    <span>PRÓXIMO ATENDIMENTO</span>
-                    <h3>Agendamento confirmado</h3>
                   </div>
 
-                  <div className="confirmed-badge">
+                  <div className="summary-icon">
                     ✓
                   </div>
+
                 </div>
 
-                <div className="appointment-date">
-                  <strong>
-                    {formatarData(
-                      agendamento.data
-                    )}
-                  </strong>
+                <div className="summary-content">
+
+                  <div className="summary-item">
+
+                    <span className="summary-icon-small">
+                      📅
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Data
+                      </small>
+
+                      <strong>
+
+                        {dataSelecionada
+                          ? formatarData(
+                              dataSelecionada
+                            )
+                          : 'Não selecionada'}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                  <div className="summary-item">
+
+                    <span className="summary-icon-small">
+                      💈
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Barbeiro
+                      </small>
+
+                      <strong>
+
+                        {barbeiroAtual
+                          ? barbeiroAtual.nome
+                          : 'Não selecionado'}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                  <div className="summary-item">
+
+                    <span className="summary-icon-small">
+                      ✂
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Serviço
+                      </small>
+
+                      <strong>
+
+                        {servicoAtual
+                          ? servicoAtual.nome
+                          : 'Não selecionado'}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                  <div className="summary-item">
+
+                    <span className="summary-icon-small">
+                      🕐
+                    </span>
+
+                    <div>
+
+                      <small>
+                        Horário
+                      </small>
+
+                      <strong>
+                        {horarioSelecionado ||
+                          'Não selecionado'}
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div className="summary-price">
 
                   <span>
-                    às {agendamento.horario}
+                    Total
                   </span>
+
+                  <strong>
+
+                    {servicoAtual
+                      ? formatarPreco(
+                          servicoAtual.preco
+                        )
+                      : 'R$ 0,00'}
+
+                  </strong>
+
                 </div>
 
-                <div className="appointment-details">
-                  <div>
-                    <span>Barbeiro</span>
-                    <strong>
-                      {agendamento.barbeiroNome}
-                    </strong>
-                  </div>
+                <button
+                  type="button"
+                  className="btn-confirmar"
+                  disabled={
+                    !formularioCompleto ||
+                    salvandoAgendamento
+                  }
+                  onClick={
+                    abrirConfirmacao
+                  }
+                >
 
-                  <div>
-                    <span>Serviço</span>
-                    <strong>
-                      {agendamento.servicoNome}
-                    </strong>
-                  </div>
+                  {modoReagendamento
+                    ? 'Reagendar atendimento'
+                    : 'Confirmar agendamento'}
 
-                  <div>
-                    <span>Valor</span>
-                    <strong>
-                      R${' '}
-                      {agendamento.preco.toFixed(
-                        2
-                      )}
-                    </strong>
-                  </div>
-                </div>
+                </button>
 
-                <div className="appointment-actions">
-                  <button
-                    className="btn-reagendar"
-                    onClick={iniciarReagendamento}
-                  >
-                    ↻ Reagendar
-                  </button>
+                {!formularioCompleto && (
 
-                  <button
-                    className="btn-cancelar"
-                    onClick={abrirCancelamento}
-                  >
-                    Cancelar
-                  </button>
-                </div>
+                  <p className="summary-warning">
+                    Complete todas as
+                    etapas para continuar.
+                  </p>
+
+                )}
+
               </section>
-            )}
-          </aside>
-        </div>
+
+              {/* ===========================================
+                  PRÓXIMO AGENDAMENTO
+              =========================================== */}
+
+              {agendamento && (
+
+                <section className="next-appointment">
+
+                  <div className="next-header">
+
+                    <div>
+
+                      <span>
+                        PRÓXIMO ATENDIMENTO
+                      </span>
+
+                      <h3>
+                        Agendamento confirmado
+                      </h3>
+
+                    </div>
+
+                    <div className="confirmed-badge">
+                      ✓
+                    </div>
+
+                  </div>
+
+                  <div className="appointment-date">
+
+                    <strong>
+
+                      {formatarData(
+                        agendamento.data
+                      )}
+
+                    </strong>
+
+                    <span>
+                      às{' '}
+                      {
+                        agendamento.horario
+                      }
+                    </span>
+
+                  </div>
+
+                  <div className="appointment-details">
+
+                    <div>
+
+                      <span>
+                        Barbeiro
+                      </span>
+
+                      <strong>
+                        {
+                          agendamento.barbeiroNome
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div>
+
+                      <span>
+                        Serviço
+                      </span>
+
+                      <strong>
+                        {
+                          agendamento.servicoNome
+                        }
+                      </strong>
+
+                    </div>
+
+                    <div>
+
+                      <span>
+                        Valor
+                      </span>
+
+                      <strong>
+
+                        {formatarPreco(
+                          agendamento.preco
+                        )}
+
+                      </strong>
+
+                    </div>
+
+                  </div>
+
+                  <div className="appointment-actions">
+
+                    <button
+                      type="button"
+                      className="btn-reagendar"
+                      onClick={
+                        iniciarReagendamento
+                      }
+                    >
+                      ↻ Reagendar
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn-cancelar"
+                      onClick={
+                        abrirCancelamento
+                      }
+                    >
+                      Cancelar
+                    </button>
+
+                  </div>
+
+                </section>
+
+              )}
+
+            </aside>
+
+          </div>
+
+        )}
+
       </section>
 
-      {/* MODAL DE CONFIRMAÇÃO */}
+      {/* ===================================================
+          MODAL CONFIRMAÇÃO
+      =================================================== */}
+
       {modalConfirmacao && (
+
         <div
           className="modal-overlay"
           onClick={() =>
-            setModalConfirmacao(false)
+            !salvandoAgendamento &&
+            setModalConfirmacao(
+              false
+            )
           }
         >
+
           <div
             className="modal"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
+
             <button
+              type="button"
               className="modal-close"
+              disabled={
+                salvandoAgendamento
+              }
               onClick={() =>
-                setModalConfirmacao(false)
+                setModalConfirmacao(
+                  false
+                )
               }
             >
               ×
@@ -1052,96 +2844,173 @@ function AppAgendamento() {
             </div>
 
             <h3>
+
               {modoReagendamento
                 ? 'Confirmar reagendamento?'
                 : 'Confirmar agendamento?'}
+
             </h3>
 
             <p>
-              Confira os detalhes antes de confirmar.
+              Confira os detalhes
+              antes de confirmar.
             </p>
 
             <div className="modal-details">
+
               <div>
-                <span>Data</span>
+
+                <span>
+                  Data
+                </span>
+
                 <strong>
                   {formatarData(
                     dataSelecionada
                   )}
                 </strong>
+
               </div>
 
               <div>
-                <span>Horário</span>
+
+                <span>
+                  Horário
+                </span>
+
                 <strong>
-                  {horarioSelecionado}
+                  {
+                    horarioSelecionado
+                  }
                 </strong>
+
               </div>
 
               <div>
-                <span>Barbeiro</span>
+
+                <span>
+                  Barbeiro
+                </span>
+
                 <strong>
-                  {barbeiroAtual?.nome}
+                  {
+                    barbeiroAtual?.nome
+                  }
                 </strong>
+
               </div>
 
               <div>
-                <span>Serviço</span>
+
+                <span>
+                  Serviço
+                </span>
+
                 <strong>
-                  {servicoAtual?.nome}
+                  {
+                    servicoAtual?.nome
+                  }
                 </strong>
+
               </div>
 
               <div>
-                <span>Valor</span>
+
+                <span>
+                  Valor
+                </span>
+
                 <strong>
-                  R${' '}
-                  {servicoAtual?.preco.toFixed(
-                    2
-                  )}
+
+                  {servicoAtual
+                    ? formatarPreco(
+                        servicoAtual.preco
+                      )
+                    : 'R$ 0,00'}
+
                 </strong>
+
               </div>
+
             </div>
 
             <div className="modal-actions">
+
               <button
+                type="button"
                 className="modal-secondary"
+                disabled={
+                  salvandoAgendamento
+                }
                 onClick={() =>
-                  setModalConfirmacao(false)
+                  setModalConfirmacao(
+                    false
+                  )
                 }
               >
                 Voltar
               </button>
 
               <button
+                type="button"
                 className="modal-primary"
-                onClick={confirmarAgendamento}
+                disabled={
+                  salvandoAgendamento
+                }
+                onClick={
+                  confirmarAgendamento
+                }
               >
-                Confirmar
+
+                {salvandoAgendamento
+                  ? 'Salvando...'
+                  : modoReagendamento
+                  ? 'Confirmar reagendamento'
+                  : 'Confirmar'}
+
               </button>
+
             </div>
+
           </div>
+
         </div>
+
       )}
 
-      {/* MODAL DE CANCELAMENTO */}
+      {/* ===================================================
+          MODAL CANCELAMENTO
+      =================================================== */}
+
       {modalCancelamento && (
+
         <div
           className="modal-overlay"
           onClick={() =>
-            setModalCancelamento(false)
+            !cancelandoAgendamento &&
+            setModalCancelamento(
+              false
+            )
           }
         >
+
           <div
             className="modal"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
+
             <button
+              type="button"
               className="modal-close"
+              disabled={
+                cancelandoAgendamento
+              }
               onClick={() =>
-                setModalCancelamento(false)
+                setModalCancelamento(
+                  false
+                )
               }
             >
               ×
@@ -1151,49 +3020,89 @@ function AppAgendamento() {
               !
             </div>
 
-            <h3>Cancelar agendamento?</h3>
+            <h3>
+              Cancelar agendamento?
+            </h3>
 
             <p>
-              Tem certeza que deseja cancelar este
-              atendimento?
+              Tem certeza que deseja
+              cancelar este atendimento?
             </p>
 
             {agendamento && (
+
               <div className="cancel-info">
+
                 <strong>
+
                   {formatarData(
                     agendamento.data
                   )}{' '}
-                  às {agendamento.horario}
+                  às{' '}
+                  {
+                    agendamento.horario
+                  }
+
                 </strong>
 
                 <span>
-                  {agendamento.servicoNome} com{' '}
-                  {agendamento.barbeiroNome}
+
+                  {
+                    agendamento.servicoNome
+                  }{' '}
+                  com{' '}
+                  {
+                    agendamento.barbeiroNome
+                  }
+
                 </span>
+
               </div>
+
             )}
 
             <div className="modal-actions">
+
               <button
+                type="button"
                 className="modal-secondary"
+                disabled={
+                  cancelandoAgendamento
+                }
                 onClick={() =>
-                  setModalCancelamento(false)
+                  setModalCancelamento(
+                    false
+                  )
                 }
               >
                 Voltar
               </button>
 
               <button
+                type="button"
                 className="modal-danger"
-                onClick={confirmarCancelamento}
+                disabled={
+                  cancelandoAgendamento
+                }
+                onClick={
+                  confirmarCancelamento
+                }
               >
-                Sim, cancelar
+
+                {cancelandoAgendamento
+                  ? 'Cancelando...'
+                  : 'Sim, cancelar'}
+
               </button>
+
             </div>
+
           </div>
+
         </div>
+
       )}
+
     </main>
   );
 }

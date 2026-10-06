@@ -1,39 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Servicos.css';
 import logoHope from '../../assets/logo-hope.png';
 
-const servicosIniciais = [
-  {
-    id: 1,
-    nome: 'Corte',
-    duracao: 30,
-    valor: 35,
-    status: 'Ativo',
-  },
-  {
-    id: 2,
-    nome: 'Barba',
-    duracao: 20,
-    valor: 25,
-    status: 'Ativo',
-  },
-  {
-    id: 3,
-    nome: 'Corte + Barba',
-    duracao: 50,
-    valor: 55,
-    status: 'Ativo',
-  },
-];
+const API_URL = 'http://localhost:3333';
 
 function Servicos() {
-  const [servicos, setServicos] = useState(servicosIniciais);
+  const [servicos, setServicos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
   const [pesquisa, setPesquisa] = useState('');
   const [filtro, setFiltro] = useState('Todos');
 
   const [modalFormulario, setModalFormulario] = useState(false);
-
   const [servicoSelecionado, setServicoSelecionado] = useState(null);
 
   const [formulario, setFormulario] = useState({
@@ -42,23 +20,121 @@ function Servicos() {
     valor: '',
   });
 
+  /* =========================================
+     PEGAR TOKEN
+  ========================================= */
+
+  function pegarToken() {
+    return localStorage.getItem('token');
+  }
+
+  /* =========================================
+     CONVERTER SERVIÇO DA API PARA A TELA
+  ========================================= */
+
+  function mapearServico(servico) {
+    return {
+      id: servico.servico_id,
+      nome: servico.servico_nome,
+      duracao: Number(servico.servico_duracao),
+      valor: Number(servico.servico_preco),
+      descricao: servico.servico_descricao || '',
+      status:
+        Number(servico.servico_ativo) === 1
+          ? 'Ativo'
+          : 'Inativo',
+    };
+  }
+
+  /* =========================================
+     CARREGAR SERVIÇOS DA API
+  ========================================= */
+
+  async function carregarServicos() {
+    try {
+      setCarregando(true);
+
+      const token = pegarToken();
+
+      if (!token) {
+        alert('Você precisa estar logado.');
+        return;
+      }
+
+      const resposta = await fetch(
+        `${API_URL}/servicos`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.message ||
+            'Erro ao carregar serviços.'
+        );
+      }
+
+      const lista = Array.isArray(dados.dados)
+        ? dados.dados
+        : [];
+
+      setServicos(
+        lista.map((servico) =>
+          mapearServico(servico)
+        )
+      );
+    } catch (error) {
+      console.error(
+        'Erro ao carregar serviços:',
+        error
+      );
+
+      alert(error.message);
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  /* =========================================
+     CARREGAR AO ABRIR A TELA
+  ========================================= */
+
+  useEffect(() => {
+    carregarServicos();
+  }, []);
 
   /* =========================================
      FILTRO E PESQUISA
   ========================================= */
 
-  const servicosFiltrados = servicos.filter((servico) => {
-    const termo = pesquisa.toLowerCase();
+  const servicosFiltrados = servicos.filter(
+    (servico) => {
+      const termo = pesquisa
+        .trim()
+        .toLowerCase();
 
-    const correspondePesquisa =
-      servico.nome.toLowerCase().includes(termo);
+      const correspondePesquisa =
+        servico.nome
+          .toLowerCase()
+          .includes(termo);
 
-    const correspondeFiltro =
-      filtro === 'Todos' || servico.status === filtro;
+      const correspondeFiltro =
+        filtro === 'Todos' ||
+        servico.status === filtro;
 
-    return correspondePesquisa && correspondeFiltro;
-  });
-
+      return (
+        correspondePesquisa &&
+        correspondeFiltro
+      );
+    }
+  );
 
   /* =========================================
      ABRIR CADASTRO
@@ -76,7 +152,6 @@ function Servicos() {
     setModalFormulario(true);
   }
 
-
   /* =========================================
      ABRIR EDIÇÃO
   ========================================= */
@@ -93,7 +168,6 @@ function Servicos() {
     setModalFormulario(true);
   }
 
-
   /* =========================================
      ALTERAR FORMULÁRIO
   ========================================= */
@@ -107,20 +181,21 @@ function Servicos() {
     }));
   }
 
-
   /* =========================================
      SALVAR SERVIÇO
   ========================================= */
 
-  function salvarServico(event) {
+  async function salvarServico(event) {
     event.preventDefault();
 
     if (
-      !formulario.nome ||
+      !formulario.nome.trim() ||
       !formulario.duracao ||
       !formulario.valor
     ) {
-      alert('Preencha todos os campos obrigatórios.');
+      alert(
+        'Preencha todos os campos obrigatórios.'
+      );
       return;
     }
 
@@ -128,122 +203,212 @@ function Servicos() {
       String(formulario.valor).replace(',', '.')
     );
 
-    const duracaoNumerica = Number(formulario.duracao);
+    const duracaoNumerica = Number(
+      formulario.duracao
+    );
 
-    if (valorNumerico <= 0) {
+    if (
+      Number.isNaN(valorNumerico) ||
+      valorNumerico <= 0
+    ) {
       alert('Informe um valor válido.');
       return;
     }
 
-    if (duracaoNumerica <= 0) {
+    if (
+      Number.isNaN(duracaoNumerica) ||
+      duracaoNumerica <= 0
+    ) {
       alert('Informe uma duração válida.');
       return;
     }
 
+    try {
+      const token = pegarToken();
 
-    /* EDITAR */
+      if (!token) {
+        alert('Você precisa estar logado.');
+        return;
+      }
 
-    if (servicoSelecionado) {
-      setServicos((anterior) =>
-        anterior.map((servico) =>
-          servico.id === servicoSelecionado.id
-            ? {
-                ...servico,
-                nome: formulario.nome,
-                duracao: duracaoNumerica,
-                valor: valorNumerico,
-              }
-            : servico
-        )
-      );
-
-      alert('Serviço atualizado com sucesso!');
-    }
-
-
-    /* NOVO SERVIÇO */
-
-    else {
-      const novoServico = {
-        id:
-          servicos.length > 0
-            ? Math.max(
-                ...servicos.map((servico) => servico.id)
-              ) + 1
-            : 1,
-
-        nome: formulario.nome,
-        duracao: duracaoNumerica,
-        valor: valorNumerico,
-        status: 'Ativo',
+      const corpo = {
+        servico_nome: formulario.nome.trim(),
+        servico_duracao: duracaoNumerica,
+        servico_preco: valorNumerico,
       };
 
-      setServicos((anterior) => [
-        ...anterior,
-        novoServico,
-      ]);
+      let url = `${API_URL}/servicos`;
+      let metodo = 'POST';
 
-      alert('Serviço cadastrado com sucesso!');
+      /* EDITAR */
+      if (servicoSelecionado) {
+        url = `${API_URL}/servicos/${servicoSelecionado.id}`;
+        metodo = 'PUT';
+      }
+
+      const resposta = await fetch(url, {
+        method: metodo,
+
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+
+        body: JSON.stringify(corpo),
+      });
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.message ||
+            'Erro ao salvar serviço.'
+        );
+      }
+
+      if (servicoSelecionado) {
+        alert(
+          'Serviço atualizado com sucesso!'
+        );
+      } else {
+        alert(
+          'Serviço cadastrado com sucesso!'
+        );
+      }
+
+      fecharFormulario();
+
+      await carregarServicos();
+    } catch (error) {
+      console.error(
+        'Erro ao salvar serviço:',
+        error
+      );
+
+      alert(error.message);
     }
-
-    fecharFormulario();
   }
-
 
   /* =========================================
      ALTERAR STATUS
   ========================================= */
 
-  function alterarStatus(servico) {
-    const novoStatus =
-      servico.status === 'Ativo'
-        ? 'Inativo'
-        : 'Ativo';
+  async function alterarStatus(servico) {
 
-    const mensagem =
-      novoStatus === 'Inativo'
-        ? `Deseja desativar o serviço "${servico.nome}"?`
-        : `Deseja ativar o serviço "${servico.nome}"?`;
+  const vaiAtivar =
+    servico.status === 'Inativo';
 
-    if (!window.confirm(mensagem)) {
-      return;
-    }
 
-    setServicos((anterior) =>
-      anterior.map((item) =>
-        item.id === servico.id
-          ? {
-              ...item,
-              status: novoStatus,
-            }
-          : item
-      )
-    );
+  const mensagem = vaiAtivar
+    ? `Deseja ativar o serviço "${servico.nome}"?`
+    : `Deseja desativar o serviço "${servico.nome}"?`;
+
+
+  if (!window.confirm(mensagem)) {
+    return;
   }
 
 
+  try {
+
+    const token = pegarToken();
+
+
+    if (!token) {
+
+      alert(
+        'Você precisa estar logado.'
+      );
+
+      return;
+    }
+
+
+    const rota = vaiAtivar
+      ? `${API_URL}/servicos/${servico.id}/reativar`
+      : `${API_URL}/servicos/${servico.id}/desativar`;
+
+
+    const resposta = await fetch(
+      rota,
+      {
+        method: 'PATCH',
+
+        headers: {
+
+          'Content-Type':
+            'application/json',
+
+          Authorization:
+            `Bearer ${token}`
+        }
+      }
+    );
+
+
+    const dados =
+      await resposta.json();
+
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.message ||
+        'Erro ao alterar status do serviço.'
+      );
+    }
+
+
+    alert(
+      vaiAtivar
+        ? 'Serviço ativado com sucesso!'
+        : 'Serviço desativado com sucesso!'
+    );
+
+
+    await carregarServicos();
+
+
+  } catch (error) {
+
+    console.error(
+      'Erro ao alterar status:',
+      error
+    );
+
+
+    alert(
+      error.message
+    );
+  }
+}
   /* =========================================
      FECHAR MODAL
   ========================================= */
 
   function fecharFormulario() {
     setModalFormulario(false);
-
     setServicoSelecionado(null);
-  }
 
+    setFormulario({
+      nome: '',
+      duracao: '',
+      valor: '',
+    });
+  }
 
   /* =========================================
      FORMATAR VALOR
   ========================================= */
 
   function formatarValor(valor) {
-    return valor.toLocaleString('pt-BR', {
+    const numero = Number(valor) || 0;
+
+    return numero.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
     });
   }
-
 
   /* =========================================
      TELA
@@ -252,9 +417,7 @@ function Servicos() {
   return (
     <main className="servicos-page">
 
-      {/* =====================================
-          HEADER
-      ===================================== */}
+      {/* HEADER */}
 
       <header className="servicos-header">
 
@@ -264,7 +427,6 @@ function Servicos() {
             alt="Hope Barbearia"
           />
         </div>
-
 
         <div className="servicos-title">
 
@@ -277,7 +439,6 @@ function Servicos() {
           </p>
 
         </div>
-
 
         <div className="servicos-user">
 
@@ -301,14 +462,9 @@ function Servicos() {
 
       </header>
 
-
-      {/* =====================================
-          CONTEÚDO
-      ===================================== */}
+      {/* CONTEÚDO */}
 
       <section className="servicos-content">
-
-        {/* TÍTULO */}
 
         <div className="servicos-heading">
 
@@ -323,11 +479,11 @@ function Servicos() {
             </h2>
 
             <p>
-              Consulte e gerencie os serviços oferecidos pela Hope Barbearia.
+              Consulte e gerencie os serviços
+              oferecidos pela Hope Barbearia.
             </p>
 
           </div>
-
 
           <button
             className="btn-novo-servico"
@@ -338,14 +494,9 @@ function Servicos() {
 
         </div>
 
-
-        {/* =====================================
-            CARD
-        ===================================== */}
+        {/* CARD */}
 
         <section className="servicos-card">
-
-          {/* HEADER CARD */}
 
           <div className="card-header">
 
@@ -361,20 +512,19 @@ function Servicos() {
 
             </div>
 
-
             <div className="total-servicos">
+
               {servicos.length}{' '}
+
               {servicos.length === 1
                 ? 'serviço'
                 : 'serviços'}
+
             </div>
 
           </div>
 
-
-          {/* =====================================
-              FILTROS
-          ===================================== */}
+          {/* FILTROS */}
 
           <div className="servicos-filtros">
 
@@ -389,17 +539,20 @@ function Servicos() {
                 placeholder="Pesquisar serviço..."
                 value={pesquisa}
                 onChange={(event) =>
-                  setPesquisa(event.target.value)
+                  setPesquisa(
+                    event.target.value
+                  )
                 }
               />
 
             </div>
 
-
             <select
               value={filtro}
               onChange={(event) =>
-                setFiltro(event.target.value)
+                setFiltro(
+                  event.target.value
+                )
               }
             >
 
@@ -419,10 +572,7 @@ function Servicos() {
 
           </div>
 
-
-          {/* =====================================
-              TABELA
-          ===================================== */}
+          {/* TABELA */}
 
           <div className="tabela-container">
 
@@ -456,106 +606,120 @@ function Servicos() {
 
               </thead>
 
-
               <tbody>
 
-                {servicosFiltrados.length > 0 ? (
+                {carregando ? (
 
-                  servicosFiltrados.map((servico) => (
+                  <tr>
 
-                    <tr key={servico.id}>
+                    <td
+                      colSpan="5"
+                      className="nenhum-servico"
+                    >
+                      Carregando serviços...
+                    </td>
 
-                      {/* SERVIÇO */}
+                  </tr>
 
-                      <td>
+                ) : servicosFiltrados.length > 0 ? (
 
-                        <strong className="nome-servico">
-                          {servico.nome}
-                        </strong>
+                  servicosFiltrados.map(
+                    (servico) => (
 
-                      </td>
+                      <tr key={servico.id}>
 
+                        <td>
 
-                      {/* DURAÇÃO */}
+                          <strong className="nome-servico">
+                            {servico.nome}
+                          </strong>
 
-                      <td>
+                        </td>
 
-                        <span className="duracao-servico">
+                        <td>
 
-                          {servico.duracao}{' '}
-                          min
+                          <span className="duracao-servico">
 
-                        </span>
+                            {servico.duracao}{' '}
+                            min
 
-                      </td>
+                          </span>
 
+                        </td>
 
-                      {/* VALOR */}
+                        <td>
 
-                      <td>
+                          <strong className="valor-servico">
 
-                        <strong className="valor-servico">
-                          {formatarValor(servico.valor)}
-                        </strong>
+                            {formatarValor(
+                              servico.valor
+                            )}
 
-                      </td>
+                          </strong>
 
+                        </td>
 
-                      {/* STATUS */}
+                        <td>
 
-                      <td>
-
-                        <span
-                          className={`status ${
-                            servico.status === 'Ativo'
-                              ? 'status-ativo'
-                              : 'status-inativo'
-                          }`}
-                        >
-                          {servico.status}
-                        </span>
-
-                      </td>
-
-
-                      {/* AÇÕES */}
-
-                      <td>
-
-                        <div className="acoes">
-
-                          <button
-                            className="acao-editar"
-                            onClick={() =>
-                              abrirEdicao(servico)
-                            }
+                          <span
+                            className={`status ${
+                              servico.status ===
+                              'Ativo'
+                                ? 'status-ativo'
+                                : 'status-inativo'
+                            }`}
                           >
-                            Editar
-                          </button>
 
+                            {servico.status}
 
-                          <button
-                            className={
-                              servico.status === 'Ativo'
-                                ? 'acao-desativar'
-                                : 'acao-ativar'
-                            }
-                            onClick={() =>
-                              alterarStatus(servico)
-                            }
-                          >
-                            {servico.status === 'Ativo'
-                              ? 'Desativar'
-                              : 'Ativar'}
-                          </button>
+                          </span>
 
-                        </div>
+                        </td>
 
-                      </td>
+                        <td>
 
-                    </tr>
+                          <div className="acoes">
 
-                  ))
+                            <button
+                              className="acao-editar"
+                              onClick={() =>
+                                abrirEdicao(
+                                  servico
+                                )
+                              }
+                            >
+                              Editar
+                            </button>
+
+                            <button
+                              className={
+                                servico.status ===
+                                'Ativo'
+                                  ? 'acao-desativar'
+                                  : 'acao-ativar'
+                              }
+                              onClick={() =>
+                                alterarStatus(
+                                  servico
+                                )
+                              }
+                            >
+
+                              {servico.status ===
+                              'Ativo'
+                                ? 'Desativar'
+                                : 'Ativar'}
+
+                            </button>
+
+                          </div>
+
+                        </td>
+
+                      </tr>
+
+                    )
+                  )
 
                 ) : (
 
@@ -599,10 +763,7 @@ function Servicos() {
 
       </section>
 
-
-      {/* =====================================
-          MODAL DE CADASTRO / EDIÇÃO
-      ===================================== */}
+      {/* MODAL CADASTRO / EDIÇÃO */}
 
       {modalFormulario && (
 
@@ -611,7 +772,8 @@ function Servicos() {
           onMouseDown={(event) => {
 
             if (
-              event.target === event.currentTarget
+              event.target ===
+              event.currentTarget
             ) {
               fecharFormulario();
             }
@@ -620,8 +782,6 @@ function Servicos() {
         >
 
           <div className="modal">
-
-            {/* MODAL HEADER */}
 
             <div className="modal-header">
 
@@ -645,8 +805,8 @@ function Servicos() {
 
               </div>
 
-
               <button
+                type="button"
                 className="modal-fechar"
                 onClick={fecharFormulario}
               >
@@ -654,9 +814,6 @@ function Servicos() {
               </button>
 
             </div>
-
-
-            {/* FORM */}
 
             <form
               className="servico-form"
@@ -684,7 +841,6 @@ function Servicos() {
 
                 </div>
 
-
                 {/* DURAÇÃO */}
 
                 <div className="form-group">
@@ -701,8 +857,12 @@ function Servicos() {
                       name="duracao"
                       min="1"
                       placeholder="30"
-                      value={formulario.duracao}
-                      onChange={alterarFormulario}
+                      value={
+                        formulario.duracao
+                      }
+                      onChange={
+                        alterarFormulario
+                      }
                     />
 
                     <span>
@@ -712,7 +872,6 @@ function Servicos() {
                   </div>
 
                 </div>
-
 
                 {/* VALOR */}
 
@@ -732,11 +891,15 @@ function Servicos() {
                       id="valor"
                       type="number"
                       name="valor"
-                      min="0"
+                      min="0.01"
                       step="0.01"
                       placeholder="35,00"
-                      value={formulario.valor}
-                      onChange={alterarFormulario}
+                      value={
+                        formulario.valor
+                      }
+                      onChange={
+                        alterarFormulario
+                      }
                     />
 
                   </div>
@@ -745,19 +908,17 @@ function Servicos() {
 
               </div>
 
-
-              {/* FOOTER */}
-
               <div className="modal-footer">
 
                 <button
                   type="button"
                   className="btn-cancelar"
-                  onClick={fecharFormulario}
+                  onClick={
+                    fecharFormulario
+                  }
                 >
                   Cancelar
                 </button>
-
 
                 <button
                   type="submit"
