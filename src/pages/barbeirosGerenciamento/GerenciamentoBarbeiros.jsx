@@ -8,6 +8,7 @@ function GerenciamentoBarbeiros() {
 
   const [barbeiros, setBarbeiros] = useState([]);
   const [busca, setBusca] = useState("");
+  const [filtroStatus, setFiltroStatus] = useState("todos");
   const [carregando, setCarregando] = useState(true);
 
   const [modalAberto, setModalAberto] = useState(false);
@@ -111,7 +112,7 @@ function GerenciamentoBarbeiros() {
   async function abrirEdicao(barbeiro) {
     try {
       const resposta = await fetch(
-        `http://localhost:3333/usuarios/${barbeiro.usuario_id}`,
+        `http://localhost:3333/barbeiros/${barbeiro.usuario_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -411,49 +412,22 @@ function GerenciamentoBarbeiros() {
   // INATIVAR
   // =====================================================
 
-  async function inativarBarbeiro(barbeiro) {
-
-    const confirmar = window.confirm(
-      `Deseja inativar o barbeiro "${barbeiro.usuario_nome}"?`
-    );
-
-    if (!confirmar) {
-      return;
-    }
-
+  async function alterarStatusBarbeiro(barbeiro) {
+    const ativo = Number(barbeiro.usuario_ativo) === 1;
+    const acao = ativo ? "inativar" : "reativar";
+    if (!window.confirm(`Deseja ${acao} o barbeiro "${barbeiro.usuario_nome}"?`)) return;
     try {
-
       const resposta = await fetch(
-        `http://localhost:3333/usuarios/${barbeiro.usuario_id}/ocultar`,
-        {
-          method: "PATCH",
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `http://localhost:3333/usuarios/${barbeiro.usuario_id}/${ativo ? "ocultar" : "reativar"}`,
+        { method: "PATCH", headers: { Authorization: `Bearer ${token}` } }
       );
-
       const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.message ||
-          "Não foi possível inativar o barbeiro."
-        );
-      }
-
-      alert("Barbeiro inativado com sucesso!");
-
-      carregarBarbeiros();
-
+      if (!resposta.ok) throw new Error(dados.message || `Não foi possível ${acao} o barbeiro.`);
+      await carregarBarbeiros();
+      alert(`Barbeiro ${ativo ? "inativado" : "reativado"} com sucesso!`);
     } catch (error) {
       console.error(error);
-
-      alert(
-        error.message ||
-        "Erro ao inativar barbeiro."
-      );
+      alert(error.message || "Erro ao alterar status do barbeiro.");
     }
   }
 
@@ -463,6 +437,8 @@ function GerenciamentoBarbeiros() {
 
   const barbeirosFiltrados = barbeiros.filter(
     (barbeiro) => {
+      if (filtroStatus === "ativos" && Number(barbeiro.usuario_ativo) !== 1) return false;
+      if (filtroStatus === "inativos" && Number(barbeiro.usuario_ativo) === 1) return false;
 
       const texto =
         busca.toLowerCase();
@@ -699,7 +675,11 @@ function GerenciamentoBarbeiros() {
               />
 
             </div>
-
+            <div className="filtros-status" aria-label="Filtrar barbeiros por status">
+              <button type="button" className={filtroStatus === "todos" ? "filtro-ativo" : ""} onClick={() => setFiltroStatus("todos")}>Todos</button>
+              <button type="button" className={filtroStatus === "ativos" ? "filtro-ativo" : ""} onClick={() => setFiltroStatus("ativos")}>Ativos</button>
+              <button type="button" className={filtroStatus === "inativos" ? "filtro-ativo" : ""} onClick={() => setFiltroStatus("inativos")}>Inativos</button>
+            </div>
           </div>
 
 
@@ -883,11 +863,11 @@ function GerenciamentoBarbeiros() {
                             <button
                               className="acao-inativar"
                               onClick={() =>
-                                inativarBarbeiro(barbeiro)
+                                alterarStatusBarbeiro(barbeiro)
                               }
-                              title="Inativar barbeiro"
+                              title={Number(barbeiro.usuario_ativo) === 1 ? "Inativar barbeiro" : "Reativar barbeiro"}
                             >
-                              🚫
+                              {Number(barbeiro.usuario_ativo) === 1 ? "🚫" : "↻"}
                             </button>
 
                             <button

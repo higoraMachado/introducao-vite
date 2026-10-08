@@ -1,25 +1,26 @@
-/* ===================================================== 
-    PÁGINA 
-===================================================== */
+/* GERENCIAMENTO DE BARBEIROS - HOPE */
 
 .gerenciamento-barbeiros-page {
   min-height: 100vh;
-  background: #0b0b0b;
-  color: #f5f5f5;
+  background: #f4f5f7;
+  color: #222;
+  font-family: Arial, sans-serif;
 }
 
+.gerenciamento-barbeiros-page * {
+  box-sizing: border-box;
+}
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* CABEÇALHO */
 
 .gerenciamento-header {
-  height: 105px;
+  min-height: 100px;
   display: flex;
   align-items: center;
-  padding: 0 45px;
-  background: #101010;
-  border-bottom: 1px solid #292929;
+  gap: 24px;
+  padding: 18px 45px;
+  background: #171717;
+  border-bottom: 3px solid #d4af37;
 }
 
 .gerenciamento-logo img {
@@ -28,7 +29,7 @@
 }
 
 .gerenciamento-title {
-  margin-left: 25px;
+  min-width: 0;
 }
 
 .gerenciamento-title h1 {
@@ -38,8 +39,8 @@
 }
 
 .gerenciamento-title p {
-  margin: 5px 0 0;
-  color: #999;
+  margin: 7px 0 0;
+  color: #ccc;
   font-size: 14px;
 }
 
@@ -50,213 +51,254 @@
   gap: 12px;
 }
 
-.gerenciamento-user strong {
-  display: block;
-  color: #fff;
-}
-
-.gerenciamento-user span {
-  display: block;
-  margin-top: 3px;
-  color: #999;
-  font-size: 13px;
-}
-
 .gerenciamento-avatar {
   width: 45px;
   height: 45px;
-  border-radius: 50%;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
   background: #d4af37;
-  color: #0b0b0b;
+  color: #171717;
   font-weight: bold;
-  font-size: 18px;
 }
 
+.gerenciamento-user strong,
+.gerenciamento-user span {
+  display: block;
+}
 
-/* =====================================================
-   CONTEÚDO
-===================================================== */
+.gerenciamento-user strong {
+  color: white;
+}
+
+.gerenciamento-user span {
+  margin-top: 4px;
+  color: #bbb;
+  font-size: 13px;
+}
+
+/* CONTEÚDO */
 
 .gerenciamento-content {
-  padding: 40px 50px 60px;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 36px 35px 60px;
 }
 
 .gerenciamento-heading {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 30px;
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
 .gerenciamento-heading span {
-  color: #d4af37;
+  color: #97751b;
   font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 2px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
 }
 
 .gerenciamento-heading h2 {
   margin: 8px 0;
+  color: #222;
   font-size: 32px;
 }
 
 .gerenciamento-heading p {
   margin: 0;
-  color: #999;
+  color: #666;
+  line-height: 1.5;
 }
 
 .btn-voltar {
-  padding: 11px 18px;
-  border: 1px solid #383838;
+  flex-shrink: 0;
+  padding: 12px 18px;
+  border: 1px solid #d5d5d5;
   border-radius: 8px;
-  background: #151515;
-  color: #ddd;
+  background: white;
+  color: #333;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .btn-voltar:hover {
   border-color: #d4af37;
-  color: #d4af37;
+  background: #fff8e3;
 }
 
-
-/* =====================================================
-   ESTATÍSTICAS
-===================================================== */
+/* ESTATÍSTICAS */
 
 .barbeiro-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 25px;
 }
 
 .barbeiro-stat {
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 22px;
-  background: #121212;
-  border: 1px solid #292929;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid #e2e4e8;
   border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(212, 175, 55, 0.12);
-  color: #d4af37;
-  font-size: 20px;
+  border-radius: 10px;
+  background: #fff5d8;
+  color: #97751b;
+  font-size: 23px;
 }
 
 .barbeiro-stat span {
   display: block;
-  color: #999;
+  color: #666;
   font-size: 13px;
 }
 
 .barbeiro-stat strong {
   display: block;
-  margin-top: 5px;
-  font-size: 25px;
-  color: #fff;
+  margin-top: 7px;
+  color: #222;
+  font-size: 27px;
 }
 
-
-/* =====================================================
-   CARD
-===================================================== */
+/* CARD PRINCIPAL */
 
 .gerenciamento-card {
-  background: #121212;
-  border: 1px solid #292929;
-  border-radius: 14px;
   overflow: hidden;
+  border: 1px solid #e2e4e8;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
 }
 
 .card-top {
-  padding: 25px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #292929;
+  gap: 18px;
+  padding: 25px 28px;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .card-top > div span {
-  color: #d4af37;
+  color: #97751b;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: 1.5px;
 }
 
 .card-top h3 {
-  margin: 7px 0 0;
-  font-size: 20px;
+  margin: 8px 0 0;
+  color: #222;
+  font-size: 21px;
 }
 
 .btn-novo-barbeiro {
-  padding: 12px 20px;
+  padding: 13px 20px;
   border: none;
   border-radius: 8px;
   background: #d4af37;
-  color: #080808;
-  font-weight: bold;
+  color: #171717;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .btn-novo-barbeiro:hover {
-  background: #e5c45a;
+  background: #e6c65c;
 }
 
-
-/* =====================================================
-   BUSCA
-===================================================== */
+/* BUSCA E FILTROS */
 
 .barra-filtros {
-  padding: 20px 28px;
-  border-bottom: 1px solid #292929;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 22px 28px;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .campo-busca {
-  max-width: 600px;
+  height: 46px;
+  flex: 1 1 320px;
+  max-width: 570px;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 15px;
-  height: 45px;
-  border: 1px solid #333;
+  border: 1px solid #d8dce2;
   border-radius: 8px;
-  background: #0d0d0d;
+  background: #fff;
+}
+
+.campo-busca:focus-within {
+  border-color: #d4af37;
 }
 
 .campo-busca span {
-  color: #d4af37;
+  color: #97751b;
 }
 
 .campo-busca input {
   width: 100%;
+  min-width: 0;
   border: none;
   outline: none;
   background: transparent;
-  color: #fff;
+  color: #222;
+  font-size: 13px;
 }
 
 .campo-busca input::placeholder {
-  color: #666;
+  color: #818791;
 }
 
+.filtros-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
 
-/* =====================================================
-   TABELA
-===================================================== */
+.filtros-status button {
+  padding: 10px 16px;
+  border: 1px solid #d8dce2;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filtros-status button:hover {
+  background: #fff8e6;
+}
+
+.filtros-status button.filtro-ativo {
+  border-color: #d4af37;
+  background: #d4af37;
+  color: #171717;
+}
+
+/* TABELA */
 
 .tabela-container {
   width: 100%;
@@ -265,164 +307,172 @@
 
 .tabela-container table {
   width: 100%;
+  min-width: 850px;
   border-collapse: collapse;
 }
 
 .tabela-container th {
-  padding: 15px 20px;
-  text-align: left;
-  color: #777;
+  padding: 17px 20px;
+  background: #f8f9fb;
+  color: #555e6b;
   font-size: 11px;
-  letter-spacing: 1px;
-  background: #0e0e0e;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .tabela-container td {
   padding: 18px 20px;
-  border-top: 1px solid #242424;
+  border-top: 1px solid #e8eaed;
+  color: #292929;
   vertical-align: middle;
 }
 
 .tabela-container tbody tr:hover {
-  background: #171717;
+  background: #fffaf0;
 }
 
-
-/* =====================================================
-   INFORMAÇÕES
-===================================================== */
+/* INFORMAÇÕES DO BARBEIRO */
 
 .barbeiro-info {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 170px;
 }
 
 .barbeiro-avatar {
-  width: 42px;
-  height: 42px;
+  width: 43px;
+  height: 43px;
   flex-shrink: 0;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
   background: #d4af37;
-  color: #0b0b0b;
-  font-weight: bold;
+  color: #171717;
+  font-weight: 700;
 }
 
 .barbeiro-info strong {
   display: block;
+  color: #222;
+  overflow-wrap: anywhere;
 }
 
 .barbeiro-info span {
   display: block;
-  margin-top: 4px;
+  margin-top: 5px;
   color: #777;
   font-size: 12px;
 }
 
 .contato-info span {
   display: block;
-  color: #ddd;
+  color: #333;
+  overflow-wrap: anywhere;
 }
 
 .contato-info small {
   display: block;
-  margin-top: 5px;
-  color: #777;
+  margin-top: 6px;
+  color: #68717e;
 }
 
 .especialidade {
-  color: #d4af37;
+  color: #80610c;
+  font-weight: 600;
 }
 
-
-/* =====================================================
-   STATUS
-===================================================== */
+/* STATUS */
 
 .status {
   display: inline-flex;
-  padding: 6px 11px;
+  align-items: center;
+  padding: 7px 12px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .status.ativo {
-  background: rgba(50, 180, 100, 0.12);
-  color: #65d68a;
+  background: #e0f6e7;
+  color: #16713b;
 }
 
 .status.inativo {
-  background: rgba(200, 70, 70, 0.12);
-  color: #e87979;
+  background: #fde8e8;
+  color: #a52a2a;
 }
 
-
-/* =====================================================
-   AÇÕES
-===================================================== */
+/* BOTÕES DE AÇÃO */
 
 .acoes {
   display: flex;
-  gap: 7px;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .acoes button {
-  width: 35px;
-  height: 35px;
-  border-radius: 7px;
-  border: 1px solid #333;
-  background: #171717;
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 17px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .acao-editar {
-  color: #d4af37;
+  color: #96700b;
 }
 
 .acao-inativar {
-  color: #e4a65c;
+  color: #bd7324;
 }
 
 .acao-excluir {
-  color: #e56b6b;
+  color: #c0392b;
 }
 
 .acoes button:hover {
+  transform: translateY(-2px);
   border-color: #d4af37;
+  background: #fff8e6;
 }
 
-
-/* =====================================================
-   ESTADO VAZIO
-===================================================== */
+/* ESTADO VAZIO */
 
 .estado-tabela {
-  min-height: 260px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  color: #888;
+  gap: 10px;
+  padding: 30px;
+  color: #666;
+  text-align: center;
 }
 
 .estado-tabela div {
-  font-size: 35px;
   color: #d4af37;
+  font-size: 36px;
 }
 
 .estado-tabela strong {
-  color: #ddd;
+  color: #333;
 }
 
-
-/* =====================================================
-   MODAL
-===================================================== */
+/* MODAL */
 
 .modal-overlay {
   position: fixed;
@@ -431,8 +481,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 25px;
-  background: rgba(0, 0, 0, 0.78);
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .barbeiro-modal {
@@ -440,59 +490,59 @@
   max-width: 760px;
   max-height: 90vh;
   overflow-y: auto;
-  background: #121212;
-  border: 1px solid #333;
   border-radius: 14px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+  background: white;
+  color: #222;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
 }
 
 .modal-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
   padding: 25px 28px;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .modal-header span {
-  color: #d4af37;
+  color: #97751b;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: 1.5px;
 }
 
 .modal-header h2 {
-  margin: 7px 0 0;
+  margin: 8px 0 0;
+  color: #222;
 }
 
 .modal-fechar {
   border: none;
   background: transparent;
-  color: #aaa;
-  font-size: 28px;
+  color: #666;
+  font-size: 29px;
   cursor: pointer;
 }
 
 .modal-fechar:hover {
-  color: #d4af37;
+  color: #b58b21;
 }
 
-
-/* =====================================================
-   FORMULÁRIO MODAL
-===================================================== */
+/* FORMULÁRIO DO MODAL */
 
 .modal-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
   padding: 28px;
 }
 
 .campo {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
 }
 
 .campo-full {
@@ -500,18 +550,21 @@
 }
 
 .campo label {
-  color: #bbb;
+  color: #444;
   font-size: 13px;
+  font-weight: 600;
 }
 
 .campo input {
-  height: 44px;
+  width: 100%;
+  height: 45px;
   padding: 0 13px;
-  border: 1px solid #333;
-  border-radius: 7px;
+  border: 1px solid #d8dce2;
+  border-radius: 8px;
   outline: none;
-  background: #0c0c0c;
-  color: #fff;
+  background: #fff;
+  color: #222;
+  font-size: 14px;
 }
 
 .campo input:focus {
@@ -519,92 +572,133 @@
 }
 
 .campo input::placeholder {
-  color: #666;
+  color: #909090;
 }
-
-
-/* =====================================================
-   RODAPÉ MODAL
-===================================================== */
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 20px 28px;
-  border-top: 1px solid #292929;
+  border-top: 1px solid #e8e8e8;
+}
+
+.btn-modal-cancelar,
+.btn-modal-salvar {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .btn-modal-cancelar {
-  padding: 11px 18px;
-  border: 1px solid #444;
-  border-radius: 7px;
-  background: transparent;
-  color: #ccc;
-  cursor: pointer;
+  border: 1px solid #d8dce2;
+  background: white;
+  color: #444;
 }
 
 .btn-modal-salvar {
-  padding: 11px 20px;
   border: none;
-  border-radius: 7px;
   background: #d4af37;
-  color: #090909;
-  font-weight: bold;
-  cursor: pointer;
+  color: #171717;
 }
 
 .btn-modal-salvar:hover {
-  background: #e5c45a;
+  background: #e6c65c;
 }
 
+/* RESPONSIVIDADE */
 
-/* =====================================================
-   RESPONSIVO
-===================================================== */
-
-@media (max-width: 900px) {
-
-  .gerenciamento-content {
-    padding: 30px 20px;
+@media (max-width: 950px) {
+  .gerenciamento-header {
+    padding: 18px 24px;
   }
 
+  .gerenciamento-content {
+    padding: 30px 22px;
+  }
+
+  .barbeiro-stats {
+    gap: 12px;
+  }
+
+  .barbeiro-stat {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 700px) {
   .gerenciamento-header {
-    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .gerenciamento-logo img {
+    width: 60px;
+  }
+
+  .gerenciamento-title h1 {
+    font-size: 19px;
+  }
+
+  .gerenciamento-user {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .gerenciamento-content {
+    padding: 22px 14px;
+  }
+
+  .gerenciamento-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gerenciamento-heading h2 {
+    font-size: 27px;
   }
 
   .barbeiro-stats {
     grid-template-columns: 1fr;
   }
 
-  .gerenciamento-heading {
-    align-items: flex-start;
-    gap: 20px;
+  .card-top {
     flex-direction: column;
-  }
-
-}
-
-@media (max-width: 650px) {
-
-  .gerenciamento-header {
-    height: auto;
+    align-items: stretch;
     padding: 20px;
-    flex-wrap: wrap;
-    gap: 15px;
   }
 
-  .gerenciamento-user {
-    margin-left: 0;
+  .barra-filtros {
+    padding: 18px;
+  }
+
+  .campo-busca {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .filtros-status {
+    width: 100%;
+  }
+
+  .filtros-status button {
+    flex: 1;
   }
 
   .modal-grid {
     grid-template-columns: 1fr;
+    padding: 20px;
   }
 
   .campo-full {
     grid-column: auto;
   }
 
+  .modal-header,
+  .modal-footer {
+    padding: 20px;
+  }
 }
-
