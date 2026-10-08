@@ -1723,7 +1723,7 @@ function AppAgendamento() {
           <p>
             {modoReagendamento
               ? 'Reagende seu atendimento'
-              : 'Agende seu próximo atendimento'}
+              : 'Gerencie seus agendamentos e marque novos atendimentos'}
           </p>
 
         </div>

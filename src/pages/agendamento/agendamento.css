@@ -164,47 +164,39 @@
    TÍTULO DO HEADER
 ========================================================= */
 
-.header-title {
+body .agendamento-header .header-title {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  position: relative;
 }
 
-.header-title::before,
-.header-title::after {
-  content: "";
-  display: inline-block;
-
-  width: 52px;
-  height: 1px;
-
-  background: #a88735;
-
-  vertical-align: middle;
-
-  margin: 0 16px;
-}
-
-.header-title h1 {
-  display: inline-block;
-
+body .agendamento-header .header-title h1 {
   margin: 0;
-
   color: #e2bd55;
-
   font-size: 29px;
   font-weight: 800;
-
+  line-height: 1.1;
   letter-spacing: -0.5px;
-
-  text-shadow:
-    0 2px 12px rgba(214, 173, 53, 0.18);
+  white-space: nowrap;
+  text-shadow: 0 2px 12px rgba(214, 173, 53, 0.18);
 }
 
-.header-title p {
+body .agendamento-header .header-title h1::before,
+body .agendamento-header .header-title h1::after {
+  content: none !important;
+  display: none !important;
+}
+
+body .agendamento-header .header-title p {
   margin: 6px 0 0;
-
   color: #cfcfcf;
-
   font-size: 12px;
 }
 
@@ -1817,11 +1809,10 @@
     font-size: 23px;
   }
 
-  .header-title::before,
-  .header-title::after {
-    width: 25px;
-
-    margin: 0 8px;
+  .header-title h1::before,
+  .header-title h1::after {
+    display: none;
+    content: none;
   }
 
   .header-user {
@@ -1892,8 +1883,8 @@
     font-size: 10px;
   }
 
-  .header-title::before,
-  .header-title::after {
+  .header-title h1::before,
+  .header-title h1::after {
     display: none;
   }
 

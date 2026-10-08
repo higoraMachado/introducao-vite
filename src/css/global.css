@@ -129,37 +129,6 @@ body [class$="-header"] .admin-header-logo {
   z-index: 2;
 }
 
-body [class$="-header"] .header-logo::before,
-body [class$="-header"] .dashboard-logo::before,
-body [class$="-header"] .clientes-logo::before,
-body [class$="-header"] .admin-header-logo::before {
-  content: "";
-  position: absolute;
-  width: 126px;
-  height: 126px;
-  left: 0;
-  top: 6px;
-  border-radius: 50%;
-  border: 1px solid rgba(214, 176, 87, 0.4);
-  box-shadow:
-    0 0 0 6px rgba(201, 162, 77, 0.035),
-    0 0 24px rgba(201, 162, 77, 0.1);
-}
-
-body [class$="-header"] .header-logo::after,
-body [class$="-header"] .dashboard-logo::after,
-body [class$="-header"] .clientes-logo::after,
-body [class$="-header"] .admin-header-logo::after {
-  content: "";
-  position: absolute;
-  width: 112px;
-  height: 112px;
-  left: 7px;
-  top: 13px;
-  border-radius: 50%;
-  border: 1px dashed rgba(214, 176, 87, 0.22);
-}
-
 body [class$="-header"] img,
 body .dashboard-header img,
 body .header-logo img,

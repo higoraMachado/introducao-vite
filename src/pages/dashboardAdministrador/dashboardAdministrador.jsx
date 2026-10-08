@@ -144,7 +144,7 @@ function DashboardAdministrador() {
 
         <div className="admin-header-title">
           <h1>Painel Administrativo</h1>
-          <p>Gerencie a Hope Barbearia</p>
+          <span>Gerencie sua barbearia com eficiência</span>
         </div>
 
         <div
