@@ -2100,262 +2100,144 @@ function AppAgendamento() {
                   ETAPA 2 - BARBEIRO
               =========================================== */}
 
-              <section className="card">
-
-                <div className="card-title">
-
-                  <div className="step-number">
-                    2
-                  </div>
-
-                  <div>
-
-                    <h3>
-                      Escolha o barbeiro
-                    </h3>
-
-                    <p>
-                      Selecione o
-                      profissional desejado.
-                    </p>
 
-                  </div>
-
-                </div>
-
-                {barbeiros.length === 0 ? (
-
-                  <div className="empty-state">
-
-                    <strong>
-                      Nenhum barbeiro disponível
-                    </strong>
-
-                    <p>
-                      Não existem barbeiros
-                      ativos cadastrados.
-                    </p>
-
-                  </div>
-
-                ) : (
-
-                  <div className="barbers-grid">
-
-                    {barbeiros.map(
-                      (barbeiro) => (
-
-                        <button
-                          type="button"
-                          key={
-                            barbeiro.id
-                          }
-                          className={`barber-card ${
-                            Number(
-                              barbeiroSelecionado
-                            ) ===
-                            Number(
-                              barbeiro.id
-                            )
-                              ? 'selected'
-                              : ''
-                          }`}
-                          onClick={() =>
-                            selecionarBarbeiro(
-                              barbeiro.id
-                            )
-                          }
-                        >
-
-                          <div className="barber-avatar">
-
-                            {barbeiro.foto ? (
-
-                              <img
-                                src={
-                                  barbeiro.foto.startsWith(
-                                    'http'
-                                  )
-                                    ? barbeiro.foto
-                                    : `${API_URL}${barbeiro.foto}`
-                                }
-                                alt={
-                                  barbeiro.nome
-                                }
-                              />
-
-                            ) : (
-
-                              <span>
-                                {barbeiro.nome
-                                  ?.charAt(
-                                    0
-                                  )
-                                  .toUpperCase()}
-                              </span>
-
-                            )}
-
-                          </div>
-
-                          <div className="barber-info">
-
-                            <strong>
-                              {barbeiro.nome}
-                            </strong>
-
-                            <span>
-                              {
-                                barbeiro.especialidade
-                              }
-                            </span>
-
-                          </div>
-
-                          <div className="selection-check">
-                            ✓
-                          </div>
-
-                        </button>
-
-                      )
-                    )}
-
-                  </div>
-
-                )}
-
-              </section>
-
-              {/* ===========================================
-                  ETAPA 3 - SERVIÇO
-              =========================================== */}
-
-              <section className="card">
-
-                <div className="card-title">
-
-                  <div className="step-number">
-                    3
-                  </div>
-
-                  <div>
-
-                    <h3>
-                      Escolha o serviço
-                    </h3>
-
-                    <p>
-                      Selecione o serviço
-                      que deseja realizar.
-                    </p>
-
-                  </div>
-
-                </div>
-
-                {!barbeiroSelecionado ? (
-
-                  <div className="empty-state">
-
-                    <strong>
-                      Escolha um barbeiro
-                    </strong>
-
-                    <p>
-                      Primeiro selecione
-                      um profissional.
-                    </p>
-
-                  </div>
-
-                ) : servicosDoBarbeiro.length ===
-                  0 ? (
-
-                  <div className="empty-state">
-
-                    <strong>
-                      Nenhum serviço disponível
-                    </strong>
-
-                    <p>
-                      Este barbeiro ainda
-                      não possui serviços
-                      vinculados.
-                    </p>
-
-                  </div>
-
-                ) : (
-
-                  <div className="services-grid">
-
-                    {servicosDoBarbeiro.map(
-                      (servico) => (
-
-                        <button
-                          type="button"
-                          key={
-                            servico.id
-                          }
-                          className={`service-option ${
-                            Number(
-                              servicoSelecionado
-                            ) ===
-                            Number(
-                              servico.id
-                            )
-                              ? 'selected'
-                              : ''
-                          }`}
-                          onClick={() =>
-                            selecionarServico(
-                              servico.id
-                            )
-                          }
-                        >
-
-                          <div className="service-option-main">
-
-                            <div className="service-icon">
-                              ✂
-                            </div>
-
-                            <div>
-
-                              <strong>
-                                {servico.nome}
-                              </strong>
-
-                              <span>
-                                {
-                                  servico.duracao
-                                }{' '}
-                                min
-                              </span>
-
-                            </div>
-
-                          </div>
-
-                          <div className="service-price">
-
-                            {formatarPreco(
-                              servico.preco
-                            )}
-
-                          </div>
-
-                        </button>
-
-                      )
-                    )}
-
-                  </div>
-
-                )}
-
-              </section>
+<div className="barbeiros-grid">
+  {barbeiros.map((barbeiro) => (
+    <button
+      type="button"
+      key={barbeiro.id}
+      className={`barbeiro-card ${
+        Number(barbeiroSelecionado) === Number(barbeiro.id)
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => selecionarBarbeiro(barbeiro.id)}
+    >
+      <div className="barbeiro-avatar">
+        <img
+          src={
+            barbeiro.foto
+              ? barbeiro.foto.startsWith("http")
+                ? barbeiro.foto
+                : `${API_URL}/${barbeiro.foto.replace(/^\/+/, "")}`
+              : ""
+          }
+          alt={barbeiro.nome || "Foto do barbeiro"}
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+
+            const avatar = event.currentTarget.parentElement;
+
+            if (avatar) {
+              avatar.textContent =
+                barbeiro.nome?.charAt(0).toUpperCase() || "?";
+            }
+          }}
+          style={{
+            display: barbeiro.foto ? "block" : "none",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "50%",
+          }}
+        />
+
+        {!barbeiro.foto && (
+          <span>
+            {barbeiro.nome?.charAt(0).toUpperCase() || "?"}
+          </span>
+        )}
+      </div>
+
+        
+<div className="barbeiro-info">
+  <strong
+    style={{
+      color:
+        Number(barbeiroSelecionado) === Number(barbeiro.id)
+          ? '#ffffff'
+          : '#171717',
+      WebkitTextFillColor:
+        Number(barbeiroSelecionado) === Number(barbeiro.id)
+          ? '#ffffff'
+          : '#171717',
+    }}
+  >
+    {barbeiro.nome}
+  </strong>
+
+  <span>{barbeiro.especialidade || 'Barbeiro'}</span>
+</div>
+
+
+      <div className="check">
+        {Number(barbeiroSelecionado) === Number(barbeiro.id) && "✓"}
+      </div>
+    </button>
+  ))}
+</div>
+
+
+         
+{/* ===========================================
+    ETAPA 3 - SERVIÇO
+=========================================== */}
+
+<section className="card">
+  <div className="card-title">
+    <div className="step-number">3</div>
+
+    <div>
+      <h3>Escolha o serviço</h3>
+      <p>Selecione o serviço que deseja realizar.</p>
+    </div>
+  </div>
+
+  {!barbeiroSelecionado ? (
+    <div className="empty-state">
+      <strong>Escolha um barbeiro</strong>
+      <p>Primeiro selecione um profissional.</p>
+    </div>
+  ) : servicosDoBarbeiro.length === 0 ? (
+    <div className="empty-state">
+      <strong>Nenhum serviço disponível</strong>
+      <p>
+        Este barbeiro ainda não possui serviços
+        vinculados.
+      </p>
+    </div>
+  ) : (
+    <div className="services-grid">
+      {servicosDoBarbeiro.map((servico) => (
+        <button
+          type="button"
+          key={servico.id}
+          className={`service-option ${
+            Number(servicoSelecionado) ===
+            Number(servico.id)
+              ? 'selected'
+              : ''
+          }`}
+          onClick={() => selecionarServico(servico.id)}
+        >
+          <div className="service-icon">✂</div>
+
+          <div className="service-info">
+            
+            <div className="service-name">
+              {servico.nome} - {servico.duracao} min
+            </div>
+
+            <div className="service-price">
+              {formatarPreco(servico.preco)}
+            </div>
+
+          </div>
+        </button>
+      ))}
+    </div>
+  )}
+</section>
 
               {/* ===========================================
                   ETAPA 4 - HORÁRIO
