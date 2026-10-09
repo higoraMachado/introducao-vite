@@ -128,12 +128,10 @@ a {
   bottom: -1px;
   width: 100%;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(212, 175, 55, 0.65),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(212, 175, 55, 0.65),
+      transparent);
   opacity: 0.7;
 }
 
@@ -278,13 +276,11 @@ a {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(5, 5, 5, 0.98) 0%,
-    rgba(5, 5, 5, 0.90) 30%,
-    rgba(5, 5, 5, 0.55) 55%,
-    rgba(5, 5, 5, 0.20) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(5, 5, 5, 0.98) 0%,
+      rgba(5, 5, 5, 0.90) 30%,
+      rgba(5, 5, 5, 0.55) 55%,
+      rgba(5, 5, 5, 0.20) 100%);
   z-index: 1;
 }
 
@@ -292,11 +288,9 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    0deg,
-    rgba(5, 5, 5, 0.75) 0%,
-    transparent 35%
-  );
+  background: linear-gradient(0deg,
+      rgba(5, 5, 5, 0.75) 0%,
+      transparent 35%);
   pointer-events: none;
   z-index: 1;
 }
@@ -367,23 +361,37 @@ a {
 }
 
 .services-grid {
-  max-width: 1150px;
+  width: 100%;
+  max-width: 1300px;
   margin: 0 auto;
+
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  align-items: stretch;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 22px;
 }
 
+/* Estrutura do card */
 .service-card {
   position: relative;
-  padding: 40px 25px;
-  text-align: center;
-  background: #171717;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  isolation: isolate;
+  min-width: 0;
+  min-height: 265px;
   overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
+
+  background-color: #171717;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  border: 1px solid rgba(212, 175, 55, 0.3);
+
+  transition:
+    min-height 0.5s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 .service-card::before {
@@ -488,9 +496,211 @@ a {
   letter-spacing: 2px;
 }
 
+/* Imagem de cada serviço */
+.service-corte {
+  background-image: url("/images/corte-masculino.jpg");
+}
+
+.service-barba {
+  background-image: url("/images/barba.jpg");
+}
+
+.service-combo {
+  background-image: url("/images/corte-barba.jpg");
+}
+
+.service-tratamentos {
+  background-image: url("/images/tratamentos.jpg");
+}
+
+/* Camada escura para legibilidade */
+.service-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background: rgba(0, 0, 0, 0.58);
+
+  transition: background 0.45s ease;
+}
+
+/* Conteúdo do card */
+.service-content {
+  position: relative;
+  z-index: 1;
+
+  min-height: 263px;
+  padding: 42px 20px 25px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  transition: padding 0.45s ease;
+}
+
+/* Ícone */
+.service-icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  font-size: 27px;
+
+  transition:
+    transform 0.45s ease,
+    background 0.4s ease,
+    color 0.4s ease;
+}
+
+/* Título */
+.service-card h3 {
+  margin: 0;
+
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+
+  transition:
+    transform 0.45s ease,
+    color 0.4s ease;
+}
+
+/* Especificações escondidas inicialmente */
+.service-details {
+  width: 100%;
+  max-height: 0;
+  margin-top: 0;
+
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(15px);
+
+  transition:
+    max-height 0.5s ease,
+    opacity 0.35s ease,
+    transform 0.4s ease,
+    margin-top 0.4s ease;
+}
+
+.service-details p {
+  margin: 0 0 18px;
+
+  color: #eeeeee;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.service-more-text {
+  color: #d4af37;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.7;
+}
+
+/* SAIBA MAIS */
+.service-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: auto;
+  padding-top: 20px;
+
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.service-more-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #d4af37;
+  border-radius: 50%;
+
+  color: #d4af37;
+  font-size: 26px;
+  font-weight: 300;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+
 @media (hover: hover) and (pointer: fine) {
   .services-grid:hover .service-card:not(:hover) {
-    opacity: 0.65;
+    opacity: 0.7;
+  }
+
+  .service-card:hover {
+    min-height: 390px;
+
+    border-color: #d4af37;
+
+    box-shadow:
+      0 18px 38px rgba(0, 0, 0, 0.4),
+      0 0 18px rgba(212, 175, 55, 0.12);
+
+    transform: translateY(-5px);
+  }
+
+  .service-card:hover .service-overlay {
+    background: rgba(0, 0, 0, 0.73);
+  }
+
+  .service-card:hover .service-content {
+    padding-top: 30px;
+  }
+
+  .service-card:hover .service-icon {
+    background: #d4af37;
+    color: #111111;
+    transform: translateY(-5px) scale(1.05);
+  }
+
+  .service-card:hover h3 {
+    color: #d4af37;
+  }
+
+  .service-card:hover .service-details {
+    max-height: 190px;
+    margin-top: 22px;
+
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .service-card:hover .service-more {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .service-card:hover .service-more-icon {
+    background: #d4af37;
+    color: #111111;
+    transform: rotate(90deg);
   }
 }
 
@@ -512,16 +722,12 @@ a {
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(
-      circle,
+    radial-gradient(circle,
       rgba(212, 175, 55, 0.15),
-      transparent 45%
-    ),
-    linear-gradient(
-      145deg,
+      transparent 45%),
+    linear-gradient(145deg,
       #1d1d1d,
-      #080808
-    );
+      #080808);
 }
 
 .about-image-content {
@@ -600,11 +806,9 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    145deg,
-    #252525,
-    #0c0c0c
-  );
+  background: linear-gradient(145deg,
+      #252525,
+      #0c0c0c);
   color: rgba(212, 175, 55, 0.5);
   letter-spacing: 4px;
   font-size: 11px;
@@ -633,11 +837,9 @@ a {
   padding: 130px 7%;
   text-align: center;
   background:
-    radial-gradient(
-      circle,
+    radial-gradient(circle,
       rgba(212, 175, 55, 0.1),
-      transparent 45%
-    ),
+      transparent 45%),
     #0b0b0b;
 }
 
@@ -725,6 +927,18 @@ a {
 /* ==========================================================================
    10. MEDIA QUERIES (RESPONSIVIDADE)
    ========================================================================== */
+
+/* =========================================
+   RESPONSIVIDADE DOS SERVIÇOS
+========================================= */
+
+@media (max-width: 1000px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
 
 /* Tablet (max-width: 900px) */
 @media (max-width: 900px) {
@@ -857,6 +1071,7 @@ a {
 
   .services-grid {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
 
   .about-content {
@@ -872,14 +1087,42 @@ a {
     padding: 55px 25px;
     gap: 35px;
   }
+
+  .service-card {
+    min-height: 240px;
+  }
+
+  .service-content {
+    min-height: 238px;
+  }
+
+  /* No celular, mostra as especificações sem depender do mouse */
+  .service-details {
+    max-height: 190px;
+    margin-top: 20px;
+
+    opacity: 1;
+    transform: none;
+  }
+
+  .service-more {
+    opacity: 1;
+    transform: none;
+  }
+
 }
 
 /* Acessibilidade - Animações Reduzidas */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   .service-card,
+  .service-overlay,
+  .service-content,
   .service-card::before,
   .service-icon,
+  .service-card h3,
+  .service-details,
   .service-more,
   .service-more-icon {
     transition: none !important;
