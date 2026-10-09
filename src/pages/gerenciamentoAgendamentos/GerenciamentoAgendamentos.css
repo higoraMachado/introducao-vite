@@ -1,0 +1,723 @@
+
+/* =====================================================
+   HOPE BARBEARIA
+   GERENCIAMENTO DE AGENDAMENTOS - ADMINISTRADOR
+===================================================== */
+
+.ga-pagina {
+  min-height: 100vh;
+  background: #f5f5f5;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.ga-pagina *,
+.ga-pagina *::before,
+.ga-pagina *::after {
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+.ga-cabecalho {
+  width: 100%;
+  min-height: 110px;
+  background: #101010;
+  border-bottom: 3px solid #c6a45b;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 40px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ga-botao-logo {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.ga-botao-logo:hover {
+  transform: scale(1.06);
+}
+
+.ga-botao-logo:focus-visible {
+  outline: 2px solid #d4af67;
+  outline-offset: 5px;
+  border-radius: 8px;
+}
+
+.ga-logo {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+}
+
+.ga-titulo-cabecalho h1 {
+  margin: 0 0 8px;
+  color: #fff;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.ga-titulo-cabecalho p {
+  margin: 0;
+  color: #d4af67;
+  font-size: 14px;
+}
+
+/* =====================================================
+   CONTEÚDO PRINCIPAL
+===================================================== */
+
+.ga-conteudo {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 35px 32px 60px;
+}
+
+.ga-topo-conteudo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.ga-topo-conteudo h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  color: #1a1a1a;
+}
+
+.ga-topo-conteudo p {
+  margin: 0;
+  font-size: 15px;
+  color: #666;
+}
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+
+.ga-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ga-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ga-btn:focus-visible {
+  outline: 3px solid rgba(198, 164, 91, 0.45);
+  outline-offset: 2px;
+}
+
+.ga-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ga-btn-dourado {
+  background: #c6a45b;
+  color: #151515;
+}
+
+.ga-btn-dourado:hover:not(:disabled) {
+  background: #d8b76e;
+  box-shadow: 0 4px 12px rgba(198, 164, 91, 0.25);
+}
+
+.ga-btn-atualizar {
+  background: #242424;
+  color: #fff;
+  min-height: 44px;
+  align-self: end;
+}
+
+.ga-btn-atualizar:hover:not(:disabled) {
+  background: #414141;
+}
+
+.ga-btn-editar {
+  background: #c6a45b;
+  color: #171717;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.ga-btn-editar:hover:not(:disabled) {
+  background: #d8b76e;
+}
+
+.ga-btn-cancelar {
+  background: #b42318;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.ga-btn-cancelar:hover:not(:disabled) {
+  background: #921d14;
+}
+
+.ga-btn-secundario {
+  background: #ececec;
+  color: #333;
+  border-color: #ddd;
+}
+
+.ga-btn-secundario:hover:not(:disabled) {
+  background: #dedede;
+}
+
+/* =====================================================
+   MENSAGENS
+===================================================== */
+
+.ga-alerta {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ga-alerta-sucesso {
+  color: #17603a;
+  background: #e6f6eb;
+  border: 1px solid #b9e2c6;
+}
+
+.ga-alerta-erro {
+  color: #a52222;
+  background: #fff0f0;
+  border: 1px solid #edc0c0;
+}
+
+/* =====================================================
+   CARDS DE ESTATÍSTICAS
+===================================================== */
+
+.ga-estatisticas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.ga-card {
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-top: 4px solid #c6a45b;
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+}
+
+.ga-card span {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ga-card strong {
+  color: #191919;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   PAINÉIS
+===================================================== */
+
+.ga-painel {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.04);
+}
+
+.ga-painel-titulo {
+  padding: 20px 24px;
+  border-bottom: 1px solid #ededed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ga-painel-titulo h3 {
+  margin: 0;
+  font-size: 19px;
+  color: #242424;
+}
+
+.ga-painel-titulo span {
+  font-size: 13px;
+  color: #777;
+}
+
+/* =====================================================
+   FILTROS
+===================================================== */
+
+.ga-filtros {
+  padding: 24px;
+  display: grid;
+  grid-template-columns:
+    minmax(180px, 1.5fr)
+    minmax(150px, 1fr)
+    minmax(145px, 1fr)
+    minmax(145px, 1fr)
+    auto;
+  align-items: end;
+  gap: 16px;
+}
+
+.ga-grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ga-grupo-campo label {
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ga-grupo-campo input,
+.ga-grupo-campo select,
+.ga-grupo-campo textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 7px;
+  background: #fff;
+  color: #222;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ga-grupo-campo input,
+.ga-grupo-campo select {
+  min-height: 44px;
+}
+
+.ga-grupo-campo textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.ga-grupo-campo input:focus,
+.ga-grupo-campo select:focus,
+.ga-grupo-campo textarea:focus {
+  border-color: #c6a45b;
+  box-shadow: 0 0 0 3px rgba(198, 164, 91, 0.14);
+}
+
+.ga-grupo-campo input::placeholder,
+.ga-grupo-campo textarea::placeholder {
+  color: #999;
+}
+
+/* =====================================================
+   TABELA
+===================================================== */
+
+.ga-tabela-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.ga-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1050px;
+  background: #fff;
+}
+
+.ga-tabela thead {
+  background: #1b1b1b;
+}
+
+.ga-tabela thead th {
+  padding: 16px 15px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.ga-tabela tbody td {
+  padding: 16px 15px;
+  border-bottom: 1px solid #ededed;
+  color: #444;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.ga-tabela tbody tr {
+  transition: background 0.15s ease;
+}
+
+.ga-tabela tbody tr:hover {
+  background: #faf8f3;
+}
+
+.ga-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ga-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.ga-sem-registros {
+  padding: 35px !important;
+  text-align: center;
+  color: #777 !important;
+}
+
+.ga-estado {
+  padding: 30px;
+  text-align: center;
+  color: #666;
+}
+
+/* =====================================================
+   STATUS DOS AGENDAMENTOS
+===================================================== */
+
+.ga-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.ga-status-agendado {
+  background: #fff4d8;
+  color: #8a5b00;
+}
+
+.ga-status-confirmado {
+  background: #e1f1ff;
+  color: #1765a3;
+}
+
+.ga-status-concluido,
+.ga-status-concluído {
+  background: #e3f5e9;
+  color: #1e7544;
+}
+
+.ga-status-cancelado,
+.ga-status-cancelada {
+  background: #fde7e7;
+  color: #b42318;
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.ga-modal-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.ga-modal {
+  width: 100%;
+  max-width: 680px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.3);
+}
+
+.ga-modal-cabecalho {
+  background: #151515;
+  border-bottom: 3px solid #c6a45b;
+  padding: 22px 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.ga-modal-cabecalho h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 22px;
+}
+
+.ga-fechar {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.ga-fechar:hover {
+  color: #d4af67;
+}
+
+.ga-fechar:focus-visible {
+  outline: 2px solid #d4af67;
+  outline-offset: 3px;
+}
+
+.ga-formulario {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ga-formulario-linha {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ga-modal-acoes {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 22px;
+  margin-top: 5px;
+}
+
+/* =====================================================
+   RESPONSIVIDADE - NOTEBOOKS
+===================================================== */
+
+@media (max-width: 1200px) {
+  .ga-estatisticas {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ga-filtros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ga-btn-atualizar {
+    width: fit-content;
+  }
+}
+
+/* =====================================================
+   RESPONSIVIDADE - TABLETS
+===================================================== */
+
+@media (max-width: 768px) {
+  .ga-cabecalho {
+    padding: 16px 22px;
+    gap: 16px;
+  }
+
+  .ga-logo {
+    width: 65px;
+    height: 65px;
+  }
+
+  .ga-titulo-cabecalho h1 {
+    font-size: 21px;
+  }
+
+  .ga-conteudo {
+    padding: 24px 18px 40px;
+  }
+
+  .ga-topo-conteudo h2 {
+    font-size: 24px;
+  }
+
+  .ga-estatisticas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .ga-card {
+    padding: 18px;
+  }
+
+  .ga-card strong {
+    font-size: 27px;
+  }
+
+  .ga-painel-titulo {
+    padding: 18px;
+  }
+
+  .ga-filtros {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .ga-formulario {
+    padding: 20px;
+  }
+}
+
+/* =====================================================
+   RESPONSIVIDADE - CELULARES
+===================================================== */
+
+@media (max-width: 480px) {
+  .ga-cabecalho {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .ga-logo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .ga-titulo-cabecalho h1 {
+    font-size: 17px;
+  }
+
+  .ga-titulo-cabecalho p {
+    font-size: 12px;
+  }
+
+  .ga-conteudo {
+    padding: 20px 12px 35px;
+  }
+
+  .ga-topo-conteudo {
+    align-items: stretch;
+  }
+
+  .ga-topo-conteudo h2 {
+    font-size: 22px;
+  }
+
+  .ga-topo-conteudo > .ga-btn {
+    width: 100%;
+  }
+
+  .ga-estatisticas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ga-card {
+    padding: 16px 13px;
+  }
+
+  .ga-card span {
+    font-size: 12px;
+  }
+
+  .ga-card strong {
+    font-size: 25px;
+  }
+
+  .ga-filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .ga-btn-atualizar {
+    width: 100%;
+  }
+
+  .ga-modal-fundo {
+    padding: 10px;
+  }
+
+  .ga-modal {
+    max-height: calc(100vh - 20px);
+  }
+
+  .ga-modal-cabecalho {
+    padding: 18px;
+  }
+
+  .ga-modal-cabecalho h2 {
+    font-size: 19px;
+  }
+
+  .ga-formulario {
+    padding: 18px;
+  }
+
+  .ga-formulario-linha {
+    grid-template-columns: 1fr;
+  }
+
+  .ga-modal-acoes {
+    flex-direction: column-reverse;
+  }
+
+  .ga-modal-acoes .ga-btn {
+    width: 100%;
+  }
+}

@@ -1,4 +1,5 @@
-import { Routes, Route, } from 'react-router-dom';
+
+import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 
 import Dashboard from './pages/dashboardCliente/Dashboard';
@@ -23,12 +24,16 @@ import Despesas from './pages/Despesas/Despesas';
 import Landing from './pages/landing/Landing';
 import GerenciamentoBarbeiros from './pages/barbeirosGerenciamento/GerenciamentoBarbeiros';
 
+// NOVA TELA DE GERENCIAMENTO DE AGENDAMENTOS
+import GerenciamentoAgendamentos from './pages/gerenciamentoAgendamentos/GerenciamentoAgendamentos';
 
 function App() {
     return (
         <Routes>
 
-            {/* PÚBLICAS */}
+            {/* =========================================
+                ROTAS PÚBLICAS
+            ========================================= */}
 
             <Route
                 path="/"
@@ -50,7 +55,9 @@ function App() {
                 element={<RedefinirSenha />}
             />
 
-            {/* CLIENTE */}
+            {/* =========================================
+                CLIENTE - TIPO 3
+            ========================================= */}
 
             <Route
                 path="/dashboardCliente"
@@ -79,7 +86,9 @@ function App() {
                 }
             />
 
-            {/* BARBEIRO */}
+            {/* =========================================
+                BARBEIRO - TIPO 2
+            ========================================= */}
 
             <Route
                 path="/dashboardBarbeiro"
@@ -90,8 +99,14 @@ function App() {
                 }
             />
 
-            {/* ADMINISTRADOR */}
-      
+            {/* A rota de gerenciamento do barbeiro
+                será adicionada quando criarmos
+                MeusAgendamentos.jsx. */}
+
+            {/* =========================================
+                ADMINISTRADOR - TIPO 1
+            ========================================= */}
+
             <Route
                 path="/dashboardAdministrador"
                 element={
@@ -106,6 +121,17 @@ function App() {
                 element={
                     <ProtectedRoute tiposPermitidos={[1]}>
                         <DashboardAdministrador />
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* NOVA ROTA - AGENDAMENTOS DO ADMINISTRADOR */}
+
+            <Route
+                path="/gerenciamentoAgendamentos"
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <GerenciamentoAgendamentos />
                     </ProtectedRoute>
                 }
             />

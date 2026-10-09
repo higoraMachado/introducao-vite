@@ -21,7 +21,7 @@ function DashboardAdministrador() {
     {
       nome: "Agendamentos",
       icone: "▣",
-      rota: "/agendamento",
+      rota: "/gerenciamentoAgendamentos",
     },
     {
       nome: "Clientes",
@@ -351,7 +351,7 @@ function DashboardAdministrador() {
                 <button
                   className="admin-link"
                   onClick={() =>
-                    acessar("Agendamentos", "/agendamento")
+                    acessar("Agendamentos", "/gerenciamentoAgendamentos")
                   }
                 >
                   Ver todos
@@ -515,7 +515,7 @@ function DashboardAdministrador() {
 
               <button
                 onClick={() =>
-                  acessar("Agendamentos", "/agendamento")
+                  acessar("Agendamentos", "/gerenciamentoAgendamentos")
                 }
               >
                 <span>📅</span>
