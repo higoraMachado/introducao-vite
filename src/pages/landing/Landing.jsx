@@ -162,72 +162,117 @@ function Landing() {
 
         <div className="services-grid">
 
-          <div className="service-card">
+          {/* CARD 1 — CORTE MASCULINO */}
+          <article className="service-card service-corte">
+            <div className="service-overlay"></div>
 
-            <div className="service-icon">
-              ✂
+            <div className="service-content">
+              <div className="service-icon">✂</div>
+
+              <h3>Corte Masculino</h3>
+
+              <div className="service-details">
+                <p>
+                  Cortes clássicos, degradê, social e estilos
+                  modernos, com acabamento personalizado
+                  para valorizar seu visual.
+                </p>
+
+                <span className="service-more-text">
+                  PRECISÃO • ESTILO • QUALIDADE
+                </span>
+              </div>
+
+              <div className="service-more">
+                <span className="service-more-icon">+</span>
+                <span className="service-more-text">SAIBA MAIS</span>
+              </div>
             </div>
+          </article>
 
-            <h3>
-              Corte Masculino
-            </h3>
+          {/* CARD 2 — BARBA */}
+          <article className="service-card service-barba">
+            <div className="service-overlay"></div>
 
-            <p>
-              Cortes modernos e tradicionais feitos de acordo com seu estilo.
-            </p>
+            <div className="service-content">
+              <div className="service-icon">◈</div>
 
-          </div>
+              <h3>Barba</h3>
 
+              <div className="service-details">
+                <p>
+                  Modelagem, alinhamento dos contornos,
+                  aparagem e acabamento preciso para
+                  deixar sua barba impecável.
+                </p>
 
-          <div className="service-card">
+                <span className="service-more-text">
+                  CUIDADO • CONTORNO • ELEGÂNCIA
+                </span>
+              </div>
 
-            <div className="service-icon">
-              ◈
+              <div className="service-more">
+                <span className="service-more-icon">+</span>
+                <span className="service-more-text">SAIBA MAIS</span>
+              </div>
             </div>
+          </article>
 
-            <h3>
-              Barba
-            </h3>
+          {/* CARD 3 — CORTE + BARBA */}
+          <article className="service-card service-combo">
+            <div className="service-overlay"></div>
 
-            <p>
-              Modelagem e acabamento para deixar sua barba impecável.
-            </p>
+            <div className="service-content">
+              <div className="service-icon">✂</div>
 
-          </div>
+              <h3>Corte + Barba</h3>
 
+              <div className="service-details">
+                <p>
+                  Combinação de corte personalizado,
+                  barba modelada e acabamento completo
+                  para renovar seu visual.
+                </p>
 
-          <div className="service-card">
+                <span className="service-more-text">
+                  EXPERIÊNCIA • ESTILO • RENOVAÇÃO
+                </span>
+              </div>
 
-            <div className="service-icon">
-              ✂
+              <div className="service-more">
+                <span className="service-more-icon">+</span>
+                <span className="service-more-text">SAIBA MAIS</span>
+              </div>
             </div>
+          </article>
 
-            <h3>
-              Corte + Barba
-            </h3>
+          {/* CARD 4 — TRATAMENTOS */}
+          <article className="service-card service-tratamentos">
+            <div className="service-overlay"></div>
 
-            <p>
-              O combo completo para renovar completamente seu visual.
-            </p>
+            <div className="service-content">
+              <div className="service-icon">◆</div>
 
-          </div>
+              <h3>Tratamentos</h3>
 
+              <div className="service-details">
+                <p>
+                  Cuidados para cabelo e barba,
+                  hidratação e tratamentos capilares
+                  de acordo com as necessidades do cliente.
+                </p>
 
-          <div className="service-card">
+                <span className="service-more-text">
+                  CUIDADO • HIDRATAÇÃO • BEM-ESTAR
+                </span>
+              </div>
 
-            <div className="service-icon">
-              ◆
+              <div className="service-more">
+                <span className="service-more-icon">+</span>
+                <span className="service-more-text">SAIBA MAIS</span>
+              </div>
             </div>
-
-            <h3>
-              Tratamentos
-            </h3>
-
-            <p>
-              Cuidados especiais para cabelo, barba e aparência.
-            </p>
-
-          </div>
+          </article>
 
         </div>
 
