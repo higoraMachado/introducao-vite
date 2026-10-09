@@ -246,20 +246,19 @@ function Landing() {
             </div>
           </article>
 
-          {/* CARD 4 — TRATAMENTOS */}
+          {/* CARD 4 — Hair tattoo */}
           <article className="service-card service-tratamentos">
             <div className="service-overlay"></div>
 
             <div className="service-content">
               <div className="service-icon">◆</div>
 
-              <h3>Tratamentos</h3>
+              <h3>Hair Tattoo & Freestyle</h3>
 
               <div className="service-details">
                 <p>
-                  Cuidados para cabelo e barba,
-                  hidratação e tratamentos capilares
-                  de acordo com as necessidades do cliente.
+                  Desenhos personalizados, riscos e detalhes criativos
+                  para deixar seu corte único e cheio de personalidade.
                 </p>
 
                 <span className="service-more-text">
