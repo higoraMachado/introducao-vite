@@ -9,7 +9,8 @@ const API_URL = "http://localhost:3333";
 const formularioInicial = {
   usuario_id: "",
   barbeiro_servico_id: "",
-  agendamento_dt_hr_inicio: "",
+  data: "",
+  horario: "",
   agendamento_status: "agendado",
   agendamento_observacoes: "",
   agendamento_forma_pagamento: "",
@@ -24,6 +25,12 @@ function extrairLista(resposta) {
   if (Array.isArray(resposta?.dados)) return resposta.dados;
   if (Array.isArray(resposta?.dados?.dados)) {
     return resposta.dados.dados;
+  }
+  if (Array.isArray(resposta?.horarios)) {
+    return resposta.horarios;
+  }
+  if (Array.isArray(resposta?.dados?.horarios)) {
+    return resposta.dados.horarios;
   }
   return [];
 }
@@ -79,15 +86,11 @@ function dataParaInput(valor) {
   );
 }
 
-function dataParaAPI(valor) {
-  if (!valor) return null;
-  return `${valor.replace("T", " ")}:00`;
-}
-
 function formatarData(valor) {
   if (!valor) return "-";
 
-  const data = new Date(dataParaInput(valor));
+  const texto = dataParaInput(valor);
+  const data = new Date(texto);
 
   if (Number.isNaN(data.getTime())) {
     return String(valor);
@@ -99,8 +102,12 @@ function formatarData(valor) {
   });
 }
 
-// Aceita duração em minutos (40, "40")
-// ou em formato de horário ("00:40:00").
+function dataParaAPI(valor) {
+  if (!valor) return null;
+
+  return `${valor.replace("T", " ")}:00`;
+}
+
 function duracaoEmMinutos(valor) {
   if (valor === null || valor === undefined || valor === "") {
     return null;
@@ -132,6 +139,7 @@ function duracaoEmMinutos(valor) {
     if (minutos >= 60 || segundos >= 60) return null;
 
     const total = horas * 60 + minutos + segundos / 60;
+
     return total > 0 ? total : null;
   }
 
@@ -180,6 +188,31 @@ function obterNomeBarbeiroServico(item) {
   return `${barbeiro} — ${servico}`;
 }
 
+function obterHorarios(resposta) {
+  const lista = extrairLista(resposta);
+
+  return [
+    ...new Set(
+      lista
+        .map((item) => {
+          if (typeof item === "string") return item;
+
+          return (
+            item?.inicio ??
+            item?.horario ??
+            item?.hora ??
+            null
+          );
+        })
+        .filter(
+          (hora) =>
+            typeof hora === "string" &&
+            /^\d{2}:\d{2}$/.test(hora)
+        )
+    ),
+  ].sort();
+}
+
 // =====================================================
 // COMPONENTE PRINCIPAL
 // =====================================================
@@ -210,8 +243,16 @@ export default function GerenciamentoAgendamentos() {
     ...formularioInicial,
   });
 
+  const [horariosDisponiveis, setHorariosDisponiveis] =
+    useState([]);
+
+  const [carregandoHorarios, setCarregandoHorarios] =
+    useState(false);
+
+  const [erroHorarios, setErroHorarios] = useState("");
+
   // ===================================================
-  // LOGO: VOLTAR À PÁGINA ANTERIOR
+  // LOGO - VOLTAR À PÁGINA ANTERIOR
   // ===================================================
 
   function voltar() {
@@ -225,7 +266,7 @@ export default function GerenciamentoAgendamentos() {
   }
 
   // ===================================================
-  // REQUISIÇÕES
+  // REQUISIÇÕES PARA A API
   // ===================================================
 
   const requisicao = useCallback(async (rota, opcoes = {}) => {
@@ -270,7 +311,7 @@ export default function GerenciamentoAgendamentos() {
   }, []);
 
   // ===================================================
-  // CARREGAR DADOS
+  // CARREGAR DADOS PRINCIPAIS
   // ===================================================
 
   const carregarDados = useCallback(async () => {
@@ -311,7 +352,7 @@ export default function GerenciamentoAgendamentos() {
   }, [carregarDados]);
 
   // ===================================================
-  // BARBEIROS
+  // NOMES DOS BARBEIROS
   // ===================================================
 
   const nomesBarbeiros = useMemo(() => {
@@ -347,7 +388,7 @@ export default function GerenciamentoAgendamentos() {
   }, [vinculos, agendamentos]);
 
   // ===================================================
-  // SERVIÇO SELECIONADO E DURAÇÃO
+  // SERVIÇO E DURAÇÃO SELECIONADOS
   // ===================================================
 
   const servicoSelecionado = useMemo(() => {
@@ -364,16 +405,123 @@ export default function GerenciamentoAgendamentos() {
     );
   }, [servicoSelecionado]);
 
-  // Calculado automaticamente ao trocar o serviço
-  // ou a data e hora de início.
+  const barbeiroSelecionado =
+    servicoSelecionado?.usuario_id ??
+    servicoSelecionado?.barbeiro_id;
+
+  const servicoIdSelecionado =
+    servicoSelecionado?.servico_id;
+
+  // ===================================================
+  // CONSULTAR HORÁRIOS DISPONÍVEIS
+  // ===================================================
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function buscarHorarios() {
+      setHorariosDisponiveis([]);
+      setErroHorarios("");
+
+      if (
+        !modalAberto ||
+        !formulario.data ||
+        !barbeiroSelecionado ||
+        !servicoIdSelecionado
+      ) {
+        setCarregandoHorarios(false);
+        return;
+      }
+
+      setCarregandoHorarios(true);
+
+      try {
+        const parametros = new URLSearchParams({
+          data: formulario.data,
+          barbeiro_id: String(barbeiroSelecionado),
+          servico_id: String(servicoIdSelecionado),
+        });
+
+        const resposta = await requisicao(
+          `/agendamentos/disponibilidade?${parametros.toString()}`
+        );
+
+        if (!ativo) return;
+
+        setHorariosDisponiveis(
+          obterHorarios(resposta)
+        );
+      } catch (error) {
+        if (ativo) {
+          setErroHorarios(error.message);
+        }
+      } finally {
+        if (ativo) {
+          setCarregandoHorarios(false);
+        }
+      }
+    }
+
+    buscarHorarios();
+
+    return () => {
+      ativo = false;
+    };
+  }, [
+    modalAberto,
+    formulario.data,
+    barbeiroSelecionado,
+    servicoIdSelecionado,
+    requisicao,
+  ]);
+
+  // ===================================================
+  // DATA E HORA DE INÍCIO
+  // ===================================================
+
+  const inicioSelecionado = useMemo(() => {
+    if (!formulario.data || !formulario.horario) {
+      return "";
+    }
+
+    return `${formulario.data}T${formulario.horario}`;
+  }, [formulario.data, formulario.horario]);
+
+  // ===================================================
+  // TÉRMINO AUTOMÁTICO
+  // ===================================================
+
   const terminoCalculado = useMemo(() => {
     return calcularTermino(
-      formulario.agendamento_dt_hr_inicio,
+      inicioSelecionado,
       duracaoSelecionada
     );
+  }, [inicioSelecionado, duracaoSelecionada]);
+
+  // ===================================================
+  // HORÁRIOS EXIBIDOS
+  // ===================================================
+
+  const horariosExibidos = useMemo(() => {
+    const horarios = [...horariosDisponiveis];
+
+    // Ao editar, a consulta de disponibilidade pode
+    // excluir o horário do próprio agendamento.
+    // Nesse caso, ele continua visível no formulário,
+    // mas a API fará a validação final ao salvar.
+    if (
+      agendamentoEditando &&
+      formulario.horario &&
+      !horarios.includes(formulario.horario)
+    ) {
+      horarios.push(formulario.horario);
+    }
+
+    return [...new Set(horarios)].sort();
   }, [
-    formulario.agendamento_dt_hr_inicio,
-    duracaoSelecionada,
+    horariosDisponiveis,
+    agendamentoEditando,
+    formulario.horario,
   ]);
 
   // ===================================================
@@ -451,7 +599,7 @@ export default function GerenciamentoAgendamentos() {
   }, [agendamentos]);
 
   // ===================================================
-  // CADASTRO
+  // ABRIR CADASTRO
   // ===================================================
 
   function abrirCadastro() {
@@ -459,14 +607,20 @@ export default function GerenciamentoAgendamentos() {
     setFormulario({ ...formularioInicial });
     setErro("");
     setMensagem("");
+    setHorariosDisponiveis([]);
+    setErroHorarios("");
     setModalAberto(true);
   }
 
   // ===================================================
-  // EDIÇÃO
+  // ABRIR EDIÇÃO
   // ===================================================
 
   function abrirEdicao(item) {
+    const inicio = dataParaInput(
+      item.agendamento_dt_hr_inicio
+    );
+
     setAgendamentoEditando(item);
 
     setFormulario({
@@ -474,9 +628,8 @@ export default function GerenciamentoAgendamentos() {
       barbeiro_servico_id: String(
         item.barbeiro_servico_id ?? ""
       ),
-      agendamento_dt_hr_inicio: dataParaInput(
-        item.agendamento_dt_hr_inicio
-      ),
+      data: inicio.slice(0, 10),
+      horario: inicio.slice(11, 16),
       agendamento_status:
         item.agendamento_status || "agendado",
       agendamento_observacoes:
@@ -487,8 +640,14 @@ export default function GerenciamentoAgendamentos() {
 
     setErro("");
     setMensagem("");
+    setHorariosDisponiveis([]);
+    setErroHorarios("");
     setModalAberto(true);
   }
+
+  // ===================================================
+  // FECHAR MODAL
+  // ===================================================
 
   function fecharModal() {
     if (salvando) return;
@@ -497,19 +656,51 @@ export default function GerenciamentoAgendamentos() {
     setAgendamentoEditando(null);
     setFormulario({ ...formularioInicial });
     setErro("");
+    setErroHorarios("");
+    setHorariosDisponiveis([]);
   }
+
+  // ===================================================
+  // ALTERAR CAMPOS
+  // ===================================================
 
   function alterarCampo(evento) {
     const { name, value } = evento.target;
 
-    setFormulario((anterior) => ({
-      ...anterior,
-      [name]: value,
-    }));
+    setFormulario((anterior) => {
+      const novo = {
+        ...anterior,
+        [name]: value,
+      };
+
+      // Ao trocar o serviço ou a data, o horário
+      // anterior deixa de estar selecionado.
+      if (
+        name === "barbeiro_servico_id" ||
+        name === "data"
+      ) {
+        novo.horario = "";
+      }
+
+      return novo;
+    });
   }
 
   // ===================================================
-  // SALVAR COM TÉRMINO AUTOMÁTICO
+  // SELECIONAR HORÁRIO
+  // ===================================================
+
+  function selecionarHorario(horario) {
+    setFormulario((anterior) => ({
+      ...anterior,
+      horario,
+    }));
+
+    setErro("");
+  }
+
+  // ===================================================
+  // SALVAR AGENDAMENTO
   // ===================================================
 
   async function salvarAgendamento(evento) {
@@ -521,15 +712,18 @@ export default function GerenciamentoAgendamentos() {
     if (
       !formulario.usuario_id ||
       !formulario.barbeiro_servico_id ||
-      !formulario.agendamento_dt_hr_inicio
+      !formulario.data ||
+      !formulario.horario
     ) {
-      setErro("Preencha todos os campos obrigatórios.");
+      setErro(
+        "Selecione o cliente, o serviço, a data e o horário."
+      );
       return;
     }
 
     if (!duracaoSelecionada) {
       setErro(
-        "O serviço selecionado não possui uma duração válida cadastrada. Verifique o cadastro do serviço."
+        "O serviço selecionado não possui duração válida cadastrada."
       );
       return;
     }
@@ -541,10 +735,38 @@ export default function GerenciamentoAgendamentos() {
       return;
     }
 
-    const inicio = new Date(
-      formulario.agendamento_dt_hr_inicio
-    );
+    if (carregandoHorarios || erroHorarios) {
+      setErro(
+        "Aguarde a consulta de disponibilidade antes de salvar."
+      );
+      return;
+    }
 
+    const horarioDisponivel =
+      horariosDisponiveis.includes(formulario.horario);
+
+    const inicioOriginal = agendamentoEditando
+      ? dataParaInput(
+          agendamentoEditando.agendamento_dt_hr_inicio
+        )
+      : "";
+
+    const mesmoInicio =
+      Boolean(agendamentoEditando) &&
+      inicioSelecionado === inicioOriginal &&
+      String(formulario.barbeiro_servico_id) ===
+        String(
+          agendamentoEditando.barbeiro_servico_id
+        );
+
+    if (!horarioDisponivel && !mesmoInicio) {
+      setErro(
+        "O horário selecionado não está disponível. Escolha outro horário."
+      );
+      return;
+    }
+
+    const inicio = new Date(inicioSelecionado);
     const fim = new Date(terminoCalculado);
 
     if (
@@ -552,7 +774,9 @@ export default function GerenciamentoAgendamentos() {
       Number.isNaN(fim.getTime()) ||
       fim <= inicio
     ) {
-      setErro("Informe uma data e hora de início válidas.");
+      setErro(
+        "A data e o horário selecionados são inválidos."
+      );
       return;
     }
 
@@ -564,7 +788,7 @@ export default function GerenciamentoAgendamentos() {
       ),
 
       agendamento_dt_hr_inicio: dataParaAPI(
-        formulario.agendamento_dt_hr_inicio
+        inicioSelecionado
       ),
 
       agendamento_dt_hr_fim: dataParaAPI(
@@ -617,7 +841,7 @@ export default function GerenciamentoAgendamentos() {
   }
 
   // ===================================================
-  // CANCELAMENTO
+  // CANCELAR AGENDAMENTO
   // ===================================================
 
   async function cancelarAgendamento(item) {
@@ -633,7 +857,9 @@ export default function GerenciamentoAgendamentos() {
     try {
       await requisicao(
         `/agendamentos/${item.agendamento_id}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+        }
       );
 
       await carregarDados();
@@ -652,6 +878,8 @@ export default function GerenciamentoAgendamentos() {
 
   return (
     <div className="ga-pagina">
+      {/* CABEÇALHO */}
+
       <header className="ga-cabecalho">
         <button
           type="button"
@@ -674,6 +902,8 @@ export default function GerenciamentoAgendamentos() {
       </header>
 
       <main className="ga-conteudo">
+        {/* TÍTULO */}
+
         <div className="ga-topo-conteudo">
           <div>
             <h2>Agenda da Barbearia</h2>
@@ -691,6 +921,8 @@ export default function GerenciamentoAgendamentos() {
             + Novo Agendamento
           </button>
         </div>
+
+        {/* MENSAGENS */}
 
         {mensagem && (
           <div className="ga-alerta ga-alerta-sucesso">
@@ -813,15 +1045,19 @@ export default function GerenciamentoAgendamentos() {
                 <option value="">
                   Todos os status
                 </option>
+
                 <option value="agendado">
                   Agendado
                 </option>
+
                 <option value="confirmado">
                   Confirmado
                 </option>
+
                 <option value="concluido">
                   Concluído
                 </option>
+
                 <option value="cancelado">
                   Cancelado
                 </option>
@@ -838,11 +1074,12 @@ export default function GerenciamentoAgendamentos() {
           </div>
         </section>
 
-        {/* TABELA DE AGENDAMENTOS */}
+        {/* TABELA */}
 
         <section className="ga-painel">
           <div className="ga-painel-titulo">
             <h3>Todos os Agendamentos</h3>
+
             <span>
               {agendamentosFiltrados.length} resultado(s)
             </span>
@@ -880,7 +1117,9 @@ export default function GerenciamentoAgendamentos() {
 
                     return (
                       <tr key={item.agendamento_id}>
-                        <td>#{item.agendamento_id}</td>
+                        <td>
+                          #{item.agendamento_id}
+                        </td>
 
                         <td>
                           {item.usuario_nome || "-"}
@@ -1065,83 +1304,201 @@ export default function GerenciamentoAgendamentos() {
                 </select>
               </div>
 
-              {/* INÍCIO */}
+              {/* DATA */}
 
               <div className="ga-grupo-campo">
-                <label htmlFor="ga-inicio-form">
-                  Data e hora de início *
+                <label htmlFor="ga-data-form">
+                  Data do atendimento *
                 </label>
 
                 <input
-                  id="ga-inicio-form"
-                  type="datetime-local"
-                  name="agendamento_dt_hr_inicio"
-                  value={
-                    formulario.agendamento_dt_hr_inicio
-                  }
+                  id="ga-data-form"
+                  type="date"
+                  name="data"
+                  value={formulario.data}
                   onChange={alterarCampo}
                   required
                 />
               </div>
 
-              {/* TÉRMINO AUTOMÁTICO */}
+              {/* HORÁRIOS DISPONÍVEIS */}
+
+              <div className="ga-grupo-campo">
+                <label>
+                  Horários disponíveis *
+                </label>
+
+                {!formulario.barbeiro_servico_id ||
+                !formulario.data ? (
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#777",
+                      fontSize: "13px",
+                    }}
+                  >
+                    Selecione primeiro o barbeiro,
+                    o serviço e a data.
+                  </p>
+                ) : carregandoHorarios ? (
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#777",
+                      fontSize: "13px",
+                    }}
+                  >
+                    Consultando horários disponíveis...
+                  </p>
+                ) : erroHorarios ? (
+                  <div className="ga-alerta ga-alerta-erro">
+                    {erroHorarios}
+                  </div>
+                ) : horariosExibidos.length === 0 ? (
+                  <div
+                    style={{
+                      padding: "14px",
+                      background: "#fff4e5",
+                      borderRadius: "8px",
+                      color: "#885b16",
+                      fontSize: "13px",
+                    }}
+                  >
+                    Não existem horários disponíveis
+                    para este barbeiro nesta data.
+                    Escolha outro dia.
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns:
+                        "repeat(auto-fill, minmax(82px, 1fr))",
+                      gap: "10px",
+                    }}
+                  >
+                    {horariosExibidos.map((horario) => {
+                      const selecionado =
+                        formulario.horario === horario;
+
+                      const disponivel =
+                        horariosDisponiveis.includes(horario);
+
+                      const horarioOriginal =
+                        agendamentoEditando &&
+                        inicioSelecionado ===
+                          dataParaInput(
+                            agendamentoEditando.agendamento_dt_hr_inicio
+                          ) &&
+                        String(
+                          formulario.barbeiro_servico_id
+                        ) ===
+                          String(
+                            agendamentoEditando.barbeiro_servico_id
+                          );
+
+                      const permitido =
+                        disponivel ||
+                        (selecionado && horarioOriginal);
+
+                      return (
+                        <button
+                          key={horario}
+                          type="button"
+                          onClick={() =>
+                            selecionarHorario(horario)
+                          }
+                          disabled={!permitido}
+                          aria-pressed={selecionado}
+                          style={{
+                            padding: "12px 8px",
+                            borderRadius: "8px",
+                            border: selecionado
+                              ? "2px solid #b88d38"
+                              : "1px solid #ddd",
+                            background: selecionado
+                              ? "#c6a45b"
+                              : "#fff",
+                            color: selecionado
+                              ? "#151515"
+                              : "#333",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: permitido
+                              ? "pointer"
+                              : "not-allowed",
+                            opacity: permitido ? 1 : 0.45,
+                            transition: "0.2s",
+                          }}
+                        >
+                          {horario}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* RESUMO DO AGENDAMENTO */}
 
               <div
                 className="ga-grupo-campo"
                 aria-live="polite"
               >
                 <label>
-                  Término calculado automaticamente
+                  Resumo do atendimento
                 </label>
 
                 <div
                   style={{
-                    padding: "15px",
+                    padding: "16px",
                     border: "1px solid #e5d4ad",
                     borderRadius: "8px",
                     background: "#faf7ef",
                   }}
                 >
-                  {servicoSelecionado && (
-                    <p
-                      style={{
-                        margin: "0 0 8px",
-                        fontSize: "13px",
-                        color: "#555",
-                      }}
-                    >
-                      <strong>Duração do serviço:</strong>{" "}
-                      {duracaoSelecionada
-                        ? `${duracaoSelecionada} minutos`
-                        : "Duração não cadastrada"}
-                    </p>
-                  )}
-
-                  <strong
+                  <p
                     style={{
-                      color: "#222",
-                      fontSize: "17px",
+                      margin: "0 0 10px",
+                      color: "#555",
+                      fontSize: "13px",
                     }}
                   >
-                    {terminoCalculado
-                      ? formatarData(terminoCalculado)
-                      : "Selecione o serviço e o início"}
-                  </strong>
+                    <strong>Duração do serviço:</strong>{" "}
+                    {duracaoSelecionada
+                      ? `${duracaoSelecionada} minutos`
+                      : "Selecione um serviço"}
+                  </p>
 
                   <p
                     style={{
-                      margin: "8px 0 0",
-                      color: "#777",
-                      fontSize: "12px",
+                      margin: "0 0 10px",
+                      color: "#555",
+                      fontSize: "13px",
                     }}
                   >
-                    O horário de término será calculado
-                    com base na duração cadastrada.
+                    <strong>Início:</strong>{" "}
+                    {inicioSelecionado
+                      ? formatarData(inicioSelecionado)
+                      : "Selecione um horário"}
+                  </p>
+
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "#222",
+                      fontSize: "15px",
+                    }}
+                  >
+                    <strong>Término automático:</strong>{" "}
+                    {terminoCalculado
+                      ? formatarData(terminoCalculado)
+                      : "Aguardando seleção"}
                   </p>
                 </div>
               </div>
 
-              {/* STATUS: SOMENTE EDIÇÃO */}
+              {/* STATUS */}
 
               {agendamentoEditando && (
                 <div className="ga-grupo-campo">
@@ -1160,9 +1517,11 @@ export default function GerenciamentoAgendamentos() {
                     <option value="agendado">
                       Agendado
                     </option>
+
                     <option value="confirmado">
                       Confirmado
                     </option>
+
                     <option value="concluido">
                       Concluído
                     </option>
@@ -1170,7 +1529,7 @@ export default function GerenciamentoAgendamentos() {
                 </div>
               )}
 
-              {/* FORMA DE PAGAMENTO */}
+              {/* PAGAMENTO */}
 
               <div className="ga-grupo-campo">
                 <label htmlFor="ga-pagamento-form">
@@ -1208,11 +1567,15 @@ export default function GerenciamentoAgendamentos() {
                 />
               </div>
 
+              {/* ERROS */}
+
               {erro && (
                 <div className="ga-alerta ga-alerta-erro">
                   {erro}
                 </div>
               )}
+
+              {/* BOTÕES */}
 
               <div className="ga-modal-acoes">
                 <button
@@ -1229,6 +1592,8 @@ export default function GerenciamentoAgendamentos() {
                   className="ga-btn ga-btn-dourado"
                   disabled={
                     salvando ||
+                    carregandoHorarios ||
+                    Boolean(erroHorarios) ||
                     !duracaoSelecionada ||
                     !terminoCalculado
                   }
