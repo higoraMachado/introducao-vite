@@ -1,76 +1,52 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MovimentacaoEstoque.css';
 import logoHope from '../../assets/logo-hope.png';
 
-const produtosIniciais = [
-  {
-    id: 1,
-    nome: 'Pomada Modeladora',
-    categoria: 'Finalização',
-    quantidade: 15,
-    precoCompra: 15,
-    precoVenda: 25,
-  },
-  {
-    id: 2,
-    nome: 'Shampoo Masculino',
-    categoria: 'Higiene',
-    quantidade: 8,
-    precoCompra: 18,
-    precoVenda: 30,
-  },
-  {
-    id: 3,
-    nome: 'Cera para Barba',
-    categoria: 'Barba',
-    quantidade: 11,
-    precoCompra: 12,
-    precoVenda: 22,
-  },
-  {
-    id: 4,
-    nome: 'Óleo para Barba',
-    categoria: 'Barba',
-    quantidade: 4,
-    precoCompra: 20,
-    precoVenda: 35,
-  },
-];
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333';
 
 const hoje = new Date().toISOString().slice(0, 10);
 
-const movimentosIniciais = [
-  {
-    id: 1,
-    tipo: 'entrada',
-    produto: 'Pomada Modeladora',
-    categoria: 'Finalização',
-    quantidade: 10,
-    data: '2026-09-18',
-    motivo: 'Reposição de fornecedor',
-    valor: 150,
-  },
-  {
-    id: 2,
-    tipo: 'saida',
-    produto: 'Shampoo Masculino',
-    categoria: 'Higiene',
-    quantidade: 3,
-    data: '2026-09-17',
-    motivo: 'Uso em atendimento',
-    valor: 54,
-  },
-  {
-    id: 3,
-    tipo: 'entrada',
-    produto: 'Cera para Barba',
-    categoria: 'Barba',
-    quantidade: 6,
-    data: '2026-09-15',
-    motivo: 'Compra de lotes adicionais',
-    valor: 72,
-  },
-];
+async function request(endpoint, options = {}) {
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+
+  let data = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.mensagem || data?.message || 'Erro ao realizar operação.'
+    );
+  }
+
+  return data;
+}
+
+// Converte o produto da API para o formato usado na tela
+function normalizarProduto(produto) {
+  return {
+    id: produto.produto_id,
+    nome: produto.produto_nome ?? '',
+    categoria: produto.produto_categoria ?? 'Sem categoria',
+    quantidade: Number(produto.produto_est_atual ?? 0),
+    precoCompra: Number(produto.produto_custo ?? 0),
+    precoVenda: Number(produto.produto_preco ?? 0),
+  };
+}
 
 function formatarMoeda(valor) {
   return new Intl.NumberFormat('pt-BR', {
@@ -88,24 +64,59 @@ function formatarData(data) {
 }
 
 function MovimentacaoEstoque() {
-  const [produtos, setProdutos] = useState(produtosIniciais);
-  const [movimentos, setMovimentos] = useState(movimentosIniciais);
+  const navigate = useNavigate();
+
+  // Produtos vêm SOMENTE da API
+  const [produtos, setProdutos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [enviando, setEnviando] = useState(false);
+
+  // Movimentações feitas nesta sessão (a API ainda não guarda histórico)
+  const [movimentos, setMovimentos] = useState([]);
+
   const [tipoMovimentacao, setTipoMovimentacao] = useState('entrada');
   const [filtro, setFiltro] = useState('todos');
-  const [modalCadastroAberto, setModalCadastroAberto] = useState(false);
-  const [novoProdutoForm, setNovoProdutoForm] = useState({
-    nome: '',
-    categoria: 'Finalização',
-    quantidade: '',
-    precoCompra: '',
-    precoVenda: '',
-  });
   const [form, setForm] = useState({
-    produtoId: '1',
+    produtoId: '',
     quantidade: '',
     data: hoje,
     motivo: '',
   });
+
+  async function carregarProdutos() {
+    try {
+      setCarregando(true);
+
+      const resposta = await request('/produtos');
+      const lista = Array.isArray(resposta?.dados) ? resposta.dados : [];
+      const normalizados = lista.map(normalizarProduto);
+
+      setProdutos(normalizados);
+
+      // Garante que o select tenha um produto válido selecionado
+      setForm((estadoAtual) => {
+        const aindaExiste = normalizados.some(
+          (produto) => String(produto.id) === estadoAtual.produtoId
+        );
+
+        return aindaExiste
+          ? estadoAtual
+          : {
+              ...estadoAtual,
+              produtoId: normalizados[0] ? String(normalizados[0].id) : '',
+            };
+      });
+    } catch (error) {
+      console.error('Erro ao carregar produtos:', error);
+      alert(error.message || 'Não foi possível carregar os produtos.');
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  useEffect(() => {
+    carregarProdutos();
+  }, []);
 
   const resumo = useMemo(() => {
     const entradas = movimentos.filter((item) => item.tipo === 'entrada');
@@ -139,72 +150,7 @@ function MovimentacaoEstoque() {
     }));
   }
 
-  function alterarNovoProduto(event) {
-    const { name, value } = event.target;
-    setNovoProdutoForm((estadoAtual) => ({
-      ...estadoAtual,
-      [name]: value,
-    }));
-  }
-
-  function cadastrarProduto(event) {
-    event.preventDefault();
-
-    const nome = novoProdutoForm.nome.trim();
-    const quantidade = Number(novoProdutoForm.quantidade);
-    const precoCompra = Number(novoProdutoForm.precoCompra);
-    const precoVenda = Number(novoProdutoForm.precoVenda);
-
-    if (!nome) {
-      alert('Informe o nome do produto.');
-      return;
-    }
-
-    if (!novoProdutoForm.categoria) {
-      alert('Selecione a categoria do produto.');
-      return;
-    }
-
-    if (!quantidade || quantidade <= 0) {
-      alert('Informe uma quantidade inicial válida.');
-      return;
-    }
-
-    if (!precoCompra || precoCompra <= 0) {
-      alert('Informe o preço de compra válido.');
-      return;
-    }
-
-    if (!precoVenda || precoVenda <= 0) {
-      alert('Informe o preço de venda válido.');
-      return;
-    }
-
-    const produtoNovo = {
-      id: Date.now(),
-      nome,
-      categoria: novoProdutoForm.categoria,
-      quantidade,
-      precoCompra,
-      precoVenda,
-    };
-
-    setProdutos((estadoAtual) => [...estadoAtual, produtoNovo]);
-    setForm((estadoAtual) => ({
-      ...estadoAtual,
-      produtoId: String(produtoNovo.id),
-    }));
-    setNovoProdutoForm({
-      nome: '',
-      categoria: 'Finalização',
-      quantidade: '',
-      precoCompra: '',
-      precoVenda: '',
-    });
-    setModalCadastroAberto(false);
-  }
-
-  function registrarMovimentacao(event) {
+  async function registrarMovimentacao(event) {
     event.preventDefault();
 
     const produtoSelecionado = produtos.find(
@@ -233,49 +179,55 @@ function MovimentacaoEstoque() {
       return;
     }
 
-    setProdutos((estadoAtual) =>
-      estadoAtual.map((produto) => {
-        if (produto.id !== produtoSelecionado.id) {
-          return produto;
+    if (tipoMovimentacao === 'saida' && quantidade > produtoSelecionado.quantidade) {
+      alert('A quantidade de saída não pode ser maior que o estoque atual.');
+      return;
+    }
+
+    try {
+      setEnviando(true);
+
+      await request(
+        `/produtos/${produtoSelecionado.id}/estoque/${tipoMovimentacao}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            tipo: tipoMovimentacao,
+            quantidade,
+            motivo: form.motivo.trim(),
+          }),
         }
+      );
 
-        const novaQuantidade =
-          tipoMovimentacao === 'entrada'
-            ? produto.quantidade + quantidade
-            : produto.quantidade - quantidade;
+      setMovimentos((estadoAtual) => [
+        {
+          id: Date.now(),
+          tipo: tipoMovimentacao,
+          produto: produtoSelecionado.nome,
+          categoria: produtoSelecionado.categoria,
+          quantidade,
+          data: form.data,
+          motivo: form.motivo.trim(),
+          valor: quantidade * produtoSelecionado.precoCompra,
+        },
+        ...estadoAtual,
+      ]);
 
-        if (tipoMovimentacao === 'saida' && novaQuantidade < 0) {
-          alert('A quantidade de saída não pode ser maior que o estoque atual.');
-          return produto;
-        }
+      setForm({
+        produtoId: String(produtoSelecionado.id),
+        quantidade: '',
+        data: hoje,
+        motivo: '',
+      });
 
-        return {
-          ...produto,
-          quantidade: novaQuantidade,
-        };
-      })
-    );
-
-    const valorMovimento = quantidade * produtoSelecionado.precoCompra;
-
-    const novoMovimento = {
-      id: Date.now(),
-      tipo: tipoMovimentacao,
-      produto: produtoSelecionado.nome,
-      categoria: produtoSelecionado.categoria,
-      quantidade,
-      data: form.data,
-      motivo: form.motivo.trim(),
-      valor: valorMovimento,
-    };
-
-    setMovimentos((estadoAtual) => [novoMovimento, ...estadoAtual]);
-    setForm({
-      produtoId: String(produtoSelecionado.id),
-      quantidade: '',
-      data: hoje,
-      motivo: '',
-    });
+      // Atualiza as quantidades com o que está no banco
+      await carregarProdutos();
+    } catch (error) {
+      console.error('Erro ao registrar movimentação:', error);
+      alert(error.message || 'Não foi possível registrar a movimentação.');
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
@@ -310,118 +262,11 @@ function MovimentacaoEstoque() {
           <button
             type="button"
             className="new-product-button"
-            onClick={() => setModalCadastroAberto(true)}
+            onClick={() => navigate('/CadastroProduto')}
           >
             + Cadastrar novo produto
           </button>
         </div>
-
-        {modalCadastroAberto && (
-          <div className="modal-overlay" onClick={() => setModalCadastroAberto(false)}>
-            <div className="modal-card" onClick={(event) => event.stopPropagation()}>
-              <button
-                type="button"
-                className="modal-close"
-                onClick={() => setModalCadastroAberto(false)}
-              >
-                ×
-              </button>
-
-              <div className="modal-icon">+</div>
-              <h3>Cadastrar produto</h3>
-              <p>Adicione um novo item ao estoque.</p>
-
-              <form className="modal-form" onSubmit={cadastrarProduto}>
-                <div className="form-group">
-                  <label htmlFor="novo-nome">Nome</label>
-                  <input
-                    id="novo-nome"
-                    type="text"
-                    name="nome"
-                    value={novoProdutoForm.nome}
-                    onChange={alterarNovoProduto}
-                    placeholder="Ex: Gel fixador"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="novo-categoria">Categoria</label>
-                  <select
-                    id="novo-categoria"
-                    name="categoria"
-                    value={novoProdutoForm.categoria}
-                    onChange={alterarNovoProduto}
-                  >
-                    <option value="Finalização">Finalização</option>
-                    <option value="Higiene">Higiene</option>
-                    <option value="Barba">Barba</option>
-                    <option value="Acessórios">Acessórios</option>
-                  </select>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="novo-quantidade">Quantidade</label>
-                    <input
-                      id="novo-quantidade"
-                      type="number"
-                      name="quantidade"
-                      min="1"
-                      value={novoProdutoForm.quantidade}
-                      onChange={alterarNovoProduto}
-                      placeholder="0"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="novo-precoCompra">Preço de compra</label>
-                    <input
-                      id="novo-precoCompra"
-                      type="number"
-                      name="precoCompra"
-                      min="0.01"
-                      step="0.01"
-                      value={novoProdutoForm.precoCompra}
-                      onChange={alterarNovoProduto}
-                      placeholder="R$ 0,00"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="novo-precoVenda">Preço de venda</label>
-                  <input
-                    id="novo-precoVenda"
-                    type="number"
-                    name="precoVenda"
-                    min="0.01"
-                    step="0.01"
-                    value={novoProdutoForm.precoVenda}
-                    onChange={alterarNovoProduto}
-                    placeholder="R$ 0,00"
-                    required
-                  />
-                </div>
-
-                <div className="form-actions">
-                  <button
-                    type="button"
-                    className="secondary-button"
-                    onClick={() => setModalCadastroAberto(false)}
-                  >
-                    Cancelar
-                  </button>
-                  <button type="submit" className="primary-button">
-                    Salvar produto
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
         <div className="summary-grid">
           <article className="summary-card accent">
@@ -478,6 +323,11 @@ function MovimentacaoEstoque() {
                   value={form.produtoId}
                   onChange={alterarFormulario}
                 >
+                  {produtos.length === 0 && (
+                    <option value="">
+                      {carregando ? 'Carregando produtos...' : 'Nenhum produto cadastrado'}
+                    </option>
+                  )}
                   {produtos.map((produto) => (
                     <option key={produto.id} value={produto.id}>
                       {produto.nome}
@@ -531,8 +381,12 @@ function MovimentacaoEstoque() {
                 <button type="button" className="secondary-button">
                   Cancelar
                 </button>
-                <button type="submit" className="primary-button">
-                  Registrar movimentação
+                <button
+                  type="submit"
+                  className="primary-button"
+                  disabled={enviando || produtos.length === 0}
+                >
+                  {enviando ? 'Registrando...' : 'Registrar movimentação'}
                 </button>
               </div>
             </form>
@@ -547,6 +401,11 @@ function MovimentacaoEstoque() {
             </div>
 
             <div className="stock-list">
+              {!carregando && produtos.length === 0 && (
+                <div className="stock-item">
+                  <span>Nenhum produto cadastrado.</span>
+                </div>
+              )}
               {produtos.map((produto) => (
                 <div key={produto.id} className="stock-item">
                   <div>

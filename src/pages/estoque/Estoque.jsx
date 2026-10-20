@@ -47,43 +47,20 @@ async function request(endpoint, options = {}) {
 
 function normalizarProduto(produto) {
   return {
-    ...produto,
-
-    id: produto.id ?? produto._id,
-
-    nome: produto.nome ?? '',
-
-    descricao: produto.descricao ?? '',
-
-    categoria: produto.categoria ?? '',
-
-    quantidade: Number(
-      produto.quantidade ??
-        produto.estoqueAtual ??
-        produto.estoque ??
-        0
-    ),
-
-    precoCompra: Number(
-      produto.precoCompra ??
-        produto.custo ??
-        produto.preco_custo ??
-        0
-    ),
-
-    precoVenda: Number(
-      produto.precoVenda ??
-        produto.preco ??
-        0
-    ),
-
-    estoqueMinimo: Number(
-      produto.estoqueMinimo ??
-        produto.estoque_minimo ??
-        0
-    )
+    id: produto.produto_id,
+    nome: produto.produto_nome ?? '',
+    descricao: produto.produto_descricao ?? '',
+    categoria: produto.produto_categoria ?? 'Sem categoria',
+    quantidade: Number(produto.produto_est_atual ?? 0),
+    precoCompra: Number(produto.produto_custo ?? 0),
+    precoVenda: Number(produto.produto_preco ?? 0),
+    estoqueMinimo: Number(produto.produto_est_minimo ?? 0),
+    imagem: produto.produto_imagem
+      ? `${API_URL}/public/produtos/${produto.produto_imagem}`
+      : null
   };
 }
+
 async function carregarProdutos() {
   try {
      setCarregando(true);
@@ -203,38 +180,21 @@ useEffect(() => {
     const precoVenda = Number(produtoForm.precoVenda);
     const estoqueMinimo = Number(produtoForm.estoqueMinimo);
 
-    const resposta = await request('/produtos', {
+    await request('/produtos', {
       method: 'POST',
 
       body: JSON.stringify({
         nome: produtoForm.nome,
         descricao: produtoForm.descricao,
         categoria: produtoForm.categoria,
-
         quantidade,
-
-        // Caso sua API utilize esses nomes:
-        precoCompra,
-        precoVenda,
+        custo: precoCompra,
+        preco: precoVenda,
         estoqueMinimo
       })
     });
 
-    const produtoCriado =
-      resposta?.produto ||
-      resposta?.dados ||
-      resposta;
-
-    if (produtoCriado?.id || produtoCriado?._id) {
-      setProdutos((produtosAtuais) => [
-        ...produtosAtuais,
-        normalizarProduto(produtoCriado)
-      ]);
-    } else {
-      // Se a API não devolve o produto criado,
-      // busca novamente.
-      await carregarProdutos();
-    }
+    await carregarProdutos();
 
     setProdutoForm({
       nome: '',
@@ -290,22 +250,18 @@ useEffect(() => {
   }
 
   try {
-    let endpoint = '';
+    await request(
+      `/produtos/${produtoSelecionado.id}/estoque/${tipoMovimentacao}`,
+      {
+        method: 'POST',
 
-    if (tipoMovimentacao === 'entrada') {
-      endpoint = `/produtos/${produtoSelecionado.id}/entrada`;
-    } else {
-      endpoint = `/produtos/${produtoSelecionado.id}/saida`;
-    }
-
-    await request(endpoint, {
-      method: 'POST',
-
-      body: JSON.stringify({
-        quantidade,
-        motivo: movimentacaoForm.motivo
-      })
-    });
+        body: JSON.stringify({
+          tipo: tipoMovimentacao,
+          quantidade,
+          motivo: movimentacaoForm.motivo
+        })
+      }
+    );
 
     await carregarProdutos();
 
@@ -334,6 +290,37 @@ useEffect(() => {
     );
   }
 }
+
+  // ========================================
+  // EXCLUIR PRODUTO
+  // ========================================
+
+  async function excluirProduto(produto) {
+    const confirmou = window.confirm(
+      `Excluir o produto "${produto.nome}"?\n\nEssa ação não pode ser desfeita.`
+    );
+
+    if (!confirmou) {
+      return;
+    }
+
+    try {
+      await request(`/produtos/${produto.id}`, {
+        method: 'DELETE'
+      });
+
+      setProdutos((produtosAtuais) =>
+        produtosAtuais.filter((item) => item.id !== produto.id)
+      );
+    } catch (error) {
+      console.error('Erro ao excluir produto:', error);
+
+      alert(
+        error.message ||
+          'Não foi possível excluir o produto.'
+      );
+    }
+  }
 
   // ========================================
   // ABRIR MOVIMENTAÇÃO
@@ -793,7 +780,20 @@ useEffect(() => {
                             <div className="product-name">
 
                               <div className="product-icon">
-                                📦
+                                {produto.imagem ? (
+                                  <img
+                                    src={produto.imagem}
+                                    alt={produto.nome}
+                                    style={{
+                                      width: '100%',
+                                      height: '100%',
+                                      objectFit: 'cover',
+                                      borderRadius: 'inherit'
+                                    }}
+                                  />
+                                ) : (
+                                  '📦'
+                                )}
                               </div>
 
                               <div>
@@ -852,16 +852,31 @@ useEffect(() => {
 
                           <td>
 
-                            <button
-                              className="btn-movimentar"
-                              onClick={() =>
-                                abrirMovimentacao(
-                                  produto
-                                )
-                              }
-                            >
-                              Movimentar
-                            </button>
+                            <div className="table-actions">
+
+                              <button
+                                className="btn-movimentar"
+                                onClick={() =>
+                                  abrirMovimentacao(
+                                    produto
+                                  )
+                                }
+                              >
+                                Movimentar
+                              </button>
+
+                              <button
+                                className="btn-excluir"
+                                onClick={() =>
+                                  excluirProduto(
+                                    produto
+                                  )
+                                }
+                              >
+                                Excluir
+                              </button>
+
+                            </div>
 
                           </td>
 

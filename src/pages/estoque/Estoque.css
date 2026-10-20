@@ -667,6 +667,45 @@ tbody tr:hover {
 }
 
 
+.table-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.btn-excluir {
+  height: 34px;
+
+  padding: 0 12px;
+
+  border: 1px solid #e0b4b4;
+
+  border-radius: 7px;
+
+  background: white;
+
+  color: #b42318;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-excluir:hover {
+  background: #b42318;
+
+  border-color: #b42318;
+
+  color: white;
+}
+
+
 /* ========================================
    TABELA VAZIA
 ======================================== */
