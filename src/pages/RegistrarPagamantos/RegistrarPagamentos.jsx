@@ -44,9 +44,7 @@ const pagamentosIniciais = [
 
 function formatarData(data) {
   if (!data) return '-';
-
   const [ano, mes, dia] = data.split('-');
-
   return `${dia}/${mes}/${ano.slice(2)}`;
 }
 
@@ -68,17 +66,12 @@ function RegistrarPagamentos() {
     observacao: '',
   });
 
-  const [pagamentos, setPagamentos] = useState(
-    pagamentosIniciais
-  );
-
+  const [pagamentos, setPagamentos] = useState(pagamentosIniciais);
   const [busca, setBusca] = useState('');
-
   const [filtroForma, setFiltroForma] = useState('Todas');
 
   function alterarCampo(event) {
     const { name, value } = event.target;
-
     setForm((estadoAtual) => ({
       ...estadoAtual,
       [name]: value,
@@ -89,10 +82,7 @@ function RegistrarPagamentos() {
     setForm((estadoAtual) => ({
       ...estadoAtual,
       formaPagamento: forma,
-      parcelas:
-        forma === 'Cartão de crédito'
-          ? estadoAtual.parcelas
-          : '1',
+      parcelas: forma === 'Cartão de crédito' ? estadoAtual.parcelas : '1',
     }));
   }
 
@@ -111,12 +101,7 @@ function RegistrarPagamentos() {
   function registrarPagamento(event) {
     event.preventDefault();
 
-    if (
-      !form.cliente ||
-      !form.servico ||
-      !form.valor ||
-      !form.data
-    ) {
+    if (!form.cliente || !form.servico || !form.valor || !form.data) {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
@@ -132,79 +117,53 @@ function RegistrarPagamentos() {
       observacao: form.observacao,
     };
 
-    setPagamentos((listaAtual) => [
-      novoPagamento,
-      ...listaAtual,
-    ]);
-
+    setPagamentos((listaAtual) => [novoPagamento, ...listaAtual]);
     alert('Pagamento registrado com sucesso!');
-
     limparFormulario();
   }
 
   function excluirPagamento(id) {
-    const confirmar = window.confirm(
-      'Deseja realmente excluir este pagamento?'
-    );
-
+    const confirmar = window.confirm('Deseja realmente excluir este pagamento?');
     if (!confirmar) return;
 
     setPagamentos((listaAtual) =>
-      listaAtual.filter(
-        (pagamento) => pagamento.id !== id
-      )
+      listaAtual.filter((pagamento) => pagamento.id !== id)
     );
   }
 
-  const pagamentosFiltrados = pagamentos.filter(
-    (pagamento) => {
-      const correspondeBusca =
-        pagamento.cliente
-          .toLowerCase()
-          .includes(busca.toLowerCase());
+  const pagamentosFiltrados = pagamentos.filter((pagamento) => {
+    const correspondeBusca = pagamento.cliente
+      .toLowerCase()
+      .includes(busca.toLowerCase());
 
-      const correspondeForma =
-        filtroForma === 'Todas' ||
-        pagamento.formaPagamento === filtroForma;
+    const correspondeForma =
+      filtroForma === 'Todas' || pagamento.formaPagamento === filtroForma;
 
-      return correspondeBusca && correspondeForma;
-    }
-  );
+    return correspondeBusca && correspondeForma;
+  });
 
   const totalRecebido = pagamentos.reduce(
-    (total, pagamento) =>
-      total + Number(pagamento.valor),
+    (total, pagamento) => total + Number(pagamento.valor),
     0
   );
 
   const quantidadePagamentos = pagamentos.length;
 
   const pagamentosHoje = pagamentos.filter(
-    (pagamento) =>
-      pagamento.data ===
-      new Date().toISOString().slice(0, 10)
+    (pagamento) => pagamento.data === new Date().toISOString().slice(0, 10)
   );
 
   const totalHoje = pagamentosHoje.reduce(
-    (total, pagamento) =>
-      total + Number(pagamento.valor),
+    (total, pagamento) => total + Number(pagamento.valor),
     0
   );
 
   return (
     <main className="registrar-pagamento-page">
-
-      {/* =========================================
-          CABEÇALHO
-      ========================================= */}
-
+      {/* CABEÇALHO */}
       <header className="registrar-pagamento-header">
-
         <div className="header-logo">
-          <img
-            src={logoHope}
-            alt="Hope Barbearia"
-          />
+          <img src={logoHope} alt="Hope Barbearia" />
         </div>
 
         <div className="header-title">
@@ -213,157 +172,64 @@ function RegistrarPagamentos() {
         </div>
 
         <div className="header-user">
-
-          <div className="user-avatar">
-            A
-          </div>
-
+          <div className="user-avatar">A</div>
           <div className="user-info">
             <strong>Administrador</strong>
             <span>Financeiro</span>
           </div>
-
         </div>
-
       </header>
 
-
-      {/* =========================================
-          CONTEÚDO
-      ========================================= */}
-
+      {/* CONTEÚDO */}
       <section className="registrar-pagamento-content">
-
         {/* TÍTULO */}
-
         <div className="page-heading">
-
-          <span className="heading-label">
-            FINANCEIRO
-          </span>
-
-          <h2>
-            Registrar pagamento
-          </h2>
-
-          <p>
-            Cadastre os recebimentos e acompanhe
-            o histórico financeiro da barbearia.
-          </p>
-
+          <span className="heading-label">FINANCEIRO</span>
+          <h2>Registrar pagamento</h2>
+          <p>Cadastre os recebimentos e acompanhe o histórico financeiro da barbearia.</p>
         </div>
 
-
-        {/* =========================================
-            CARDS DE RESUMO
-        ========================================= */}
-
+        {/* CARDS DE RESUMO */}
         <div className="pagamento-resumo-cards">
-
           <div className="resumo-card">
-
-            <div className="resumo-icone">
-              R$
-            </div>
-
+            <div className="resumo-icone">R$</div>
             <div>
-              <span>
-                Total recebido
-              </span>
-
-              <strong>
-                {formatarValor(totalRecebido)}
-              </strong>
+              <span>Total recebido</span>
+              <strong>{formatarValor(totalRecebido)}</strong>
             </div>
-
           </div>
 
-
           <div className="resumo-card">
-
-            <div className="resumo-icone">
-              $
-            </div>
-
+            <div className="resumo-icone">$</div>
             <div>
-              <span>
-                Recebido hoje
-              </span>
-
-              <strong>
-                {formatarValor(totalHoje)}
-              </strong>
+              <span>Recebido hoje</span>
+              <strong>{formatarValor(totalHoje)}</strong>
             </div>
-
           </div>
 
-
           <div className="resumo-card">
-
-            <div className="resumo-icone">
-              ✓
-            </div>
-
+            <div className="resumo-icone">✓</div>
             <div>
-              <span>
-                Pagamentos registrados
-              </span>
-
-              <strong>
-                {quantidadePagamentos}
-              </strong>
+              <span>Pagamentos registrados</span>
+              <strong>{quantidadePagamentos}</strong>
             </div>
-
           </div>
-
         </div>
 
-
-        {/* =========================================
-            ÁREA PRINCIPAL
-        ========================================= */}
-
+        {/* ÁREA PRINCIPAL */}
         <div className="pagamento-layout">
-
-
-          {/* =====================================
-              FORMULÁRIO
-          ===================================== */}
-
-          <form
-            className="pagamento-form"
-            onSubmit={registrarPagamento}
-          >
-
+          {/* FORMULÁRIO */}
+          <form className="pagamento-form" onSubmit={registrarPagamento}>
             <div className="form-header">
-
-              <span>
-                REGISTRO
-              </span>
-
-              <h3>
-                Novo recebimento
-              </h3>
-
-              <p>
-                Informe os dados do pagamento
-                realizado pelo cliente.
-              </p>
-
+              <span>REGISTRO</span>
+              <h3>Novo recebimento</h3>
+              <p>Informe os dados do pagamento realizado pelo cliente.</p>
             </div>
-
 
             <div className="form-grid">
-
-
               {/* CLIENTE */}
-
               <div className="form-group">
-
-                <label htmlFor="cliente">
-                  Cliente
-                </label>
-
+                <label htmlFor="cliente">Cliente</label>
                 <input
                   id="cliente"
                   name="cliente"
@@ -373,18 +239,11 @@ function RegistrarPagamentos() {
                   placeholder="Nome do cliente"
                   required
                 />
-
               </div>
 
-
               {/* SERVIÇO */}
-
               <div className="form-group">
-
-                <label htmlFor="servico">
-                  Serviço
-                </label>
-
+                <label htmlFor="servico">Serviço</label>
                 <input
                   id="servico"
                   name="servico"
@@ -394,18 +253,11 @@ function RegistrarPagamentos() {
                   placeholder="Ex: Corte de cabelo"
                   required
                 />
-
               </div>
 
-
               {/* DATA */}
-
               <div className="form-group">
-
-                <label htmlFor="data">
-                  Data
-                </label>
-
+                <label htmlFor="data">Data</label>
                 <input
                   id="data"
                   name="data"
@@ -414,24 +266,13 @@ function RegistrarPagamentos() {
                   onChange={alterarCampo}
                   required
                 />
-
               </div>
 
-
               {/* VALOR */}
-
               <div className="form-group">
-
-                <label htmlFor="valor">
-                  Valor
-                </label>
-
+                <label htmlFor="valor">Valor</label>
                 <div className="input-valor">
-
-                  <span>
-                    R$
-                  </span>
-
+                  <span>R$</span>
                   <input
                     id="valor"
                     name="valor"
@@ -443,24 +284,14 @@ function RegistrarPagamentos() {
                     placeholder="0,00"
                     required
                   />
-
                 </div>
-
               </div>
 
-
               {/* FORMA DE PAGAMENTO */}
-
               <div className="form-group full-width">
-
-                <label>
-                  Forma de pagamento
-                </label>
-
+                <label>Forma de pagamento</label>
                 <div className="formas-pagamento">
-
                   {formasPagamento.map((forma) => (
-
                     <button
                       key={forma}
                       type="button"
@@ -469,58 +300,27 @@ function RegistrarPagamentos() {
                           ? 'forma-pagamento selecionada'
                           : 'forma-pagamento'
                       }
-                      onClick={() =>
-                        selecionarForma(forma)
-                      }
+                      onClick={() => selecionarForma(forma)}
                     >
-
                       <span className="forma-icone">
-
                         {forma === 'Dinheiro' && 'R$'}
-
                         {forma === 'PIX' && '✦'}
-
                         {forma === 'Cartão de débito' && '▣'}
-
                         {forma === 'Cartão de crédito' && '▤'}
-
                       </span>
-
-                      <span>
-                        {forma}
-                      </span>
-
+                      <span>{forma}</span>
                     </button>
-
                   ))}
-
                 </div>
-
               </div>
 
-
               {/* PARCELAMENTO */}
-
-              {form.formaPagamento ===
-                'Cartão de crédito' && (
-
+              {form.formaPagamento === 'Cartão de crédito' && (
                 <div className="parcelamento-box full-width">
-
                   <div className="parcelamento-texto">
-
-                    <span>
-                      PARCELAMENTO
-                    </span>
-
-                    <strong>
-                      Número de parcelas
-                    </strong>
-
-                    <p>
-                      Escolha em quantas vezes
-                      o pagamento será dividido.
-                    </p>
-
+                    <span>PARCELAMENTO</span>
+                    <strong>Número de parcelas</strong>
+                    <p>Escolha em quantas vezes o pagamento será dividido.</p>
                   </div>
 
                   <select
@@ -528,54 +328,21 @@ function RegistrarPagamentos() {
                     value={form.parcelas}
                     onChange={alterarCampo}
                   >
-
-                    <option value="1">
-                      1x
-                    </option>
-
-                    <option value="2">
-                      2x
-                    </option>
-
-                    <option value="3">
-                      3x
-                    </option>
-
-                    <option value="4">
-                      4x
-                    </option>
-
-                    <option value="5">
-                      5x
-                    </option>
-
-                    <option value="6">
-                      6x
-                    </option>
-
-                    <option value="10">
-                      10x
-                    </option>
-
-                    <option value="12">
-                      12x
-                    </option>
-
+                    <option value="1">1x</option>
+                    <option value="2">2x</option>
+                    <option value="3">3x</option>
+                    <option value="4">4x</option>
+                    <option value="5">5x</option>
+                    <option value="6">6x</option>
+                    <option value="10">10x</option>
+                    <option value="12">12x</option>
                   </select>
-
                 </div>
-
               )}
 
-
               {/* OBSERVAÇÃO */}
-
               <div className="form-group full-width">
-
-                <label htmlFor="observacao">
-                  Observações
-                </label>
-
+                <label htmlFor="observacao">Observações</label>
                 <textarea
                   id="observacao"
                   name="observacao"
@@ -584,16 +351,11 @@ function RegistrarPagamentos() {
                   placeholder="Adicione alguma observação..."
                   rows="4"
                 />
-
               </div>
-
             </div>
 
-
             {/* BOTÕES */}
-
             <div className="form-actions">
-
               <button
                 type="button"
                 className="btn-secondary"
@@ -602,416 +364,184 @@ function RegistrarPagamentos() {
                 Limpar
               </button>
 
-              <button
-                type="submit"
-                className="btn-primary"
-              >
+              <button type="submit" className="btn-primary">
                 Registrar pagamento
               </button>
-
             </div>
-
           </form>
 
-
-          {/* =====================================
-              RESUMO LATERAL
-          ===================================== */}
-
+          {/* RESUMO LATERAL */}
           <aside className="pagamento-lateral">
-
             <div className="resumo-pagamento">
-
               <div className="resumo-pagamento-header">
-
-                <span>
-                  RESUMO
-                </span>
-
-                <h3>
-                  Pagamento
-                </h3>
-
+                <span>RESUMO</span>
+                <h3>Pagamento</h3>
               </div>
-
 
               <div className="resumo-pagamento-content">
-
                 <div className="resumo-linha">
-
-                  <span>
-                    Cliente
-                  </span>
-
-                  <strong>
-                    {form.cliente ||
-                      'Não informado'}
-                  </strong>
-
+                  <span>Cliente</span>
+                  <strong>{form.cliente || 'Não informado'}</strong>
                 </div>
 
-
                 <div className="resumo-linha">
-
-                  <span>
-                    Serviço
-                  </span>
-
-                  <strong>
-                    {form.servico ||
-                      'Não informado'}
-                  </strong>
-
+                  <span>Serviço</span>
+                  <strong>{form.servico || 'Não informado'}</strong>
                 </div>
 
-
                 <div className="resumo-linha">
-
-                  <span>
-                    Forma
-                  </span>
-
-                  <strong>
-                    {form.formaPagamento}
-                  </strong>
-
+                  <span>Forma</span>
+                  <strong>{form.formaPagamento}</strong>
                 </div>
 
-
-                {form.formaPagamento ===
-                  'Cartão de crédito' && (
-
+                {form.formaPagamento === 'Cartão de crédito' && (
                   <div className="resumo-linha">
-
-                    <span>
-                      Parcelamento
-                    </span>
-
-                    <strong>
-                      {form.parcelas}x
-                    </strong>
-
+                    <span>Parcelamento</span>
+                    <strong>{form.parcelas}x</strong>
                   </div>
-
                 )}
 
-
                 <div className="resumo-valor">
-
-                  <span>
-                    Valor total
-                  </span>
-
+                  <span>Valor total</span>
                   <strong>
-                    {form.valor
-                      ? formatarValor(form.valor)
-                      : 'R$ 0,00'}
+                    {form.valor ? formatarValor(form.valor) : 'R$ 0,00'}
                   </strong>
-
                 </div>
-
               </div>
-
             </div>
-
 
             <div className="informacao-card">
-
-              <span>
-                INFORMAÇÃO
-              </span>
-
+              <span>INFORMAÇÃO</span>
               <p>
-                Os pagamentos registrados ficam
-                disponíveis no histórico financeiro
+                Os pagamentos registrados ficam disponíveis no histórico financeiro
                 da barbearia.
               </p>
-
             </div>
-
           </aside>
-
         </div>
 
-
-        {/* =========================================
-            HISTÓRICO
-        ========================================= */}
-
+        {/* HISTÓRICO */}
         <section className="historico-pagamentos">
-
           <div className="historico-header">
-
             <div>
-
-              <span className="heading-label">
-                MOVIMENTAÇÕES
-              </span>
-
-              <h2>
-                Histórico de pagamentos
-              </h2>
-
-              <p>
-                Consulte os recebimentos registrados
-                na barbearia.
-              </p>
-
+              <span className="heading-label">MOVIMENTAÇÕES</span>
+              <h2>Histórico de pagamentos</h2>
+              <p>Consulte os recebimentos registrados na barbearia.</p>
             </div>
-
           </div>
 
-
           {/* FILTROS */}
-
           <div className="historico-filtros">
-
             <div className="busca-container">
-
-              <span className="busca-icone">
-                ⌕
-              </span>
-
+              <span className="busca-icone">⌕</span>
               <input
                 type="text"
                 placeholder="Buscar por cliente..."
                 value={busca}
-                onChange={(event) =>
-                  setBusca(event.target.value)
-                }
+                onChange={(event) => setBusca(event.target.value)}
               />
-
             </div>
-
 
             <select
               value={filtroForma}
-              onChange={(event) =>
-                setFiltroForma(event.target.value)
-              }
+              onChange={(event) => setFiltroForma(event.target.value)}
             >
-
-              <option value="Todas">
-                Todas as formas
-              </option>
-
+              <option value="Todas">Todas as formas</option>
               {formasPagamento.map((forma) => (
-
-                <option
-                  key={forma}
-                  value={forma}
-                >
+                <option key={forma} value={forma}>
                   {forma}
                 </option>
-
               ))}
-
             </select>
-
           </div>
-
 
           {/* TABELA */}
-
           <div className="historico-tabela-container">
-
             {pagamentosFiltrados.length > 0 ? (
-
               <table className="historico-tabela">
-
                 <thead>
-
                   <tr>
-
-                    <th>
-                      Cliente
-                    </th>
-
-                    <th>
-                      Serviço
-                    </th>
-
-                    <th>
-                      Data
-                    </th>
-
-                    <th>
-                      Pagamento
-                    </th>
-
-                    <th>
-                      Parcelas
-                    </th>
-
-                    <th>
-                      Valor
-                    </th>
-
-                    <th>
-                      Ação
-                    </th>
-
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Data</th>
+                    <th>Pagamento</th>
+                    <th>Parcelas</th>
+                    <th>Valor</th>
+                    <th>Ação</th>
                   </tr>
-
                 </thead>
-
-
                 <tbody>
-
-                  {pagamentosFiltrados.map(
-                    (pagamento) => (
-
-                      <tr key={pagamento.id}>
-
-                        <td>
-
-                          <div className="cliente-tabela">
-
-                            <div className="cliente-avatar">
-                              {pagamento.cliente
-                                .charAt(0)
-                                .toUpperCase()}
-                            </div>
-
-                            <strong>
-                              {pagamento.cliente}
-                            </strong>
-
+                  {pagamentosFiltrados.map((pagamento) => (
+                    <tr key={pagamento.id}>
+                      <td>
+                        <div className="cliente-tabela">
+                          <div className="cliente-avatar">
+                            {pagamento.cliente.charAt(0).toUpperCase()}
                           </div>
-
-                        </td>
-
-
-                        <td>
-                          {pagamento.servico}
-                        </td>
-
-
-                        <td>
-                          {formatarData(
-                            pagamento.data
-                          )}
-                        </td>
-
-
-                        <td>
-
-                          <span
-                            className={`forma-tag ${
-                              pagamento.formaPagamento
-                                .toLowerCase()
-                                .replaceAll(
-                                  ' ',
-                                  '-'
-                                )
-                            }`}
-                          >
-
-                            {pagamento.formaPagamento}
-
-                          </span>
-
-                        </td>
-
-
-                        <td>
-
-                          {pagamento.formaPagamento ===
-                          'Cartão de crédito'
-                            ? `${pagamento.parcelas}x`
-                            : '-'}
-
-                        </td>
-
-
-                        <td>
-
-                          <strong className="valor-tabela">
-                            {formatarValor(
-                              pagamento.valor
-                            )}
-                          </strong>
-
-                        </td>
-
-
-                        <td>
-
-                          <button
-                            type="button"
-                            className="btn-excluir"
-                            onClick={() =>
-                              excluirPagamento(
-                                pagamento.id
-                              )
-                            }
-                            title="Excluir pagamento"
-                          >
-                            Excluir
-                          </button>
-
-                        </td>
-
-                      </tr>
-
-                    )
-                  )}
-
+                          <strong>{pagamento.cliente}</strong>
+                        </div>
+                      </td>
+                      <td>{pagamento.servico}</td>
+                      <td>{formatarData(pagamento.data)}</td>
+                      <td>
+                        <span
+                          className={`forma-tag ${pagamento.formaPagamento
+                            .toLowerCase()
+                            .replaceAll(' ', '-')}`}
+                        >
+                          {pagamento.formaPagamento}
+                        </span>
+                      </td>
+                      <td>
+                        {pagamento.formaPagamento === 'Cartão de crédito'
+                          ? `${pagamento.parcelas}x`
+                          : '-'}
+                      </td>
+                      <td>
+                        <strong className="valor-tabela">
+                          {formatarValor(pagamento.valor)}
+                        </strong>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn-excluir"
+                          onClick={() => excluirPagamento(pagamento.id)}
+                          title="Excluir pagamento"
+                        >
+                          Excluir
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
-
               </table>
-
             ) : (
-
               <div className="historico-vazio">
-
-                <div className="historico-vazio-icone">
-                  —
-                </div>
-
-                <strong>
-                  Nenhum pagamento encontrado
-                </strong>
-
-                <p>
-                  Tente alterar os filtros ou
-                  registrar um novo pagamento.
-                </p>
-
+                <div className="historico-vazio-icone">—</div>
+                <strong>Nenhum pagamento encontrado</strong>
+                <p>Tente alterar os filtros ou registrar um novo pagamento.</p>
               </div>
-
             )}
-
           </div>
 
-
           {/* RODAPÉ DO HISTÓRICO */}
-
           <div className="historico-footer">
-
             <span>
-              {pagamentosFiltrados.length}{' '}
-              pagamento(s) encontrado(s)
+              {pagamentosFiltrados.length} pagamento(s) encontrado(s)
             </span>
-
             <strong>
               Total exibido:{' '}
               {formatarValor(
                 pagamentosFiltrados.reduce(
-                  (total, pagamento) =>
-                    total +
-                    Number(pagamento.valor),
+                  (total, pagamento) => total + Number(pagamento.valor),
                   0
                 )
               )}
             </strong>
-
           </div>
-
         </section>
-
       </section>
-
     </main>
   );
 }

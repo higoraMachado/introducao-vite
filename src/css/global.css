@@ -380,4 +380,72 @@ body .btn-photo:hover {
   body [class$="-header"] .admin-header-title h1 {
     font-size: 20px;
   }
+} 
+
+
+
+
+/* =========================================
+   correção tamnho */
+
+   /* =========================================
+   PADRONIZAÇÃO GLOBAL DE FONTES E ELEMENTOS
+========================================= */
+
+/* 1. Rótulos e Legendas de topo em caixa alta */
+.heading-label,
+[class*="-heading"] .heading-label {
+  font-size: 1.2rem !important; /* Aumentado de 10px para 12px */
+  letter-spacing: 1.5px;
+}
+
+/* 2. Formulários Globais (Inputs, Selects, Textareas e Labels) */
+input, 
+select, 
+textarea, 
+button {
+  font-family: inherit;
+}
+
+label {
+  font-size: 1.3rem !important;
+  font-weight: 700;
+}
+
+input, 
+select, 
+textarea {
+  font-size: 1.4rem !important; /* Garante que o texto digitado seja legível */
+}
+
+/* 3. Botões Globais */
+button,
+[class^="btn-"] {
+  font-size: 1.3rem !important;
+}
+
+/* 4. Tabelas Globais (Históricos, Estoque, Clientes) */
+table th {
+  font-size: 1.3rem !important;
+}
+
+table td,
+table td strong,
+table td span {
+  font-size: 1.4rem !important;
+}
+
+/* 5. Parágrafos descritivos e textos auxiliares das páginas */
+p, 
+span {
+  font-size: 1.4rem;
+}
+
+/* Mantém os títulos com bom tamanho */
+h2 {
+  font-size: 3rem !important;
+}
+
+h3 {
+  font-size: 2rem !important;
 }
