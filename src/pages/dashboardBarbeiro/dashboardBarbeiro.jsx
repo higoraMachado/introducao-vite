@@ -464,6 +464,9 @@ function DashboardBarbeiro() {
   function irParaPerfil() {
     navigate('/perfil');
   }
+   function irParaMeusAgendamentos() {
+   navigate('/meusAgendamentosBarbeiro');
+   }
 
   function irParaAgenda() {
     const elemento = document.getElementById(
@@ -571,14 +574,21 @@ function DashboardBarbeiro() {
             >
               Ver agenda
             </button>
+<button
+  type="button"
+  className="btn-ver-agenda"
+  onClick={irParaMeusAgendamentos}
+>
+  Meus agendamentos
+</button>
 
-            <button
-              type="button"
-              className="btn-novo-agendamento"
-              onClick={abrirModalAgendamento}
-            >
-              + Novo agendamento
-            </button>
+<button
+  type="button"
+  className="btn-novo-agendamento"
+  onClick={abrirModalAgendamento}
+>
+  + Novo agendamento
+</button>
           </div>
         </div>
 
@@ -628,12 +638,12 @@ function DashboardBarbeiro() {
               </div>
 
               <button
-                type="button"
-                className="card-link"
-                onClick={irParaAgenda}
-              >
-                Ver todos
-              </button>
+  type="button"
+  className="card-link"
+  onClick={irParaMeusAgendamentos}
+>
+  Ver todos
+</button>
             </div>
 
             <div className="agenda-list">
@@ -772,12 +782,12 @@ function DashboardBarbeiro() {
             </div>
 
             <button
-              type="button"
-              className="card-link"
-              onClick={irParaAgenda}
-            >
-              Agenda
-            </button>
+  type="button"
+  className="card-link"
+  onClick={irParaMeusAgendamentos}
+>
+  Ver todos
+</button>
           </div>
 
           <div className="proximos-list">

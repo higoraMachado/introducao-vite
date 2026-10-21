@@ -24,8 +24,11 @@ import Despesas from './pages/Despesas/Despesas';
 import Landing from './pages/landing/Landing';
 import GerenciamentoBarbeiros from './pages/barbeirosGerenciamento/GerenciamentoBarbeiros';
 
-// NOVA TELA DE GERENCIAMENTO DE AGENDAMENTOS
+// GERENCIAMENTO DE AGENDAMENTOS DO ADMINISTRADOR
 import GerenciamentoAgendamentos from './pages/gerenciamentoAgendamentos/GerenciamentoAgendamentos';
+
+// GERENCIAMENTO DE AGENDAMENTOS DO BARBEIRO
+import MeusAgendamentos from './pages/meusAgendamentos/meusAgendamentos';
 
 function App() {
     return (
@@ -99,9 +102,16 @@ function App() {
                 }
             />
 
-            {/* A rota de gerenciamento do barbeiro
-                será adicionada quando criarmos
-                MeusAgendamentos.jsx. */}
+            {/* NOVA ROTA - MEUS AGENDAMENTOS DO BARBEIRO */}
+
+            <Route
+                path="/meusAgendamentosBarbeiro"
+                element={
+                    <ProtectedRoute tiposPermitidos={[2]}>
+                        <MeusAgendamentos />
+                    </ProtectedRoute>
+                }
+            />
 
             {/* =========================================
                 ADMINISTRADOR - TIPO 1
@@ -125,7 +135,7 @@ function App() {
                 }
             />
 
-            {/* NOVA ROTA - AGENDAMENTOS DO ADMINISTRADOR */}
+            {/* GERENCIAMENTO DE AGENDAMENTOS DO ADMINISTRADOR */}
 
             <Route
                 path="/gerenciamentoAgendamentos"

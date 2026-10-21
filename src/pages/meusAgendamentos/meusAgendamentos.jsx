@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoHope from "../../assets/logo-hope.png";
-import "./MeusAgendamentos.css";
+import "./meusAgendamentos.css";
 
 const API = "http://localhost:3333";
 

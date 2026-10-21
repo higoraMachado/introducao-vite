@@ -1,13 +1,14 @@
+
 import { Navigate, useLocation } from 'react-router-dom';
 
-function ProtectedRoute({ children, tiposPermitidos }) {
+function ProtectedRoute({ children, tiposPermitidos = [] }) {
     const location = useLocation();
 
     const token = localStorage.getItem('token');
     const usuarioSalvo = localStorage.getItem('usuario');
 
     // =====================================================
-    // NAO ESTA LOGADO
+    // VERIFICA SE O USUARIO ESTA LOGADO
     // =====================================================
 
     if (!token || !usuarioSalvo) {
@@ -23,7 +24,7 @@ function ProtectedRoute({ children, tiposPermitidos }) {
     }
 
     // =====================================================
-    // TENTA LER O USUARIO
+    // TENTA LER OS DADOS DO USUARIO
     // =====================================================
 
     let usuario;
@@ -43,46 +44,16 @@ function ProtectedRoute({ children, tiposPermitidos }) {
     }
 
     // =====================================================
-    // TIPO DO USUARIO
+    // IDENTIFICA O TIPO DO USUARIO
     // =====================================================
 
-    const tipoUsuario = Number(usuario.usuario_tipo);
+    const tipoUsuario = Number(usuario?.usuario_tipo);
 
     // =====================================================
-    // ADMINISTRADOR
+    // VERIFICA SE O TIPO E VALIDO
     // =====================================================
 
-    if (tipoUsuario === 1) {
-        return children;
-    }
-
-    // =====================================================
-    // VERIFICA SE O TIPO PODE ACESSAR A PAGINA
-    // =====================================================
-
-    if (!tiposPermitidos.includes(tipoUsuario)) {
-
-        // BARBEIRO
-        if (tipoUsuario === 2) {
-            return (
-                <Navigate
-                    to="/dashboardBarbeiro"
-                    replace
-                />
-            );
-        }
-
-        // CLIENTE
-        if (tipoUsuario === 3) {
-            return (
-                <Navigate
-                    to="/dashboardCliente"
-                    replace
-                />
-            );
-        }
-
-        // TIPO DESCONHECIDO
+    if (![1, 2, 3].includes(tipoUsuario)) {
         localStorage.removeItem('usuario');
         localStorage.removeItem('token');
 
@@ -95,7 +66,48 @@ function ProtectedRoute({ children, tiposPermitidos }) {
     }
 
     // =====================================================
-    // ACESSO LIBERADO
+    // VERIFICA SE O USUARIO TEM PERMISSAO
+    // =====================================================
+
+    const acessoPermitido = tiposPermitidos
+        .map(Number)
+        .includes(tipoUsuario);
+
+    if (!acessoPermitido) {
+
+        // ADMINISTRADOR - TIPO 1
+        if (tipoUsuario === 1) {
+            return (
+                <Navigate
+                    to="/dashboardAdministrador"
+                    replace
+                />
+            );
+        }
+
+        // BARBEIRO - TIPO 2
+        if (tipoUsuario === 2) {
+            return (
+                <Navigate
+                    to="/dashboardBarbeiro"
+                    replace
+                />
+            );
+        }
+
+        // CLIENTE - TIPO 3
+        if (tipoUsuario === 3) {
+            return (
+                <Navigate
+                    to="/dashboardCliente"
+                    replace
+                />
+            );
+        }
+    }
+
+    // =====================================================
+    // ACESSO AUTORIZADO
     // =====================================================
 
     return children;
