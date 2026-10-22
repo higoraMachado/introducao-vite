@@ -20,22 +20,20 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 /* ========================================
    PÁGINA
 ======================================== */
 
 .login-page {
   width: 100%;
-  height: 100vh;
-
+  min-height: 100vh;
   display: flex;
-
-  background: #111111;
-
-  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
-
 
 /* ========================================
    LADO ESQUERDO
@@ -58,26 +56,23 @@ body {
   background-repeat: no-repeat;
 }
 
-
 /* Efeito escuro sobre a imagem */
 
 .login-brand::after {
-  content: '';
+  content: "";
 
   position: absolute;
 
   inset: 0;
 
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.05),
-      transparent 65%
-    );
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.05),
+    transparent 65%
+  );
 
   pointer-events: none;
 }
-
 
 /* ========================================
    CONTEÚDO DA MARCA
@@ -101,7 +96,6 @@ body {
   color: white;
 }
 
-
 /* ========================================
    LOGO
 ======================================== */
@@ -117,7 +111,6 @@ body {
   margin-bottom: 28px;
 }
 
-
 .brand-logo img {
   width: 230px;
   height: 230px;
@@ -125,7 +118,6 @@ body {
   object-fit: contain;
   display: block;
 }
-
 
 /* ========================================
    TEXTO
@@ -140,10 +132,8 @@ body {
 
   font-weight: 500;
 
-  text-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
-
 
 .brand-content p {
   margin-top: 16px;
@@ -154,10 +144,8 @@ body {
 
   color: #dddddd;
 
-  text-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
-
 
 /* ========================================
    LADO DIREITO
@@ -175,59 +163,50 @@ body {
   padding: 20px;
 }
 
-
 /* ========================================
    CARD
 ======================================== */
 
-.login-card {
+.login-container {
   width: 100%;
-
   max-width: 530px;
-
-  height: calc(100vh - 40px);
-
-  max-height: 850px;
-
-  background: #fafafa;
-
-  border-radius: 15px;
-
-  padding: 38px 50px 25px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  overflow: hidden;
+  min-width: 0;
+  height: auto;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
+.login-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  box-sizing: border-box;
+  overflow: visible;
+  padding: 30px;
+}
 
 /* ========================================
    ÍCONE
 ======================================== */
 
 .barber-icon {
-  width: 105px;
-  height: 105px;
-
-  border: 2px solid #222222;
-
-  border-radius: 50%;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
+  width: 100%;
   margin: 0 auto 18px;
-
-  position: relative;
 }
 
+.barber-icon img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+}
 
 .barber-icon::before {
-  content: '';
+  content: "";
 
   position: absolute;
 
@@ -239,7 +218,6 @@ body {
   border-radius: 50%;
 }
 
-
 .barber-icon span {
   position: relative;
 
@@ -249,7 +227,6 @@ body {
 
   color: #222222;
 }
-
 
 /* ========================================
    TÍTULO
@@ -267,7 +244,6 @@ body {
   color: #151515;
 }
 
-
 .login-description {
   text-align: center;
 
@@ -278,7 +254,6 @@ body {
   font-size: 16px;
 }
 
-
 /* ========================================
    FORMULÁRIO
 ======================================== */
@@ -286,7 +261,6 @@ body {
 .form-group {
   margin-bottom: 17px;
 }
-
 
 .form-group label {
   display: block;
@@ -300,13 +274,11 @@ body {
   color: #222222;
 }
 
-
 .input-wrapper {
   position: relative;
 
   width: 100%;
 }
-
 
 .input-wrapper input {
   width: 100%;
@@ -330,17 +302,14 @@ body {
   transition: 0.2s;
 }
 
-
 .input-wrapper input::placeholder {
   color: #999999;
 }
 
-
 .input-wrapper input:focus {
   border-color: #222222;
 
-  box-shadow:
-    0 0 0 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
 }
 
 /* ========================================
@@ -372,10 +341,8 @@ body {
 .input-container input:focus {
   border-color: #222222;
 
-  box-shadow:
-    0 0 0 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
 }
-
 
 /* ÍCONE DO USUÁRIO */
 
@@ -393,7 +360,6 @@ body {
   pointer-events: none;
   z-index: 2;
 }
-
 
 /* ========================================
    ÍCONE INPUT
@@ -415,7 +381,6 @@ body {
 
   z-index: 2;
 }
-
 
 /* ========================================
    SENHA
@@ -451,7 +416,6 @@ body {
   display: block;
 }
 
-
 /* ========================================
    OPÇÕES
 ======================================== */
@@ -468,7 +432,6 @@ body {
   font-size: 14px;
 }
 
-
 .remember {
   display: flex;
 
@@ -481,11 +444,9 @@ body {
   color: #444444;
 }
 
-
 .remember input {
   display: none;
 }
-
 
 .custom-checkbox {
   width: 19px;
@@ -502,16 +463,14 @@ body {
   flex-shrink: 0;
 }
 
-
 .remember input:checked + .custom-checkbox {
   background: #171717;
 
   border-color: #171717;
 }
 
-
 .remember input:checked + .custom-checkbox::after {
-  content: '✓';
+  content: "✓";
 
   position: absolute;
 
@@ -522,7 +481,6 @@ body {
   left: 3px;
   top: 0;
 }
-
 
 .forgot-password {
   border: none;
@@ -536,11 +494,9 @@ body {
   cursor: pointer;
 }
 
-
 .forgot-password:hover {
   color: #111111;
 }
-
 
 /* ========================================
    BOTÃO ENTRAR
@@ -568,13 +524,11 @@ body {
   transition: 0.2s;
 }
 
-
 .login-button:hover {
   background: #2a2a2a;
 
   transform: translateY(-1px);
 }
-
 
 /* ========================================
    DIVISOR
@@ -590,7 +544,6 @@ body {
   margin: 24px 0;
 }
 
-
 .divider span {
   flex: 1;
 
@@ -599,7 +552,6 @@ body {
   background: #d5d5d5;
 }
 
-
 .divider p {
   margin: 0;
 
@@ -607,7 +559,6 @@ body {
 
   font-size: 13px;
 }
-
 
 /* ========================================
    CRIAR CONTA
@@ -640,11 +591,9 @@ body {
   transition: 0.2s;
 }
 
-
 .create-account:hover {
   background: #eeeeee;
 }
-
 
 /* ========================================
    RODAPÉ
@@ -661,14 +610,130 @@ body {
 
   font-size: 12px;
 }
+/* Fundo escuro do modal */
+.cadastro-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(5px);
+}
 
+/* Janela */
+.cadastro-modal {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  padding: 36px 28px;
+  border-radius: 18px;
+  background: #fff;
+  color: #171717;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: aparecerModal 0.22s ease-out;
+}
+
+.cadastro-modal-fechar {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.cadastro-modal-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #171717;
+  color: white;
+  font-size: 28px;
+}
+
+.cadastro-modal h2 {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.cadastro-modal > p {
+  margin: 0 0 26px;
+  color: #777;
+  text-align: center;
+  font-size: 14px;
+}
+
+.cadastro-opcao {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 17px;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  background: #fff;
+  color: #171717;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.cadastro-opcao:hover {
+  background: #f5f5f5;
+  border-color: #171717;
+}
+
+.cadastro-opcao-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #171717;
+  font-size: 22px;
+}
+
+.cadastro-opcao > span:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cadastro-opcao strong {
+  font-size: 15px;
+}
+
+.cadastro-opcao small {
+  color: #777;
+  font-size: 12px;
+}
+
+.cadastro-seta {
+  font-size: 28px;
+  color: #777;
+}
 
 /* ========================================
    NOTEBOOK / TABLET
 ======================================== */
 
 @media (max-width: 1000px) {
-
   .login-brand {
     width: 38%;
   }
@@ -716,14 +781,19 @@ body {
     font-size: 31px;
   }
 }
+.cadastro-modal {
+  padding: 32px 20px;
+}
 
+.cadastro-opcao {
+  padding: 13px;
+}
 
 /* ========================================
    CELULAR
 ======================================== */
 
 @media (max-width: 750px) {
-
   .login-page {
     width: 100%;
 
@@ -735,7 +805,6 @@ body {
 
     overflow-y: auto;
   }
-
 
   /* LADO ESQUERDO */
 
@@ -749,27 +818,22 @@ body {
     padding: 25px 15px;
   }
 
-
   .brand-logo {
     margin-bottom: 18px;
   }
-
 
   .brand-logo img {
     width: 150px;
     height: 150px;
   }
 
-
   .brand-content h1 {
     font-size: 18px;
   }
 
-
   .brand-content p {
     display: none;
   }
-
 
   /* LADO DIREITO */
 
@@ -780,7 +844,6 @@ body {
 
     padding: 15px 12px;
   }
-
 
   .login-card {
     width: 100%;
@@ -794,7 +857,6 @@ body {
     border-radius: 12px;
   }
 
-
   .barber-icon {
     width: 95px;
     height: 95px;
@@ -802,17 +864,14 @@ body {
     margin-bottom: 18px;
   }
 
-
   .barber-icon::before {
     width: 74px;
     height: 74px;
   }
 
-
   .login-card h2 {
     font-size: 25px;
   }
-
 
   .login-description {
     font-size: 15px;
@@ -820,50 +879,56 @@ body {
     margin-bottom: 22px;
   }
 
-
   .login-options {
     font-size: 13px;
   }
-
 
   .forgot-password {
     font-size: 13px;
   }
 }
+.cadastro-modal {
+  padding: 32px 20px;
+}
 
+.cadastro-opcao {
+  padding: 13px;
+}
 
 /* ========================================
    CELULAR PEQUENO
 ======================================== */
 
 @media (max-width: 400px) {
-
   .login-brand {
     height: 260px;
 
     min-height: 260px;
   }
 
-
   .brand-logo img {
     width: 115px;
     height: 115px;
   }
 
-
   .brand-content h1 {
     font-size: 17px;
   }
-
 
   .login-card {
     padding: 25px 18px 22px;
   }
 
-
   .login-card h2 {
     font-size: 23px;
   }
+}
+.cadastro-modal {
+  padding: 32px 20px;
+}
+
+.cadastro-opcao {
+  padding: 13px;
 }
 /* =========================================================
    MODAL - ESCOLHA DE CADASTRO
@@ -883,7 +948,6 @@ body {
 
   backdrop-filter: blur(5px);
 }
-
 
 /* =========================================================
    CARD DO MODAL
@@ -910,7 +974,6 @@ body {
   animation: cadastroModalEntrada 0.25s ease;
 }
 
-
 /* =========================================================
    ANIMAÇÃO
    ========================================================= */
@@ -926,7 +989,16 @@ body {
     transform: translateY(0) scale(1);
   }
 }
-
+@keyframes aparecerModal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 /* =========================================================
    BOTÃO FECHAR
@@ -964,7 +1036,6 @@ body {
   transform: rotate(90deg);
 }
 
-
 /* =========================================================
    ÍCONE DO MODAL
    ========================================================= */
@@ -988,10 +1059,8 @@ body {
 
   font-size: 28px;
 
-  box-shadow:
-    0 0 20px rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
 }
-
 
 /* =========================================================
    TÍTULO
@@ -1006,7 +1075,6 @@ body {
   font-weight: 600;
 }
 
-
 .cadastro-modal > p {
   margin: 0 0 30px;
 
@@ -1014,7 +1082,6 @@ body {
 
   font-size: 15px;
 }
-
 
 /* =========================================================
    OPÇÕES DE CADASTRO
@@ -1027,7 +1094,6 @@ body {
 
   gap: 18px;
 }
-
 
 /* =========================================================
    BOTÕES CLIENTE / BARBEIRO
@@ -1061,7 +1127,6 @@ body {
     box-shadow 0.25s ease;
 }
 
-
 .cadastro-opcoes button:hover {
   transform: translateY(-4px);
 
@@ -1071,9 +1136,8 @@ body {
 
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(212, 175, 55, 0.10);
+    0 0 20px rgba(212, 175, 55, 0.1);
 }
-
 
 /* =========================================================
    ÍCONE DAS OPÇÕES
@@ -1101,12 +1165,10 @@ body {
     border-color 0.25s ease;
 }
 
-
 .cadastro-opcoes button:hover .cadastro-opcao-icon {
   background: rgba(212, 175, 55, 0.14);
   border-color: #d4af37;
 }
-
 
 /* =========================================================
    NOME DA OPÇÃO
@@ -1118,7 +1180,6 @@ body {
   font-size: 18px;
   font-weight: 600;
 }
-
 
 /* =========================================================
    DESCRIÇÃO DA OPÇÃO
@@ -1133,13 +1194,11 @@ body {
   line-height: 1.4;
 }
 
-
 /* =========================================================
    RESPONSIVIDADE
    ========================================================= */
 
 @media (max-width: 600px) {
-
   .cadastro-modal {
     padding: 35px 20px 25px;
     max-width: 420px;
@@ -1157,33 +1216,101 @@ body {
   .cadastro-opcoes button {
     min-height: 145px;
   }
-
 }
 /* ========================================
    ACABAMENTO PRETO + DOURADO
    Apenas estilo — nenhuma lógica foi alterada
 ======================================== */
-.login-card{border:1px solid rgba(201,162,39,.35);box-shadow:0 20px 60px rgba(0,0,0,.45);background:#111}
-.barber-icon{border-color:#c9a227;box-shadow:0 0 25px rgba(201,162,39,.1)}
-.barber-icon::before{border-color:#8f7418}
-.barber-icon span{color:#c9a227}
-.login-card h2{color:#f1f1f1;letter-spacing:.3px}
-.login-description{color:#bdbdbd}
-.input-wrapper input,.input-container input{background:#171717;color:#f5f5f5;border-color:#3a3a3a}
-.input-wrapper input:focus,.input-container input:focus{border-color:#c9a227;box-shadow:0 0 0 3px rgba(201,162,39,.1)}
-.input-wrapper input::placeholder,.input-container input::placeholder{color:#777}
-.email-icon,.input-icon{color:#c9a227}
-.password-button{color:#999}
-.password-button:hover{color:#c9a227}
-.forgot-password{color:#c9a227}
-.forgot-password:hover{color:#e0bd45}
-.login-button{border:1px solid #c9a227;background:linear-gradient(135deg,#c9a227,#a88416);color:#111;font-weight:700;box-shadow:0 5px 18px rgba(201,162,39,.12)}
-.login-button:hover{background:linear-gradient(135deg,#e0bd45,#c9a227);box-shadow:0 7px 22px rgba(201,162,39,.22)}
-.divider span{background:#333}
-.divider p{color:#999}
-.create-account{border-color:#c9a227;color:#c9a227;background:transparent}
-.create-account:hover{background:rgba(201,162,39,.08);color:#e0bd45}
-.custom-checkbox{border-color:#777;background:#181818}
-.remember input:checked + .custom-checkbox{background:#c9a227;border-color:#c9a227}
-.remember input:checked + .custom-checkbox::after{color:#111}
-.login-card footer{color:#777}
+.login-card {
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  background: #111;
+}
+.barber-icon {
+  border-color: #c9a227;
+  box-shadow: 0 0 25px rgba(201, 162, 39, 0.1);
+}
+.barber-icon::before {
+  border-color: #8f7418;
+}
+.barber-icon span {
+  color: #c9a227;
+}
+.login-card h2 {
+  color: #f1f1f1;
+  letter-spacing: 0.3px;
+}
+.login-description {
+  color: #bdbdbd;
+}
+.input-wrapper input,
+.input-container input {
+  background: #171717;
+  color: #f5f5f5;
+  border-color: #3a3a3a;
+}
+.input-wrapper input:focus,
+.input-container input:focus {
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
+}
+.input-wrapper input::placeholder,
+.input-container input::placeholder {
+  color: #777;
+}
+.email-icon,
+.input-icon {
+  color: #c9a227;
+}
+.password-button {
+  color: #999;
+}
+.password-button:hover {
+  color: #c9a227;
+}
+.forgot-password {
+  color: #c9a227;
+}
+.forgot-password:hover {
+  color: #e0bd45;
+}
+.login-button {
+  border: 1px solid #c9a227;
+  background: linear-gradient(135deg, #c9a227, #a88416);
+  color: #111;
+  font-weight: 700;
+  box-shadow: 0 5px 18px rgba(201, 162, 39, 0.12);
+}
+.login-button:hover {
+  background: linear-gradient(135deg, #e0bd45, #c9a227);
+  box-shadow: 0 7px 22px rgba(201, 162, 39, 0.22);
+}
+.divider span {
+  background: #333;
+}
+.divider p {
+  color: #999;
+}
+.create-account {
+  border-color: #c9a227;
+  color: #c9a227;
+  background: transparent;
+}
+.create-account:hover {
+  background: rgba(201, 162, 39, 0.08);
+  color: #e0bd45;
+}
+.custom-checkbox {
+  border-color: #777;
+  background: #181818;
+}
+.remember input:checked + .custom-checkbox {
+  background: #c9a227;
+  border-color: #c9a227;
+}
+.remember input:checked + .custom-checkbox::after {
+  color: #111;
+}
+.login-card footer {
+  color: #777;
+}

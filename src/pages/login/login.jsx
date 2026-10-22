@@ -1,16 +1,12 @@
-import { useState } from 'react';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import './login.css';
+import "./login.css";
 
-import logoHope from '../../assets/logo-hope.png';
-import barbearia from '../../assets/barbearia.jpg';
+import logoHope from "../../assets/logo-hope.png";
+import barbearia from "../../assets/barbearia.jpg";
 
 function Login() {
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,41 +20,37 @@ function Login() {
   // ESTADOS
   // =====================================================
 
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [lembrar, setLembrar] = useState(false);
+  const [mostrarOpcoesCadastro, setMostrarOpcoesCadastro] = useState(false);
 
   // =====================================================
   // LOGIN
   // =====================================================
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     if (!email || !senha) {
-      alert('Preencha o e-mail e a senha.');
+      alert("Preencha o e-mail e a senha.");
       return;
     }
 
     try {
+      const resposta = await fetch("http://localhost:3333/login", {
+        method: "POST",
 
-      const resposta = await fetch(
-        'http://localhost:3333/login',
-        {
-          method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          headers: {
-            'Content-Type': 'application/json',
-          },
-
-          body: JSON.stringify({
-            email: email,
-            senha: senha,
-          }),
-        }
-      );
+        body: JSON.stringify({
+          email: email,
+          senha: senha,
+        }),
+      });
 
       const dados = await resposta.json();
 
@@ -67,12 +59,7 @@ function Login() {
       // =================================================
 
       if (!resposta.ok) {
-
-        alert(
-          dados.erro ||
-          dados.message ||
-          'E-mail ou senha inválidos.'
-        );
+        alert(dados.erro || dados.message || "E-mail ou senha inválidos.");
 
         return;
       }
@@ -81,41 +68,27 @@ function Login() {
       // SALVA TOKEN
       // =================================================
 
-      localStorage.setItem(
-        'token',
-        dados.dados.token
-      );
+      localStorage.setItem("token", dados.dados.token);
 
       // =================================================
       // SALVA USUARIO
       // =================================================
 
-      localStorage.setItem(
-        'usuario',
-        JSON.stringify(
-          dados.dados.usuario
-        )
-      );
+      localStorage.setItem("usuario", JSON.stringify(dados.dados.usuario));
 
-      console.log(
-        'Login realizado:',
-        dados.dados
-      );
+      console.log("Login realizado:", dados.dados);
 
       // =================================================
       // IDENTIFICA TIPO DO USUARIO
       // =================================================
 
-      const tipoUsuario = Number(
-        dados.dados.usuario?.usuario_tipo
-      );
+      const tipoUsuario = Number(dados.dados.usuario?.usuario_tipo);
 
       // =================================================
       // CLIENTE
       // =================================================
 
       if (tipoUsuario === 3) {
-
         /*
          * Se o cliente tentou acessar uma página
          * protegida antes de fazer login,
@@ -133,24 +106,17 @@ function Login() {
          */
 
         if (destino) {
-
-          navigate(
-            destino,
-            {
-              replace: true,
-            }
-          );
+          navigate(destino, {
+            replace: true,
+          });
 
           return;
         }
 
         // Caso tenha entrado normalmente
-        navigate(
-          '/dashboardCliente',
-          {
-            replace: true,
-          }
-        );
+        navigate("/dashboardCliente", {
+          replace: true,
+        });
 
         return;
       }
@@ -160,13 +126,9 @@ function Login() {
       // =================================================
 
       if (tipoUsuario === 2) {
-
-        navigate(
-          '/dashboardBarbeiro',
-          {
-            replace: true,
-          }
-        );
+        navigate("/dashboardBarbeiro", {
+          replace: true,
+        });
 
         return;
       }
@@ -176,13 +138,9 @@ function Login() {
       // =================================================
 
       if (tipoUsuario === 1) {
-
-        navigate(
-          '/dashboardAdministrador',
-          {
-            replace: true,
-          }
-        );
+        navigate("/dashboardAdministrador", {
+          replace: true,
+        });
 
         return;
       }
@@ -191,20 +149,13 @@ function Login() {
       // TIPO DESCONHECIDO
       // =================================================
 
-      alert(
-        'Tipo de usuário não reconhecido.'
-      );
-
+      alert("Tipo de usuário não reconhecido.");
     } catch (error) {
-
-      console.error(
-        'Erro ao conectar com o servidor:',
-        error
-      );
+      console.error("Erro ao conectar com o servidor:", error);
 
       alert(
-        'Não foi possível conectar ao servidor. ' +
-        'Verifique se o backend está rodando.'
+        "Não foi possível conectar ao servidor. " +
+          "Verifique se o backend está rodando.",
       );
     }
   };
@@ -214,10 +165,7 @@ function Login() {
   // =====================================================
 
   function recuperarSenha() {
-
-    navigate(
-      '/recuperacaoSenha'
-    );
+    navigate("/recuperacaoSenha");
   }
 
   // =====================================================
@@ -225,17 +173,14 @@ function Login() {
   // =====================================================
 
   function criarConta() {
-    navigate('/CriarConta');
+    setMostrarOpcoesCadastro(true);
   }
-
   // =====================================================
   // TELA
   // =====================================================
 
   return (
-
     <main className="login-page">
-
       {/* =================================================
           LADO ESQUERDO
       ================================================= */}
@@ -252,26 +197,18 @@ function Login() {
           `,
         }}
       >
-
         <div className="brand-content">
-
           {/* LOGO */}
 
           <div className="brand-logo">
-
-            <img
-              src={logoHope}
-              alt="Hope Barbearia"
-            />
-
+            <img src={logoHope} alt="Hope Barbearia" />
           </div>
 
           {/* TEXTO */}
 
           <h1>
             Sistema de Agendamento
-            <br />
-            e Controle Financeiro
+            <br />e Controle Financeiro
           </h1>
 
           <p>
@@ -279,81 +216,55 @@ function Login() {
             <br />
             em um só lugar.
           </p>
-
         </div>
-
       </section>
-
 
       {/* =================================================
           LADO DIREITO
       ================================================= */}
 
       <section className="login-container">
-
         <div className="login-card">
-
           {/* =================================================
               ÍCONE
           ================================================= */}
 
           <div className="barber-icon">
-
-            <span>
-              ✂
-            </span>
-
+            <img src={logoHope} alt="Logo Hope Barbearia" />
           </div>
-
 
           {/* =================================================
               TÍTULO
           ================================================= */}
 
-          <h2>
-            Login
-          </h2>
+          <h2>Login</h2>
 
-          <p className="login-description">
-            Acesse sua conta para continuar
-          </p>
-
+          <p className="login-description">Acesse sua conta para continuar</p>
 
           {/* =================================================
               FORMULÁRIO
           ================================================= */}
 
           <form onSubmit={handleSubmit}>
-
             {/* =================================================
                 E-MAIL
             ================================================= */}
 
             <div className="form-group">
-
-              <label htmlFor="email">
-                E-mail
-              </label>
+              <label htmlFor="email">E-mail</label>
 
               <div className="input-container">
-
                 <input
                   id="email"
                   type="email"
                   placeholder="Digite seu e-mail"
                   value={email}
-                  onChange={(event) =>
-                    setEmail(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => setEmail(event.target.value)}
                   required
                 />
 
                 {!email && (
-
                   <span className="email-icon">
-
                     <svg
                       width="21"
                       height="21"
@@ -364,44 +275,25 @@ function Login() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
+                      <circle cx="12" cy="8" r="4" />
 
-                      <circle
-                        cx="12"
-                        cy="8"
-                        r="4"
-                      />
-
-                      <path
-                        d="M4 21c0-4 3.5-7 8-7s8 3 8 7"
-                      />
-
+                      <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7" />
                     </svg>
-
                   </span>
-
                 )}
-
               </div>
-
             </div>
-
 
             {/* =================================================
                 SENHA
             ================================================= */}
 
             <div className="form-group">
-
-              <label htmlFor="senha">
-                Senha
-              </label>
+              <label htmlFor="senha">Senha</label>
 
               <div className="input-wrapper">
-
                 {!senha && (
-
                   <span className="input-icon">
-
                     <svg
                       width="21"
                       height="21"
@@ -410,39 +302,19 @@ function Login() {
                       stroke="currentColor"
                       strokeWidth="2"
                     >
+                      <rect x="5" y="10" width="14" height="11" rx="2" />
 
-                      <rect
-                        x="5"
-                        y="10"
-                        width="14"
-                        height="11"
-                        rx="2"
-                      />
-
-                      <path
-                        d="M8 10V7a4 4 0 0 1 8 0v3"
-                      />
-
+                      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
                     </svg>
-
                   </span>
-
                 )}
 
                 <input
                   id="senha"
-                  type={
-                    mostrarSenha
-                      ? 'text'
-                      : 'password'
-                  }
+                  type={mostrarSenha ? "text" : "password"}
                   placeholder="Digite sua senha"
                   value={senha}
-                  onChange={(event) =>
-                    setSenha(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => setSenha(event.target.value)}
                   required
                 />
 
@@ -453,20 +325,10 @@ function Login() {
                 <button
                   type="button"
                   className="password-button"
-                  onClick={() =>
-                    setMostrarSenha(
-                      !mostrarSenha
-                    )
-                  }
-                  aria-label={
-                    mostrarSenha
-                      ? 'Ocultar senha'
-                      : 'Mostrar senha'
-                  }
+                  onClick={() => setMostrarSenha(!mostrarSenha)}
+                  aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
                 >
-
                   {mostrarSenha ? (
-
                     <svg
                       width="21"
                       height="21"
@@ -477,25 +339,15 @@ function Login() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-
                       <path d="M3 3l18 18" />
 
-                      <path
-                        d="M10.6 10.6a2 2 0 0 0 2.8 2.8"
-                      />
+                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
 
-                      <path
-                        d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-0.4 1.4-1.2 2.6-2.2 3.7"
-                      />
+                      <path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c5 0 9 4 10 8-0.4 1.4-1.2 2.6-2.2 3.7" />
 
-                      <path
-                        d="M6.6 6.6C4.7 7.8 3.4 9.5 2 12c1 4 5 8 10 8 1.4 0 2.7-.3 3.9-.9"
-                      />
-
+                      <path d="M6.6 6.6C4.7 7.8 3.4 9.5 2 12c1 4 5 8 10 8 1.4 0 2.7-.3 3.9-.9" />
                     </svg>
-
                   ) : (
-
                     <svg
                       width="21"
                       height="21"
@@ -506,54 +358,33 @@ function Login() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-
                       <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
 
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="3"
-                      />
-
+                      <circle cx="12" cy="12" r="3" />
                     </svg>
-
                   )}
-
                 </button>
-
               </div>
-
             </div>
-
 
             {/* =================================================
                 OPÇÕES
             ================================================= */}
 
             <div className="login-options">
-
               {/* LEMBRAR */}
 
               <label className="remember">
-
                 <input
                   type="checkbox"
                   checked={lembrar}
-                  onChange={(event) =>
-                    setLembrar(
-                      event.target.checked
-                    )
-                  }
+                  onChange={(event) => setLembrar(event.target.checked)}
                 />
 
                 <span className="custom-checkbox"></span>
 
-                <span>
-                  Lembrar-me
-                </span>
-
+                <span>Lembrar-me</span>
               </label>
-
 
               {/* ESQUECI SENHA */}
 
@@ -564,51 +395,34 @@ function Login() {
               >
                 Esqueci minha senha
               </button>
-
             </div>
-
 
             {/* =================================================
                 ENTRAR
             ================================================= */}
 
-            <button
-              type="submit"
-              className="login-button"
-            >
+            <button type="submit" className="login-button">
               Entrar
             </button>
-
           </form>
-
 
           {/* =================================================
               DIVISOR
           ================================================= */}
 
           <div className="divider">
-
             <span></span>
 
-            <p>
-              OU
-            </p>
+            <p>OU</p>
 
             <span></span>
-
           </div>
-
 
           {/* =================================================
               CRIAR CONTA
           ================================================= */}
 
-          <button
-            type="button"
-            className="create-account"
-            onClick={criarConta}
-          >
-
+          <button type="button" className="create-account" onClick={criarConta}>
             <svg
               width="22"
               height="22"
@@ -617,47 +431,75 @@ function Login() {
               stroke="currentColor"
               strokeWidth="1.8"
             >
+              <circle cx="9" cy="8" r="4" />
 
-              <circle
-                cx="9"
-                cy="8"
-                r="4"
-              />
+              <path d="M3 21c0-4 2.5-7 6-7s6 3 6 7" />
 
-              <path
-                d="M3 21c0-4 2.5-7 6-7s6 3 6 7"
-              />
+              <path d="M19 8v6" />
 
-              <path
-                d="M19 8v6"
-              />
-
-              <path
-                d="M16 11h6"
-              />
-
+              <path d="M16 11h6" />
             </svg>
-
             Criar nova conta
-
           </button>
+          {mostrarOpcoesCadastro && (
+            <div className="cadastro-modal-overlay">
+              <div
+                className="cadastro-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="titulo-cadastro"
+              >
+                <button
+                  type="button"
+                  className="cadastro-modal-fechar"
+                  onClick={() => setMostrarOpcoesCadastro(false)}
+                  aria-label="Fechar janela"
+                >
+                  ×
+                </button>
 
+                <div className="cadastro-modal-icone">✂</div>
+
+                <h2 id="titulo-cadastro">Criar nova conta</h2>
+
+                <p>Como você deseja se cadastrar?</p>
+
+                <button
+                  type="button"
+                  className="cadastro-opcao"
+                  onClick={() => navigate("/CriarConta")}
+                >
+                  <span className="cadastro-opcao-icone">👤</span>
+                  <span>
+                    <strong>Sou Cliente</strong>
+                    <small>Quero agendar meus horários</small>
+                  </span>
+                  <span className="cadastro-seta">›</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="cadastro-opcao"
+                  onClick={() => navigate("/cadastroBarbeiro")}
+                >
+                  <span className="cadastro-opcao-icone">💈</span>
+                  <span>
+                    <strong>Sou Barbeiro</strong>
+                    <small>Quero fazer parte da Hope Barbearia</small>
+                  </span>
+                  <span className="cadastro-seta">›</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* =================================================
               RODAPÉ
           ================================================= */}
 
-          <footer>
-
-            © 2026 Hope Barbearia.
-            Todos os direitos reservados.
-
-          </footer>
-
+          <footer>© 2026 Hope Barbearia. Todos os direitos reservados.</footer>
         </div>
-
       </section>
-
     </main>
   );
 }
