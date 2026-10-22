@@ -225,10 +225,7 @@ function Login() {
   // =====================================================
 
   function criarConta() {
-
-    navigate(
-      '/CadastroCliente'
-    );
+    navigate('/CriarConta');
   }
 
   // =====================================================

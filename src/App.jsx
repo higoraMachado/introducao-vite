@@ -57,6 +57,11 @@ function App() {
                 path="/redefinirSenha"
                 element={<RedefinirSenha />}
             />
+            {/* Cadastro público: criação de conta */}
+            <Route
+                path="/CriarConta"
+                element={<CadastroCliente modoPublico />}
+            />
 
             {/* =========================================
                 CLIENTE - TIPO 3
@@ -166,12 +171,20 @@ function App() {
 
             <Route
                 path="/CadastroCliente"
-                element={<CadastroCliente />}
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <CadastroCliente />
+                    </ProtectedRoute>
+                }
             />
 
             <Route
                 path="/CadastroBarbeiro"
-                element={<CadastroBarbeiro />}
+                element={
+                    <ProtectedRoute tiposPermitidos={[1]}>
+                        <CadastroBarbeiro />
+                    </ProtectedRoute>
+                }
             />
 
             <Route
