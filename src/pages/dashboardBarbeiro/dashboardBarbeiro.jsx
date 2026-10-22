@@ -585,7 +585,7 @@ function DashboardBarbeiro() {
 <button
   type="button"
   className="btn-novo-agendamento"
-  onClick={abrirModalAgendamento}
+  onClick={irParaMeusAgendamentos}
 >
   + Novo agendamento
 </button>

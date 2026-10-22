@@ -43,7 +43,22 @@ function Perfil() {
   // =====================================================
 
   function voltarDashboard() {
-    navigate("/dashboardBarbeiro");
+    let tipo = null;
+    try {
+      const salvo = JSON.parse(localStorage.getItem("usuario") || "{}");
+      tipo = Number(salvo.usuario_tipo ?? salvo.tipo);
+    } catch (error) {
+      console.error("Erro ao identificar tipo do usuário:", error);
+    }
+
+    if (!tipo && usuario) {
+      tipo = usuario.tipo === "Administrador" ? 1 : usuario.tipo === "Barbeiro" ? 2 : 3;
+    }
+
+    if (tipo === 1) navigate("/dashboardAdministrador");
+    else if (tipo === 2) navigate("/dashboardBarbeiro");
+    else if (tipo === 3) navigate("/dashboardCliente");
+    else navigate("/login");
   }
 
   // =====================================================
@@ -192,80 +207,63 @@ function Perfil() {
   async function salvarAlteracoes() {
     try {
       const token = localStorage.getItem("token");
-
       if (!token) {
         navigate("/login");
         return;
       }
 
-      const resposta = await fetch(
-        `http://localhost:3333/usuarios/${usuario.id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            usuario_nome: dadosEditados.nome,
-            usuario_email: dadosEditados.email,
-            usuario_telefone:
-              dadosEditados.telefone.replace(/\D/g, ""),
-            usuario_dt_nascimento:
-              dadosEditados.nascimento,
-          }),
-        }
-      );
+      const resposta = await fetch("http://localhost:3333/usuarios/meu-perfil", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          usuario_nome: dadosEditados.nome.trim(),
+          usuario_email: dadosEditados.email.trim(),
+          usuario_telefone: (dadosEditados.telefone || "").replace(/\D/g, ""),
+          usuario_dt_nascimento: dadosEditados.nascimento || null,
+        }),
+      });
 
       const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.mensagem ||
-            dados.message ||
-            "Erro ao atualizar os dados"
-        );
+      if (!resposta.ok || dados.sucesso === false) {
+        throw new Error(dados.message || dados.mensagem || "Erro ao atualizar perfil.");
+      }
+      if (!dados.dados) {
+        throw new Error("A API não retornou os dados atualizados.");
       }
 
-      // Atualiza os dados exibidos
-      setUsuario(dadosEditados);
+      const usuarioAPI = dados.dados;
+      const usuarioFormatado = {
+        id: usuarioAPI.usuario_id,
+        nome: usuarioAPI.usuario_nome || "",
+        email: usuarioAPI.usuario_email || "",
+        telefone: usuarioAPI.usuario_telefone || "",
+        nascimento: usuarioAPI.usuario_dt_nascimento
+          ? String(usuarioAPI.usuario_dt_nascimento).substring(0, 10)
+          : "",
+        tipo: Number(usuarioAPI.usuario_tipo) === 1
+          ? "Administrador"
+          : Number(usuarioAPI.usuario_tipo) === 2 ? "Barbeiro" : "Cliente",
+        ativo: Number(usuarioAPI.usuario_ativo) === 1,
+      };
 
-      // Atualiza o localStorage
-      const usuarioAtual =
-        JSON.parse(
-          localStorage.getItem("usuario")
-        ) || {};
+      setUsuario(usuarioFormatado);
+      setDadosEditados(usuarioFormatado);
 
-      localStorage.setItem(
-        "usuario",
-        JSON.stringify({
-          ...usuarioAtual,
-          usuario_nome:
-            dadosEditados.nome,
-          usuario_email:
-            dadosEditados.email,
-          usuario_telefone:
-            dadosEditados.telefone,
-          usuario_dt_nascimento:
-            dadosEditados.nascimento,
-        })
-      );
-
+      let usuarioLocal = {};
+      try {
+        usuarioLocal = JSON.parse(localStorage.getItem("usuario") || "{}");
+      } catch (error) {
+        console.error("Dados locais inválidos:", error);
+      }
+      localStorage.setItem("usuario", JSON.stringify({ ...usuarioLocal, ...usuarioAPI }));
       setEditando(false);
-
-      alert(
-        "Dados atualizados com sucesso!"
-      );
+      alert("Perfil atualizado com sucesso!");
     } catch (error) {
-      console.error(
-        "Erro ao atualizar perfil:",
-        error
-      );
-
-      alert(
-        error.message ||
-          "Erro ao atualizar perfil."
-      );
+      console.error("Erro ao atualizar perfil:", error);
+      alert(error.message || "Não foi possível atualizar o perfil.");
     }
   }
 
