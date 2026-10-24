@@ -1092,3 +1092,34 @@
     padding: 18px;
   }
 }
+/* CORREÇÃO DO BOTÃO EDITAR */
+
+.clientes-page .clientes-tabela .acoes .acao-editar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 86px;
+  min-height: 30px;
+  padding: 0 10px;
+
+  background-color: #171717;
+  color: #ffffff;
+
+  border: 1px solid #171717;
+  border-radius: 5px;
+
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+
+  opacity: 1;
+  visibility: visible;
+  cursor: pointer;
+}
+
+.clientes-page .clientes-tabela .acoes .acao-editar:hover {
+  background-color: #333333;
+  color: #ffffff;
+  border-color: #333333;
+}
