@@ -1,345 +1,527 @@
-/* =========================================
-   PÁGINA DE REDEFINIÇÃO
-   ========================================= */
-
-.redefinir-senha-page {
-    min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 30px;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #2a2a2a 0%,
-            #111111 45%,
-            #050505 100%
-        );
-
-    font-family: Arial, Helvetica, sans-serif;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 /* =========================================
-   CONTAINER
+   REDEFINIR SENHA — Hope Barbearia
+   Mesmo visual do login: foto escura ao fundo,
+   brasão à esquerda e card dourado à direita.
+   (Somente estilo — a lógica não foi alterada)
+
+   Tudo escopado em .redefinir-senha-page para
+   não vazar para outras telas.
    ========================================= */
 
-.redefinir-senha-container {
-    width: 100%;
-    max-width: 450px;
+/* =========================================
+   PÁGINA
+   ========================================= */
+
+html body div.redefinir-senha-page {
+  --gold: #c9a24d;
+  --gold-light: #e6c56f;
+  --ink: #070605;
+  --field: #141413;
+  --field-line: #302d28;
+
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(32px, 7vw, 120px);
+
+  padding: 40px clamp(24px, 5vw, 80px);
+
+  background: var(--ink);
+  color: #ffffff;
+
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+
+  overflow: hidden;
+  isolation: isolate;
 }
 
+/* Texto só para leitores de tela */
+.redefinir-senha-page .sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================
+   FUNDO
+   ========================================= */
+
+.redefinir-senha-page .redefinir-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+
+  background-size: cover;
+  background-position: center 70%;
+  background-repeat: no-repeat;
+
+  filter: grayscale(0.3) brightness(0.85) contrast(1.1);
+}
+
+.redefinir-senha-page::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background:
+    radial-gradient(ellipse at 28% 48%, rgba(7, 6, 5, 0.2) 0%, rgba(7, 6, 5, 0.7) 75%),
+    linear-gradient(90deg, rgba(7, 6, 5, 0.35), rgba(7, 6, 5, 0.8));
+}
+
+/* =========================================
+   LADO ESQUERDO — MARCA
+   ========================================= */
+
+.redefinir-senha-page .redefinir-brand {
+  flex: 1 1 0;
+  max-width: 520px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.redefinir-senha-page .redefinir-logo {
+  width: min(100%, 440px);
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* O PNG tem margem transparente; a escala compensa */
+.redefinir-senha-page .redefinir-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  transform: scale(1.4);
+
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.7));
+}
+
+.redefinir-senha-page .redefinir-slogan {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin: 6px 0 0;
+  padding-bottom: 22px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+}
+
+.redefinir-senha-page .redefinir-slogan span,
+.redefinir-senha-page .redefinir-slogan strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.redefinir-senha-page .redefinir-slogan span {
+  color: var(--gold);
+}
+
+.redefinir-senha-page .redefinir-slogan strong {
+  color: #ffffff;
+}
+
+.redefinir-senha-page .redefinir-slogan::after {
+  content: '';
+
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+
+  width: 44px;
+  height: 1px;
+
+  background: var(--gold);
+
+  transform: translateX(-50%);
+}
 
 /* =========================================
    CARD
    ========================================= */
 
-.redefinir-senha-card {
-    width: 100%;
+.redefinir-senha-page .redefinir-senha-container {
+  flex: 0 0 auto;
 
-    box-sizing: border-box;
-
-    padding: 42px;
-
-    background: rgba(25, 25, 25, 0.96);
-
-    border: 1px solid rgba(212, 175, 55, 0.35);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.65),
-        0 0 25px rgba(212, 175, 55, 0.08);
-
-    color: #ffffff;
+  width: 100%;
+  max-width: 400px;
 }
 
+.redefinir-senha-page .redefinir-senha-card {
+  width: 100%;
+
+  padding: 44px 34px 30px;
+
+  background: rgba(9, 9, 9, 0.9);
+
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(201, 162, 77, 0.08) inset;
+
+  color: #ffffff;
+}
 
 /* =========================================
-   TÍTULO
+   TÍTULO E DESCRIÇÃO
    ========================================= */
 
-.redefinir-senha-card h1 {
-    margin: 0 0 12px;
+.redefinir-senha-page .redefinir-senha-card h1 {
+  margin: 0;
 
-    text-align: center;
+  text-align: center;
 
-    color: #d4af37;
+  font-family: inherit;
+  font-size: 24px !important;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 
-    font-size: 29px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.5px;
+  color: var(--gold);
 }
 
+.redefinir-senha-page .redefinir-senha-card h1::before {
+  content: '';
 
-/* =========================================
-   DESCRIÇÃO
-   ========================================= */
+  display: block;
 
-.redefinir-senha-card > p {
-    margin: 0 0 28px;
+  width: 38px;
+  height: 2px;
 
-    text-align: center;
+  margin: 0 auto 22px;
 
-    color: #bdbdbd;
-
-    font-size: 15px;
-
-    line-height: 1.6;
+  background: var(--gold);
 }
 
+.redefinir-senha-page .redefinir-descricao {
+  margin: 14px 0 30px;
+
+  text-align: center;
+
+  font-size: 13px;
+  line-height: 1.7;
+
+  color: #d9d6cf;
+}
 
 /* =========================================
    FORMULÁRIO
    ========================================= */
 
-.redefinir-senha-card form {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 16px;
+.redefinir-senha-page .redefinir-senha-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
+.redefinir-senha-page .form-group {
+  display: block;
+
+  margin: 0 0 18px;
+}
+
+.redefinir-senha-page .campo {
+  position: relative;
+
+  width: 100%;
+}
+
+.redefinir-senha-page .campo input {
+  width: 100%;
+  height: 48px;
+
+  margin: 0;
+  padding: 0 16px 0 50px;
+
+  background: var(--field);
+
+  border: 1px solid var(--field-line);
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 14px !important;
+
+  color: #f4f1ea;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.redefinir-senha-page .campo input::placeholder {
+  color: #8a867d;
+}
+
+.redefinir-senha-page .campo input:hover:not(:disabled) {
+  border-color: #4a4338;
+}
+
+.redefinir-senha-page .campo input:focus {
+  border-color: var(--gold);
+
+  box-shadow: 0 0 0 3px rgba(201, 162, 77, 0.22);
+}
+
+.redefinir-senha-page .campo input:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* Mantém o campo escuro quando o navegador preenche sozinho */
+.redefinir-senha-page .campo input:-webkit-autofill,
+.redefinir-senha-page .campo input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f4f1ea;
+  caret-color: #f4f1ea;
+
+  box-shadow: 0 0 0 1000px var(--field) inset;
+}
+
+.redefinir-senha-page .campo-icone {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+
+  color: #9d9a92;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+
+  transition: color 0.2s ease;
+}
+
+.redefinir-senha-page .campo:focus-within .campo-icone {
+  color: var(--gold);
+}
 
 /* =========================================
-   GRUPO DO CAMPO
+   MENSAGENS
    ========================================= */
 
-.form-group {
-    display: flex;
+.redefinir-senha-page .mensagem-erro,
+.redefinir-senha-page .mensagem-sucesso {
+  margin: 0 0 18px !important;
+  padding: 12px 14px;
 
-    flex-direction: column;
+  border-radius: 6px;
 
-    gap: 6px;
+  font-size: 13px !important;
+  line-height: 1.5;
+  text-align: left !important;
 }
 
+.redefinir-senha-page .mensagem-erro {
+  background: rgba(198, 40, 40, 0.12);
 
-/* =========================================
-   LABEL
-   ========================================= */
+  border: 1px solid rgba(229, 83, 83, 0.4);
 
-.redefinir-senha-card label {
-    color: #eeeeee;
-
-    font-size: 14px;
-
-    font-weight: 600;
+  color: #ff8a8a !important;
 }
 
+.redefinir-senha-page .mensagem-sucesso {
+  background: rgba(46, 125, 50, 0.14);
 
-/* =========================================
-   INPUT
-   ========================================= */
+  border: 1px solid rgba(76, 175, 80, 0.4);
 
-.redefinir-senha-card input {
-    width: 100%;
-
-    box-sizing: border-box;
-
-    padding: 14px 15px;
-
-    background: #111111;
-
-    border: 1px solid #3a3a3a;
-
-    border-radius: 9px;
-
-    color: #ffffff;
-
-    font-size: 15px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+  color: #8fd694 !important;
 }
-
-
-.redefinir-senha-card input::placeholder {
-    color: #777777;
-}
-
-
-.redefinir-senha-card input:focus {
-    border-color: #d4af37;
-
-    box-shadow:
-        0 0 0 3px rgba(212, 175, 55, 0.10);
-}
-
 
 /* =========================================
    BOTÃO PRINCIPAL
    ========================================= */
 
-.redefinir-senha-card form button {
-    width: 100%;
+.redefinir-senha-page .btn-redefinir {
+  width: 100%;
+  height: 48px;
 
-    margin-top: 8px;
+  margin: 4px 0 0;
+  padding: 0;
 
-    padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 
-    border: none;
+  background: linear-gradient(180deg, #e0bd72 0%, #c39a4a 55%, #a87f38 100%);
 
-    border-radius: 9px;
+  border: none;
+  border-radius: 6px;
 
-    background: linear-gradient(
-        135deg,
-        #d4af37,
-        #b8860b
-    );
+  font-family: inherit;
+  font-size: 13px !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 
-    color: #111111;
+  color: #15110a;
 
-    font-size: 15px;
+  cursor: pointer;
 
-    font-weight: 700;
+  box-shadow: 0 8px 22px rgba(201, 162, 77, 0.18);
 
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        opacity 0.2s ease;
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
 
+.redefinir-senha-page .btn-redefinir:hover:not(:disabled) {
+  filter: brightness(1.08);
 
-.redefinir-senha-card form button:hover {
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 20px rgba(212, 175, 55, 0.20);
+  box-shadow: 0 10px 26px rgba(201, 162, 77, 0.3);
 }
 
-
-.redefinir-senha-card form button:active {
-    transform: translateY(0);
+.redefinir-senha-page .btn-redefinir:active:not(:disabled) {
+  filter: brightness(0.96);
 }
 
+.redefinir-senha-page .btn-redefinir:disabled {
+  opacity: 0.6;
 
-.redefinir-senha-card form button:disabled {
-    opacity: 0.6;
+  cursor: not-allowed;
 
-    cursor: not-allowed;
-
-    transform: none;
-
-    box-shadow: none;
+  box-shadow: none;
 }
-
 
 /* =========================================
-   MENSAGEM DE ERRO
+   BOTÃO VOLTAR (secundário)
    ========================================= */
 
-.mensagem-erro {
-    margin: 0 !important;
+.redefinir-senha-page .redefinir-voltar {
+  width: 100%;
+  height: 46px;
 
-    padding: 11px 13px;
+  margin: 22px 0 0;
+  padding: 0;
 
-    border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
-    background: rgba(198, 40, 40, 0.12);
+  background: transparent;
 
-    border: 1px solid rgba(198, 40, 40, 0.35);
+  border: 1px solid rgba(201, 162, 77, 0.55);
+  border-radius: 6px;
 
-    color: #ff7777 !important;
+  font-family: inherit;
+  font-size: 12px !important;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 
-    font-size: 14px !important;
+  color: var(--gold-light);
 
-    text-align: left !important;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
+.redefinir-senha-page .redefinir-voltar:hover:not(:disabled) {
+  background: rgba(201, 162, 77, 0.12);
+
+  border-color: var(--gold);
+}
+
+.redefinir-senha-page .redefinir-voltar:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.redefinir-senha-page .btn-redefinir:focus-visible,
+.redefinir-senha-page .redefinir-voltar:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
 
 /* =========================================
-   MENSAGEM DE SUCESSO
+   TABLET E CELULAR
    ========================================= */
 
-.mensagem-sucesso {
-    margin: 0 !important;
+@media (max-width: 900px) {
+  html body div.redefinir-senha-page {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
 
-    padding: 11px 13px;
+    padding: 28px 20px 40px;
+  }
 
-    border-radius: 7px;
+  .redefinir-senha-page .redefinir-brand {
+    flex: none;
+    max-width: none;
+  }
 
-    background: rgba(46, 125, 50, 0.12);
+  .redefinir-senha-page .redefinir-logo {
+    width: min(60vw, 220px);
+  }
 
-    border: 1px solid rgba(76, 175, 80, 0.35);
+  .redefinir-senha-page .redefinir-slogan {
+    padding-bottom: 16px;
 
-    color: #81c784 !important;
+    letter-spacing: 0.24em;
+  }
 
-    font-size: 14px !important;
+  .redefinir-senha-page .redefinir-slogan span,
+  .redefinir-senha-page .redefinir-slogan strong {
+    font-size: 12px;
+  }
 
-    text-align: left !important;
+  .redefinir-senha-page .redefinir-senha-container {
+    max-width: 420px;
+  }
 }
 
+@media (max-width: 420px) {
+  .redefinir-senha-page .redefinir-senha-card {
+    padding: 36px 22px 24px;
+  }
 
-/* =========================================
-   BOTÃO VOLTAR
-   ========================================= */
-
-.btn-voltar {
-    width: 100%;
-
-    margin-top: 18px;
-
-    padding: 12px;
-
-    background: transparent;
-
-    border: 1px solid #3d3d3d;
-
-    border-radius: 9px;
-
-    color: #bdbdbd;
-
-    font-size: 14px;
-
-    cursor: pointer;
-
-    transition:
-        border-color 0.2s ease,
-        color 0.2s ease;
+  .redefinir-senha-page .redefinir-senha-card h1 {
+    font-size: 21px !important;
+  }
 }
 
-
-.btn-voltar:hover {
-    border-color: #d4af37;
-
-    color: #d4af37;
+@media (prefers-reduced-motion: reduce) {
+  .redefinir-senha-page * {
+    transition: none !important;
+  }
 }
-
-
-.btn-voltar:disabled {
-    opacity: 0.5;
-
-    cursor: not-allowed;
-}
-
-
-/* =========================================
-   RESPONSIVO
-   ========================================= */
-
-@media (max-width: 520px) {
-
-    .redefinir-senha-page {
-        padding: 18px;
-    }
-
-    .redefinir-senha-card {
-        padding: 30px 24px;
-    }
-
-    .redefinir-senha-card h1 {
-        font-size: 25px;
-    }
-}
-

@@ -1,339 +1,536 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 /* =========================================
-   PÁGINA DE RECUPERAÇÃO DE SENHA
+   RECUPERAR SENHA — Hope Barbearia
+   Mesmo visual do login: foto escura ao fundo,
+   brasão à esquerda e card dourado à direita.
+   (Somente estilo — a lógica não foi alterada)
+
+   Tudo escopado em .recuperacao-page para
+   não vazar para outras telas.
    ========================================= */
 
-.recuperacao-page {
-    min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 30px;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #2a2a2a 0%,
-            #111111 45%,
-            #050505 100%
-        );
-
-    font-family: Arial, Helvetica, sans-serif;
-}
 /* =========================================
-   CONTAINER
+   PÁGINA
    ========================================= */
 
-.recuperacao-container {
-    width: 100%;
-    max-width: 440px;
+html body div.recuperacao-page {
+  --gold: #c9a24d;
+  --gold-light: #e6c56f;
+  --ink: #070605;
+  --field: #141413;
+  --field-line: #302d28;
 
-    display: flex;
-    justify-content: center;
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(32px, 7vw, 120px);
+
+  padding: 40px clamp(24px, 5vw, 80px);
+
+  background: var(--ink);
+  color: #ffffff;
+
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+
+  overflow: hidden;
+  isolation: isolate;
 }
 
+/* Texto só para leitores de tela */
+.recuperacao-page .sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================
+   FUNDO
+   ========================================= */
+
+.recuperacao-page .recuperacao-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+
+  background-size: cover;
+  background-position: center 70%;
+  background-repeat: no-repeat;
+
+  filter: grayscale(0.3) brightness(0.85) contrast(1.1);
+}
+
+.recuperacao-page::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background:
+    radial-gradient(ellipse at 28% 48%, rgba(7, 6, 5, 0.2) 0%, rgba(7, 6, 5, 0.7) 75%),
+    linear-gradient(90deg, rgba(7, 6, 5, 0.35), rgba(7, 6, 5, 0.8));
+}
+
+/* =========================================
+   LADO ESQUERDO — MARCA
+   ========================================= */
+
+.recuperacao-page .recuperacao-brand {
+  flex: 1 1 0;
+  max-width: 520px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.recuperacao-page .recuperacao-logo {
+  width: min(100%, 440px);
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* O PNG tem margem transparente; a escala compensa */
+.recuperacao-page .recuperacao-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  transform: scale(1.4);
+
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.7));
+}
+
+.recuperacao-page .recuperacao-slogan {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin: 6px 0 0;
+  padding-bottom: 22px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+}
+
+.recuperacao-page .recuperacao-slogan span,
+.recuperacao-page .recuperacao-slogan strong {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.recuperacao-page .recuperacao-slogan span {
+  color: var(--gold);
+}
+
+.recuperacao-page .recuperacao-slogan strong {
+  color: #ffffff;
+}
+
+.recuperacao-page .recuperacao-slogan::after {
+  content: '';
+
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+
+  width: 44px;
+  height: 1px;
+
+  background: var(--gold);
+
+  transform: translateX(-50%);
+}
 
 /* =========================================
    CARD
    ========================================= */
 
-.recuperacao-card {
-    width: 100%;
-    max-width: 440px;
+.recuperacao-page .recuperacao-container {
+  flex: 0 0 auto;
 
-    padding: 42px;
-
-    background: rgba(25, 25, 25, 0.96);
-
-    border: 1px solid rgba(212, 175, 55, 0.35);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.65),
-        0 0 25px rgba(212, 175, 55, 0.08);
-
-    color: #ffffff;
+  width: 100%;
+  max-width: 400px;
 }
 
+.recuperacao-page .recuperacao-card {
+  width: 100%;
+
+  padding: 44px 34px 30px;
+
+  background: rgba(9, 9, 9, 0.9);
+
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(201, 162, 77, 0.08) inset;
+
+  color: #ffffff;
+}
 
 /* =========================================
-   LOGO / ÍCONE
+   TÍTULO E DESCRIÇÃO
    ========================================= */
 
-.recuperacao-icon {
-    width: 70px;
-    height: 70px;
+.recuperacao-page .recuperacao-card h1 {
+  margin: 0;
 
-    margin: 0 auto 22px;
+  text-align: center;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-family: inherit;
+  font-size: 24px !important;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 
-    border-radius: 50%;
-
-    background: rgba(212, 175, 55, 0.10);
-
-    border: 1px solid rgba(212, 175, 55, 0.45);
-
-    color: #d4af37;
-
-    font-size: 30px;
+  color: var(--gold);
 }
 
+.recuperacao-page .recuperacao-card h1::before {
+  content: '';
 
-/* =========================================
-   TÍTULO
-   ========================================= */
+  display: block;
 
-.recuperacao-card h1 {
-    margin: 0 0 12px;
+  width: 38px;
+  height: 2px;
 
-    text-align: center;
+  margin: 0 auto 22px;
 
-    color: #d4af37;
-
-    font-size: 29px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.5px;
+  background: var(--gold);
 }
 
+.recuperacao-page .recuperacao-descricao {
+  margin: 14px 0 30px;
 
-/* =========================================
-   DESCRIÇÃO
-   ========================================= */
+  text-align: center;
 
-.recuperacao-card p {
-    margin: 0 0 28px;
+  font-size: 13px;
+  line-height: 1.7;
 
-    text-align: center;
-
-    color: #bdbdbd;
-
-    font-size: 15px;
-
-    line-height: 1.6;
+  color: #d9d6cf;
 }
-
 
 /* =========================================
    FORMULÁRIO
    ========================================= */
 
-.recuperacao-card form {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 16px;
+.recuperacao-page .recuperacao-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
+.recuperacao-page .form-group {
+  display: block;
 
-/* =========================================
-   LABEL
-   ========================================= */
-
-.recuperacao-card label {
-    margin-bottom: 6px;
-
-    color: #eeeeee;
-
-    font-size: 14px;
-
-    font-weight: 600;
+  margin: 0 0 18px;
 }
 
+.recuperacao-page .campo {
+  position: relative;
 
-/* =========================================
-   INPUT
-   ========================================= */
-
-.recuperacao-card input {
-    width: 100%;
-
-    box-sizing: border-box;
-
-    padding: 14px 15px;
-
-    background: #111111;
-
-    border: 1px solid #3a3a3a;
-
-    border-radius: 9px;
-
-    color: #ffffff;
-
-    font-size: 15px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+  width: 100%;
 }
 
+.recuperacao-page .campo input {
+  width: 100%;
+  height: 48px;
 
-.recuperacao-card input::placeholder {
-    color: #777777;
+  margin: 0;
+  padding: 0 16px 0 50px;
+
+  background: var(--field);
+
+  border: 1px solid var(--field-line);
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 14px !important;
+
+  color: #f4f1ea;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-
-.recuperacao-card input:focus {
-    border-color: #d4af37;
-
-    box-shadow:
-        0 0 0 3px rgba(212, 175, 55, 0.10);
+.recuperacao-page .campo input::placeholder {
+  color: #8a867d;
 }
 
-
-/* =========================================
-   BOTÃO PRINCIPAL
-   ========================================= */
-
-.recuperacao-card form button {
-    width: 100%;
-
-    margin-top: 8px;
-
-    padding: 14px;
-
-    border: none;
-
-    border-radius: 9px;
-
-    background: linear-gradient(
-        135deg,
-        #d4af37,
-        #b8860b
-    );
-
-    color: #111111;
-
-    font-size: 15px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        opacity 0.2s ease;
+.recuperacao-page .campo input:hover:not(:disabled) {
+  border-color: #4a4338;
 }
 
+.recuperacao-page .campo input:focus {
+  border-color: var(--gold);
 
-.recuperacao-card form button:hover {
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 20px rgba(212, 175, 55, 0.20);
+  box-shadow: 0 0 0 3px rgba(201, 162, 77, 0.22);
 }
 
+.recuperacao-page .campo input:disabled {
+  opacity: 0.6;
 
-.recuperacao-card form button:active {
-    transform: translateY(0);
+  cursor: not-allowed;
 }
 
+/* Mantém o campo escuro quando o navegador preenche sozinho */
+.recuperacao-page .campo input:-webkit-autofill,
+.recuperacao-page .campo input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f4f1ea;
+  caret-color: #f4f1ea;
 
-.recuperacao-card form button:disabled {
-    opacity: 0.6;
-
-    cursor: not-allowed;
-
-    transform: none;
-
-    box-shadow: none;
+  box-shadow: 0 0 0 1000px var(--field) inset;
 }
 
+.recuperacao-page .campo-icone {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+
+  color: #9d9a92;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+
+  transition: color 0.2s ease;
+}
+
+.recuperacao-page .campo:focus-within .campo-icone {
+  color: var(--gold);
+}
 
 /* =========================================
    MENSAGENS
    ========================================= */
 
-.mensagem-erro {
-    margin: 0 !important;
+.recuperacao-page .mensagem-erro,
+.recuperacao-page .mensagem-sucesso {
+  margin: 0 0 18px !important;
+  padding: 12px 14px;
 
-    padding: 11px 13px;
+  border-radius: 6px;
 
-    border-radius: 7px;
-
-    background: rgba(198, 40, 40, 0.12);
-
-    border: 1px solid rgba(198, 40, 40, 0.35);
-
-    color: #ff7777 !important;
-
-    font-size: 14px !important;
-
-    text-align: left !important;
+  font-size: 13px !important;
+  line-height: 1.5;
+  text-align: left !important;
 }
 
+.recuperacao-page .mensagem-erro {
+  background: rgba(198, 40, 40, 0.12);
 
-.mensagem-sucesso {
-    margin: 0 !important;
+  border: 1px solid rgba(229, 83, 83, 0.4);
 
-    padding: 11px 13px;
-
-    border-radius: 7px;
-
-    background: rgba(46, 125, 50, 0.12);
-
-    border: 1px solid rgba(76, 175, 80, 0.35);
-
-    color: #81c784 !important;
-
-    font-size: 14px !important;
-
-    text-align: left !important;
+  color: #ff8a8a !important;
 }
 
+.recuperacao-page .mensagem-sucesso {
+  background: rgba(46, 125, 50, 0.14);
+
+  border: 1px solid rgba(76, 175, 80, 0.4);
+
+  color: #8fd694 !important;
+}
 
 /* =========================================
-   BOTÃO VOLTAR
+   BOTÃO PRINCIPAL
    ========================================= */
 
-.btn-voltar {
-    margin-top: 18px !important;
+.recuperacao-page .btn-recuperar {
+  width: 100%;
+  height: 48px;
 
-    background: transparent !important;
+  margin: 4px 0 0;
+  padding: 0;
 
-    border: 1px solid #3d3d3d !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 
-    color: #bdbdbd !important;
+  background: linear-gradient(180deg, #e0bd72 0%, #c39a4a 55%, #a87f38 100%);
 
-    box-shadow: none !important;
+  border: none;
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 13px !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  color: #15110a;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 22px rgba(201, 162, 77, 0.18);
+
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
 
+/* Texto mais longo que no login/redefinição: menos espaçamento entre letras */
+.recuperacao-page .btn-recuperar {
+  padding: 0 14px;
+  gap: 10px;
 
-.btn-voltar:hover {
-    border-color: #d4af37 !important;
-
-    color: #d4af37 !important;
-
-    box-shadow: none !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em;
 }
 
+.recuperacao-page .btn-recuperar:hover:not(:disabled) {
+  filter: brightness(1.08);
+
+  box-shadow: 0 10px 26px rgba(201, 162, 77, 0.3);
+}
+
+.recuperacao-page .btn-recuperar:active:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.recuperacao-page .btn-recuperar:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  box-shadow: none;
+}
 
 /* =========================================
-   RESPONSIVO
+   BOTÃO VOLTAR (secundário)
    ========================================= */
 
-@media (max-width: 520px) {
+.recuperacao-page .recuperacao-voltar {
+  width: 100%;
+  height: 46px;
 
-    .recuperacao-page {
-        padding: 18px;
-    }
+  margin: 22px 0 0;
+  padding: 0;
 
-    .recuperacao-card {
-        padding: 30px 24px;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
-    .recuperacao-card h1 {
-        font-size: 25px;
-    }
+  background: transparent;
+
+  border: 1px solid rgba(201, 162, 77, 0.55);
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 12px !important;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  color: var(--gold-light);
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.recuperacao-page .recuperacao-voltar:hover:not(:disabled) {
+  background: rgba(201, 162, 77, 0.12);
+
+  border-color: var(--gold);
+}
+
+.recuperacao-page .recuperacao-voltar:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.recuperacao-page .btn-recuperar:focus-visible,
+.recuperacao-page .recuperacao-voltar:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   TABLET E CELULAR
+   ========================================= */
+
+@media (max-width: 900px) {
+  html body div.recuperacao-page {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+
+    padding: 28px 20px 40px;
+  }
+
+  .recuperacao-page .recuperacao-brand {
+    flex: none;
+    max-width: none;
+  }
+
+  .recuperacao-page .recuperacao-logo {
+    width: min(60vw, 220px);
+  }
+
+  .recuperacao-page .recuperacao-slogan {
+    padding-bottom: 16px;
+
+    letter-spacing: 0.24em;
+  }
+
+  .recuperacao-page .recuperacao-slogan span,
+  .recuperacao-page .recuperacao-slogan strong {
+    font-size: 12px;
+  }
+
+  .recuperacao-page .recuperacao-container {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 420px) {
+  .recuperacao-page .recuperacao-card {
+    padding: 36px 22px 24px;
+  }
+
+  .recuperacao-page .recuperacao-card h1 {
+    font-size: 21px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recuperacao-page * {
+    transition: none !important;
+  }
 }

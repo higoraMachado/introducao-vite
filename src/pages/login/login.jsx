@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import "./login.css";
 
-import logoHope from "../../assets/logo-hope.png";
-import barbearia from "../../assets/barbearia.jpg";
+import logoHope from "../../assets/logo_login.png";
+import fotoLogin from "../../assets/foto-login.jpg";
 
 function Login() {
   const navigate = useNavigate();
@@ -182,64 +182,41 @@ function Login() {
   return (
     <main className="login-page">
       {/* =================================================
-          LADO ESQUERDO
+          FUNDO (foto da barbearia)
       ================================================= */}
 
-      <section
-        className="login-brand"
-        style={{
-          backgroundImage: `
-            linear-gradient(
-              rgba(10, 10, 10, 0.68),
-              rgba(10, 10, 10, 0.82)
-            ),
-            url(${barbearia})
-          `,
-        }}
-      >
-        <div className="brand-content">
-          {/* LOGO */}
+      <div
+        className="login-bg"
+        style={{ backgroundImage: `url(${fotoLogin})` }}
+        aria-hidden="true"
+      />
 
+      {/* =================================================
+          LADO ESQUERDO — MARCA
+      ================================================= */}
+
+      <section className="login-brand">
+        <div className="brand-content">
           <div className="brand-logo">
             <img src={logoHope} alt="Hope Barbearia" />
           </div>
 
-          {/* TEXTO */}
-
-          <h1>
-            Sistema de Agendamento
-            <br />e Controle Financeiro
-          </h1>
-
-          <p>
-            Gestão completa da sua barbearia
-            <br />
-            em um só lugar.
+          <p className="brand-slogan">
+            <span>Mais que um corte,</span>
+            <strong>é estilo de vida.</strong>
           </p>
         </div>
       </section>
 
       {/* =================================================
-          LADO DIREITO
+          LADO DIREITO — CARD DE LOGIN
       ================================================= */}
 
       <section className="login-container">
         <div className="login-card">
-          {/* =================================================
-              ÍCONE
-          ================================================= */}
+          <h2>Bem-vindo</h2>
 
-          <div className="barber-icon">
-            <img src={logoHope} alt="Logo Hope Barbearia" />
-          </div>
-
-          {/* =================================================
-              TÍTULO
-          ================================================= */}
-
-          <h2>Login</h2>
-
-          <p className="login-description">Acesse sua conta para continuar</p>
+          <p className="login-description">Acesso ao sistema</p>
 
           {/* =================================================
               FORMULÁRIO
@@ -251,19 +228,19 @@ function Login() {
             ================================================= */}
 
             <div className="form-group">
-              <label htmlFor="email">E-mail</label>
+              <label htmlFor="email" className="sr-only">E-mail</label>
 
               <div className="input-container">
                 <input
                   id="email"
                   type="email"
-                  placeholder="Digite seu e-mail"
+                  placeholder="E-mail"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   required
                 />
 
-                {!email && (
+                {(
                   <span className="email-icon">
                     <svg
                       width="21"
@@ -289,10 +266,10 @@ function Login() {
             ================================================= */}
 
             <div className="form-group">
-              <label htmlFor="senha">Senha</label>
+              <label htmlFor="senha" className="sr-only">Senha</label>
 
               <div className="input-wrapper">
-                {!senha && (
+                {(
                   <span className="input-icon">
                     <svg
                       width="21"
@@ -312,7 +289,7 @@ function Login() {
                 <input
                   id="senha"
                   type={mostrarSenha ? "text" : "password"}
-                  placeholder="Digite sua senha"
+                  placeholder="Senha"
                   value={senha}
                   onChange={(event) => setSenha(event.target.value)}
                   required
@@ -383,7 +360,7 @@ function Login() {
 
                 <span className="custom-checkbox"></span>
 
-                <span>Lembrar-me</span>
+                <span>Lembrar de mim</span>
               </label>
 
               {/* ESQUECI SENHA */}
@@ -393,7 +370,7 @@ function Login() {
                 className="forgot-password"
                 onClick={recuperarSenha}
               >
-                Esqueci minha senha
+                Esqueceu sua senha?
               </button>
             </div>
 
@@ -403,6 +380,20 @@ function Login() {
 
             <button type="submit" className="login-button">
               Entrar
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="M13 6l6 6-6 6" />
+              </svg>
             </button>
           </form>
 
@@ -497,7 +488,21 @@ function Login() {
               RODAPÉ
           ================================================= */}
 
-          <footer>© 2026 Hope Barbearia. Todos os direitos reservados.</footer>
+          <footer>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <rect x="5" y="10" width="14" height="11" rx="2" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            <span>Acesso restrito para usuários autorizados</span>
+          </footer>
         </div>
       </section>
     </main>

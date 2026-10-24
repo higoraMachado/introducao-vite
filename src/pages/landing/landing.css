@@ -2,6 +2,8 @@
    1. RESET & GLOBALS
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -298,7 +300,7 @@ a {
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 620px;
+  max-width: 800px;
 }
 
 .hero-subtitle {
@@ -321,6 +323,10 @@ a {
 
 .hero h1 span {
   color: #d4af37;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
 }
 
 .hero-content p {
@@ -518,9 +524,7 @@ a {
   position: absolute;
   inset: 0;
   z-index: 0;
-
   background: rgba(0, 0, 0, 0.58);
-
   transition: background 0.45s ease;
 }
 
@@ -528,15 +532,12 @@ a {
 .service-content {
   position: relative;
   z-index: 1;
-
   min-height: 263px;
   padding: 42px 20px 25px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-
   transition: padding 0.45s ease;
 }
 
@@ -545,17 +546,13 @@ a {
   width: 60px;
   height: 60px;
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-bottom: 20px;
-
   border: 1px solid #d4af37;
   color: #d4af37;
   font-size: 27px;
-
   transition:
     transform 0.45s ease,
     background 0.4s ease,
@@ -565,11 +562,9 @@ a {
 /* Título */
 .service-card h3 {
   margin: 0;
-
   color: #ffffff;
   font-size: 18px;
   font-weight: 500;
-
   transition:
     transform 0.45s ease,
     color 0.4s ease;
@@ -580,11 +575,9 @@ a {
   width: 100%;
   max-height: 0;
   margin-top: 0;
-
   opacity: 0;
   overflow: hidden;
   transform: translateY(15px);
-
   transition:
     max-height 0.5s ease,
     opacity 0.35s ease,
@@ -594,7 +587,6 @@ a {
 
 .service-details p {
   margin: 0 0 18px;
-
   color: #eeeeee;
   font-size: 13px;
   line-height: 1.8;
@@ -614,14 +606,11 @@ a {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-
   margin-top: auto;
   padding-top: 20px;
-
   opacity: 0;
   transform: translateY(12px);
   pointer-events: none;
-
   transition:
     opacity 0.35s ease,
     transform 0.35s ease;
@@ -630,18 +619,14 @@ a {
 .service-more-icon {
   width: 40px;
   height: 40px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid #d4af37;
   border-radius: 50%;
-
   color: #d4af37;
   font-size: 26px;
   font-weight: 300;
-
   transition:
     background 0.3s ease,
     color 0.3s ease,
@@ -656,13 +641,10 @@ a {
 
   .service-card:hover {
     min-height: 390px;
-
     border-color: #d4af37;
-
     box-shadow:
       0 18px 38px rgba(0, 0, 0, 0.4),
       0 0 18px rgba(212, 175, 55, 0.12);
-
     transform: translateY(-5px);
   }
 
@@ -687,7 +669,6 @@ a {
   .service-card:hover .service-details {
     max-height: 190px;
     margin-top: 22px;
-
     opacity: 1;
     transform: translateY(0);
   }
@@ -710,24 +691,42 @@ a {
    ========================================================================== */
 
 .about-section {
+  position: relative;
   min-height: 600px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: #0b0b0b;
+  align-items: center;
+  
+  /* Imagem de fundo pegando os dois lados com fit perfeito */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
+/* Camada escura sobre a imagem de fundo para dar excelente legibilidade aos textos e à logo */
+.about-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(11, 11, 11, 0.88) 0%,
+    rgba(11, 11, 11, 0.75) 50%,
+    rgba(11, 11, 11, 0.90) 100%
+  );
+  z-index: 1;
+}
+
+/* Lado Esquerdo - Mantém a logo em destaque */
 .about-image {
-  min-height: 600px;
+  position: relative;
+  z-index: 2;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(circle,
-      rgba(212, 175, 55, 0.15),
-      transparent 45%),
-    linear-gradient(145deg,
-      #1d1d1d,
-      #080808);
+  padding: 40px;
 }
 
 .about-image-content {
@@ -735,6 +734,8 @@ a {
   color: #d4af37;
   border: 1px solid rgba(212, 175, 55, 0.4);
   padding: 55px;
+  background: rgba(8, 8, 8, 0.5);
+  backdrop-filter: blur(5px);
 }
 
 .about-image-content span {
@@ -749,35 +750,68 @@ a {
   letter-spacing: 6px;
 }
 
+/* Lado Direito - Conteúdo e textos */
 .about-content {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 80px 10%;
+  padding: 80px 10% 80px 5%;
 }
 
+/* Título: BARBEARIA no mesmo tamanho exato de MAIS QUE UMA */
 .about-content h2 {
   margin: 18px 0 25px;
-  font-size: clamp(35px, 4vw, 55px);
-  line-height: 1;
+  font-size: clamp(32px, 4.5vw, 52px);
+  line-height: 1.1;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .about-content h2 span {
   color: #d4af37;
+  font-size: inherit;
+  font-weight: inherit;
+  display: block;
 }
 
+/* Texto abaixo da frase: Fonte elegante com serifa e tamanho maior */
 .about-content p {
-  max-width: 500px;
-  color: #999;
-  line-height: 1.8;
-  font-size: 14px;
+  max-width: 520px;
+  color: #e0e0e0;
+  font-family: 'Cinzel', 'Montserrat', serif;
+  font-size: 18px;
+  line-height: 1.9;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .about-content .btn-primary {
   width: fit-content;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
+/* ==========================================================================
+   EFEITO DE SCROLL REVEAL CONTÍNUO (Subir e Descer)
+   ========================================================================== */
+
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Atrasos individuais em cascata */
+.delay-1 { transition-delay: 0.15s; }
+.delay-2 { transition-delay: 0.3s; }
 
 /* ==========================================================================
    7. EQUIPE SECTION
@@ -928,17 +962,11 @@ a {
    10. MEDIA QUERIES (RESPONSIVIDADE)
    ========================================================================== */
 
-/* =========================================
-   RESPONSIVIDADE DOS SERVIÇOS
-========================================= */
-
 @media (max-width: 1000px) {
   .services-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
-
 
 /* Tablet (max-width: 900px) */
 @media (max-width: 900px) {
@@ -1005,7 +1033,7 @@ a {
   }
 
   .about-image {
-    min-height: 400px;
+    min-height: 350px;
   }
 
   .team-grid {
@@ -1075,11 +1103,11 @@ a {
   }
 
   .about-content {
-    padding: 70px 25px;
+    padding: 50px 25px 70px;
   }
 
   .about-image {
-    min-height: 350px;
+    min-height: 300px;
   }
 
   .footer-content {
@@ -1096,11 +1124,9 @@ a {
     min-height: 238px;
   }
 
-  /* No celular, mostra as especificações sem depender do mouse */
   .service-details {
     max-height: 190px;
     margin-top: 20px;
-
     opacity: 1;
     transform: none;
   }
@@ -1109,12 +1135,10 @@ a {
     opacity: 1;
     transform: none;
   }
-
 }
 
 /* Acessibilidade - Animações Reduzidas */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   .service-card,
   .service-overlay,
@@ -1124,7 +1148,10 @@ a {
   .service-card h3,
   .service-details,
   .service-more,
-  .service-more-icon {
+  .service-more-icon,
+  .reveal-on-scroll {
     transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
   }
 }

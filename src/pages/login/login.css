@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* ========================================
+   LOGIN — Hope Barbearia
+   Fundo escuro com foto, brasão à esquerda
+   e card com moldura dourada à direita.
+   (Somente estilo — a lógica não foi alterada)
+======================================== */
+
 /* ========================================
    RESET
 ======================================== */
@@ -20,916 +29,686 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Texto só para leitores de tela (labels dos campos) */
+.login-page .sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ========================================
    PÁGINA
+   (html body main... para vencer o global.css)
 ======================================== */
 
-.login-page {
+html body main.login-page {
+  --gold: #c9a24d;
+  --gold-light: #e6c56f;
+  --gold-deep: #9b7430;
+  --ink: #070605;
+  --field: #141413;
+  --field-line: #302d28;
+
+  position: relative;
+
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-
-/* ========================================
-   LADO ESQUERDO
-======================================== */
-
-.login-brand {
-  width: 42%;
-  height: 100vh;
 
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: clamp(32px, 7vw, 120px);
 
-  position: relative;
+  padding: 40px clamp(24px, 5vw, 80px);
+
+  background: var(--ink);
+  color: #ffffff;
+
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
 
   overflow: hidden;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* Efeito escuro sobre a imagem */
-
-.login-brand::after {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.05),
-    transparent 65%
-  );
-
-  pointer-events: none;
+  isolation: isolate;
 }
 
 /* ========================================
-   CONTEÚDO DA MARCA
+   FUNDO — foto escurecida, tom quente
 ======================================== */
 
-.brand-content {
+.login-page .login-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+
+  background-size: cover;
+  background-position: center 70%;
+  background-repeat: no-repeat;
+
+  filter: grayscale(0.3) brightness(0.85) contrast(1.1);
+}
+
+.login-page::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background:
+    radial-gradient(ellipse at 28% 48%, rgba(7, 6, 5, 0.2) 0%, rgba(7, 6, 5, 0.7) 75%),
+    linear-gradient(90deg, rgba(7, 6, 5, 0.35), rgba(7, 6, 5, 0.8));
+}
+
+/* ========================================
+   LADO ESQUERDO — BRASÃO + SLOGAN
+======================================== */
+
+.login-page .login-brand {
+  flex: 1 1 0;
+  max-width: 520px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.login-page .brand-content {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.login-page .brand-logo {
+  width: min(100%, 440px);
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* O PNG tem margem transparente; a escala compensa */
+.login-page .brand-logo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  transform: scale(1.4);
+
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.7));
+}
+
+.login-page .brand-slogan {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 6px;
+  padding-bottom: 22px;
+
   position: relative;
 
-  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+}
 
-  width: 90%;
-  max-width: 500px;
+.login-page .brand-slogan span {
+  font-size: 15px;
+  font-weight: 500;
+
+  color: var(--gold);
+}
+
+.login-page .brand-slogan strong {
+  font-size: 15px;
+  font-weight: 500;
+
+  color: #ffffff;
+}
+
+.login-page .brand-slogan::after {
+  content: '';
+
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+
+  width: 44px;
+  height: 1px;
+
+  background: var(--gold);
+
+  transform: translateX(-50%);
+}
+
+/* ========================================
+   LADO DIREITO — CARD
+======================================== */
+
+.login-page .login-container {
+  flex: 0 0 auto;
+
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-page .login-card {
+  position: relative;
+
+  width: 100%;
 
   display: flex;
   flex-direction: column;
 
-  align-items: center;
+  padding: 44px 34px 30px;
 
-  text-align: center;
+  background: rgba(9, 9, 9, 0.9);
 
-  color: white;
-}
+  border: 1px solid var(--gold);
+  border-radius: 8px;
 
-/* ========================================
-   LOGO
-======================================== */
-
-.brand-logo {
-  width: 100%;
-
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-bottom: 28px;
-}
-
-.brand-logo img {
-  width: 230px;
-  height: 230px;
-  max-width: 60%;
-  object-fit: contain;
-  display: block;
-}
-
-/* ========================================
-   TEXTO
-======================================== */
-
-.brand-content h1 {
-  margin: 0;
-
-  font-size: 24px;
-
-  line-height: 1.4;
-
-  font-weight: 500;
-
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-.brand-content p {
-  margin-top: 16px;
-
-  font-size: 16px;
-
-  line-height: 1.6;
-
-  color: #dddddd;
-
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* ========================================
-   LADO DIREITO
-======================================== */
-
-.login-container {
-  width: 58%;
-  height: 100vh;
-
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  padding: 20px;
-}
-
-/* ========================================
-   CARD
-======================================== */
-
-.login-container {
-  width: 100%;
-  max-width: 530px;
-  min-width: 0;
-  height: auto;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  height: auto;
-  box-sizing: border-box;
-  overflow: visible;
-  padding: 30px;
-}
-
-/* ========================================
-   ÍCONE
-======================================== */
-
-.barber-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin: 0 auto 18px;
-}
-
-.barber-icon img {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  display: block;
-}
-
-.barber-icon::before {
-  content: "";
-
-  position: absolute;
-
-  width: 82px;
-  height: 82px;
-
-  border: 1px solid #333333;
-
-  border-radius: 50%;
-}
-
-.barber-icon span {
-  position: relative;
-
-  z-index: 2;
-
-  font-size: 36px;
-
-  color: #222222;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(201, 162, 77, 0.08) inset;
 }
 
 /* ========================================
    TÍTULO
 ======================================== */
 
-.login-card h2 {
+.login-page .login-card h2 {
   margin: 0;
 
   text-align: center;
 
-  font-size: 30px;
+  font-family: inherit;
+  font-size: 26px !important;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 
-  font-weight: 700;
-
-  color: #151515;
+  color: var(--gold);
 }
 
-.login-description {
-  text-align: center;
+.login-page .login-card h2::before {
+  content: '';
 
-  margin: 8px 0 24px;
-
-  color: #666666;
-
-  font-size: 16px;
-}
-
-/* ========================================
-   FORMULÁRIO
-======================================== */
-
-.form-group {
-  margin-bottom: 17px;
-}
-
-.form-group label {
   display: block;
 
-  margin-bottom: 7px;
+  width: 38px;
+  height: 2px;
 
-  font-size: 15px;
+  margin: 0 auto 22px;
 
-  font-weight: 600;
-
-  color: #222222;
+  background: var(--gold);
 }
 
-.input-wrapper {
-  position: relative;
+.login-page .login-description {
+  margin: 8px 0 34px;
 
-  width: 100%;
-}
+  text-align: center;
 
-.input-wrapper input {
-  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
 
-  height: 50px;
-
-  border: 1px solid #d5d5d5;
-
-  border-radius: 9px;
-
-  background: #ffffff;
-
-  padding: 0 50px 0 55px;
-
-  font-size: 15px;
-
-  color: #222222;
-
-  outline: none;
-
-  transition: 0.2s;
-}
-
-.input-wrapper input::placeholder {
-  color: #999999;
-}
-
-.input-wrapper input:focus {
-  border-color: #222222;
-
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+  color: #f2efe8;
 }
 
 /* ========================================
-   CAMPO E-MAIL
+   CAMPOS
 ======================================== */
 
-.input-container {
+.login-page .form-group {
+  margin-bottom: 18px;
+}
+
+.login-page .input-wrapper,
+.login-page .input-container {
   position: relative;
+
   width: 100%;
 }
 
-.input-container input {
+.login-page .input-wrapper input,
+.login-page .input-container input {
   width: 100%;
-  height: 50px;
-  border: 1px solid #d5d5d5;
-  border-radius: 9px;
-  background: #ffffff;
-  padding: 0 50px 0 15px;
-  font-size: 15px;
-  color: #222222;
+  height: 48px;
+
+  padding: 0 48px 0 50px;
+
+  background: var(--field);
+
+  border: 1px solid var(--field-line);
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 14px !important;
+
+  color: #f4f1ea;
+
   outline: none;
-  transition: 0.2s;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.input-container input::placeholder {
-  color: #999999;
+.login-page .input-container input {
+  padding-right: 16px;
 }
 
-.input-container input:focus {
-  border-color: #222222;
-
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+.login-page .input-wrapper input::placeholder,
+.login-page .input-container input::placeholder {
+  color: #8a867d;
 }
 
-/* ÍCONE DO USUÁRIO */
+.login-page .input-wrapper input:hover,
+.login-page .input-container input:hover {
+  border-color: #4a4338;
+}
 
-.email-icon {
+.login-page .input-wrapper input:focus,
+.login-page .input-container input:focus {
+  border-color: var(--gold);
+
+  box-shadow: 0 0 0 3px rgba(201, 162, 77, 0.22);
+}
+
+/* Mantém o campo escuro quando o navegador preenche sozinho */
+.login-page input:-webkit-autofill,
+.login-page input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f4f1ea;
+  caret-color: #f4f1ea;
+
+  box-shadow: 0 0 0 1000px var(--field) inset;
+}
+
+/* Ícones à esquerda (sempre visíveis) */
+
+.login-page .email-icon,
+.login-page .input-icon {
   position: absolute;
-  right: 17px;
+  left: 17px;
   top: 50%;
-  transform: translateY(-50%);
-
-  color: #888888;
 
   display: flex;
   align-items: center;
 
+  color: #9d9a92;
+
+  transform: translateY(-50%);
+
   pointer-events: none;
   z-index: 2;
 }
 
-/* ========================================
-   ÍCONE INPUT
-======================================== */
-
-.input-icon {
-  position: absolute;
-
-  right: 50px;
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  color: #888888;
-
-  display: flex;
-
-  pointer-events: none;
-
-  z-index: 2;
+.login-page .input-wrapper:focus-within .input-icon,
+.login-page .input-container:focus-within .email-icon {
+  color: var(--gold);
 }
 
-/* ========================================
-   SENHA
-======================================== */
+/* Olho (mostrar/ocultar senha) */
 
-.password-button {
+.login-page .password-button {
   position: absolute;
-  right: 15px;
+  right: 8px;
   top: 50%;
-  transform: translateY(-50%);
 
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
 
-  border: none;
-  background: transparent;
-
-  color: #777777;
+  padding: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+
+  color: #9d9a92;
+
   cursor: pointer;
-  padding: 0;
+
+  transform: translateY(-50%);
+
+  transition: color 0.2s ease;
 }
 
-.password-button:hover {
-  color: #222222;
+.login-page .password-button:hover {
+  color: var(--gold-light);
 }
 
-.password-button svg {
-  display: block;
+.login-page .password-button:focus-visible,
+.login-page .forgot-password:focus-visible,
+.login-page .login-button:focus-visible,
+.login-page .create-account:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
 }
 
 /* ========================================
-   OPÇÕES
+   LEMBRAR / ESQUECEU A SENHA
 ======================================== */
 
-.login-options {
+.login-page .login-options {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 
-  margin: 3px 0 22px;
-
-  font-size: 14px;
+  margin: 2px 0 26px;
 }
 
-.remember {
+.login-page .remember {
+  position: relative;
+
   display: flex;
-
   align-items: center;
-
-  gap: 8px;
+  gap: 9px;
 
   cursor: pointer;
 
-  color: #444444;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+
+  color: #d9d6cf;
 }
 
-.remember input {
-  display: none;
+.login-page .remember span {
+  font-size: 12px;
 }
 
-.custom-checkbox {
-  width: 19px;
-  height: 19px;
+/* Checkbox real fica invisível, mas continua acessível pelo teclado */
+.login-page .remember input {
+  position: absolute;
+  width: 16px;
+  height: 16px;
 
-  border: 1px solid #999999;
+  margin: 0;
 
-  border-radius: 3px;
+  opacity: 0;
+}
 
-  background: white;
-
+.login-page .custom-checkbox {
   position: relative;
 
+  width: 16px;
+  height: 16px;
+
   flex-shrink: 0;
-}
-
-.remember input:checked + .custom-checkbox {
-  background: #171717;
-
-  border-color: #171717;
-}
-
-.remember input:checked + .custom-checkbox::after {
-  content: "✓";
-
-  position: absolute;
-
-  color: white;
-
-  font-size: 13px;
-
-  left: 3px;
-  top: 0;
-}
-
-.forgot-password {
-  border: none;
 
   background: transparent;
 
-  color: #666666;
+  border: 1px solid #77736a;
+  border-radius: 3px;
 
-  font-size: 14px;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.login-page .remember:hover .custom-checkbox {
+  border-color: var(--gold);
+}
+
+.login-page .remember input:focus-visible + .custom-checkbox {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
+
+.login-page .remember input:checked + .custom-checkbox {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.login-page .remember input:checked + .custom-checkbox::after {
+  content: '';
+
+  position: absolute;
+  left: 4px;
+  top: 1px;
+
+  width: 4px;
+  height: 8px;
+
+  border: solid #111111;
+  border-width: 0 2px 2px 0;
+
+  transform: rotate(45deg);
+}
+
+.login-page .forgot-password {
+  padding: 0;
+
+  background: transparent;
+  border: none;
+
+  font-family: inherit;
+  font-size: 12px !important;
+  font-weight: 500;
+
+  color: var(--gold-light);
+
+  text-decoration: underline;
+  text-underline-offset: 3px;
 
   cursor: pointer;
 }
 
-.forgot-password:hover {
-  color: #111111;
+.login-page .forgot-password:hover {
+  color: #f6dc93;
 }
 
 /* ========================================
    BOTÃO ENTRAR
 ======================================== */
 
-.login-button {
+.login-page .login-button {
   width: 100%;
+  height: 48px;
 
-  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: linear-gradient(180deg, #e0bd72 0%, #c39a4a 55%, #a87f38 100%);
 
   border: none;
+  border-radius: 6px;
 
-  border-radius: 9px;
+  font-family: inherit;
+  font-size: 13px !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 
-  background: #171717;
-
-  color: white;
-
-  font-size: 17px;
-
-  font-weight: 600;
+  color: #15110a;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  box-shadow: 0 8px 22px rgba(201, 162, 77, 0.18);
+
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.login-button:hover {
-  background: #2a2a2a;
+.login-page .login-button:hover {
+  filter: brightness(1.08);
 
-  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(201, 162, 77, 0.3);
+}
+
+.login-page .login-button:active {
+  filter: brightness(0.96);
 }
 
 /* ========================================
    DIVISOR
 ======================================== */
 
-.divider {
+.login-page .divider {
   display: flex;
-
   align-items: center;
+  gap: 14px;
 
-  gap: 15px;
-
-  margin: 24px 0;
+  margin: 22px 0 18px;
 }
 
-.divider span {
+.login-page .divider span {
   flex: 1;
 
   height: 1px;
 
-  background: #d5d5d5;
+  background: #2c2924;
 }
 
-.divider p {
+.login-page .divider p {
   margin: 0;
 
-  color: #777777;
+  font-size: 11px;
+  letter-spacing: 0.2em;
 
-  font-size: 13px;
+  color: #8a867d;
 }
 
 /* ========================================
-   CRIAR CONTA
+   CRIAR CONTA (secundário)
 ======================================== */
 
-.create-account {
+.login-page .create-account {
   width: 100%;
+  height: 46px;
 
-  height: 49px;
-
-  border: 1px solid #999999;
-
-  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
   background: transparent;
 
-  display: flex;
+  border: 1px solid rgba(201, 162, 77, 0.55);
+  border-radius: 6px;
 
-  align-items: center;
-  justify-content: center;
+  font-family: inherit;
+  font-size: 12px !important;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 
-  gap: 10px;
-
-  font-size: 16px;
-
-  color: #222222;
+  color: var(--gold-light);
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.create-account:hover {
-  background: #eeeeee;
+.login-page .create-account svg {
+  width: 18px;
+  height: 18px;
+}
+
+.login-page .create-account:hover {
+  background: rgba(201, 162, 77, 0.12);
+
+  border-color: var(--gold);
 }
 
 /* ========================================
    RODAPÉ
 ======================================== */
 
-.login-card footer {
-  margin-top: auto;
+.login-page .login-card footer {
+  margin-top: 26px;
+  padding-top: 18px;
 
-  padding-top: 25px;
-
-  text-align: center;
-
-  color: #999999;
-
-  font-size: 12px;
-}
-/* Fundo escuro do modal */
-.cadastro-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(5px);
+  gap: 8px;
+
+  border-top: 1px solid #2c2924;
+
+  color: #a29e94;
 }
 
-/* Janela */
-.cadastro-modal {
-  position: relative;
-  width: 100%;
-  max-width: 430px;
-  padding: 36px 28px;
-  border-radius: 18px;
-  background: #fff;
-  color: #171717;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: aparecerModal 0.22s ease-out;
-}
-
-.cadastro-modal-fechar {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  border: none;
-  background: transparent;
-  color: #666;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-.cadastro-modal-icone {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 18px;
-  border-radius: 50%;
-  background: #171717;
-  color: white;
-  font-size: 28px;
-}
-
-.cadastro-modal h2 {
-  margin: 0 0 10px;
-  text-align: center;
-  font-size: 25px;
-}
-
-.cadastro-modal > p {
-  margin: 0 0 26px;
-  color: #777;
-  text-align: center;
-  font-size: 14px;
-}
-
-.cadastro-opcao {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  margin-top: 12px;
-  padding: 17px;
-  border: 1px solid #e2e2e2;
-  border-radius: 12px;
-  background: #fff;
-  color: #171717;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background 0.2s,
-    border-color 0.2s;
-}
-
-.cadastro-opcao:hover {
-  background: #f5f5f5;
-  border-color: #171717;
-}
-
-.cadastro-opcao-icone {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  background: #171717;
-  font-size: 22px;
-}
-
-.cadastro-opcao > span:nth-child(2) {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.cadastro-opcao strong {
-  font-size: 15px;
-}
-
-.cadastro-opcao small {
-  color: #777;
-  font-size: 12px;
-}
-
-.cadastro-seta {
-  font-size: 28px;
-  color: #777;
+.login-page .login-card footer span {
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 /* ========================================
-   NOTEBOOK / TABLET
+   TABLET E CELULAR
+   marca em cima, card embaixo
 ======================================== */
 
-@media (max-width: 1000px) {
-  .login-brand {
-    width: 38%;
+@media (max-width: 900px) {
+  html body main.login-page {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+
+    padding: 28px 20px 40px;
   }
 
-  .login-container {
-    width: 62%;
-
-    padding: 15px;
+  .login-page .login-brand {
+    flex: none;
+    max-width: none;
   }
 
-  .login-card {
-    height: calc(100vh - 30px);
-
-    padding: 30px 35px 22px;
+  .login-page .brand-logo {
+    width: min(60vw, 220px);
   }
 
-  .brand-logo img {
-    width: 230px;
-    height: 230px;
+  .login-page .brand-slogan {
+    padding-bottom: 16px;
+
+    letter-spacing: 0.24em;
   }
 
-  .brand-content h1 {
-    font-size: 20px;
+  .login-page .brand-slogan span,
+  .login-page .brand-slogan strong {
+    font-size: 12px;
   }
 
-  .brand-content p {
-    font-size: 14px;
-  }
-
-  .login-card h2 {
-    font-size: 27px;
-  }
-
-  .barber-icon {
-    width: 90px;
-    height: 90px;
-  }
-
-  .barber-icon::before {
-    width: 70px;
-    height: 70px;
-  }
-
-  .barber-icon span {
-    font-size: 31px;
+  .login-page .login-container {
+    max-width: 420px;
   }
 }
-.cadastro-modal {
-  padding: 32px 20px;
-}
 
-.cadastro-opcao {
-  padding: 13px;
-}
-
-/* ========================================
-   CELULAR
-======================================== */
-
-@media (max-width: 750px) {
-  .login-page {
-    width: 100%;
-
-    height: auto;
-
-    min-height: 100vh;
-
-    display: block;
-
-    overflow-y: auto;
+@media (max-width: 420px) {
+  .login-page .login-card {
+    padding: 36px 22px 24px;
   }
 
-  /* LADO ESQUERDO */
-
-  .login-brand {
-    width: 100%;
-
-    height: 300px;
-
-    min-height: 300px;
-
-    padding: 25px 15px;
-  }
-
-  .brand-logo {
-    margin-bottom: 18px;
-  }
-
-  .brand-logo img {
-    width: 150px;
-    height: 150px;
-  }
-
-  .brand-content h1 {
-    font-size: 18px;
-  }
-
-  .brand-content p {
-    display: none;
-  }
-
-  /* LADO DIREITO */
-
-  .login-container {
-    width: 100%;
-
-    height: auto;
-
-    padding: 15px 12px;
-  }
-
-  .login-card {
-    width: 100%;
-
-    height: auto;
-
-    max-height: none;
-
-    padding: 30px 22px 25px;
-
-    border-radius: 12px;
-  }
-
-  .barber-icon {
-    width: 95px;
-    height: 95px;
-
-    margin-bottom: 18px;
-  }
-
-  .barber-icon::before {
-    width: 74px;
-    height: 74px;
-  }
-
-  .login-card h2 {
-    font-size: 25px;
-  }
-
-  .login-description {
-    font-size: 15px;
-
-    margin-bottom: 22px;
-  }
-
-  .login-options {
-    font-size: 13px;
-  }
-
-  .forgot-password {
-    font-size: 13px;
+  .login-page .login-card h2 {
+    font-size: 22px !important;
   }
 }
-.cadastro-modal {
-  padding: 32px 20px;
-}
 
-.cadastro-opcao {
-  padding: 13px;
-}
-
-/* ========================================
-   CELULAR PEQUENO
-======================================== */
-
-@media (max-width: 400px) {
-  .login-brand {
-    height: 260px;
-
-    min-height: 260px;
-  }
-
-  .brand-logo img {
-    width: 115px;
-    height: 115px;
-  }
-
-  .brand-content h1 {
-    font-size: 17px;
-  }
-
-  .login-card {
-    padding: 25px 18px 22px;
-  }
-
-  .login-card h2 {
-    font-size: 23px;
+@media (prefers-reduced-motion: reduce) {
+  .login-page * {
+    transition: none !important;
   }
 }
-.cadastro-modal {
-  padding: 32px 20px;
-}
 
-.cadastro-opcao {
-  padding: 13px;
-}
 /* =========================================================
    MODAL - ESCOLHA DE CADASTRO
    ========================================================= */
@@ -937,51 +716,45 @@ body {
 .cadastro-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.78);
+  z-index: 9999;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   padding: 20px;
-  z-index: 9999;
+
+  background: rgba(0, 0, 0, 0.8);
 
   backdrop-filter: blur(5px);
 }
-
-/* =========================================================
-   CARD DO MODAL
-   ========================================================= */
 
 .cadastro-modal {
   position: relative;
 
   width: 100%;
-  max-width: 520px;
+  max-width: 440px;
 
-  background: #111111;
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  border-radius: 18px;
+  padding: 40px 32px 32px;
 
-  padding: 40px;
+  background: #0c0c0c;
+
+  border: 1px solid #c9a24d;
+  border-radius: 8px;
 
   text-align: center;
 
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.65),
-    0 0 30px rgba(212, 175, 55, 0.08);
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
 
   animation: cadastroModalEntrada 0.25s ease;
 }
 
-/* =========================================================
-   ANIMAÇÃO
-   ========================================================= */
-
 @keyframes cadastroModalEntrada {
   from {
     opacity: 0;
-    transform: translateY(15px) scale(0.97);
+    transform: translateY(14px) scale(0.98);
   }
 
   to {
@@ -989,26 +762,11 @@ body {
     transform: translateY(0) scale(1);
   }
 }
-@keyframes aparecerModal {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* =========================================================
-   BOTÃO FECHAR
-   ========================================================= */
 
 .cadastro-modal-fechar {
   position: absolute;
-
-  top: 14px;
-  right: 16px;
+  top: 12px;
+  right: 14px;
 
   width: 34px;
   height: 34px;
@@ -1020,297 +778,148 @@ body {
   background: transparent;
   border: none;
 
-  color: #aaa;
-  font-size: 28px;
+  color: #9d9a92;
+  font-size: 28px !important;
   line-height: 1;
 
   cursor: pointer;
 
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .cadastro-modal-fechar:hover {
-  color: #d4af37;
-  transform: rotate(90deg);
+  color: #e6c56f;
 }
 
-/* =========================================================
-   ÍCONE DO MODAL
-   ========================================================= */
+.cadastro-modal-icone {
+  width: 56px;
+  height: 56px;
 
-.cadastro-modal-icon {
-  width: 64px;
-  height: 64px;
-
-  margin: 0 auto 20px;
+  margin: 0 auto 18px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  border: 1px solid rgba(201, 162, 77, 0.5);
   border-radius: 50%;
 
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(201, 162, 77, 0.08);
 
-  color: #d4af37;
-
-  font-size: 28px;
-
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+  color: #c9a24d;
+  font-size: 24px;
 }
-
-/* =========================================================
-   TÍTULO
-   ========================================================= */
 
 .cadastro-modal h2 {
   margin: 0 0 8px;
 
-  color: #d4af37;
-
-  font-size: 26px;
+  font-size: 22px !important;
   font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: #c9a24d;
 }
 
 .cadastro-modal > p {
-  margin: 0 0 30px;
+  margin: 0 0 26px;
 
-  color: #b8b8b8;
+  font-size: 14px;
 
-  font-size: 15px;
+  color: #b8b4aa;
 }
 
-/* =========================================================
-   OPÇÕES DE CADASTRO
-   ========================================================= */
-
-.cadastro-opcoes {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 18px;
-}
-
-/* =========================================================
-   BOTÕES CLIENTE / BARBEIRO
-   ========================================================= */
-
-.cadastro-opcoes button {
-  min-height: 190px;
+.cadastro-opcao {
+  width: 100%;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 16px;
 
-  gap: 9px;
+  margin-bottom: 12px;
+  padding: 16px 18px;
 
-  padding: 25px 18px;
+  background: #141413;
 
-  background: #181818;
+  border: 1px solid #302d28;
+  border-radius: 6px;
 
-  border: 1px solid #333;
-  border-radius: 14px;
+  font-family: inherit;
+  text-align: left;
 
-  color: #fff;
+  color: #ffffff;
 
   cursor: pointer;
 
   transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    background 0.25s ease,
-    box-shadow 0.25s ease;
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
-.cadastro-opcoes button:hover {
-  transform: translateY(-4px);
-
-  background: #1d1d1d;
-
-  border-color: #d4af37;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(212, 175, 55, 0.1);
+.cadastro-opcao:last-child {
+  margin-bottom: 0;
 }
 
-/* =========================================================
-   ÍCONE DAS OPÇÕES
-   ========================================================= */
+.cadastro-opcao:hover {
+  background: #1a1916;
 
-.cadastro-opcao-icon {
-  width: 58px;
-  height: 58px;
+  border-color: #c9a24d;
+}
+
+.cadastro-opcao:focus-visible,
+.cadastro-modal-fechar:focus-visible {
+  outline: 2px solid #e6c56f;
+  outline-offset: 2px;
+}
+
+.cadastro-opcao-icone {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 5px;
-
+  border: 1px solid rgba(201, 162, 77, 0.3);
   border-radius: 50%;
 
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: rgba(201, 162, 77, 0.08);
 
-  font-size: 27px;
-
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease;
+  font-size: 22px !important;
 }
 
-.cadastro-opcoes button:hover .cadastro-opcao-icon {
-  background: rgba(212, 175, 55, 0.14);
-  border-color: #d4af37;
+.cadastro-opcao > span:nth-child(2) {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-/* =========================================================
-   NOME DA OPÇÃO
-   ========================================================= */
-
-.cadastro-opcoes button strong {
-  color: #d4af37;
-
-  font-size: 18px;
+.cadastro-opcao strong {
+  font-size: 15px;
   font-weight: 600;
+
+  color: #e6c56f;
 }
 
-/* =========================================================
-   DESCRIÇÃO DA OPÇÃO
-   ========================================================= */
-
-.cadastro-opcoes button small {
-  max-width: 170px;
-
-  color: #999;
-
-  font-size: 13px;
+.cadastro-opcao small {
+  font-size: 12px;
   line-height: 1.4;
+
+  color: #8f8b81;
 }
 
-/* =========================================================
-   RESPONSIVIDADE
-   ========================================================= */
+.cadastro-seta {
+  font-size: 24px !important;
 
-@media (max-width: 600px) {
+  color: #c9a24d;
+}
+
+@media (max-width: 480px) {
   .cadastro-modal {
-    padding: 35px 20px 25px;
-    max-width: 420px;
+    padding: 36px 20px 24px;
   }
-
-  .cadastro-modal h2 {
-    font-size: 23px;
-  }
-
-  .cadastro-opcoes {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .cadastro-opcoes button {
-    min-height: 145px;
-  }
-}
-/* ========================================
-   ACABAMENTO PRETO + DOURADO
-   Apenas estilo — nenhuma lógica foi alterada
-======================================== */
-.login-card {
-  border: 1px solid rgba(201, 162, 39, 0.35);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-  background: #111;
-}
-.barber-icon {
-  border-color: #c9a227;
-  box-shadow: 0 0 25px rgba(201, 162, 39, 0.1);
-}
-.barber-icon::before {
-  border-color: #8f7418;
-}
-.barber-icon span {
-  color: #c9a227;
-}
-.login-card h2 {
-  color: #f1f1f1;
-  letter-spacing: 0.3px;
-}
-.login-description {
-  color: #bdbdbd;
-}
-.input-wrapper input,
-.input-container input {
-  background: #171717;
-  color: #f5f5f5;
-  border-color: #3a3a3a;
-}
-.input-wrapper input:focus,
-.input-container input:focus {
-  border-color: #c9a227;
-  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
-}
-.input-wrapper input::placeholder,
-.input-container input::placeholder {
-  color: #777;
-}
-.email-icon,
-.input-icon {
-  color: #c9a227;
-}
-.password-button {
-  color: #999;
-}
-.password-button:hover {
-  color: #c9a227;
-}
-.forgot-password {
-  color: #c9a227;
-}
-.forgot-password:hover {
-  color: #e0bd45;
-}
-.login-button {
-  border: 1px solid #c9a227;
-  background: linear-gradient(135deg, #c9a227, #a88416);
-  color: #111;
-  font-weight: 700;
-  box-shadow: 0 5px 18px rgba(201, 162, 39, 0.12);
-}
-.login-button:hover {
-  background: linear-gradient(135deg, #e0bd45, #c9a227);
-  box-shadow: 0 7px 22px rgba(201, 162, 39, 0.22);
-}
-.divider span {
-  background: #333;
-}
-.divider p {
-  color: #999;
-}
-.create-account {
-  border-color: #c9a227;
-  color: #c9a227;
-  background: transparent;
-}
-.create-account:hover {
-  background: rgba(201, 162, 39, 0.08);
-  color: #e0bd45;
-}
-.custom-checkbox {
-  border-color: #777;
-  background: #181818;
-}
-.remember input:checked + .custom-checkbox {
-  background: #c9a227;
-  border-color: #c9a227;
-}
-.remember input:checked + .custom-checkbox::after {
-  color: #111;
-}
-.login-card footer {
-  color: #777;
 }
