@@ -415,73 +415,42 @@
 
 .tabela-container {
   width: 100%;
-
   overflow-x: auto;
 }
 
 .servicos-tabela {
   width: 100%;
-
   border-collapse: collapse;
-
   table-layout: auto;
 }
 
-
 /* CABEÇALHO */
-
 .servicos-tabela thead {
   background: #fafafa;
 }
 
 .servicos-tabela th {
   height: 48px;
-
   padding: 0 24px;
-
   border-bottom: 1px solid #dedede;
-
   color: #666666;
-
   font-size: 12px;
   font-weight: 800;
-
   letter-spacing: 1px;
-
   text-align: left;
-
   white-space: nowrap;
+  vertical-align: middle; /* Adicionado para centralizar verticalmente */
 }
-
 
 /* CORPO */
-
 .servicos-tabela td {
   height: 70px;
-
   padding: 0 24px;
-
   border-bottom: 1px solid #e7e7e7;
-
   color: #333333;
-
   font-size: 15px;
-
-  vertical-align: middle;
+  vertical-align: middle; /* Mantém as linhas centralizadas */
 }
-
-.servicos-tabela tbody tr {
-  transition: background 0.15s ease;
-}
-
-.servicos-tabela tbody tr:hover {
-  background: #fafafa;
-}
-
-.servicos-tabela tbody tr:last-child td {
-  border-bottom: none;
-}
-
 
 /* =====================================================
    COLUNAS
@@ -805,71 +774,50 @@
 
 
 /* =====================================================
-   FORMULÁRIO DO MODAL
+   INPUT COM PREFIXO E SUFIXO
 ===================================================== */
 
-.servico-form {
-  padding: 30px;
-}
-
-.form-grid {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 23px 25px;
-}
-
-.form-full {
-  grid-column: 1 / -1;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-
-  gap: 8px;
-}
-
-.form-group label {
-  color: #333333;
-
-  font-size: 14px;
-  font-weight: 650;
-}
-
-.form-group input {
-  width: 100%;
+.input-com-prefixo,
+.input-com-sufixo {
   height: 45px;
-
-  padding: 0 13px;
-
+  display: flex;
+  align-items: center;
   border: 1px solid #d2d2d2;
   border-radius: 7px;
-
   background: #ffffff;
+  overflow: hidden;
+  padding: 0 12px; /* Adiciona respiro nas bordas laterais */
+  gap: 8px; /* Cria distância segura entre o texto e o input */
+}
 
-  color: #222222;
+.input-com-prefixo:focus-within,
+.input-com-sufixo:focus-within {
+  border-color: #777777;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
+}
 
+.input-com-prefixo span,
+.input-com-sufixo span {
+  color: #666666;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.input-com-prefixo input,
+.input-com-sufixo input {
+  flex: 1;
+  width: 100%;
+  min-width: 0; /* Essencial para o input não estourar o container flex */
+  height: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
   font-family: inherit;
   font-size: 14px;
-
-  outline: none;
-
-  transition: 0.2s ease;
+  color: #222222;
 }
-
-.form-group input:focus {
-  border-color: #777777;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.04);
-}
-
-.form-group input::placeholder {
-  color: #999999;
-}
-
 
 /* =====================================================
    INPUT DURAÇÃO
