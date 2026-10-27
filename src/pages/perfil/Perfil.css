@@ -1451,4 +1451,101 @@ body {
   .modal {
     padding: 25px 20px;
   }
+} 
+
+/* =========================================================
+   ESTILIZAÇÃO DO LETREIRO E PERFIL PRINCIPAL
+========================================================= */
+
+.profile-main-info h2 {
+  margin: 4px 0 8px;
+  color: #171717;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #171717 30%, #b68a35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Container para separar o email do cargo com margem */
+.profile-info-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px; /* Aumenta o espaço entre o email e o administrador */
+  margin-top: 6px;
+}
+
+.profile-main-info p {
+  margin: 0;
+  color: #666666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.user-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 16px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fef4d9, #f5ecd2);
+  border: 1px solid #dfc77d;
+  color: #70571d;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.15);
+}
+
+
+/* =========================================================
+   TITULO CENTRAL DO HEADER (PADRÃO DAS OUTRAS TELAS)
+========================================================= */
+
+.dashboard-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  min-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.dashboard-line {
+  flex: 1;
+  height: 1px;
+  background: #d4af37;
+  opacity: 0.7;
+}
+
+.dashboard-center h2 {
+  margin: 0;
+  color: #dfbf68;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.dashboard-center p {
+  margin: 6px 0 0;
+  color: #b8b8b8;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }

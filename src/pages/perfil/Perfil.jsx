@@ -363,7 +363,7 @@ function Perfil() {
 
   return (
     <main className="perfil-page">
-      <header className="dashboard-header">
+  <header className="dashboard-header">
         <div className="dashboard-left">
           <button
             type="button"
@@ -379,8 +379,12 @@ function Perfil() {
         </div>
 
         <div className="dashboard-center">
-          <h2>HOPE BARBEARIA</h2>
-          <span>MEU PERFIL</span>
+          <div className="dashboard-title-wrapper">
+            <span className="dashboard-line"></span>
+            <h2>HOPE BARBEARIA</h2>
+            <span className="dashboard-line"></span>
+          </div>
+          <p>MEU PERFIL</p>
         </div>
 
         <div className="dashboard-right">
@@ -394,6 +398,7 @@ function Perfil() {
           </div>
         </div>
       </header>
+
 
       <div className="perfil-content">
         <div className="perfil-topo">
@@ -414,7 +419,9 @@ function Perfil() {
           </button>
         </div>
 
-        <div className="profile-hero-card">
+
+
+          <div className="profile-hero-card">
           <div className="profile-photo-section">
             <div className="profile-photo">
               {usuario.nome.charAt(0).toUpperCase()}
@@ -423,10 +430,12 @@ function Perfil() {
 
           <div className="profile-main-info">
             <h2>{usuario.nome}</h2>
-            <p>{usuario.email}</p>
-            <span className="user-type-badge">
-              {usuario.tipo}
-            </span>
+            <div className="profile-info-details">
+              <p>{usuario.email}</p>
+              <span className="user-type-badge">
+                {usuario.tipo}
+              </span>
+            </div>
           </div>
         </div>
 
