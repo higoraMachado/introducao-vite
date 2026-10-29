@@ -5,6 +5,8 @@ import {
   Area,
   BarChart,
   Bar,
+  ComposedChart,
+  Line,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -115,6 +117,7 @@ function TooltipFinanceiro({ active, payload, label }) {
 
 function ControleFinanceiro() {
   const [periodo, setPeriodo] = useState('6');
+  const [periodoRelatorio, setPeriodoRelatorio] = useState('mensal');
   const [filtroTipo, setFiltroTipo] = useState('Todos');
 
   const [resumo, setResumo] = useState({
@@ -351,6 +354,82 @@ function ControleFinanceiro() {
 
     return meses;
   }, [movimentacoesPeriodo, periodo]);
+
+  // Agrupa as movimentações reais para o relatório diário, semanal ou mensal.
+  const dadosGraficoRelatorio = useMemo(() => {
+    const hoje = new Date();
+    const inicioHoje = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    let periodos = [];
+
+    if (periodoRelatorio === 'diario') {
+      periodos = Array.from({ length: 7 }, (_, index) => {
+        const data = new Date(inicioHoje);
+        data.setDate(inicioHoje.getDate() - (6 - index));
+        const chave = dataLocalISO(data);
+        return {
+          chave,
+          rotulo: data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+          receitas: 0,
+          despesas: 0,
+        };
+      });
+    } else if (periodoRelatorio === 'semanal') {
+      const segundaAtual = new Date(inicioHoje);
+      const diaSemana = (segundaAtual.getDay() + 6) % 7;
+      segundaAtual.setDate(segundaAtual.getDate() - diaSemana);
+
+      periodos = Array.from({ length: 8 }, (_, index) => {
+        const inicioSemana = new Date(segundaAtual);
+        inicioSemana.setDate(segundaAtual.getDate() - (7 * (7 - index)));
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+        return {
+          chave: dataLocalISO(inicioSemana),
+          fim: dataLocalISO(fimSemana),
+          rotulo: `${inicioSemana.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}–${fimSemana.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}`,
+          receitas: 0,
+          despesas: 0,
+        };
+      });
+    } else {
+      periodos = Array.from({ length: 6 }, (_, index) => {
+        const data = new Date(hoje.getFullYear(), hoje.getMonth() - (5 - index), 1);
+        const chave = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}`;
+        const nomeMes = data.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '');
+        return {
+          chave,
+          rotulo: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
+          receitas: 0,
+          despesas: 0,
+        };
+      });
+    }
+
+    movimentacoes.forEach((item) => {
+      if (!item.dataOriginal) return;
+      const dataTexto = String(item.dataOriginal).slice(0, 10);
+      const dataItem = new Date(`${dataTexto}T12:00:00`);
+      if (Number.isNaN(dataItem.getTime())) return;
+
+      let periodoEncontrado;
+      if (periodoRelatorio === 'diario') {
+        periodoEncontrado = periodos.find((itemPeriodo) => itemPeriodo.chave === dataTexto);
+      } else if (periodoRelatorio === 'semanal') {
+        periodoEncontrado = periodos.find((itemPeriodo) => dataTexto >= itemPeriodo.chave && dataTexto <= itemPeriodo.fim);
+      } else {
+        periodoEncontrado = periodos.find((itemPeriodo) => itemPeriodo.chave === dataTexto.slice(0, 7));
+      }
+
+      if (!periodoEncontrado) return;
+      if (item.tipo === 'Entrada') periodoEncontrado.receitas += item.valor;
+      if (item.tipo === 'Saída') periodoEncontrado.despesas += item.valor;
+    });
+
+    return periodos.map((item) => ({
+      ...item,
+      lucro: item.receitas - item.despesas,
+    }));
+  }, [movimentacoes, periodoRelatorio]);
 
   // Calcula uma projeção baseada na média dos meses disponíveis.
   const projecao = useMemo(() => {
@@ -600,81 +679,69 @@ function ControleFinanceiro() {
 
         <div className="financeiro-graficos-grid">
           <section className="financeiro-panel financeiro-panel-grande">
-            <div className="financeiro-panel-header">
+            <div className="financeiro-panel-header financeiro-relatorio-header">
               <div>
-                <span className="financeiro-section-kicker">
-                  DESEMPENHO
-                </span>
-
-                <h3>Receitas x despesas</h3>
-
-                <p>Comparativo mensal em reais</p>
+                <span className="financeiro-section-kicker">DESEMPENHO FINANCEIRO</span>
+                <h3>Relatório de receitas, despesas e lucro</h3>
+                <p>
+                  {periodoRelatorio === 'diario'
+                    ? 'Movimentação dos últimos 7 dias'
+                    : periodoRelatorio === 'semanal'
+                      ? 'Comparativo das últimas 8 semanas'
+                      : 'Evolução dos últimos 6 meses'}
+                </p>
               </div>
 
-              <span className="financeiro-badge">Mensal</span>
+              <label className="financeiro-periodo financeiro-periodo-grafico">
+                Visualização
+                <select
+                  value={periodoRelatorio}
+                  onChange={(event) => setPeriodoRelatorio(event.target.value)}
+                >
+                  <option value="diario">Diário</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="mensal">Mensal</option>
+                </select>
+              </label>
             </div>
 
-            <div className="financeiro-chart">
+            <div className="financeiro-relatorio-resumo">
+              <div>
+                <span>Receitas exibidas</span>
+                <strong className="financeiro-relatorio-receita">
+                  {moeda(dadosGraficoRelatorio.reduce((total, item) => total + item.receitas, 0))}
+                </strong>
+              </div>
+              <div>
+                <span>Despesas exibidas</span>
+                <strong className="financeiro-relatorio-despesa">
+                  {moeda(dadosGraficoRelatorio.reduce((total, item) => total + item.despesas, 0))}
+                </strong>
+              </div>
+              <div>
+                <span>Resultado do período</span>
+                <strong className={dadosGraficoRelatorio.reduce((total, item) => total + item.lucro, 0) >= 0 ? 'financeiro-relatorio-receita' : 'financeiro-relatorio-despesa'}>
+                  {moeda(dadosGraficoRelatorio.reduce((total, item) => total + item.lucro, 0))}
+                </strong>
+              </div>
+            </div>
+
+            <div className="financeiro-chart financeiro-chart-relatorio">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={historicoFinanceiro}
-                  margin={{
-                    top: 12,
-                    right: 8,
-                    left: 4,
-                    bottom: 4,
-                  }}
-                  barGap={8}
+                <ComposedChart
+                  data={dadosGraficoRelatorio}
+                  margin={{ top: 14, right: 12, left: 4, bottom: 4 }}
+                  barGap={5}
                 >
-                  <CartesianGrid
-                    stroke="#292929"
-                    strokeDasharray="3 3"
-                    vertical={false}
-                  />
-
-                  <XAxis
-                    dataKey="mes"
-                    tick={{ fill: '#b8b8b8', fontSize: 12 }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-
-                  <YAxis
-                    tickFormatter={moedaCompacta}
-                    tick={{ fill: '#b8b8b8', fontSize: 11 }}
-                    axisLine={false}
-                    tickLine={false}
-                    width={64}
-                  />
-
-                  <Tooltip
-                    content={<TooltipFinanceiro />}
-                    cursor={{
-                      fill: 'rgba(214,173,80,0.08)',
-                    }}
-                  />
-
-                  <Legend
-                    wrapperStyle={{
-                      color: '#e8e8e8',
-                      fontSize: 12,
-                    }}
-                  />
-
-                  <Bar
-                    dataKey="receitas"
-                    name="Receitas"
-                    fill="#d6ad50"
-                    radius={[5, 5, 0, 0]}
-                  />
-
-                  <Bar
-                    dataKey="despesas"
-                    name="Despesas"
-                    fill="#b85b55"
-                    radius={[5, 5, 0, 0]}
-                  />
-                </BarChart>
+                  <CartesianGrid stroke="#292929" strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="rotulo" tick={{ fill: '#b8b8b8', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis tickFormatter={moedaCompacta} tick={{ fill: '#b8b8b8', fontSize: 11 }} axisLine={false} tickLine={false} width={64} />
+                  <Tooltip content={<TooltipFinanceiro />} cursor={{ fill: 'rgba(214,173,80,0.08)' }} />
+                  <Legend wrapperStyle={{ color: '#e8e8e8', fontSize: 12 }} />
+                  <Bar dataKey="receitas" name="Receitas" fill="#d6ad50" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="despesas" name="Despesas" fill="#b85b55" radius={[5, 5, 0, 0]} />
+                  <Line type="monotone" dataKey="lucro" name="Lucro" stroke="#f0d78a" strokeWidth={3} dot={{ r: 3, fill: '#f0d78a' }} activeDot={{ r: 6 }} />
+                </ComposedChart>
               </ResponsiveContainer>
             </div>
           </section>

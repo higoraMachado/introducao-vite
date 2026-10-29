@@ -1129,3 +1129,661 @@
     grid-column: auto;
   }
 }
+
+
+
+/* =====================================================
+   HOPE BARBEARIA — TEMA ESCURO PRETO E DOURADO
+   Mantém as classes e a lógica existentes.
+===================================================== */
+
+.servicos-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  color: #f5f2eb;
+  background:
+    linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.82)),
+    url("../../assets/fundo das paginas.avif") center center / cover fixed no-repeat,
+    #080808;
+}
+
+.servicos-header {
+  position: relative;
+  z-index: 1;
+  height: 88px;
+  background: rgba(5, 5, 5, 0.88);
+  border-bottom: 2px solid #c49a3a;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.servicos-logo img {
+  width: 145px;
+  height: 76px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(212, 170, 74, 0.16));
+}
+
+.servicos-title h1 {
+  color: #e5bd62;
+  text-shadow: 0 0 18px rgba(210, 166, 63, 0.14);
+}
+
+.servicos-title p {
+  color: #d1c8b7;
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, #f0d27c, #b78a2f);
+  color: #080808;
+  border: 1px solid #f6df9c;
+  box-shadow: 0 0 0 3px rgba(202, 159, 57, 0.12);
+}
+
+.user-info span {
+  color: #c9c0af;
+}
+
+.servicos-content {
+  position: relative;
+  z-index: 0;
+  max-width: 1600px;
+  padding-top: 42px;
+}
+
+.heading-label {
+  color: #d8ad4e;
+}
+
+.servicos-heading h2 {
+  color: #fffaf0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.servicos-heading p {
+  color: #d0c8bc;
+}
+
+.btn-novo-servico {
+  border: 1px solid #d7ad4d;
+  background: linear-gradient(135deg, #e4c46c, #b9872b);
+  color: #100d07;
+  box-shadow: 0 4px 18px rgba(194, 145, 42, 0.18);
+}
+
+.btn-novo-servico:hover {
+  background: linear-gradient(135deg, #f0d783, #c99a3d);
+  box-shadow: 0 6px 22px rgba(194, 145, 42, 0.28);
+  transform: translateY(-2px);
+}
+
+.servicos-card {
+  background: rgba(8, 8, 8, 0.78);
+  border: 1px solid rgba(199, 151, 48, 0.72);
+  border-radius: 13px;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 220, 130, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.card-header {
+  min-height: 104px;
+  background: linear-gradient(110deg, rgba(5, 5, 5, 0.96), rgba(21, 18, 12, 0.84));
+  border-bottom: 1px solid rgba(201, 157, 58, 0.55);
+  box-shadow: inset 0 -3px 0 rgba(190, 143, 43, 0.55);
+}
+
+.card-label {
+  color: #d9ad4d;
+}
+
+.card-header h3 {
+  color: #fffaf0;
+}
+
+.total-servicos {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(207, 164, 65, 0.55);
+  color: #f8e6b4;
+}
+
+.servicos-filtros {
+  background: rgba(10, 10, 10, 0.48);
+  border-bottom: 1px solid rgba(211, 177, 101, 0.2);
+}
+
+.campo-pesquisa,
+.servicos-filtros select {
+  background: rgba(12, 12, 12, 0.72);
+  border: 1px solid rgba(195, 151, 57, 0.48);
+  color: #f7f0e2;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.campo-pesquisa:focus-within,
+.servicos-filtros select:focus {
+  border-color: #e0b64e;
+  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.14);
+}
+
+.campo-pesquisa span {
+  color: #d7ad4d;
+}
+
+.campo-pesquisa input {
+  color: #fffaf0;
+}
+
+.campo-pesquisa input::placeholder {
+  color: #aaa092;
+}
+
+.servicos-filtros select option {
+  background: #111;
+  color: #f7f0e2;
+}
+
+.servicos-tabela {
+  background: rgba(7, 7, 7, 0.48);
+}
+
+.servicos-tabela thead {
+  background: rgba(22, 20, 16, 0.86);
+}
+
+.servicos-tabela th {
+  color: #e2ba5d;
+  border-bottom: 1px solid rgba(198, 154, 57, 0.36);
+}
+
+.servicos-tabela td {
+  color: #e9e3d8;
+  border-bottom: 1px solid rgba(235, 221, 191, 0.13);
+}
+
+.servicos-tabela tbody tr {
+  background: rgba(5, 5, 5, 0.18);
+  transition: background 0.18s ease;
+}
+
+.servicos-tabela tbody tr:hover {
+  background: rgba(195, 151, 57, 0.09);
+}
+
+.nome-servico,
+.valor-servico {
+  color: #fffaf0;
+}
+
+.duracao-servico {
+  color: #c8c0b4;
+}
+
+.status-ativo {
+  background: rgba(58, 112, 73, 0.2);
+  border: 1px solid rgba(107, 177, 120, 0.58);
+  color: #b7e2bc;
+}
+
+.status-inativo {
+  background: rgba(120, 120, 120, 0.12);
+  border: 1px solid rgba(180, 180, 180, 0.25);
+  color: #b8b0a4;
+}
+
+.acoes button {
+  border-radius: 7px;
+}
+
+.acao-editar,
+.acao-ativar {
+  border: 1px solid #c69a3a;
+  background: rgba(7, 7, 7, 0.62);
+  color: #e8c56d;
+}
+
+.acao-editar:hover,
+.acao-ativar:hover {
+  background: rgba(198, 154, 58, 0.17);
+  border-color: #f0cf78;
+}
+
+.acao-desativar {
+  border: 1px solid rgba(198, 154, 58, 0.75);
+  background: rgba(9, 9, 9, 0.7);
+  color: #e6c46c;
+}
+
+.acao-desativar:hover {
+  background: rgba(198, 154, 58, 0.16);
+  border-color: #f0cf78;
+}
+
+.nenhum-servico span {
+  color: #d7ad4d;
+}
+
+.nenhum-servico strong {
+  color: #f5eddf;
+}
+
+.nenhum-servico p {
+  color: #b7ad9c;
+}
+
+/* Modal de cadastro/edição */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(5px);
+}
+
+.modal {
+  background: rgba(12, 12, 12, 0.96);
+  border: 1px solid rgba(199, 151, 48, 0.7);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.58);
+  color: #f5eee0;
+}
+
+.modal-header {
+  background: linear-gradient(110deg, #070707, #1a160d);
+  border-bottom: 1px solid rgba(199, 151, 48, 0.55);
+}
+
+.modal-header h3 {
+  color: #fff7e5;
+}
+
+.modal-fechar {
+  color: #e3bd60;
+}
+
+.modal-fechar:hover {
+  background: rgba(199, 151, 48, 0.15);
+}
+
+.servico-form {
+  background: rgba(12, 12, 12, 0.94);
+}
+
+.form-group label {
+  color: #e5c777;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(5, 5, 5, 0.72);
+  border: 1px solid rgba(199, 151, 48, 0.42);
+  color: #fff8e9;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #8f8779;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #e0b64e;
+  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.13);
+}
+
+.input-com-prefixo,
+.input-com-sufixo {
+  background: rgba(5, 5, 5, 0.72);
+  border-color: rgba(199, 151, 48, 0.48);
+}
+
+.input-com-prefixo:focus-within,
+.input-com-sufixo:focus-within {
+  border-color: #e0b64e;
+  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.13);
+}
+
+.input-com-prefixo span,
+.input-com-sufixo span {
+  color: #d9b65e;
+}
+
+.input-com-prefixo input,
+.input-com-sufixo input {
+  color: #fff8e9;
+}
+
+.modal-footer {
+  background: rgba(7, 7, 7, 0.96);
+  border-top: 1px solid rgba(199, 151, 48, 0.28);
+}
+
+.btn-cancelar {
+  background: transparent;
+  border-color: rgba(220, 204, 170, 0.32);
+  color: #e0d8ca;
+}
+
+.btn-cancelar:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.btn-salvar {
+  border: 1px solid #e0b64e;
+  background: linear-gradient(135deg, #e4c46c, #b9872b);
+  color: #100d07;
+}
+
+.btn-salvar:hover {
+  background: linear-gradient(135deg, #f0d783, #c99a3d);
+}
+
+@media (max-width: 600px) {
+  .servicos-page {
+    background-attachment: scroll;
+  }
+
+  .servicos-header {
+    background: rgba(5, 5, 5, 0.94);
+  }
+
+  .servicos-card {
+    backdrop-filter: blur(8px);
+  }
+
+  .servicos-filtros {
+    background: rgba(8, 8, 8, 0.66);
+  }
+}
+/* ============================================
+   CORREÇÃO DE CONFLITOS COM O GLOBAL.CSS
+   HOPE BARBEARIA — PÁGINA SERVIÇOS
+============================================ */
+
+/* Fundo escuro com imagem */
+body main.servicos-page {
+  min-height: 100vh;
+  width: 100%;
+  color: #f5f2eb;
+
+  background:
+    linear-gradient(
+      rgba(5, 5, 5, 0.72),
+      rgba(5, 5, 5, 0.82)
+    ),
+    url("../../assets/fundo das paginas.avif")
+      center center / cover fixed no-repeat !important;
+}
+
+/* Cabeçalho exclusivo da página Serviços */
+body .servicos-page .servicos-header {
+  width: 100%;
+  height: 88px;
+  min-height: 88px;
+  padding: 0 42px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  background: rgba(5, 5, 5, 0.92);
+  color: #ffffff;
+
+  border-bottom: 2px solid #c49a3a;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+
+  overflow: visible;
+  backdrop-filter: blur(12px);
+}
+
+/* Evita que os efeitos globais do cabeçalho interfiram */
+body .servicos-page .servicos-header::before,
+body .servicos-page .servicos-header::after {
+  content: none;
+}
+
+/* Título do cabeçalho */
+body .servicos-page .servicos-title h1 {
+  margin: 0;
+  color: #e5bd62;
+  font-size: 21px !important;
+}
+
+body .servicos-page .servicos-title p {
+  color: #d1c8b7;
+  font-size: 12px !important;
+}
+
+/* Informações do usuário */
+body .servicos-page .servicos-user {
+  min-width: 0;
+  height: auto;
+  justify-content: flex-end;
+}
+
+body .servicos-page .user-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  background: linear-gradient(135deg, #f0d27c, #b78a2f);
+  color: #080808;
+}
+
+body .servicos-page .user-info strong {
+  color: #ffffff;
+  font-size: 13px !important;
+}
+
+body .servicos-page .user-info span {
+  color: #c9c0af;
+  font-size: 11px !important;
+}
+
+/* Títulos da página */
+body .servicos-page .servicos-heading h2 {
+  color: #fffaf0;
+  font-size: 32px !important;
+}
+
+body .servicos-page .heading-label {
+  color: #d8ad4e;
+  font-size: 11px !important;
+}
+
+body .servicos-page .servicos-heading p {
+  color: #d0c8bc;
+  font-size: 15px !important;
+}
+
+/* Card principal transparente */
+body .servicos-page .servicos-card {
+  background: rgba(8, 8, 8, 0.78);
+  border: 1px solid rgba(199, 151, 48, 0.72);
+  border-radius: 13px;
+
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(12px);
+}
+
+/* Cabeçalho do card */
+body .servicos-page .servicos-card .card-header {
+  min-height: 82px;
+  background: rgba(12, 12, 12, 0.92);
+  border-bottom: 1px solid rgba(201, 157, 58, 0.55);
+}
+
+body .servicos-page .card-header h3 {
+  color: #fffaf0;
+  font-size: 18px !important;
+}
+
+body .servicos-page .card-label {
+  color: #d9ad4d;
+}
+
+/* Área de filtros */
+body .servicos-page .servicos-filtros {
+  background: rgba(10, 10, 10, 0.55);
+  border-bottom: 1px solid rgba(211, 177, 101, 0.2);
+}
+
+body .servicos-page .campo-pesquisa,
+body .servicos-page .servicos-filtros select {
+  background: rgba(12, 12, 12, 0.85);
+  border: 1px solid rgba(195, 151, 57, 0.55);
+  color: #f7f0e2;
+}
+
+body .servicos-page .campo-pesquisa input {
+  color: #fffaf0;
+  font-size: 14px !important;
+}
+
+body .servicos-page .campo-pesquisa input::placeholder {
+  color: #aaa092;
+}
+
+body .servicos-page .servicos-filtros select {
+  font-size: 14px !important;
+}
+
+body .servicos-page .servicos-filtros select option {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* Tabela */
+body .servicos-page .servicos-tabela {
+  background: rgba(7, 7, 7, 0.55);
+}
+
+body .servicos-page .servicos-tabela thead {
+  background: rgba(22, 20, 16, 0.92);
+}
+
+body .servicos-page .servicos-tabela th {
+  color: #e2ba5d;
+  font-size: 12px !important;
+  border-bottom: 1px solid rgba(198, 154, 57, 0.36);
+}
+
+body .servicos-page .servicos-tabela td {
+  color: #e9e3d8;
+  font-size: 15px !important;
+  border-bottom: 1px solid rgba(235, 221, 191, 0.13);
+}
+
+body .servicos-page .servicos-tabela tbody tr:hover {
+  background: rgba(195, 151, 57, 0.09);
+}
+
+body .servicos-page .nome-servico,
+body .servicos-page .valor-servico {
+  color: #fffaf0;
+  font-size: 15px !important;
+}
+
+body .servicos-page .duracao-servico {
+  color: #c8c0b4;
+  font-size: 15px !important;
+}
+
+/* Botões */
+body .servicos-page .btn-novo-servico,
+body .servicos-page .btn-salvar {
+  background: linear-gradient(135deg, #e4c46c, #b9872b);
+  border: 1px solid #d7ad4d;
+  color: #100d07;
+  font-size: 14px !important;
+}
+
+body .servicos-page .btn-novo-servico:hover,
+body .servicos-page .btn-salvar:hover {
+  background: linear-gradient(135deg, #f0d783, #c99a3d);
+}
+
+body .servicos-page .acao-editar,
+body .servicos-page .acao-ativar,
+body .servicos-page .acao-desativar {
+  border: 1px solid #c69a3a;
+  background: rgba(7, 7, 7, 0.8);
+  color: #e8c56d;
+  font-size: 12px !important;
+}
+
+body .servicos-page .acao-editar:hover,
+body .servicos-page .acao-ativar:hover,
+body .servicos-page .acao-desativar:hover {
+  background: rgba(198, 154, 58, 0.18);
+}
+
+/* Modal */
+body .servicos-page .modal {
+  background: #101010;
+  border: 1px solid rgba(199, 151, 48, 0.7);
+  color: #f5eee0;
+}
+
+body .servicos-page .modal-header {
+  background: #090909;
+  border-bottom: 1px solid rgba(199, 151, 48, 0.55);
+}
+
+body .servicos-page .modal-header h3 {
+  color: #fff7e5;
+  font-size: 19px !important;
+}
+
+body .servicos-page .servico-form {
+  background: #101010;
+}
+
+body .servicos-page .servico-form label {
+  color: #e5c777;
+  font-size: 13px !important;
+}
+
+body .servicos-page .servico-form input {
+  background: #090909;
+  color: #fff8e9;
+  border-color: rgba(199, 151, 48, 0.48);
+  font-size: 14px !important;
+}
+
+body .servicos-page .input-com-prefixo,
+body .servicos-page .input-com-sufixo {
+  background: #090909;
+  border-color: rgba(199, 151, 48, 0.48);
+}
+
+body .servicos-page .input-com-prefixo input,
+body .servicos-page .input-com-sufixo input {
+  background: transparent;
+  color: #fff8e9;
+}
+
+body .servicos-page .modal-footer {
+  background: #090909;
+  border-top: 1px solid rgba(199, 151, 48, 0.28);
+}
+
+body .servicos-page .btn-cancelar {
+  background: #171717;
+  color: #e0d8ca;
+  border-color: #66552e;
+  font-size: 14px !important;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 600px) {
+  body main.servicos-page {
+    background-attachment: scroll !important;
+  }
+
+  body .servicos-page .servicos-header {
+    height: auto;
+    min-height: 72px;
+    padding: 12px 15px;
+    grid-template-columns: auto 1fr auto;
+  }
+}
