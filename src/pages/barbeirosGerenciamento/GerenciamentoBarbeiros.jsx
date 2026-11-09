@@ -1,7 +1,20 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./GerenciamentoBarbeiros.css";
 import logo from "../../assets/logo-hope.png";
+
+const API_URL = "http://localhost:3333";
+
+const FORMULARIO_INICIAL = {
+  nome: "",
+  email: "",
+  senha: "",
+  telefone: "",
+  dataNascimento: "",
+  especialidade: "",
+  foto: "",
+};
 
 function GerenciamentoBarbeiros() {
   const navigate = useNavigate();
@@ -10,69 +23,69 @@ function GerenciamentoBarbeiros() {
   const [busca, setBusca] = useState("");
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
 
   const [modalAberto, setModalAberto] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
-
   const [barbeiroSelecionado, setBarbeiroSelecionado] = useState(null);
-
-  const [formulario, setFormulario] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    telefone: "",
-    dataNascimento: "",
-    especialidade: "",
-    foto: "",
-  });
+  const [formulario, setFormulario] = useState(FORMULARIO_INICIAL);
 
   const token = localStorage.getItem("token");
 
-  // =====================================================
-  // BUSCAR BARBEIROS
-  // =====================================================
+  async function requisicao(endpoint, options = {}) {
+    const resposta = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        Authorization: `Bearer ${token}`,
+        ...options.headers,
+      },
+    });
+
+    let dados = {};
+
+    try {
+      dados = await resposta.json();
+    } catch {
+      dados = {};
+    }
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.message ||
+        dados.mensagem ||
+        "Não foi possível concluir a operação."
+      );
+    }
+
+    return dados;
+  }
 
   async function carregarBarbeiros() {
     try {
       setCarregando(true);
 
-      const resposta = await fetch(
-        "http://localhost:3333/barbeiros",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const dados = await requisicao("/barbeiros");
+
+      setBarbeiros(
+        Array.isArray(dados.dados) ? dados.dados : []
       );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.message || "Erro ao carregar barbeiros."
-        );
-      }
-
-      setBarbeiros(dados.dados || []);
     } catch (error) {
-      console.error(error);
-
-      alert(
-        error.message ||
-        "Não foi possível carregar os barbeiros."
-      );
+      console.error("Erro ao carregar barbeiros:", error);
+      alert(error.message);
     } finally {
       setCarregando(false);
     }
   }
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
     carregarBarbeiros();
   }, []);
-
-  // =====================================================
-  // ALTERAR FORMULÁRIO
-  // =====================================================
 
   function alterarFormulario(event) {
     const { name, value } = event.target;
@@ -83,56 +96,22 @@ function GerenciamentoBarbeiros() {
     }));
   }
 
-  // =====================================================
-  // ABRIR CADASTRO
-  // =====================================================
-
   function abrirCadastro() {
     setModoEdicao(false);
-
     setBarbeiroSelecionado(null);
-
-    setFormulario({
-      nome: "",
-      email: "",
-      senha: "",
-      telefone: "",
-      dataNascimento: "",
-      especialidade: "",
-      foto: "",
-    });
-
+    setFormulario({ ...FORMULARIO_INICIAL });
     setModalAberto(true);
   }
 
-  // =====================================================
-  // ABRIR EDIÇÃO
-  // =====================================================
-
   async function abrirEdicao(barbeiro) {
     try {
-      const resposta = await fetch(
-        `http://localhost:3333/barbeiros/${barbeiro.usuario_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const resposta = await requisicao(
+        `/barbeiros/${barbeiro.usuario_id}`
       );
 
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.message ||
-          "Erro ao buscar dados do barbeiro."
-        );
-      }
-
-      const usuario = dados.dados;
+      const usuario = resposta.dados;
 
       setModoEdicao(true);
-
       setBarbeiroSelecionado(barbeiro);
 
       setFormulario({
@@ -140,941 +119,545 @@ function GerenciamentoBarbeiros() {
         email: usuario.usuario_email || "",
         senha: "",
         telefone: usuario.usuario_telefone || "",
-        dataNascimento:
-          usuario.usuario_dt_nascimento
-            ? String(usuario.usuario_dt_nascimento).substring(0, 10)
-            : "",
-        especialidade:
-          barbeiro.barbeiro_especialidade || "",
-        foto: barbeiro.barbeiro_foto || "",
+        dataNascimento: usuario.usuario_dt_nascimento
+          ? String(usuario.usuario_dt_nascimento).substring(0, 10)
+          : "",
+        especialidade: usuario.barbeiro_especialidade || "",
+        foto: usuario.barbeiro_foto || "",
       });
 
       setModalAberto(true);
-
     } catch (error) {
-      console.error(error);
-
-      alert(
-        error.message ||
-        "Não foi possível carregar os dados."
-      );
+      console.error("Erro ao buscar barbeiro:", error);
+      alert(error.message);
     }
   }
-
-  // =====================================================
-  // FECHAR MODAL
-  // =====================================================
 
   function fecharModal() {
     setModalAberto(false);
     setBarbeiroSelecionado(null);
+    setFormulario({ ...FORMULARIO_INICIAL });
   }
-
-  // =====================================================
-  // SALVAR
-  // =====================================================
 
   async function salvarBarbeiro(event) {
     event.preventDefault();
 
+    if (salvando) return;
+
     if (
-      !formulario.nome ||
-      !formulario.email ||
-      !formulario.telefone ||
-      !formulario.especialidade
+      !formulario.nome.trim() ||
+      !formulario.email.trim() ||
+      !formulario.telefone.trim() ||
+      !formulario.especialidade.trim()
     ) {
       alert("Preencha todos os campos obrigatórios.");
       return;
     }
 
-    try {
+    if (!modoEdicao && !formulario.senha.trim()) {
+      alert("Informe uma senha para o barbeiro.");
+      return;
+    }
 
-      // =================================================
-      // CADASTRO
-      // =================================================
+    try {
+      setSalvando(true);
 
       if (!modoEdicao) {
+        const dadosUsuario = await requisicao("/usuarios", {
+          method: "POST",
+          body: JSON.stringify({
+            usuario_nome: formulario.nome.trim(),
+            usuario_email: formulario.email.trim(),
+            usuario_senha: formulario.senha,
+            usuario_tipo: 2,
+            usuario_telefone: formulario.telefone,
+            usuario_dt_nascimento: formulario.dataNascimento || null,
+          }),
+        });
 
-        if (!formulario.senha) {
-          alert("Informe uma senha para o barbeiro.");
-          return;
-        }
+        const usuarioId = dadosUsuario.dados?.usuario_id;
 
-        // Primeiro cria o usuário
-        const respostaUsuario = await fetch(
-          "http://localhost:3333/usuarios",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-
-            body: JSON.stringify({
-              usuario_nome: formulario.nome,
-              usuario_email: formulario.email,
-              usuario_senha: formulario.senha,
-              usuario_tipo: 2,
-              usuario_telefone: formulario.telefone,
-              usuario_dt_nascimento:
-                formulario.dataNascimento || null,
-            }),
-          }
-        );
-
-        const dadosUsuario =
-          await respostaUsuario.json();
-
-        if (!respostaUsuario.ok) {
+        if (!usuarioId) {
           throw new Error(
-            dadosUsuario.message ||
-            "Erro ao cadastrar usuário."
+            "A API não retornou o ID do usuário cadastrado."
           );
         }
 
-        const usuarioId =
-          dadosUsuario.dados.usuario_id;
-
-        // Depois cria o barbeiro
-        const respostaBarbeiro = await fetch(
-          "http://localhost:3333/barbeiros",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-
-            body: JSON.stringify({
-              usuario_id: usuarioId,
-              barbeiro_especialidade:
-                formulario.especialidade,
-              barbeiro_foto:
-                formulario.foto || null,
-            }),
-          }
-        );
-
-        const dadosBarbeiro =
-          await respostaBarbeiro.json();
-
-        if (!respostaBarbeiro.ok) {
-          throw new Error(
-            dadosBarbeiro.message ||
-            "Erro ao cadastrar barbeiro."
-          );
-        }
+        await requisicao("/barbeiros", {
+          method: "POST",
+          body: JSON.stringify({
+            usuario_id: usuarioId,
+            barbeiro_especialidade: formulario.especialidade.trim(),
+            barbeiro_foto: formulario.foto || null,
+          }),
+        });
 
         alert("Barbeiro cadastrado com sucesso!");
+      } else {
+        const id = barbeiroSelecionado.usuario_id;
 
-      }
+        const dadosUsuario = {
+          usuario_nome: formulario.nome.trim(),
+          usuario_email: formulario.email.trim(),
+          usuario_telefone: formulario.telefone,
+          usuario_dt_nascimento: formulario.dataNascimento || null,
+        };
 
-      // =================================================
-      // EDIÇÃO
-      // =================================================
-
-      else {
-
-        const id =
-          barbeiroSelecionado.usuario_id;
-
-        // Atualiza dados do usuário
-        const respostaUsuario = await fetch(
-          `http://localhost:3333/usuarios/${id}`,
-          {
-            method: "PUT",
-
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-
-            body: JSON.stringify({
-              usuario_nome: formulario.nome,
-              usuario_email: formulario.email,
-              usuario_telefone: formulario.telefone,
-              usuario_dt_nascimento:
-                formulario.dataNascimento || null,
-            }),
-          }
-        );
-
-        const dadosUsuario =
-          await respostaUsuario.json();
-
-        if (!respostaUsuario.ok) {
-          throw new Error(
-            dadosUsuario.message ||
-            "Erro ao atualizar usuário."
-          );
+        if (formulario.senha.trim()) {
+          dadosUsuario.usuario_senha = formulario.senha;
         }
 
-        // Atualiza dados específicos do barbeiro
-        const respostaBarbeiro = await fetch(
-          `http://localhost:3333/barbeiros/${id}`,
-          {
-            method: "PUT",
+        await requisicao(`/usuarios/${id}`, {
+          method: "PUT",
+          body: JSON.stringify(dadosUsuario),
+        });
 
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-
-            body: JSON.stringify({
-              barbeiro_especialidade:
-                formulario.especialidade,
-
-              barbeiro_foto:
-                formulario.foto || null,
-            }),
-          }
-        );
-
-        const dadosBarbeiro =
-          await respostaBarbeiro.json();
-
-        if (!respostaBarbeiro.ok) {
-          throw new Error(
-            dadosBarbeiro.message ||
-            "Erro ao atualizar barbeiro."
-          );
-        }
+        await requisicao(`/barbeiros/${id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            barbeiro_especialidade: formulario.especialidade.trim(),
+            barbeiro_foto: formulario.foto || null,
+          }),
+        });
 
         alert("Barbeiro atualizado com sucesso!");
       }
 
       fecharModal();
-      carregarBarbeiros();
-
+      await carregarBarbeiros();
     } catch (error) {
-      console.error(error);
-
-      alert(
-        error.message ||
-        "Não foi possível salvar o barbeiro."
-      );
+      console.error("Erro ao salvar barbeiro:", error);
+      alert(error.message);
+    } finally {
+      setSalvando(false);
     }
   }
 
-  // =====================================================
-  // EXCLUIR
-  // =====================================================
-
   async function excluirBarbeiro(barbeiro) {
-
     const confirmar = window.confirm(
       `Deseja realmente excluir o barbeiro "${barbeiro.usuario_nome}"?`
     );
 
-    if (!confirmar) {
+    if (!confirmar) return;
+
+    try {
+      await requisicao(`/barbeiros/${barbeiro.usuario_id}`, {
+        method: "DELETE",
+      });
+
+      alert("Barbeiro excluído com sucesso!");
+      await carregarBarbeiros();
+    } catch (error) {
+      console.error("Erro ao excluir barbeiro:", error);
+      alert(error.message);
+    }
+  }
+
+  async function alterarStatusBarbeiro(barbeiro) {
+    const ativo = Number(barbeiro.usuario_ativo) === 1;
+    const acao = ativo ? "ocultar" : "reativar";
+
+    if (
+      !window.confirm(
+        `Deseja ${ativo ? "inativar" : "reativar"} o barbeiro "${barbeiro.usuario_nome}"?`
+      )
+    ) {
       return;
     }
 
     try {
-
-      const resposta = await fetch(
-        `http://localhost:3333/barbeiros/${barbeiro.usuario_id}`,
-        {
-          method: "DELETE",
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      await requisicao(
+        `/usuarios/${barbeiro.usuario_id}/${acao}`,
+        { method: "PATCH" }
       );
-
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {
-        throw new Error(
-          dados.message ||
-          "Não foi possível excluir o barbeiro."
-        );
-      }
-
-      alert("Barbeiro excluído com sucesso!");
-
-      carregarBarbeiros();
-
-    } catch (error) {
-      console.error(error);
 
       alert(
-        error.message ||
-        "Erro ao excluir barbeiro."
+        `Barbeiro ${ativo ? "inativado" : "reativado"} com sucesso!`
       );
-    }
-  }
 
-  // =====================================================
-  // INATIVAR
-  // =====================================================
-
-  async function alterarStatusBarbeiro(barbeiro) {
-    const ativo = Number(barbeiro.usuario_ativo) === 1;
-    const acao = ativo ? "inativar" : "reativar";
-    if (!window.confirm(`Deseja ${acao} o barbeiro "${barbeiro.usuario_nome}"?`)) return;
-    try {
-      const resposta = await fetch(
-        `http://localhost:3333/usuarios/${barbeiro.usuario_id}/${ativo ? "ocultar" : "reativar"}`,
-        { method: "PATCH", headers: { Authorization: `Bearer ${token}` } }
-      );
-      const dados = await resposta.json();
-      if (!resposta.ok) throw new Error(dados.message || `Não foi possível ${acao} o barbeiro.`);
       await carregarBarbeiros();
-      alert(`Barbeiro ${ativo ? "inativado" : "reativado"} com sucesso!`);
     } catch (error) {
-      console.error(error);
-      alert(error.message || "Erro ao alterar status do barbeiro.");
+      console.error("Erro ao alterar status:", error);
+      alert(error.message);
     }
   }
 
-  // =====================================================
-  // FILTRO
-  // =====================================================
+  const barbeirosFiltrados = barbeiros.filter((barbeiro) => {
+    const ativo = Number(barbeiro.usuario_ativo) === 1;
 
-  const barbeirosFiltrados = barbeiros.filter(
-    (barbeiro) => {
-      if (filtroStatus === "ativos" && Number(barbeiro.usuario_ativo) !== 1) return false;
-      if (filtroStatus === "inativos" && Number(barbeiro.usuario_ativo) === 1) return false;
+    if (filtroStatus === "ativos" && !ativo) return false;
+    if (filtroStatus === "inativos" && ativo) return false;
 
-      const texto =
-        busca.toLowerCase();
+    const texto = busca.toLowerCase();
 
-      return (
-        barbeiro.usuario_nome
-          ?.toLowerCase()
-          .includes(texto) ||
+    return [
+      barbeiro.usuario_nome,
+      barbeiro.usuario_email,
+      barbeiro.usuario_telefone,
+      barbeiro.barbeiro_especialidade,
+    ].some((valor) =>
+      String(valor || "").toLowerCase().includes(texto)
+    );
+  });
 
-        barbeiro.usuario_email
-          ?.toLowerCase()
-          .includes(texto) ||
-
-        barbeiro.barbeiro_especialidade
-          ?.toLowerCase()
-          .includes(texto) ||
-
-        barbeiro.usuario_telefone
-          ?.toLowerCase()
-          .includes(texto)
-      );
-    }
-  );
-
-  // =====================================================
-  // VOLTAR
-  // =====================================================
+  const totalAtivos = barbeiros.filter(
+    (item) => Number(item.usuario_ativo) === 1
+  ).length;
 
   function voltarDashboard() {
     navigate("/dashboardAdministrador");
   }
 
+  function abrirPerfil() {
+    navigate("/perfil");
+  }
+
   return (
     <div className="gerenciamento-barbeiros-page">
-
-      {/* =================================================
-          HEADER
-      ================================================= */}
-
       <header className="gerenciamento-header">
-
-        <div className="gerenciamento-logo">
-          <img
-            src={logo}
-            alt="Hope Barbearia"
-          />
-        </div>
+        <button
+          type="button"
+          className="gerenciamento-logo"
+          onClick={voltarDashboard}
+          title="Voltar ao Dashboard Administrativo"
+          aria-label="Voltar ao Dashboard Administrativo"
+        >
+          <img src={logo} alt="Hope Barbearia" />
+        </button>
 
         <div className="gerenciamento-title">
-
-          <h1>
-            Gerenciamento de Barbeiros
-          </h1>
-
-          <p>
-            Gerencie os profissionais da Hope Barbearia
-          </p>
-
+          <h1>Gerenciamento de Barbeiros</h1>
+          <p>Gerencie os profissionais da Hope Barbearia</p>
         </div>
 
-        <div className="gerenciamento-user">
-
-          <div className="gerenciamento-avatar">
-            A
-          </div>
-
+        <button
+          type="button"
+          className="gerenciamento-user"
+          onClick={abrirPerfil}
+          title="Abrir minha conta"
+        >
+          <div className="gerenciamento-avatar">A</div>
           <div>
-            <strong>
-              Administrador
-            </strong>
-
-            <span>
-              Minha conta
-            </span>
+            <strong>Administrador</strong>
+            <span>Minha conta</span>
           </div>
-
-        </div>
-
+        </button>
       </header>
 
-
-      {/* =================================================
-          CONTEÚDO
-      ================================================= */}
-
       <main className="gerenciamento-content">
-
-        {/* TÍTULO */}
-
         <div className="gerenciamento-heading">
-
           <div>
-
-            <span>
-              ADMINISTRADOR
-            </span>
-
-            <h2>
-              Barbeiros
-            </h2>
-
+            <span>ADMINISTRADOR</span>
+            <h2>Barbeiros</h2>
             <p>
-              Consulte, cadastre e gerencie os barbeiros
-              da barbearia.
+              Consulte, cadastre e gerencie os barbeiros da barbearia.
             </p>
-
           </div>
 
           <button
+            type="button"
             className="btn-voltar"
             onClick={voltarDashboard}
           >
             ← Dashboard
           </button>
-
         </div>
 
-
-        {/* =================================================
-            ESTATÍSTICAS
-        ================================================= */}
-
         <section className="barbeiro-stats">
-
           <div className="barbeiro-stat">
-
-            <div className="stat-icon">
-              ✂
-            </div>
-
+            <div className="stat-icon">✂</div>
             <div>
-              <span>
-                Total de barbeiros
-              </span>
-
-              <strong>
-                {barbeiros.length}
-              </strong>
+              <span>Total de barbeiros</span>
+              <strong>{barbeiros.length}</strong>
             </div>
-
           </div>
 
-
           <div className="barbeiro-stat">
-
-            <div className="stat-icon">
-              ✓
-            </div>
-
+            <div className="stat-icon">✓</div>
             <div>
-              <span>
-                Profissionais ativos
-              </span>
-
-              <strong>
-                {barbeiros.filter(
-                  (item) =>
-                    Number(item.usuario_ativo) === 1
-                ).length}
-              </strong>
+              <span>Profissionais ativos</span>
+              <strong>{totalAtivos}</strong>
             </div>
-
           </div>
 
-
           <div className="barbeiro-stat">
-
-            <div className="stat-icon">
-              🔎
-            </div>
-
+            <div className="stat-icon">🔎</div>
             <div>
-              <span>
-                Resultados encontrados
-              </span>
-
-              <strong>
-                {barbeirosFiltrados.length}
-              </strong>
+              <span>Resultados encontrados</span>
+              <strong>{barbeirosFiltrados.length}</strong>
             </div>
-
           </div>
-
         </section>
 
-
-        {/* =================================================
-            LISTAGEM
-        ================================================= */}
-
         <section className="gerenciamento-card">
-
           <div className="card-top">
-
             <div>
-
-              <span>
-                EQUIPE
-              </span>
-
-              <h3>
-                Barbeiros cadastrados
-              </h3>
-
+              <span>EQUIPE</span>
+              <h3>Barbeiros cadastrados</h3>
             </div>
 
             <button
+              type="button"
               className="btn-novo-barbeiro"
               onClick={abrirCadastro}
             >
               + Novo barbeiro
             </button>
-
           </div>
 
-
-          {/* BUSCA */}
-
           <div className="barra-filtros">
-
             <div className="campo-busca">
-
-              <span>
-                🔎
-              </span>
-
+              <span>🔎</span>
               <input
                 type="text"
                 placeholder="Buscar por nome, e-mail, telefone ou especialidade..."
                 value={busca}
-                onChange={(event) =>
-                  setBusca(event.target.value)
-                }
+                onChange={(event) => setBusca(event.target.value)}
               />
-
             </div>
-            <div className="filtros-status" aria-label="Filtrar barbeiros por status">
-              <button type="button" className={filtroStatus === "todos" ? "filtro-ativo" : ""} onClick={() => setFiltroStatus("todos")}>Todos</button>
-              <button type="button" className={filtroStatus === "ativos" ? "filtro-ativo" : ""} onClick={() => setFiltroStatus("ativos")}>Ativos</button>
-              <button type="button" className={filtroStatus === "inativos" ? "filtro-ativo" : ""} onClick={() => setFiltroStatus("inativos")}>Inativos</button>
+
+            <div
+              className="filtros-status"
+              aria-label="Filtrar barbeiros por status"
+            >
+              {["todos", "ativos", "inativos"].map((filtro) => (
+                <button
+                  type="button"
+                  key={filtro}
+                  className={
+                    filtroStatus === filtro ? "filtro-ativo" : ""
+                  }
+                  onClick={() => setFiltroStatus(filtro)}
+                >
+                  {filtro.charAt(0).toUpperCase() + filtro.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
 
-
-          {/* TABELA */}
-
           {carregando ? (
-
             <div className="estado-tabela">
               Carregando barbeiros...
             </div>
-
           ) : barbeirosFiltrados.length === 0 ? (
-
             <div className="estado-tabela">
-
-              <div>
-                ✂
-              </div>
-
-              <strong>
-                Nenhum barbeiro encontrado
-              </strong>
-
+              <div>✂</div>
+              <strong>Nenhum barbeiro encontrado</strong>
               <span>
-                Cadastre um novo profissional
-                para começar.
+                Cadastre um novo profissional para começar.
               </span>
-
             </div>
-
           ) : (
-
             <div className="tabela-container">
-
               <table>
-
                 <thead>
-
                   <tr>
-
-                    <th>
-                      BARBEIRO
-                    </th>
-
-                    <th>
-                      CONTATO
-                    </th>
-
-                    <th>
-                      ESPECIALIDADE
-                    </th>
-
-                    <th>
-                      STATUS
-                    </th>
-
-                    <th>
-                      AÇÕES
-                    </th>
-
+                    <th>BARBEIRO</th>
+                    <th>CONTATO</th>
+                    <th>ESPECIALIDADE</th>
+                    <th>STATUS</th>
+                    <th>AÇÕES</th>
                   </tr>
-
                 </thead>
 
-
                 <tbody>
+                  {barbeirosFiltrados.map((barbeiro) => {
+                    const ativo =
+                      Number(barbeiro.usuario_ativo) === 1;
 
-                  {barbeirosFiltrados.map(
-                    (barbeiro) => (
-
-                      <tr
-                        key={barbeiro.usuario_id}
-                      >
-
-                        {/* BARBEIRO */}
-
+                    return (
+                      <tr key={barbeiro.usuario_id}>
                         <td>
-
                           <div className="barbeiro-info">
-
                             <div className="barbeiro-avatar">
-
                               {barbeiro.usuario_nome
                                 ?.charAt(0)
                                 .toUpperCase() || "B"}
-
                             </div>
 
                             <div>
-
-                              <strong>
-                                {barbeiro.usuario_nome}
-                              </strong>
-
-                              <span>
-                                #{barbeiro.usuario_id}
-                              </span>
-
+                              <strong>{barbeiro.usuario_nome}</strong>
+                              <span>#{barbeiro.usuario_id}</span>
                             </div>
-
                           </div>
-
                         </td>
 
-
-                        {/* CONTATO */}
-
                         <td>
-
                           <div className="contato-info">
-
-                            <span>
-                              {barbeiro.usuario_email}
-                            </span>
-
+                            <span>{barbeiro.usuario_email}</span>
                             <small>
                               {barbeiro.usuario_telefone ||
                                 "Telefone não informado"}
                             </small>
-
                           </div>
-
                         </td>
 
-
-                        {/* ESPECIALIDADE */}
-
                         <td>
-
                           <span className="especialidade">
-
                             {barbeiro.barbeiro_especialidade ||
                               "Não informada"}
-
                           </span>
-
                         </td>
 
-
-                        {/* STATUS */}
-
                         <td>
-
                           <span
                             className={
-                              Number(
-                                barbeiro.usuario_ativo
-                              ) === 1
+                              ativo
                                 ? "status ativo"
                                 : "status inativo"
                             }
                           >
-
-                            {Number(
-                              barbeiro.usuario_ativo
-                            ) === 1
-                              ? "Ativo"
-                              : "Inativo"}
-
+                            {ativo ? "Ativo" : "Inativo"}
                           </span>
-
                         </td>
 
-
-                        {/* AÇÕES */}
-
                         <td>
-
                           <div className="acoes">
-
                             <button
+                              type="button"
                               className="acao-editar"
-                              onClick={() =>
-                                abrirEdicao(barbeiro)
-                              }
+                              onClick={() => abrirEdicao(barbeiro)}
                               title="Editar barbeiro"
                             >
                               ✏
                             </button>
 
                             <button
+                              type="button"
                               className="acao-inativar"
                               onClick={() =>
                                 alterarStatusBarbeiro(barbeiro)
                               }
-                              title={Number(barbeiro.usuario_ativo) === 1 ? "Inativar barbeiro" : "Reativar barbeiro"}
+                              title={ativo ? "Inativar barbeiro" : "Reativar barbeiro"}
                             >
-                              {Number(barbeiro.usuario_ativo) === 1 ? "🚫" : "↻"}
+                              {ativo ? "🚫" : "↻"}
                             </button>
 
                             <button
+                              type="button"
                               className="acao-excluir"
-                              onClick={() =>
-                                excluirBarbeiro(barbeiro)
-                              }
+                              onClick={() => excluirBarbeiro(barbeiro)}
                               title="Excluir barbeiro"
                             >
                               🗑
                             </button>
-
                           </div>
-
                         </td>
-
                       </tr>
-
-                    )
-                  )}
-
+                    );
+                  })}
                 </tbody>
-
               </table>
-
             </div>
-
           )}
-
         </section>
-
       </main>
 
-
-      {/* =================================================
-          MODAL
-      ================================================= */}
-
       {modalAberto && (
-
-        <div className="modal-overlay">
-
+        <div
+          className="modal-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) fecharModal();
+          }}
+        >
           <div className="barbeiro-modal">
-
             <div className="modal-header">
-
               <div>
-
                 <span>
-                  {modoEdicao
-                    ? "EDITAR BARBEIRO"
-                    : "NOVO BARBEIRO"}
+                  {modoEdicao ? "EDITAR BARBEIRO" : "NOVO BARBEIRO"}
                 </span>
-
                 <h2>
                   {modoEdicao
                     ? "Editar profissional"
                     : "Cadastrar barbeiro"}
                 </h2>
-
               </div>
 
               <button
+                type="button"
                 className="modal-fechar"
                 onClick={fecharModal}
               >
                 ×
               </button>
-
             </div>
 
-
-            <form
-              onSubmit={salvarBarbeiro}
-            >
-
+            <form onSubmit={salvarBarbeiro}>
               <div className="modal-grid">
-
-                {/* NOME */}
-
                 <div className="campo">
-
-                  <label>
-                    Nome *
-                  </label>
-
+                  <label>Nome *</label>
                   <input
                     type="text"
                     name="nome"
                     value={formulario.nome}
                     onChange={alterarFormulario}
                     placeholder="Nome do barbeiro"
+                    required
                   />
-
                 </div>
 
-
-                {/* EMAIL */}
-
                 <div className="campo">
-
-                  <label>
-                    E-mail *
-                  </label>
-
+                  <label>E-mail *</label>
                   <input
                     type="email"
                     name="email"
                     value={formulario.email}
                     onChange={alterarFormulario}
                     placeholder="E-mail"
+                    required
                   />
-
                 </div>
 
-
-                {/* SENHA */}
-
                 {!modoEdicao && (
-
                   <div className="campo">
-
-                    <label>
-                      Senha *
-                    </label>
-
+                    <label>Senha *</label>
                     <input
                       type="password"
                       name="senha"
                       value={formulario.senha}
                       onChange={alterarFormulario}
                       placeholder="Senha de acesso"
+                      required
                     />
-
                   </div>
-
                 )}
 
-
-                {/* TELEFONE */}
-
                 <div className="campo">
-
-                  <label>
-                    Telefone *
-                  </label>
-
+                  <label>Telefone *</label>
                   <input
                     type="text"
                     name="telefone"
                     value={formulario.telefone}
                     onChange={alterarFormulario}
                     placeholder="11999999999"
+                    required
                   />
-
                 </div>
 
-
-                {/* NASCIMENTO */}
-
                 <div className="campo">
-
-                  <label>
-                    Data de nascimento
-                  </label>
-
+                  <label>Data de nascimento</label>
                   <input
                     type="date"
                     name="dataNascimento"
-                    value={
-                      formulario.dataNascimento
-                    }
+                    value={formulario.dataNascimento}
                     onChange={alterarFormulario}
                   />
-
                 </div>
 
-
-                {/* ESPECIALIDADE */}
-
                 <div className="campo">
-
-                  <label>
-                    Especialidade *
-                  </label>
-
+                  <label>Especialidade *</label>
                   <input
                     type="text"
                     name="especialidade"
-                    value={
-                      formulario.especialidade
-                    }
+                    value={formulario.especialidade}
                     onChange={alterarFormulario}
                     placeholder="Ex.: Corte, Barba, Degradê"
+                    required
                   />
-
                 </div>
 
-
-                {/* FOTO */}
-
                 <div className="campo campo-full">
-
-                  <label>
-                    Foto
-                  </label>
-
+                  <label>Foto</label>
                   <input
                     type="text"
                     name="foto"
@@ -1082,14 +665,10 @@ function GerenciamentoBarbeiros() {
                     onChange={alterarFormulario}
                     placeholder="Nome ou caminho da foto"
                   />
-
                 </div>
-
               </div>
 
-
               <div className="modal-footer">
-
                 <button
                   type="button"
                   className="btn-modal-cancelar"
@@ -1101,25 +680,21 @@ function GerenciamentoBarbeiros() {
                 <button
                   type="submit"
                   className="btn-modal-salvar"
+                  disabled={salvando}
                 >
-                  {modoEdicao
-                    ? "Salvar alterações"
-                    : "Cadastrar barbeiro"}
+                  {salvando
+                    ? "Salvando..."
+                    : modoEdicao
+                      ? "Salvar alterações"
+                      : "Cadastrar barbeiro"}
                 </button>
-
               </div>
-
             </form>
-
           </div>
-
         </div>
-
       )}
-
     </div>
   );
 }
 
 export default GerenciamentoBarbeiros;
-

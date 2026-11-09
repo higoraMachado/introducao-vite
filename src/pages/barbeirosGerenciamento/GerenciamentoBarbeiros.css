@@ -49,6 +49,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #242424;
+  color: #fff;
+  cursor: pointer;
 }
 
 .gerenciamento-avatar {
@@ -70,12 +76,13 @@
 }
 
 .gerenciamento-user strong {
-  color: white;
+  color: #ffffff;
 }
+
 
 .gerenciamento-user span {
   margin-top: 4px;
-  color: #bbb;
+  color: #dddddd;
   font-size: 13px;
 }
 
@@ -189,6 +196,7 @@
 }
 
 .card-top {
+  background: #171717;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -198,7 +206,7 @@
 }
 
 .card-top > div span {
-  color: #97751b;
+  color: #d4af37;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -206,7 +214,7 @@
 
 .card-top h3 {
   margin: 8px 0 0;
-  color: #222;
+  color: #ffffff;
   font-size: 21px;
 }
 
