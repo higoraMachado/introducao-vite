@@ -25,119 +25,6 @@
 
 
 /* =====================================================
-   HEADER
-===================================================== */
-
-.servicos-header {
-  width: 100%;
-  height: 78px;
-
-  background: #111111;
-  color: #ffffff;
-
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-
-  padding: 0 42px;
-
-  border-bottom: 1px solid #292929;
-}
-
-
-/* LOGO */
-
-.servicos-logo {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.servicos-logo img {
-  width: 145px;
-  height: 58px;
-
-  object-fit: contain;
-  object-position: left center;
-
-  display: block;
-}
-
-
-/* TÍTULO */
-
-.servicos-title {
-  text-align: center;
-}
-
-.servicos-title h1 {
-  margin: 0;
-
-  color: #ffffff;
-
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.servicos-title p {
-  margin: 5px 0 0;
-
-  color: #a9a9a9;
-
-  font-size: 12px;
-}
-
-
-/* USUÁRIO */
-
-.servicos-user {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  gap: 10px;
-}
-
-.user-avatar {
-  width: 38px;
-  height: 38px;
-
-  border-radius: 50%;
-
-  background: #ffffff;
-  color: #111111;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-
-  gap: 2px;
-}
-
-.user-info strong {
-  color: #ffffff;
-
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.user-info span {
-  color: #999999;
-
-  font-size: 11px;
-}
-
-
-/* =====================================================
    ÁREA PRINCIPAL
 ===================================================== */
 
@@ -993,11 +880,6 @@
     padding-right: 30px;
   }
 
-  .servicos-header {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
-
   .servicos-tabela th,
   .servicos-tabela td {
     padding-left: 18px;
@@ -1015,20 +897,6 @@
 ===================================================== */
 
 @media (max-width: 850px) {
-
-  .servicos-header {
-    grid-template-columns: auto 1fr auto;
-
-    padding: 0 20px;
-  }
-
-  .servicos-logo img {
-    width: 120px;
-  }
-
-  .servicos-title h1 {
-    font-size: 19px;
-  }
 
   .servicos-content {
     padding: 30px 20px 50px;
@@ -1057,31 +925,6 @@
 ===================================================== */
 
 @media (max-width: 600px) {
-
-  .servicos-header {
-    height: auto;
-    min-height: 72px;
-
-    padding: 12px 15px;
-
-    grid-template-columns: auto 1fr auto;
-  }
-
-  .servicos-logo img {
-    width: 95px;
-  }
-
-  .servicos-title h1 {
-    font-size: 17px;
-  }
-
-  .servicos-title p {
-    display: none;
-  }
-
-  .user-info {
-    display: none;
-  }
 
   .servicos-content {
     padding: 25px 14px 40px;
@@ -1130,8 +973,6 @@
   }
 }
 
-
-
 /* =====================================================
    HOPE BARBEARIA — TEMA ESCURO PRETO E DOURADO
    Mantém as classes e a lógica existentes.
@@ -1146,43 +987,6 @@
     linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.82)),
     url("../../assets/fundo das paginas.avif") center center / cover fixed no-repeat,
     #080808;
-}
-
-.servicos-header {
-  position: relative;
-  z-index: 1;
-  height: 88px;
-  background: rgba(5, 5, 5, 0.88);
-  border-bottom: 2px solid #c49a3a;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(12px);
-}
-
-.servicos-logo img {
-  width: 145px;
-  height: 76px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(212, 170, 74, 0.16));
-}
-
-.servicos-title h1 {
-  color: #e5bd62;
-  text-shadow: 0 0 18px rgba(210, 166, 63, 0.14);
-}
-
-.servicos-title p {
-  color: #d1c8b7;
-}
-
-.user-avatar {
-  background: linear-gradient(135deg, #f0d27c, #b78a2f);
-  color: #080808;
-  border: 1px solid #f6df9c;
-  box-shadow: 0 0 0 3px rgba(202, 159, 57, 0.12);
-}
-
-.user-info span {
-  color: #c9c0af;
 }
 
 .servicos-content {
@@ -1484,10 +1288,6 @@
     background-attachment: scroll;
   }
 
-  .servicos-header {
-    background: rgba(5, 5, 5, 0.94);
-  }
-
   .servicos-card {
     backdrop-filter: blur(8px);
   }
@@ -1514,69 +1314,6 @@ body main.servicos-page {
     ),
     url("../../assets/fundo das paginas.avif")
       center center / cover fixed no-repeat !important;
-}
-
-/* Cabeçalho exclusivo da página Serviços */
-body .servicos-page .servicos-header {
-  width: 100%;
-  height: 88px;
-  min-height: 88px;
-  padding: 0 42px;
-
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-
-  background: rgba(5, 5, 5, 0.92);
-  color: #ffffff;
-
-  border-bottom: 2px solid #c49a3a;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-
-  overflow: visible;
-  backdrop-filter: blur(12px);
-}
-
-/* Evita que os efeitos globais do cabeçalho interfiram */
-body .servicos-page .servicos-header::before,
-body .servicos-page .servicos-header::after {
-  content: none;
-}
-
-/* Título do cabeçalho */
-body .servicos-page .servicos-title h1 {
-  margin: 0;
-  color: #e5bd62;
-  font-size: 21px !important;
-}
-
-body .servicos-page .servicos-title p {
-  color: #d1c8b7;
-  font-size: 12px !important;
-}
-
-/* Informações do usuário */
-body .servicos-page .servicos-user {
-  min-width: 0;
-  height: auto;
-  justify-content: flex-end;
-}
-
-body .servicos-page .user-avatar {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  background: linear-gradient(135deg, #f0d27c, #b78a2f);
-  color: #080808;
-}
-
-body .servicos-page .user-info strong {
-  color: #ffffff;
-  font-size: 13px !important;
-}
-
-body .servicos-page .user-info span {
-  color: #c9c0af;
-  font-size: 11px !important;
 }
 
 /* Títulos da página */
@@ -1778,12 +1515,5 @@ body .servicos-page .btn-cancelar {
 @media (max-width: 600px) {
   body main.servicos-page {
     background-attachment: scroll !important;
-  }
-
-  body .servicos-page .servicos-header {
-    height: auto;
-    min-height: 72px;
-    padding: 12px 15px;
-    grid-template-columns: auto 1fr auto;
   }
 }

@@ -6,6 +6,30 @@ import logoHope from '../../assets/logo_login.png';
 
 const API_URL = 'http://localhost:3333';
 
+/* A API guarda a duração como TIME ("00:30:00"). */
+function duracaoParaMinutos(valor) {
+  if (valor === null || valor === undefined || valor === '') {
+    return 0;
+  }
+
+  const texto = String(valor).trim();
+
+  if (!texto.includes(':')) {
+    return Number(texto) || 0;
+  }
+
+  const [horas, minutos] = texto.split(':');
+
+  return (Number(horas) || 0) * 60 + (Number(minutos) || 0);
+}
+
+function minutosParaDuracao(minutosTotais) {
+  const horas = Math.floor(minutosTotais / 60);
+  const minutos = minutosTotais % 60;
+
+  return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:00`;
+}
+
 function Servicos() {
   const navigate = useNavigate();
 
@@ -139,9 +163,15 @@ function Servicos() {
   function mapearServico(servico) {
     return {
       id: servico.servico_id,
+<<<<<<< Updated upstream
       nome: servico.servico_nome || '',
       duracao: converterDuracao(servico.servico_duracao),
       valor: Number(servico.servico_preco) || 0,
+=======
+      nome: servico.servico_nome,
+      duracao: duracaoParaMinutos(servico.servico_duracao),
+      valor: Number(servico.servico_preco),
+>>>>>>> Stashed changes
       descricao: servico.servico_descricao || '',
       status: Number(servico.servico_ativo) === 1
         ? 'Ativo'
@@ -293,8 +323,13 @@ function Servicos() {
 
       const corpo = {
         servico_nome: formulario.nome.trim(),
+<<<<<<< Updated upstream
         servico_duracao: duracao,
         servico_preco: valor,
+=======
+        servico_duracao: minutosParaDuracao(duracaoNumerica),
+        servico_preco: valorNumerico,
+>>>>>>> Stashed changes
       };
 
       const editando = Boolean(servicoSelecionado);
@@ -415,6 +450,7 @@ function Servicos() {
 
       <header className="servicos-header">
 
+<<<<<<< Updated upstream
         {/* LOGO CLICÁVEL */}
 
         <div className="servicos-logo">
@@ -445,6 +481,28 @@ function Servicos() {
         </div>
 
         {/* PERFIL CLICÁVEL */}
+=======
+        <div className="header-logo">
+          <img
+            src={logoHope}
+            alt="Hope Barbearia"
+          />
+        </div>
+
+        <div className="header-title">
+
+          <h1>
+            Serviços
+          </h1>
+
+          <p>
+            Gerenciamento de serviços
+          </p>
+
+        </div>
+
+        <div className="header-user">
+>>>>>>> Stashed changes
 
         <button
           type="button"

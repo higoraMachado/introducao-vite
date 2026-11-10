@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CadastroProduto.css';
-import logoHope from '../../assets/logo-hope.png';
+import logoHope from '../../assets/logo_login.png';
 
 function CadastroProduto() {
   const navigate = useNavigate();

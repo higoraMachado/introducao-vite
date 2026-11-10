@@ -230,16 +230,13 @@
    CARD
 ========================================= */
 
-.clientes-card {
-  background: #ffffff;
+body .servicos-page .servicos-card {
+  background: rgba(8, 8, 8, 0.78);
+  border: 1px solid rgba(199, 151, 48, 0.72);
+  border-radius: 13px;
 
-  border: 1px solid #e1e1e1;
-  border-radius: 12px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.035);
-
-  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(12px);
 }
 
 /* =========================================
@@ -251,7 +248,7 @@
 
   padding: 22px;
 
-  background: #171717;
+  background: #0a0a0a00;
   color: #ffffff;
 
   display: flex;

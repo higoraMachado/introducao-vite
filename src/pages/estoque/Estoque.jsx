@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Estoque.css';
-import logoHope from '../../assets/logo-hope.png';
+import logoHope from '../../assets/logo_login.png';
 import { useNavigate } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333';
@@ -515,7 +515,7 @@ useEffect(() => {
 
           <button
     type="button"
-    className="btn-cadastrar-produto"
+    className="btn-novo-produto"
     onClick={() => navigate('/CadastroProduto')}
 >
     + Cadastrar Produto

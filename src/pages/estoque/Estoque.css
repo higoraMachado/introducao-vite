@@ -1133,3 +1133,270 @@ tbody tr:hover {
   }
 
 }
+
+/* ========================================
+   TEMA HOPE BARBEARIA - PRETO E DOURADO
+   Ajustes visuais sem alterar a lógica da tela
+======================================== */
+
+.estoque-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(8, 8, 8, 0.88), rgba(8, 8, 8, 0.94)),
+    url("../../assets/fundo das paginas.avif") center / cover fixed;
+  color: #f5f5f5;
+}
+
+.estoque-header {
+  position: relative;
+  z-index: 1;
+  height: 92px;
+  background: rgba(8, 8, 8, 0.92);
+  border-bottom: 1px solid rgba(198, 160, 67, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.header-logo img {
+  max-height: 68px;
+  object-fit: contain;
+}
+
+.header-title {
+  text-align: center;
+}
+
+.header-title h1 {
+  color: #d6b45b;
+  letter-spacing: 1.3px;
+}
+
+.header-title p {
+  color: #c4c4c4;
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, #f0d27a, #b88a2c);
+  color: #17130a;
+  border: 1px solid #f3d98b;
+}
+
+.user-info strong { color: #f5f5f5; }
+.user-info span, .user-arrow { color: #d6b45b; }
+
+.estoque-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1500px;
+  padding-top: 38px;
+}
+
+.heading-label {
+  color: #d6b45b;
+  letter-spacing: 2px;
+}
+
+.page-heading h2 {
+  color: #fff;
+}
+
+.page-heading p {
+  color: #c2c2c2;
+}
+
+.btn-novo-produto {
+  background: linear-gradient(135deg, #e0bf68, #b88a2c);
+  color: #17130a;
+  border: 1px solid #f1d887;
+  box-shadow: 0 5px 16px rgba(184, 138, 44, 0.2);
+}
+
+.btn-novo-produto:hover {
+  background: linear-gradient(135deg, #f0d27a, #c99b3d);
+  color: #100e08;
+  transform: translateY(-2px);
+}
+
+.estoque-stats .stat-card {
+  background: rgba(17, 17, 17, 0.92);
+  border: 1px solid rgba(198, 160, 67, 0.38);
+  border-radius: 13px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+}
+
+.stat-icon {
+  background: rgba(214, 180, 91, 0.14);
+  color: #d6b45b;
+  border: 1px solid rgba(214, 180, 91, 0.24);
+}
+
+.stat-icon.warning {
+  background: rgba(214, 180, 91, 0.16);
+  color: #e8c96e;
+}
+.stat-icon.danger {
+  background: rgba(176, 54, 54, 0.18);
+  color: #ff9292;
+}
+
+.stat-card span { color: #bdbdbd; }
+.stat-card strong { color: #f4d27b; }
+
+.products-card {
+  background: rgba(13, 13, 13, 0.96);
+  border: 1px solid rgba(198, 160, 67, 0.42);
+  border-radius: 13px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.products-header {
+  border-bottom: 1px solid rgba(198, 160, 67, 0.25);
+}
+
+.products-header h3 { color: #f2d27a; }
+.products-header p { color: #bdbdbd; }
+
+.search-box,
+.products-filters select {
+  background: #191919;
+  border: 1px solid #5d4a23;
+  color: #f5f5f5;
+}
+
+.search-box span { color: #d6b45b; }
+.search-box input {
+  background: transparent;
+  color: #f5f5f5;
+}
+.search-box input::placeholder { color: #999; }
+.products-filters select:focus,
+.search-box:focus-within {
+  border-color: #d6b45b;
+  box-shadow: 0 0 0 2px rgba(214, 180, 91, 0.13);
+}
+
+.table-wrapper table { color: #eee; }
+.table-wrapper thead { background: #222; }
+.table-wrapper th {
+  color: #d6b45b;
+  background: #222;
+  border-bottom: 1px solid rgba(198, 160, 67, 0.38);
+}
+.table-wrapper td {
+  color: #dedede;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.table-wrapper tbody tr:hover { background: rgba(214, 180, 91, 0.07); }
+.product-icon {
+  background: #242424;
+  border: 1px solid rgba(214, 180, 91, 0.2);
+  color: #d6b45b;
+}
+.product-name strong { color: #f3f3f3; }
+.product-name span { color: #aaa; }
+.quantity, td strong { color: #f0d27a; }
+.empty-table { color: #aaa; }
+
+.status.normal {
+  background: rgba(53, 130, 76, 0.18);
+  color: #8ed5a2;
+  border: 1px solid rgba(92, 180, 117, 0.2);
+}
+.status.baixo {
+  background: rgba(214, 180, 91, 0.15);
+  color: #e7c96f;
+  border: 1px solid rgba(214, 180, 91, 0.25);
+}
+.status.esgotado {
+  background: rgba(176, 54, 54, 0.18);
+  color: #ff9999;
+  border: 1px solid rgba(176, 54, 54, 0.25);
+}
+
+.btn-movimentar {
+  background: #1b1b1b;
+  border-color: #8b6b2d;
+  color: #e5c36b;
+}
+.btn-movimentar:hover {
+  background: #d0aa4f;
+  border-color: #e5c36b;
+  color: #17130a;
+}
+.btn-excluir {
+  background: #211616;
+  border-color: #7b3434;
+  color: #ffaaaa;
+}
+.btn-excluir:hover {
+  background: #a52a2a;
+  border-color: #d65b5b;
+  color: #fff;
+}
+
+/* Modais no mesmo acabamento */
+.modal {
+  background: #141414;
+  border: 1px solid rgba(214, 180, 91,  0.5);
+  color: #f5f5f5;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+.modal-close { color: #c7a34c; }
+.modal-close:hover { color: #f2d27a; }
+.modal-icon {
+  background: rgba(214, 180, 91, 0.14);
+  color: #e3c267;
+  border: 1px solid rgba(214, 180, 91, 0.28);
+}
+.modal h3 { color: #f0d27a; }
+.modal > p { color: #bdbdbd; }
+.form-group label { color: #e0c16a; }
+.form-group input,
+.form-group select {
+  background: #202020;
+  border: 1px solid #514321;
+  color: #f5f5f5;
+}
+.form-group input::placeholder { color: #888; }
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #d6b45b;
+  box-shadow: 0 0 0 3px rgba(214, 180, 91, 0.13);
+}
+.modal-actions { border-top-color: rgba(214, 180, 91, 0.22); }
+.btn-modal-secondary {
+  background: #222;
+  border-color: #665126;
+  color: #e4c36d;
+}
+.btn-modal-secondary:hover { background: #303030; }
+.btn-modal-primary {
+  background: linear-gradient(135deg, #e0bf68, #b88a2c);
+  color: #17130a;
+  border: 1px solid #f1d887;
+}
+.btn-modal-primary:hover {
+  background: linear-gradient(135deg, #f0d27a, #c99b3d);
+}
+.current-stock {
+  background: #202020;
+  border: 1px solid rgba(214, 180, 91, 0.2);
+}
+.current-stock span { color: #aaa; }
+.current-stock strong { color: #f0d27a; }
+.movement-type button {
+  background: #202020;
+  border-color: #5c4a25;
+  color: #d4d4d4;
+}
+.movement-type button.active {
+  background: #d0aa4f;
+  border-color: #e7c96f;
+  color: #17130a;
+}
+
+@media (max-width: 800px) {
+  .estoque-header { height: auto; min-height: 82px; }
+  .header-title { text-align: left; }
+}

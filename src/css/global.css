@@ -39,14 +39,14 @@ body .login-page {
   width: 100%;
   background:
     linear-gradient(
-      rgba(245, 243, 239, 0.92),
-      rgba(245, 243, 239, 0.95)
+      rgba(8, 8, 8, 0.78),
+      rgba(8, 8, 8, 0.86)
     ),
-    url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=2200&q=85");
+    url("../assets/fundo das paginas.avif");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  color: #171717;
+  color: #f5f5f5;
   font-family:
     Inter,
     system-ui,
@@ -448,4 +448,77 @@ h2 {
 
 h3 {
   font-size: 2rem !important;
+}
+
+/* =========================================
+   HOPE BARBEARIA — TEMA GLOBAL PRETO E DOURADO
+   Fundo: src/assets/foto das paginas.avif
+========================================= */
+:root {
+  --hope-gold: #d6ad54;
+  --hope-gold-light: #efd27d;
+  --hope-black: #0b0b0b;
+  --hope-panel: rgba(17, 17, 17, 0.94);
+  --hope-text: #f4f1e8;
+}
+
+body {
+  background: #080808 !important;
+  color: var(--hope-text);
+}
+
+body main[class$="-page"],
+body .perfil-page,
+body .redefinir-page,
+body .recuperacao-page,
+body .login-page {
+  background:
+    linear-gradient(rgba(7, 7, 7, 0.78), rgba(7, 7, 7, 0.86)),
+    url("../assets/fundo das paginas.avif") center / cover fixed !important;
+  color: var(--hope-text) !important;
+}
+
+/* Campos legíveis em todas as telas */
+body input,
+body select,
+body textarea {
+  background-color: #171717 !important;
+  color: #f7f3e9 !important;
+  border-color: rgba(214, 173, 84, 0.55) !important;
+}
+
+body input::placeholder,
+body textarea::placeholder {
+  color: #aaa49a !important;
+  opacity: 1;
+}
+
+body input:focus,
+body select:focus,
+body textarea:focus {
+  border-color: var(--hope-gold-light) !important;
+  outline: 1px solid rgba(239, 210, 125, 0.35) !important;
+  box-shadow: 0 0 0 3px rgba(214, 173, 84, 0.12) !important;
+}
+
+/* Botões de páginas padronizados */
+body button,
+body [class^="btn-"] {
+  border-color: var(--hope-gold) !important;
+}
+
+body button:not(:disabled):hover,
+body [class^="btn-"]:not(:disabled):hover {
+  filter: brightness(1.12);
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 700px) {
+  body main[class$="-page"],
+  body .perfil-page,
+  body .redefinir-page,
+  body .recuperacao-page,
+  body .login-page {
+    background-attachment: scroll !important;
+  }
 }
