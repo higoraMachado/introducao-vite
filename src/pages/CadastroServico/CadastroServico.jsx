@@ -1,9 +1,13 @@
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CadastroServico.css';
 import logoHope from '../../assets/logo-hope.png';
 
+const API_URL = 'http://localhost:3333';
+
 function CadastroServico() {
-  const [modoEdicao, setModoEdicao] = useState(false);
+  const navigate = useNavigate();
 
   const [formulario, setFormulario] = useState({
     nome: '',
@@ -12,6 +16,12 @@ function CadastroServico() {
     duracao: '',
     status: 'Ativo',
   });
+
+  const [salvando, setSalvando] = useState(false);
+
+  function pegarToken() {
+    return localStorage.getItem('token');
+  }
 
   function alterarFormulario(event) {
     const { name, value } = event.target;
@@ -22,11 +32,11 @@ function CadastroServico() {
     }));
   }
 
-  function salvarServico(event) {
+  async function salvarServico(event) {
     event.preventDefault();
 
     if (
-      !formulario.nome ||
+      !formulario.nome.trim() ||
       !formulario.valor ||
       !formulario.duracao
     ) {
@@ -34,134 +44,129 @@ function CadastroServico() {
       return;
     }
 
-    console.log('Serviço:', formulario);
+    const valor = Number(
+      String(formulario.valor).replace(',', '.')
+    );
 
-    if (modoEdicao) {
-      alert('Serviço atualizado com sucesso!');
-    } else {
+    const duracao = Number(formulario.duracao);
+
+    if (!Number.isFinite(valor) || valor <= 0) {
+      alert('Informe um valor válido para o serviço.');
+      return;
+    }
+
+    if (!Number.isInteger(duracao) || duracao <= 0) {
+      alert('Informe uma duração válida em minutos.');
+      return;
+    }
+
+    const token = pegarToken();
+
+    if (!token) {
+      alert('Sua sessão não foi encontrada. Faça login novamente.');
+      navigate('/login');
+      return;
+    }
+
+    const corpo = {
+      servico_nome: formulario.nome.trim(),
+      servico_descricao: formulario.descricao.trim(),
+      servico_preco: valor,
+      servico_duracao: duracao,
+      servico_ativo: formulario.status === 'Ativo' ? 1 : 0,
+    };
+
+    try {
+      setSalvando(true);
+
+      const resposta = await fetch(`${API_URL}/servicos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(corpo),
+      });
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        if (resposta.status === 401 || resposta.status === 403) {
+          throw new Error(
+            dados.message || 'Sua sessão expirou ou você não tem permissão.'
+          );
+        }
+
+        throw new Error(
+          dados.message || 'Não foi possível cadastrar o serviço.'
+        );
+      }
+
       alert('Serviço cadastrado com sucesso!');
+      navigate('/Servicos');
+    } catch (error) {
+      console.error('Erro ao cadastrar serviço:', error);
+      alert(error.message || 'Erro de comunicação com a API.');
+    } finally {
+      setSalvando(false);
     }
   }
 
   function cancelar() {
-    window.history.back();
+    navigate(-1);
   }
 
   return (
     <main className="cadastro-servico-page">
-
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
-
       <header className="cadastro-servico-header">
-
         <div className="cadastro-servico-logo">
-          <img
-            src={logoHope}
-            alt="Hope Barbearia"
-          />
+          <img src={logoHope} alt="Hope Barbearia" />
         </div>
 
         <div className="cadastro-servico-title">
-          <h1>
-            {modoEdicao
-              ? 'Editar serviço'
-              : 'Cadastro de serviço'}
-          </h1>
-
-          <p>
-            Gerenciamento de serviços
-          </p>
+          <h1>Cadastro de serviço</h1>
+          <p>Gerenciamento de serviços</p>
         </div>
 
         <div className="cadastro-servico-user">
-
-          <div className="user-avatar">
-            B
-          </div>
+          <div className="user-avatar">B</div>
 
           <div className="user-info">
             <strong>Bruno</strong>
             <span>Minha conta</span>
           </div>
-
         </div>
-
       </header>
 
-
-      {/* =====================================================
-          CONTEÚDO
-      ===================================================== */}
-
       <section className="cadastro-servico-content">
-
         <div className="cadastro-servico-heading">
-
           <div>
-
             <span className="heading-label">
               ÁREA DO BARBEIRO
             </span>
 
-            <h2>
-              {modoEdicao
-                ? 'Editar serviço'
-                : 'Cadastrar serviço'}
-            </h2>
+            <h2>Cadastrar serviço</h2>
 
             <p>
-              {modoEdicao
-                ? 'Altere as informações do serviço selecionado.'
-                : 'Preencha os dados para cadastrar um novo serviço.'}
+              Preencha os dados para cadastrar um novo serviço.
             </p>
-
           </div>
-
         </div>
 
-
-        {/* =====================================================
-            CARD
-        ===================================================== */}
-
         <section className="cadastro-servico-card">
-
           <div className="card-header">
-
             <div>
-
-              <span className="card-label">
-                {modoEdicao
-                  ? 'EDIÇÃO DE SERVIÇO'
-                  : 'NOVO SERVIÇO'}
-              </span>
-
-              <h3>
-                Dados do serviço
-              </h3>
-
+              <span className="card-label">NOVO SERVIÇO</span>
+              <h3>Dados do serviço</h3>
             </div>
-
           </div>
-
-
-          {/* =====================================================
-              FORMULÁRIO
-          ===================================================== */}
 
           <form
             className="cadastro-servico-form"
             onSubmit={salvarServico}
           >
-
             <div className="form-grid">
-
-              {/* NOME */}
-
               <div className="form-group form-full">
-
                 <label htmlFor="nome">
                   Nome do serviço *
                 </label>
@@ -173,15 +178,12 @@ function CadastroServico() {
                   placeholder="Ex.: Corte Masculino"
                   value={formulario.nome}
                   onChange={alterarFormulario}
+                  maxLength={150}
+                  required
                 />
-
               </div>
 
-
-              {/* DESCRIÇÃO */}
-
               <div className="form-group form-full">
-
                 <label htmlFor="descricao">
                   Descrição
                 </label>
@@ -194,73 +196,53 @@ function CadastroServico() {
                   onChange={alterarFormulario}
                   rows="5"
                 />
-
               </div>
 
-
-              {/* VALOR */}
-
               <div className="form-group">
-
                 <label htmlFor="valor">
                   Valor *
                 </label>
 
                 <div className="input-prefixo">
-
-                  <span>
-                    R$
-                  </span>
+                  <span>R$</span>
 
                   <input
                     id="valor"
                     type="number"
                     name="valor"
-                    min="0"
+                    min="0.01"
                     step="0.01"
                     placeholder="35,00"
                     value={formulario.valor}
                     onChange={alterarFormulario}
+                    required
                   />
-
                 </div>
-
               </div>
 
-
-              {/* DURAÇÃO */}
-
               <div className="form-group">
-
                 <label htmlFor="duracao">
                   Duração *
                 </label>
 
                 <div className="input-sufixo">
-
                   <input
                     id="duracao"
                     type="number"
                     name="duracao"
                     min="1"
+                    step="1"
                     placeholder="30"
                     value={formulario.duracao}
                     onChange={alterarFormulario}
+                    required
                   />
 
-                  <span>
-                    minutos
-                  </span>
-
+                  <span>minutos</span>
                 </div>
-
               </div>
 
-
-              {/* STATUS */}
-
               <div className="form-group">
-
                 <label htmlFor="status">
                   Status
                 </label>
@@ -271,32 +253,18 @@ function CadastroServico() {
                   value={formulario.status}
                   onChange={alterarFormulario}
                 >
-
-                  <option value="Ativo">
-                    Ativo
-                  </option>
-
-                  <option value="Inativo">
-                    Inativo
-                  </option>
-
+                  <option value="Ativo">Ativo</option>
+                  <option value="Inativo">Inativo</option>
                 </select>
-
               </div>
-
             </div>
 
-
-            {/* =================================================
-                RODAPÉ
-            ================================================= */}
-
             <div className="form-footer">
-
               <button
                 type="button"
                 className="btn-cancelar"
                 onClick={cancelar}
+                disabled={salvando}
               >
                 Cancelar
               </button>
@@ -304,20 +272,16 @@ function CadastroServico() {
               <button
                 type="submit"
                 className="btn-salvar"
+                disabled={salvando}
               >
-                {modoEdicao
-                  ? 'Salvar alterações'
+                {salvando
+                  ? 'Salvando...'
                   : 'Cadastrar serviço'}
               </button>
-
             </div>
-
           </form>
-
         </section>
-
       </section>
-
     </main>
   );
 }
