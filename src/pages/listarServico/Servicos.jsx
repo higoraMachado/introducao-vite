@@ -6,7 +6,8 @@ import logoHope from '../../assets/logo_login.png';
 
 const API_URL = 'http://localhost:3333';
 
-/* A API guarda a duração como TIME ("00:30:00"). */
+// Converte a duração recebida da API para minutos.
+// A API utiliza o formato TIME: 00:30:00.
 function duracaoParaMinutos(valor) {
   if (valor === null || valor === undefined || valor === '') {
     return 0;
@@ -18,16 +19,21 @@ function duracaoParaMinutos(valor) {
     return Number(texto) || 0;
   }
 
-  const [horas, minutos] = texto.split(':');
+  const partes = texto.split(':').map(Number);
+  const horas = partes[0] || 0;
+  const minutos = partes[1] || 0;
+  const segundos = partes[2] || 0;
 
-  return (Number(horas) || 0) * 60 + (Number(minutos) || 0);
+  return horas * 60 + minutos + segundos / 60;
 }
 
+// Converte minutos para o formato TIME aceito pelo banco.
 function minutosParaDuracao(minutosTotais) {
-  const horas = Math.floor(minutosTotais / 60);
-  const minutos = minutosTotais % 60;
+  const minutos = Math.floor(Number(minutosTotais));
+  const horas = Math.floor(minutos / 60);
+  const minutosRestantes = minutos % 60;
 
-  return `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:00`;
+  return `${String(horas).padStart(2, '0')}:${String(minutosRestantes).padStart(2, '0')}:00`;
 }
 
 function Servicos() {
@@ -67,11 +73,12 @@ function Servicos() {
     }
   }, []);
 
-  const nomeUsuario =
+  const nomeUsuario = String(
     usuario.usuario_nome ||
     usuario.nome ||
     usuario.name ||
-    'Usuário';
+    'Usuário'
+  );
 
   const inicialUsuario =
     nomeUsuario.trim().charAt(0).toUpperCase() || 'U';
@@ -127,51 +134,15 @@ function Servicos() {
   }
 
   // =========================================
-  // CONVERTER DURAÇÃO
-  // =========================================
-
-  function converterDuracao(duracao) {
-    if (duracao === null || duracao === undefined || duracao === '') {
-      return 0;
-    }
-
-    if (typeof duracao === 'number') {
-      return duracao;
-    }
-
-    const texto = String(duracao).trim();
-
-    if (texto.includes(':')) {
-      const partes = texto.split(':').map(Number);
-
-      if (partes.some(Number.isNaN)) return 0;
-
-      return (partes[0] || 0) * 60 +
-        (partes[1] || 0) +
-        (partes[2] || 0) / 60;
-    }
-
-    const numero = Number(texto);
-
-    return Number.isFinite(numero) ? numero : 0;
-  }
-
-  // =========================================
   // MAPEAR SERVIÇOS
   // =========================================
 
   function mapearServico(servico) {
     return {
       id: servico.servico_id,
-<<<<<<< Updated upstream
       nome: servico.servico_nome || '',
-      duracao: converterDuracao(servico.servico_duracao),
-      valor: Number(servico.servico_preco) || 0,
-=======
-      nome: servico.servico_nome,
       duracao: duracaoParaMinutos(servico.servico_duracao),
-      valor: Number(servico.servico_preco),
->>>>>>> Stashed changes
+      valor: Number(servico.servico_preco) || 0,
       descricao: servico.servico_descricao || '',
       status: Number(servico.servico_ativo) === 1
         ? 'Ativo'
@@ -323,13 +294,8 @@ function Servicos() {
 
       const corpo = {
         servico_nome: formulario.nome.trim(),
-<<<<<<< Updated upstream
-        servico_duracao: duracao,
+        servico_duracao: minutosParaDuracao(duracao),
         servico_preco: valor,
-=======
-        servico_duracao: minutosParaDuracao(duracaoNumerica),
-        servico_preco: valorNumerico,
->>>>>>> Stashed changes
       };
 
       const editando = Boolean(servicoSelecionado);
@@ -450,7 +416,6 @@ function Servicos() {
 
       <header className="servicos-header">
 
-<<<<<<< Updated upstream
         {/* LOGO CLICÁVEL */}
 
         <div className="servicos-logo">
@@ -481,28 +446,6 @@ function Servicos() {
         </div>
 
         {/* PERFIL CLICÁVEL */}
-=======
-        <div className="header-logo">
-          <img
-            src={logoHope}
-            alt="Hope Barbearia"
-          />
-        </div>
-
-        <div className="header-title">
-
-          <h1>
-            Serviços
-          </h1>
-
-          <p>
-            Gerenciamento de serviços
-          </p>
-
-        </div>
-
-        <div className="header-user">
->>>>>>> Stashed changes
 
         <button
           type="button"
@@ -805,7 +748,7 @@ function Servicos() {
                       name="valor"
                       min="0.01"
                       step="0.01"
-                      placeholder="35,00"
+                      placeholder="35.00"
                       value={formulario.valor}
                       onChange={alterarFormulario}
                       required

@@ -710,3 +710,58 @@
     padding: 20px;
   }
 }
+
+.gerenciamento-barbeiros-page .campo-busca {
+  background: #ffffff !important;
+}
+
+.gerenciamento-barbeiros-page .campo-busca input {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #222222 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.gerenciamento-barbeiros-page .campo-busca input::placeholder {
+  color: #818791 !important;
+  opacity: 1 !important;
+}
+
+.gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-logo {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  outline: none;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-logo:hover,
+.gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-logo:focus,
+.gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-logo:active {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-logo img {
+  display: block;
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}

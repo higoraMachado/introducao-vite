@@ -1120,3 +1120,144 @@ body .servicos-page .servicos-card {
   color: #ffffff;
   border-color: #333333;
 }
+
+body main.clientes-page {
+  color: #f5f1e8 !important;
+}
+
+body .clientes-page .clientes-heading .heading-label {
+  color: #d6ad54 !important;
+}
+
+body .clientes-page .clientes-heading h2 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+body .clientes-page .clientes-heading p {
+  color: #d0cbc1 !important;
+}
+
+/* Card e lista */
+body .clientes-page .clientes-card {
+  background: rgba(8, 8, 8, 0.82) !important;
+  border-color: rgba(214, 173, 84, 0.45) !important;
+  color: #f5f1e8 !important;
+}
+
+body .clientes-page .card-top {
+  background: rgba(12, 12, 12, 0.96) !important;
+  color: #ffffff !important;
+}
+
+body .clientes-page .card-top .card-label {
+  color: #d6ad54 !important;
+}
+
+body .clientes-page .card-top h3 {
+  color: #ffffff !important;
+}
+
+body .clientes-page .total-clientes {
+  color: #f0e6cf !important;
+  border-color: rgba(214, 173, 84, 0.55) !important;
+}
+
+/* Pesquisa e filtros */
+body .clientes-page .clientes-filtros {
+  background: rgba(12, 12, 12, 0.88) !important;
+  border-bottom-color: rgba(214, 173, 84, 0.25) !important;
+}
+
+body .clientes-page .campo-pesquisa {
+  background: #171717 !important;
+  border-color: rgba(214, 173, 84, 0.55) !important;
+}
+
+body .clientes-page .campo-pesquisa span {
+  color: #d6ad54 !important;
+}
+
+body .clientes-page .campo-pesquisa input {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+body .clientes-page .campo-pesquisa input::placeholder {
+  color: #aaa49a !important;
+}
+
+body .clientes-page .clientes-filtros select {
+  background: #171717 !important;
+  color: #ffffff !important;
+  border-color: rgba(214, 173, 84, 0.55) !important;
+}
+
+/* Cabeçalho da tabela */
+body .clientes-page .clientes-tabela thead th {
+  background: #f4f4f4 !important;
+  color: #303030 !important;
+}
+
+/* Linhas da tabela */
+body .clientes-page .clientes-tabela tbody tr {
+  background: rgba(8, 8, 8, 0.50) !important;
+}
+
+body .clientes-page .clientes-tabela tbody tr:hover {
+  background: rgba(45, 37, 22, 0.88) !important;
+}
+
+body .clientes-page .clientes-tabela tbody td {
+  color: #f1eee7 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.30) !important;
+}
+
+body .clientes-page .clientes-tabela .cliente-id {
+  color: #e1c477 !important;
+}
+
+body .clientes-page .clientes-tabela .cliente-nome strong {
+  color: #ffffff !important;
+}
+
+body .clientes-page .clientes-tabela .cliente-nome small,
+body .clientes-page .clientes-tabela td small {
+  color: #c9c3b8 !important;
+}
+
+body .clientes-page .clientes-tabela .cliente-avatar {
+  background: #d6ad54 !important;
+  color: #171717 !important;
+}
+
+/* Mensagem de lista vazia */
+body .clientes-page .nenhum-cliente strong {
+  color: #ffffff !important;
+}
+
+body .clientes-page .nenhum-cliente p,
+body .clientes-page .nenhum-cliente span {
+  color: #c9c3b8 !important;
+}
+
+/* Botões */
+body .clientes-page .clientes-tabela .acoes .acao-visualizar,
+body .clientes-page .clientes-tabela .acoes .acao-desativar {
+  background: #f7f4ed !important;
+  color: #171717 !important;
+  border-color: #d6ad54 !important;
+}
+
+body .clientes-page .clientes-tabela .acoes .acao-editar {
+  background: #171717 !important;
+  color: #ffffff !important;
+  border-color: #d6ad54 !important;
+}
+
+body .clientes-page .clientes-tabela .acoes .acao-ativar {
+  background: #d6ad54 !important;
+  color: #171717 !important;
+  border-color: #d6ad54 !important;
+}
+
