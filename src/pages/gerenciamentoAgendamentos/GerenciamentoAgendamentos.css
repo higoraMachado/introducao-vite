@@ -5,19 +5,14 @@
 ===================================================== */
 
 .ga-pagina {
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
-  background: #f5f5f5;
-  color: #222;
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.ga-pagina *,
-.ga-pagina *::before,
-.ga-pagina *::after {
-  box-sizing: border-box;
+  color: #f5f2eb;
+  background:
+    linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.82)),
+    url("../../assets/fundo das paginas.avif") center center / cover fixed no-repeat,
+    #080808;
 }
 
 /* =====================================================
@@ -63,11 +58,14 @@
   height: 78px;
   object-fit: contain;
 }
+.ga-titulo-cabecalho {
+  text-align: center;
+}
 
 .ga-titulo-cabecalho h1 {
-  margin: 0 0 8px;
-  color: #fff;
-  font-size: 27px;
+  color: #d6b45b;
+  letter-spacing: 1.3px;
+  font-size: 34px;
   font-weight: 700;
 }
 

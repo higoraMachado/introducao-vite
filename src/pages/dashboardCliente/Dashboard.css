@@ -125,43 +125,6 @@
   z-index: 2;
 }
 
-/* moldura sutil atrás da logo */
-.dashboard-logo::before {
-  content: "";
-
-  position: absolute;
-
-  width: 126px;
-  height: 126px;
-
-  left: 0;
-  top: 6px;
-
-  border-radius: 50%;
-
-  border: 1px solid rgba(214, 176, 87, 0.40);
-
-  box-shadow:
-    0 0 0 6px rgba(201, 162, 77, 0.035),
-    0 0 24px rgba(201, 162, 77, 0.10);
-}
-
-.dashboard-logo::after {
-  content: "";
-
-  position: absolute;
-
-  width: 112px;
-  height: 112px;
-
-  left: 7px;
-  top: 13px;
-
-  border-radius: 50%;
-
-  border: 1px dashed rgba(214, 176, 87, 0.22);
-}
-
 .dashboard-logo img {
   width: 132px !important;
   height: 124px !important;
@@ -370,11 +333,12 @@
 
 .dashboard-heading h2 {
   margin: 0;
-
+  
   font-size: 36px;
   line-height: 1.15;
 
   font-weight: 800;
+  color: #dfbf68 !important;
 }
 
 .dashboard-heading p {

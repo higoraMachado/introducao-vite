@@ -83,6 +83,21 @@
 
   font-size: 15px;
 }
+.servicos-title {
+  text-align: center;
+}
+
+.servicos-title h1 {
+  color: #d6b45b;
+  letter-spacing: 1.3px;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.servicos-title p {
+  color: #c4c4c4;
+}
+
 
 
 /* =====================================================
