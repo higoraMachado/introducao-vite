@@ -1,51 +1,181 @@
 /* =========================================================
-   HOPE BARBEARIA
-   TELA DE AGENDAMENTO
-   VISUAL PADRÃO DA ÁREA DO CLIENTE
+   1. VARIÁVEIS & CONFIGURAÇÕES GLOBAIS
 ========================================================= */
+
+:root {
+  /* Cores Principais */
+  --cor-preto: #111111;
+  --cor-preto-suave: #171717;
+  --cor-branco: #ffffff;
+
+  /* Tons de Dourado */
+  --cor-dourado: #d6ad35;
+  --cor-dourado-hover: #e2bd50;
+  --cor-dourado-escuro: #9a7617;
+  --cor-dourado-borda: #c9a33b;
+  --cor-dourado-suave: #f8f0dc;
+  --cor-dourado-fundo-claro: #fffaf0;
+
+  /* Tons Neutros */
+  --cor-fundo-pagina: #f1f0ed;
+  --cor-texto-principal: #171717;
+  --cor-texto-secundario: #777777;
+  --cor-texto-suave: #999999;
+  --cor-borda: #ddd8cc;
+  --cor-borda-clara: #eeeeee;
+  --cor-desabilitado: #f3f3f3;
+
+  /* Utilitários */
+  --fonte-principal: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --sombra-card: 0 5px 18px rgba(0, 0, 0, 0.06);
+}
 
 * {
   box-sizing: border-box;
 }
 
-:root {
-  --preto: #111111;
-  --preto-2: #171717;
-  --dourado: #d6ad35;
-  --dourado-claro: #e5c76b;
-  --dourado-suave: #f7efd8;
-  --branco: #ffffff;
-  --cinza-fundo: #f1f0ed;
-  --cinza-texto: #666666;
-  --cinza-borda: #ddd8cc;
+/* =========================================================
+   2. ANIMAÇÕES (KEYFRAMES)
+========================================================= */
+
+@keyframes modalEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes menuAparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* =========================================================
-   PÁGINA
+   3. LAYOUT BASE DA PÁGINA
 ========================================================= */
 
 .agendamento-page {
   min-height: 100vh;
   width: 100%;
   background:
-    linear-gradient(
-      rgba(245, 243, 239, 0.94),
-      rgba(245, 243, 239, 0.94)
-    ),
-    #f1f0ed;
-  color: #171717;
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    linear-gradient(rgba(245, 243, 239, 0.94), rgba(245, 243, 239, 0.94)),
+    var(--cor-fundo-pagina);
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
+}
+
+.agendamento-content {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 42px 28px 70px;
+}
+
+.agendamento-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  gap: 24px;
+  align-items: start;
+}
+
+.agendamento-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* =========================================================
-   FOTO / AVATAR
+   4. HEADER & NAVEGAÇÃO DO USUÁRIO
 ========================================================= */
+
+.agendamento-header {
+  position: relative;
+  z-index: 50;
+  width: 100%;
+  min-height: 124px;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  align-items: center;
+  background: linear-gradient(180deg, #0d0d0d 0%, var(--cor-preto-suave) 100%);
+  color: var(--cor-branco);
+  border-top: 2px solid var(--cor-dourado);
+  border-bottom: 4px solid var(--cor-dourado);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+}
+
+.agendamento-header::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #a97d13, #e0bd50, #a97d13);
+}
+
+.header-logo {
+  width: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.header-logo img {
+  width: 125px;
+  height: 125px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+}
+
+.header-title {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.header-title h1 {
+  margin: 0;
+  color: var(--cor-dourado-hover);
+  font-size: 29px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  text-shadow: 0 2px 12px rgba(214, 173, 53, 0.18);
+}
+
+.header-title p {
+  margin: 6px 0 0;
+  color: #cfcfcf;
+  font-size: 12px;
+}
+
+/* Usuário & Avatar */
+.header-user {
+  position: relative;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
 
 .input-foto {
   display: none;
@@ -56,15 +186,15 @@
   height: 42px;
   min-width: 42px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--cor-branco);
+  border: 1px solid #dedede;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid #dedede;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-  transition: 0.2s ease;
+  transition: transform var(--transicao-padrao);
 }
 
 .user-avatar:hover {
@@ -72,7 +202,7 @@
 }
 
 .user-avatar span {
-  color: #111111;
+  color: var(--cor-preto);
   font-size: 14px;
   font-weight: 800;
 }
@@ -84,155 +214,15 @@
   display: block;
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
-
-.agendamento-header {
-  width: 100%;
-  min-height: 124px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #0d0d0d 0%,
-      #171717 100%
-    );
-
-  color: #ffffff;
-
-  display: grid;
-  grid-template-columns: 220px 1fr 220px;
-  align-items: center;
-
-  padding: 0 48px;
-
-  border-top: 2px solid var(--dourado);
-  border-bottom: 4px solid var(--dourado);
-
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.22);
-
-  position: relative;
-  z-index: 50;
-}
-
-/* linha dourada discreta */
-
-.agendamento-header::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 4px;
-
-  background: linear-gradient(
-    90deg,
-    #a97d13,
-    #e0bd50,
-    #a97d13
-  );
-}
-
-/* =========================================================
-   LOGO
-========================================================= */
-
-.header-logo {
-  width: 220px;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.header-logo img {
-  width: 125px;
-  height: 125px;
-
-  object-fit: contain;
-  object-position: center;
-
-  display: block;
-
-  filter:
-    drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
-}
-
-/* =========================================================
-   TÍTULO DO HEADER
-========================================================= */
-
-body .agendamento-header .header-title {
-  position: static;
-  left: auto;
-  top: auto;
-  transform: none;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-body .agendamento-header .header-title h1 {
-  margin: 0;
-  color: #e2bd55;
-  font-size: 29px;
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-  white-space: nowrap;
-  text-shadow: 0 2px 12px rgba(214, 173, 53, 0.18);
-}
-
-body .agendamento-header .header-title h1::before,
-body .agendamento-header .header-title h1::after {
-  content: none !important;
-  display: none !important;
-}
-
-body .agendamento-header .header-title p {
-  margin: 6px 0 0;
-  color: #cfcfcf;
-  font-size: 12px;
-}
-
-/* =========================================================
-   USUÁRIO
-========================================================= */
-
-.header-user {
-  min-width: 220px;
-
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  gap: 10px;
-}
-
 .user-button {
   display: flex;
   align-items: center;
   gap: 10px;
-
-  background: transparent !important;
-  border: none;
-
   padding: 5px;
-
-  color: #ffffff;
-
+  background: transparent;
+  border: none;
+  color: var(--cor-branco);
   cursor: pointer;
-}
-
-.user-button:hover {
-  background: transparent !important;
 }
 
 .user-info {
@@ -242,1474 +232,52 @@ body .agendamento-header .header-title p {
 }
 
 .user-info strong {
-  color: #ffffff;
-
+  color: var(--cor-branco);
   font-size: 13px;
   font-weight: 700;
 }
 
 .user-info span {
-  color: #999999;
-
-  font-size: 11px;
-
   margin-top: 3px;
+  color: var(--cor-texto-suave);
+  font-size: 11px;
 }
 
 .user-arrow {
-  color: #d7d7d7;
-
-  font-size: 15px;
-
   margin-left: 3px;
-}
-
-/* =========================================================
-   CONTEÚDO
-========================================================= */
-
-.agendamento-content {
-  width: 100%;
-  max-width: 1320px;
-
-  margin: 0 auto;
-
-  padding: 42px 28px 70px;
-}
-
-/* =========================================================
-   CABEÇALHO DA PÁGINA
-========================================================= */
-
-.page-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-
-  margin-bottom: 28px;
-}
-
-.heading-label {
-  display: block;
-
-  color: #9b7a20;
-
-  font-size: 10px;
-  font-weight: 800;
-
-  letter-spacing: 2px;
-
-  margin-bottom: 7px;
-}
-
-.page-heading h2 {
-  margin: 0;
-
-  color: #111111;
-
-  font-size: 31px;
-  line-height: 1.15;
-
-  font-weight: 800;
-
-  letter-spacing: -0.7px;
-}
-
-.page-heading p {
-  margin: 8px 0 0;
-
-  color: #777777;
-
-  font-size: 14px;
-}
-
-/* =========================================================
-   BOTÃO CANCELAR
-========================================================= */
-
-.btn-cancelar-modo {
-  border: 1px solid #d3b65c;
-
-  background: #ffffff;
-
-  color: #333333;
-
-  padding: 12px 18px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  transition: 0.2s;
-}
-
-.btn-cancelar-modo:hover {
-  background: #f8f0db;
-
-  border-color: #c29b25;
-}
-
-/* =========================================================
-   GRID PRINCIPAL
-========================================================= */
-
-.agendamento-grid {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    350px;
-
-  gap: 24px;
-
-  align-items: start;
-}
-
-.agendamento-main {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 20px;
-}
-
-/* =========================================================
-   CARDS
-========================================================= */
-
-.card {
-  background: #ffffff;
-
-  border: 1px solid #ddd8cc;
-
-  border-radius: 13px;
-
-  padding: 25px;
-
-  box-shadow:
-    0 5px 18px rgba(0, 0, 0, 0.06);
-
-  transition: 0.2s ease;
-}
-
-.card:hover {
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.075);
-}
-
-.card-title {
-  display: flex;
-
-  align-items: center;
-
-  gap: 13px;
-
-  margin-bottom: 23px;
-}
-
-.step-number {
-  flex-shrink: 0;
-
-  width: 34px;
-  height: 34px;
-
-  border-radius: 50%;
-
-  background: #171717;
-
-  color: #ffffff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 13px;
-  font-weight: 800;
-
-  border: 1px solid #333333;
-}
-
-.card-title h3 {
-  margin: 0;
-
-  color: #171717;
-
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.card-title p {
-  margin: 4px 0 0;
-
-  color: #858585;
-
-  font-size: 12px;
-}
-
-/* =========================================================
-   CALENDÁRIO
-========================================================= */
-
-.calendar {
-  width: 100%;
-}
-
-.calendar-header {
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  margin-bottom: 20px;
-}
-
-.calendar-header h4 {
-  margin: 0;
-
-  color: #171717;
-
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.month-button {
-  width: 34px;
-  height: 34px;
-
-  border: 1px solid #ddd3b8;
-
-  background: #ffffff;
-
-  color: #8d6d19;
-
-  border-radius: 7px;
-
-  cursor: pointer;
-
-  font-size: 21px;
-  line-height: 1;
-
-  transition: 0.2s;
-}
-
-.month-button:hover {
-  background: #f8f0dc;
-
-  border-color: #d1aa38;
-}
-
-.week-days {
-  display: grid;
-
-  grid-template-columns: repeat(7, 1fr);
-
-  gap: 7px;
-
-  margin-bottom: 8px;
-}
-
-.week-days span {
-  text-align: center;
-
-  color: #9b9b9b;
-
-  font-size: 9px;
-  font-weight: 800;
-
-  letter-spacing: 0.5px;
-}
-
-.calendar-days {
-  display: grid;
-
-  grid-template-columns: repeat(7, 1fr);
-
-  gap: 7px;
-}
-
-.calendar-empty {
-  min-height: 42px;
-}
-
-.calendar-day {
-  min-height: 42px;
-
-  border: 1px solid #dedede;
-
-  background: #ffffff;
-
-  color: #222222;
-
-  border-radius: 7px;
-
-  cursor: pointer;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border 0.2s,
-    transform 0.2s;
-}
-
-.calendar-day:hover:not(:disabled) {
-  background: #f8f0dc;
-
-  border-color: #d4af3d;
-
-  color: #7d5e0e;
-
-  transform: translateY(-1px);
-}
-
-.calendar-day.selected {
-  background: #171717;
-
-  border-color: #171717;
-
-  color: #e4bd4f;
-
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.16);
-}
-
-.calendar-day.disabled {
-  background: #f3f3f3;
-
-  color: #c3c3c3;
-
-  border-color: #eeeeee;
-
-  cursor: not-allowed;
-}
-
-/* =========================================================
-   BARBEIROS
-========================================================= */
-
-.barbeiros-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 12px;
-}
-
-.barbeiro-card {
-  position: relative;
-
-  min-height: 78px;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  padding: 13px;
-
-  border: 1px solid #ddd9d0;
-
-  border-radius: 9px;
-
-  background: #ffffff;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.barbeiro-card:hover {
-  border-color: #d0aa38;
-
-  background: #fffdf7;
-}
-
-.barbeiro-card.selected {
-  border-color: #c69c25;
-
-  background: #171717;
-
-  color: #ffffff;
-
-  box-shadow:
-    0 4px 14px rgba(0, 0, 0, 0.14);
-}
-
-.barbeiro-avatar {
-  width: 42px;
-  height: 42px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: #f0f0f0;
-
-  color: #222222;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
+  color: #d7d7d7;
   font-size: 15px;
-  font-weight: 800;
 }
 
-.barbeiro-card.selected .barbeiro-avatar {
-  background: #e2bd50;
-
-  color: #171717;
-}
-
-.barbeiro-info {
-  display: flex;
-
-  flex-direction: column;
-
-  min-width: 0;
-}
-
-.barbeiro-info strong {
-  font-size: 13px;
-}
-
-.barbeiro-info span {
-  margin-top: 4px;
-
-  color: #8a8a8a;
-
-  font-size: 10px;
-
-  line-height: 1.3;
-}
-
-.barbeiro-card.selected .barbeiro-info span {
-  color: #c2c2c2;
-}
-
-.check {
-  width: 21px;
-  height: 21px;
-
-  margin-left: auto;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: #e0b83e;
-
-  color: #171717;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 12px;
-  font-weight: 800;
-}
-
-/* =========================================================
-   SERVIÇOS
-========================================================= */
-
-.servicos-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
-}
-
-.servico-card {
-  min-height: 76px;
-
-  padding: 14px;
-
-  border: 1px solid #ddd9d0;
-
-  border-radius: 9px;
-
-  background: #ffffff;
-
-  cursor: pointer;
-
-  text-align: left;
-
-  transition: 0.2s;
-}
-
-.servico-card:hover {
-  border-color: #d0aa38;
-
-  background: #fffdf7;
-}
-
-.servico-card.selected {
-  background: #171717;
-
-  border-color: #171717;
-
-  color: #ffffff;
-}
-
-.servico-top {
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-.servico-top strong {
-  font-size: 13px;
-}
-
-.servico-top .check {
-  margin-left: 0;
-}
-
-.servico-bottom {
-  display: flex;
-
-  justify-content: space-between;
-  align-items: center;
-
-  margin-top: 12px;
-}
-
-.servico-bottom span {
-  color: #8b8b8b;
-
-  font-size: 11px;
-}
-
-.servico-bottom strong {
-  color: #9a7617;
-
-  font-size: 13px;
-}
-
-.servico-card.selected .servico-bottom span {
-  color: #bdbdbd;
-}
-
-.servico-card.selected .servico-bottom strong {
-  color: #e2bd50;
-}
-
-/* =========================================================
-   HORÁRIOS
-========================================================= */
-
-.horarios-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(6, minmax(0, 1fr));
-
-  gap: 9px;
-}
-
-.horario-button {
-  min-height: 48px;
-
-  border: 1px solid #ddd9d0;
-
-  border-radius: 7px;
-
-  background: #ffffff;
-
-  color: #333333;
-
-  cursor: pointer;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  transition: 0.2s;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-}
-
-.horario-button:hover:not(:disabled) {
-  border-color: #d0aa38;
-
-  background: #f8f0dc;
-
-  color: #80600d;
-}
-
-.horario-button.selected {
-  background: #171717;
-
-  border-color: #171717;
-
-  color: #e2bd50;
-}
-
-.horario-button.occupied {
-  background: #eeeeee;
-
-  border-color: #e4e4e4;
-
-  color: #b7b7b7;
-
-  cursor: not-allowed;
-
-  text-decoration: line-through;
-}
-
-.horario-button small {
-  margin-top: 2px;
-
-  font-size: 8px;
-
-  font-weight: 500;
-
-  text-decoration: none;
-}
-
-.horario-legenda {
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 18px;
-
-  margin-top: 18px;
-
-  color: #888888;
-
-  font-size: 10px;
-}
-
-.horario-legenda span {
-  display: flex;
-
-  align-items: center;
-
-  gap: 6px;
-}
-
-.legend {
-  width: 9px;
-  height: 9px;
-
-  border-radius: 50%;
-
-  display: inline-block;
-
-  border: 1px solid #cfcfcf;
-
-  background: #ffffff;
-}
-
-.legend.selected {
-  background: #171717;
-
-  border-color: #171717;
-}
-
-.legend.occupied {
-  background: #dddddd;
-}
-
-/* =========================================================
-   MENSAGEM VAZIA
-========================================================= */
-
-.empty-message {
-  min-height: 125px;
-
-  border: 1px dashed #d7d1c3;
-
-  border-radius: 9px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-
-  color: #999999;
-
-  background: #fffdf9;
-}
-
-.empty-message span {
-  font-size: 25px;
-
-  margin-bottom: 8px;
-}
-
-.empty-message p {
-  margin: 0;
-
-  font-size: 12px;
-}
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.agendamento-sidebar {
-  position: sticky;
-
-  top: 20px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 18px;
-}
-
-/* =========================================================
-   RESUMO
-========================================================= */
-
-.summary-card {
-  overflow: hidden;
-
-  background: #ffffff;
-
-  border: 1px solid #ddd8cc;
-
-  border-radius: 13px;
-
-  box-shadow:
-    0 5px 18px rgba(0, 0, 0, 0.07);
-}
-
-.summary-header {
-  padding: 22px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #111111,
-      #1b1b1b
-    );
-
-  color: #ffffff;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  border-bottom: 3px solid #d1a832;
-}
-
-.summary-header span {
-  color: #b99a4c;
-
-  font-size: 9px;
-
-  font-weight: 800;
-
-  letter-spacing: 2px;
-}
-
-.summary-header h3 {
-  margin: 5px 0 0;
-
-  font-size: 17px;
-}
-
-.summary-icon {
-  width: 34px;
-  height: 34px;
-
-  border: 1px solid #c69f32;
-
-  color: #e0bd50;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 14px;
-}
-
-.summary-content {
-  padding: 18px 22px 10px;
-}
-
-.summary-item {
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  padding: 14px 0;
-
-  border-bottom: 1px solid #eee9df;
-}
-
-.summary-item:last-child {
-  border-bottom: none;
-}
-
-.summary-icon-small {
-  width: 31px;
-  height: 31px;
-
-  border-radius: 7px;
-
-  background: #f7f0df;
-
-  color: #a77d13;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 13px;
-}
-
-.summary-item div {
-  display: flex;
-
-  flex-direction: column;
-
-  min-width: 0;
-}
-
-.summary-item small {
-  color: #999999;
-
-  font-size: 10px;
-
-  margin-bottom: 3px;
-}
-
-.summary-item strong {
-  font-size: 12px;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-}
-
-.summary-price {
-  margin: 7px 22px 0;
-
-  padding: 17px 0;
-
-  border-top: 1px solid #ded8ca;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-}
-
-.summary-price span {
-  color: #777777;
-
-  font-size: 12px;
-}
-
-.summary-price strong {
-  color: #a77d13;
-
-  font-size: 21px;
-}
-
-/* =========================================================
-   BOTÃO CONFIRMAR
-========================================================= */
-
-.btn-confirmar {
-  width: calc(100% - 44px);
-
-  margin: 0 22px 10px;
-
-  min-height: 46px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #d9b43f,
-      #c69b24
-    );
-
-  color: #171717;
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  transition: 0.2s;
-}
-
-.btn-confirmar:hover:not(:disabled) {
-  background:
-    linear-gradient(
-      135deg,
-      #e4c55e,
-      #d2a62e
-    );
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 5px 14px rgba(183, 140, 28, 0.25);
-}
-
-.btn-confirmar:disabled {
-  background: #d4d4d4;
-
-  color: #999999;
-
-  cursor: not-allowed;
-
-  box-shadow: none;
-}
-
-.summary-warning {
-  margin: 0;
-
-  padding: 0 22px 18px;
-
-  color: #999999;
-
-  text-align: center;
-
-  font-size: 10px;
-}
-
-/* =========================================================
-   PRÓXIMO AGENDAMENTO
-========================================================= */
-
-.next-appointment {
-  background: #ffffff;
-
-  border: 1px solid #ddd8cc;
-
-  border-radius: 13px;
-
-  padding: 21px;
-
-  box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.next-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-.next-header span {
-  color: #a17d1e;
-
-  font-size: 9px;
-
-  font-weight: 800;
-
-  letter-spacing: 1.5px;
-}
-
-.next-header h3 {
-  margin: 5px 0 0;
-
-  font-size: 14px;
-}
-
-.confirmed-badge {
-  width: 28px;
-  height: 28px;
-
-  border-radius: 50%;
-
-  background: #171717;
-
-  color: #e2bd50;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 12px;
-
-  border: 1px solid #c29a2c;
-}
-
-.appointment-date {
-  margin: 18px 0;
-
-  padding: 15px;
-
-  border-radius: 8px;
-
-  background: #f8f1df;
-
-  display: flex;
-
-  flex-direction: column;
-
-  border: 1px solid #ead9aa;
-}
-
-.appointment-date strong {
-  font-size: 18px;
-}
-
-.appointment-date span {
-  color: #777777;
-
-  font-size: 12px;
-
-  margin-top: 3px;
-}
-
-.appointment-details {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 10px;
-}
-
-.appointment-details div {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 10px;
-}
-
-.appointment-details span {
-  color: #999999;
-
-  font-size: 11px;
-}
-
-.appointment-details strong {
-  font-size: 11px;
-
-  text-align: right;
-}
-
-.appointment-actions {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 8px;
-
-  margin-top: 18px;
-}
-
-.btn-reagendar,
-.btn-cancelar {
-  min-height: 39px;
-
-  border-radius: 7px;
-
-  cursor: pointer;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  transition: 0.2s;
-}
-
-.btn-reagendar {
-  background: #d4aa32;
-
-  color: #171717;
-
-  border: 1px solid #c79c24;
-}
-
-.btn-reagendar:hover {
-  background: #e1bc4f;
-}
-
-.btn-cancelar {
-  background: #ffffff;
-
-  color: #555555;
-
-  border: 1px solid #d7d0c1;
-}
-
-.btn-cancelar:hover {
-  background: #f5f1e8;
-}
-
-/* =========================================================
-   MODAIS
-========================================================= */
-
-.modal-overlay {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 1000;
-
-  background: rgba(0, 0, 0, 0.65);
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 20px;
-
-  backdrop-filter: blur(3px);
-}
-
-.modal {
-  position: relative;
-
-  width: 100%;
-
-  max-width: 450px;
-
-  background: #ffffff;
-
-  border-radius: 13px;
-
-  padding: 30px;
-
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.3);
-
-  animation: modalEntrada 0.2s ease;
-}
-
-@keyframes modalEntrada {
-  from {
-    opacity: 0;
-
-    transform:
-      translateY(10px)
-      scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-  }
-}
-
-.modal-close {
-  position: absolute;
-
-  top: 15px;
-  right: 15px;
-
-  width: 30px;
-  height: 30px;
-
-  border: none;
-
-  background: #eeeeee;
-
-  border-radius: 50%;
-
-  color: #555555;
-
-  cursor: pointer;
-
-  font-size: 20px;
-
-  line-height: 1;
-}
-
-.modal-icon {
-  width: 54px;
-  height: 54px;
-
-  border-radius: 50%;
-
-  margin: 0 auto 16px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 22px;
-
-  font-weight: 800;
-}
-
-.modal-icon.success {
-  background: #171717;
-
-  color: #e2bd50;
-
-  border: 1px solid #c49b2b;
-}
-
-.modal-icon.danger {
-  background: #eeeeee;
-
-  color: #333333;
-}
-
-.modal h3 {
-  margin: 0;
-
-  text-align: center;
-
-  font-size: 20px;
-}
-
-.modal > p {
-  margin: 8px 0 22px;
-
-  text-align: center;
-
-  color: #777777;
-
-  font-size: 12px;
-
-  line-height: 1.5;
-}
-
-.modal-details {
-  border: 1px solid #e2ddd2;
-
-  border-radius: 9px;
-
-  overflow: hidden;
-
-  margin-bottom: 20px;
-}
-
-.modal-details div {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 11px 13px;
-
-  border-bottom: 1px solid #eeeeee;
-}
-
-.modal-details div:last-child {
-  border-bottom: none;
-}
-
-.modal-details span {
-  color: #888888;
-
-  font-size: 11px;
-}
-
-.modal-details strong {
-  font-size: 11px;
-
-  text-align: right;
-}
-
-.modal-actions {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 9px;
-}
-
-.modal-actions button {
-  min-height: 43px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-  font-weight: 700;
-}
-
-.modal-secondary {
-  border: 1px solid #d6d1c7;
-
-  background: #ffffff;
-
-  color: #444444;
-}
-
-.modal-secondary:hover {
-  background: #eeeeee;
-}
-
-.modal-primary {
-  border: 1px solid #c79d29;
-
-  background: #d4ab35;
-
-  color: #171717;
-}
-
-.modal-primary:hover {
-  background: #e1bc4e;
-}
-
-.modal-danger {
-  border: 1px solid #555555;
-
-  background: #333333;
-
-  color: #ffffff;
-}
-
-.modal-danger:hover {
-  background: #171717;
-}
-
-.cancel-info {
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  padding: 15px;
-
-  margin-bottom: 20px;
-
-  background: #f4f1eb;
-
-  border-radius: 8px;
-}
-
-.cancel-info strong {
-  font-size: 14px;
-}
-
-.cancel-info span {
-  margin-top: 5px;
-
-  color: #777777;
-
-  font-size: 11px;
-}
-
-/* =========================================================
-   MENU DROPDOWN
-========================================================= */
-
+/* Dropdown Menu */
 .user-menu {
   position: absolute;
-
   top: calc(100% + 10px);
-
   right: 0;
-
-  width: 190px;
-
-  background: #ffffff;
-
-  border-radius: 10px;
-
-  padding: 8px;
-
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.20);
-
-  border: 1px solid #e5e5e5;
-
   z-index: 1000;
-
+  width: 190px;
+  padding: 8px;
+  background: var(--cor-branco);
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   animation: menuAparecer 0.15s ease;
-}
-
-@keyframes menuAparecer {
-  from {
-    opacity: 0;
-
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-
-    transform: translateY(0);
-  }
 }
 
 .menu-item {
   width: 100%;
-
-  border: none;
-
-  background: transparent;
-
-  color: #222222;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
   padding: 11px 12px;
-
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
   border-radius: 7px;
-
-  cursor: pointer;
-
+  background: transparent;
+  color: #222222;
   font-size: 13px;
-
   text-align: left;
-
-  box-sizing: border-box;
-
   text-decoration: none;
+  cursor: pointer;
 }
 
 .menu-item:hover {
@@ -1722,10 +290,8 @@ body .agendamento-header .header-title p {
 
 .menu-divider {
   height: 1px;
-
-  background: #eeeeee;
-
   margin: 5px 0;
+  background: var(--cor-borda-clara);
 }
 
 .menu-sair {
@@ -1737,18 +303,979 @@ body .agendamento-header .header-title p {
 }
 
 /* =========================================================
-   RESPONSIVIDADE
+   5. CABEÇALHO INTERNO & ESTRUTURA DE CARDS
+========================================================= */
+
+.page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.heading-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #9b7a20;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.page-heading h2 {
+  margin: 0;
+  color: var(--cor-preto);
+  font-size: 31px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.7px;
+}
+
+.page-heading p {
+  margin: 8px 0 0;
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+}
+
+.btn-cancelar-modo {
+  padding: 12px 18px;
+  border: 1px solid #d3b65c;
+  border-radius: 8px;
+  background: var(--cor-branco);
+  color: #333333;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.btn-cancelar-modo:hover {
+  background: var(--cor-dourado-suave);
+  border-color: #c29b25;
+}
+
+.card {
+  padding: 25px;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: 13px;
+  box-shadow: var(--sombra-card);
+  transition: box-shadow var(--transicao-padrao);
+}
+
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.075);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 23px;
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cor-preto-suave);
+  border: 1px solid #333333;
+  color: var(--cor-branco);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.card-title h3 {
+  margin: 0;
+  color: var(--cor-texto-principal);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.card-title p {
+  margin: 4px 0 0;
+  color: #858585;
+  font-size: 12px;
+}
+
+/* =========================================================
+   6. ETAPA: CALENDÁRIO
+========================================================= */
+
+.calendar {
+  width: 100%;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.calendar-header h4 {
+  margin: 0;
+  color: var(--cor-texto-principal);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.month-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ddd3b8;
+  border-radius: 7px;
+  background: var(--cor-branco);
+  color: #8d6d19;
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.month-button:hover {
+  background: var(--cor-dourado-suave);
+  border-color: #d1aa38;
+}
+
+.week-days,
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 7px;
+}
+
+.week-days {
+  margin-bottom: 8px;
+}
+
+.week-days span {
+  text-align: center;
+  color: #9b9b9b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.calendar-empty {
+  min-height: 42px;
+}
+
+.calendar-day {
+  min-height: 42px;
+  border: 1px solid #dedede;
+  border-radius: 7px;
+  background: var(--cor-branco);
+  color: #222222;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background var(--transicao-padrao),
+    color var(--transicao-padrao),
+    border-color var(--transicao-padrao),
+    transform var(--transicao-padrao);
+}
+
+.calendar-day:hover:not(:disabled) {
+  background: var(--cor-dourado-suave);
+  border-color: #d4af3d;
+  color: #7d5e0e;
+  transform: translateY(-1px);
+}
+
+.calendar-day.selected {
+  background: var(--cor-preto-suave);
+  border-color: var(--cor-preto-suave);
+  color: #e4bd4f;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
+}
+
+.calendar-day.disabled {
+  background: var(--cor-desabilitado);
+  border-color: var(--cor-borda-clara);
+  color: #c3c3c3;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   7. ETAPA: BARBEIROS (UNIFICADO)
+========================================================= */
+
+.barbeiros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.barbeiro-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 82px;
+  padding: 14px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  background: var(--cor-branco);
+  color: var(--cor-texto-principal);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--transicao-padrao),
+    background var(--transicao-padrao),
+    box-shadow var(--transicao-padrao);
+}
+
+.barbeiro-card:hover {
+  border-color: var(--cor-dourado-borda);
+  background: #fffdf7;
+}
+
+.barbeiro-card.selected {
+  border-color: var(--cor-dourado-borda);
+  background: var(--cor-preto-suave);
+  color: var(--cor-branco);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.barbeiro-avatar {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eeeae1;
+  color: #222222;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.barbeiro-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.barbeiro-card.selected .barbeiro-avatar {
+  background: var(--cor-dourado-hover);
+  color: var(--cor-preto-suave);
+}
+
+.barbeiro-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.barbeiro-info strong {
+  display: block;
+  margin: 0;
+  color: var(--cor-texto-principal);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.barbeiro-info span {
+  display: block;
+  margin: 0;
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.barbeiro-card.selected .barbeiro-info strong {
+  color: var(--cor-branco);
+}
+
+.barbeiro-card.selected .barbeiro-info span {
+  color: #d0d0d0;
+}
+
+.barbeiro-card .check {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  margin-left: auto;
+  border: 1px solid #d8d2c5;
+  border-radius: 50%;
+  background: var(--cor-branco);
+  color: var(--cor-preto-suave);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.barbeiro-card.selected .check {
+  border-color: var(--cor-dourado-hover);
+  background: var(--cor-dourado-hover);
+}
+
+/* =========================================================
+   8. ETAPA: SERVIÇOS (UNIFICADO)
+========================================================= */
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.servico-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 150px;
+  padding: 16px 12px;
+  border: 1px solid #d8d1c3;
+  border-radius: 8px;
+  background: var(--cor-branco);
+  text-align: center;
+  white-space: normal;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    border-color var(--transicao-padrao),
+    background var(--transicao-padrao);
+}
+
+.servico-card:hover {
+  border-color: var(--cor-dourado-borda);
+}
+
+.servico-card.selected {
+  border: 2px solid var(--cor-dourado-borda);
+  background: var(--cor-dourado-fundo-claro);
+}
+
+.servico-icon {
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 2px;
+  border: 1px solid var(--cor-dourado-borda);
+  border-radius: 8px;
+  background: #f8f5ed;
+  color: var(--cor-dourado-borda);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.servico-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.servico-info strong {
+  display: block;
+  max-width: 100%;
+  color: var(--cor-texto-principal);
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.servico-info span {
+  display: block;
+  color: var(--cor-dourado-escuro);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   9. ETAPA: HORÁRIOS & ESTADO VAZIO
+========================================================= */
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.horario-button {
+  min-height: 48px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 7px;
+  background: var(--cor-branco);
+  color: #333333;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.horario-button:hover:not(:disabled) {
+  border-color: #d0aa38;
+  background: var(--cor-dourado-suave);
+  color: #80600d;
+}
+
+.horario-button.selected {
+  background: var(--cor-preto-suave);
+  border-color: var(--cor-preto-suave);
+  color: var(--cor-dourado-hover);
+}
+
+.horario-button.occupied {
+  background: var(--cor-borda-clara);
+  border-color: #e4e4e4;
+  color: #b7b7b7;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.horario-button small {
+  margin-top: 2px;
+  font-size: 8px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.horario-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 18px;
+  color: #888888;
+  font-size: 10px;
+}
+
+.horario-legenda span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid #cfcfcf;
+  background: var(--cor-branco);
+}
+
+.legend.selected {
+  background: var(--cor-preto-suave);
+  border-color: var(--cor-preto-suave);
+}
+
+.legend.occupied {
+  background: #dddddd;
+}
+
+.empty-message {
+  min-height: 125px;
+  border: 1px dashed #d7d1c3;
+  border-radius: 9px;
+  background: #fffdf9;
+  color: var(--cor-texto-suave);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.empty-message span {
+  margin-bottom: 8px;
+  font-size: 25px;
+}
+
+.empty-message p {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* =========================================================
+   10. SIDEBAR (RESUMO & PRÓXIMO AGENDAMENTO)
+========================================================= */
+
+.agendamento-sidebar {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.summary-card {
+  overflow: hidden;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: 13px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.07);
+}
+
+.summary-header {
+  padding: 22px;
+  background: linear-gradient(135deg, var(--cor-preto), #1b1b1b);
+  color: var(--cor-branco);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid #d1a832;
+}
+
+.summary-header span {
+  color: #b99a4c;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.summary-header h3 {
+  margin: 5px 0 0;
+  font-size: 17px;
+}
+
+.summary-icon {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #c69f32;
+  border-radius: 50%;
+  color: #e0bd50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.summary-content {
+  padding: 18px 22px 10px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee9df;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-icon-small {
+  width: 31px;
+  height: 31px;
+  border-radius: 7px;
+  background: #f7f0df;
+  color: #a77d13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.summary-item div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.summary-item small {
+  margin-bottom: 3px;
+  color: var(--cor-texto-suave);
+  font-size: 10px;
+}
+
+.summary-item strong {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary-price {
+  margin: 7px 22px 0;
+  padding: 17px 0;
+  border-top: 1px solid #ded8ca;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary-price span {
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+}
+
+.summary-price strong {
+  color: #a77d13;
+  font-size: 21px;
+}
+
+.btn-confirmar {
+  width: calc(100% - 44px);
+  min-height: 46px;
+  margin: 0 22px 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #d9b43f, #c69b24);
+  color: var(--cor-preto-suave);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.btn-confirmar:hover:not(:disabled) {
+  background: linear-gradient(135deg, #e4c55e, #d2a62e);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(183, 140, 28, 0.25);
+}
+
+.btn-confirmar:disabled {
+  background: #d4d4d4;
+  color: var(--cor-texto-suave);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.summary-warning {
+  margin: 0;
+  padding: 0 22px 18px;
+  color: var(--cor-texto-suave);
+  text-align: center;
+  font-size: 10px;
+}
+
+/* Card de Próximo Agendamento */
+.next-appointment {
+  padding: 21px;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: 13px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.next-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.next-header span {
+  color: #a17d1e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.next-header h3 {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+.confirmed-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cor-preto-suave);
+  border: 1px solid #c29a2c;
+  color: var(--cor-dourado-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.appointment-date {
+  margin: 18px 0;
+  padding: 15px;
+  border: 1px solid #ead9aa;
+  border-radius: 8px;
+  background: #f8f1df;
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-date strong {
+  font-size: 18px;
+}
+
+.appointment-date span {
+  margin-top: 3px;
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+}
+
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.appointment-details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.appointment-details span {
+  color: var(--cor-texto-suave);
+  font-size: 11px;
+}
+
+.appointment-details strong {
+  font-size: 11px;
+  text-align: right;
+}
+
+.appointment-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.btn-reagendar,
+.btn-cancelar {
+  min-height: 39px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
+}
+
+.btn-reagendar {
+  background: #d4aa32;
+  border: 1px solid #c79c24;
+  color: var(--cor-preto-suave);
+}
+
+.btn-reagendar:hover {
+  background: #e1bc4f;
+}
+
+.btn-cancelar {
+  background: var(--cor-branco);
+  border: 1px solid #d7d0c1;
+  color: #555555;
+}
+
+.btn-cancelar:hover {
+  background: #f5f1e8;
+}
+
+/* =========================================================
+   11. MODAIS
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  background: var(--cor-branco);
+  border-radius: 13px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalEntrada var(--transicao-padrao);
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cor-borda-clara);
+  color: #555555;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-icon {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.modal-icon.success {
+  background: var(--cor-preto-suave);
+  border: 1px solid #c49b2b;
+  color: var(--cor-dourado-hover);
+}
+
+.modal-icon.danger {
+  background: var(--cor-borda-clara);
+  color: #333333;
+}
+
+.modal h3 {
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+}
+
+.modal > p {
+  margin: 8px 0 22px;
+  color: var(--cor-texto-secundario);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.modal-details {
+  margin-bottom: 20px;
+  border: 1px solid #e2ddd2;
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.modal-details div {
+  padding: 11px 13px;
+  border-bottom: 1px solid var(--cor-borda-clara);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-details div:last-child {
+  border-bottom: none;
+}
+
+.modal-details span {
+  color: #888888;
+  font-size: 11px;
+}
+
+.modal-details strong {
+  font-size: 11px;
+  text-align: right;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.modal-actions button {
+  min-height: 43px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modal-secondary {
+  border: 1px solid #d6d1c7;
+  background: var(--cor-branco);
+  color: #444444;
+}
+
+.modal-secondary:hover {
+  background: var(--cor-borda-clara);
+}
+
+.modal-primary {
+  border: 1px solid #c79d29;
+  background: #d4ab35;
+  color: var(--cor-preto-suave);
+}
+
+.modal-primary:hover {
+  background: #e1bc4e;
+}
+
+.modal-danger {
+  border: 1px solid #555555;
+  background: #333333;
+  color: var(--cor-branco);
+}
+
+.modal-danger:hover {
+  background: var(--cor-preto-suave);
+}
+
+.cancel-info {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #f4f1eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cancel-info strong {
+  font-size: 14px;
+}
+
+.cancel-info span {
+  margin-top: 5px;
+  color: var(--cor-texto-secundario);
+  font-size: 11px;
+}
+
+/* =========================================================
+   12. RESPONSIVIDADE (DESKTOP-FIRST AGRUPADO)
 ========================================================= */
 
 @media (max-width: 1100px) {
-
   .agendamento-header {
     padding: 0 25px;
-
-    grid-template-columns:
-      170px
-      1fr
-      190px;
+    grid-template-columns: 170px 1fr 190px;
   }
 
   .header-logo {
@@ -1762,37 +1289,31 @@ body .agendamento-header .header-title p {
 
   .agendamento-content {
     padding-left: 25px;
-
     padding-right: 25px;
   }
 
   .agendamento-grid {
-    grid-template-columns:
-      minmax(0, 1fr)
-      320px;
-  }
-
-  .barbeiros-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 320px;
   }
 
   .horarios-grid {
-    grid-template-columns:
-      repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .barbeiros-grid,
+  .servicos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
   }
 }
 
 @media (max-width: 850px) {
-
   .agendamento-header {
     min-height: 100px;
-
     padding: 10px 20px;
-
-    grid-template-columns:
-      100px
-      1fr
-      100px;
+    grid-template-columns: 100px 1fr 100px;
   }
 
   .header-logo {
@@ -1801,18 +1322,11 @@ body .agendamento-header .header-title p {
 
   .header-logo img {
     width: 82px;
-
     height: 82px;
   }
 
   .header-title h1 {
     font-size: 23px;
-  }
-
-  .header-title h1::before,
-  .header-title h1::after {
-    display: none;
-    content: none;
   }
 
   .header-user {
@@ -1828,10 +1342,8 @@ body .agendamento-header .header-title p {
   }
 
   .page-heading {
-    align-items: flex-start;
-
     flex-direction: column;
-
+    align-items: flex-start;
     gap: 15px;
   }
 
@@ -1853,16 +1365,10 @@ body .agendamento-header .header-title p {
 }
 
 @media (max-width: 600px) {
-
   .agendamento-header {
     min-height: 90px;
-
-    grid-template-columns:
-      75px
-      1fr
-      65px;
-
     padding: 8px 12px;
+    grid-template-columns: 75px 1fr 65px;
   }
 
   .header-logo {
@@ -1871,7 +1377,6 @@ body .agendamento-header .header-title p {
 
   .header-logo img {
     width: 65px;
-
     height: 65px;
   }
 
@@ -1881,11 +1386,6 @@ body .agendamento-header .header-title p {
 
   .header-title p {
     font-size: 10px;
-  }
-
-  .header-title h1::before,
-  .header-title h1::after {
-    display: none;
   }
 
   .page-heading h2 {
@@ -1905,23 +1405,28 @@ body .agendamento-header .header-title p {
     gap: 4px;
   }
 
-  .calendar-day {
-    min-height: 38px;
-
-    font-size: 11px;
-  }
-
+  .calendar-day,
   .calendar-empty {
     min-height: 38px;
   }
 
+  .calendar-day {
+    font-size: 11px;
+  }
+
+  .barbeiros-grid,
   .servicos-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .barbeiro-card {
+    min-height: 78px;
+    padding: 12px;
   }
 
   .horarios-grid {
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .horario-button {
@@ -1930,7 +1435,6 @@ body .agendamento-header .header-title p {
 }
 
 @media (max-width: 400px) {
-
   .agendamento-content {
     padding: 20px 12px 35px;
   }
@@ -1941,7 +1445,6 @@ body .agendamento-header .header-title p {
 
   .header-logo img {
     width: 58px;
-
     height: 58px;
   }
 
@@ -1958,397 +1461,11 @@ body .agendamento-header .header-title p {
   }
 
   .horarios-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .appointment-actions,
   .modal-actions {
     grid-template-columns: 1fr;
   }
-}
-
-
-/* =========================================
-   CORREÇÃO DOS CARDS DOS BARBEIROS
-========================================= */
-
-.agendamento-page .barbeiros-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  width: 100%;
-}
-
-.agendamento-page .barbeiro-card {
-  box-sizing: border-box;
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  width: 100%;
-  min-width: 0;
-  min-height: 82px;
-  padding: 14px;
-
-  border: 1px solid #ddd8cc;
-  border-radius: 10px;
-
-  background: #fff;
-  color: #171717;
-
-  font-family: inherit;
-  font-size: 14px;
-  text-align: left;
-
-  cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.agendamento-page .barbeiro-card:hover {
-  border-color: #c9a33b;
-  background: #fffdf7;
-}
-
-.agendamento-page .barbeiro-card.selected {
-  border-color: #c9a33b;
-  background: #171717;
-  color: #fff;
-
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-}
-
-/* Foto ou inicial do barbeiro */
-
-.agendamento-page .barbeiro-avatar {
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 46px;
-  width: 46px;
-  height: 46px;
-
-  overflow: hidden;
-  border-radius: 50%;
-
-  background: #eeeae1;
-  color: #222;
-
-  font-size: 17px;
-  font-weight: 800;
-}
-
-.agendamento-page .barbeiro-avatar img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.agendamento-page .barbeiro-card.selected .barbeiro-avatar {
-  background: #e2bd50;
-  color: #171717;
-}
-
-/* Nome e especialidade */
-
-.agendamento-page .barbeiro-info {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-
-.agendamento-page .barbeiro-info strong {
-  display: block;
-  margin: 0;
-  color: #171717;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.agendamento-page .barbeiro-card.selected .barbeiro-info strong {
-  color: #ffffff !important;
-}
-
-
-.agendamento-page .barbeiro-info span {
-  display: block;
-  margin: 0;
-
-  color: #777;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-.agendamento-page .barbeiro-card.selected .barbeiro-info span {
-  color: #d0d0d0;
-}
-
-/* Indicador de seleção */
-
-.agendamento-page .barbeiro-card .check {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 22px;
-  width: 22px;
-  height: 22px;
-  margin-left: auto;
-
-  border: 1px solid #d8d2c5;
-  border-radius: 50%;
-
-  background: #fff;
-  color: #171717;
-
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.agendamento-page .barbeiro-card.selected .check {
-  border-color: #e2bd50;
-  background: #e2bd50;
-  color: #171717;
-}
-
-/* Responsividade */
-
-@media (max-width: 900px) {
-  .agendamento-page .barbeiros-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 560px) {
-  .agendamento-page .barbeiros-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .agendamento-page .barbeiro-card {
-    min-height: 78px;
-    padding: 12px;
-  }
-}
-
-
-/* =====================================
-   CORREÇÃO DOS CARDS DE SERVIÇOS
-===================================== */
-
-.agendamento-page .servicos-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
-
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.agendamento-page .servico-card {
-  box-sizing: border-box;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-
-  width: 100%;
-  min-width: 0;
-  min-height: 150px;
-  padding: 16px 12px;
-
-  text-align: center;
-  white-space: normal;
-  line-height: 1.5;
-
-  border: 1px solid #d8d1c3;
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-}
-
-.agendamento-page .servico-card:hover {
-  border-color: #c9a33b;
-}
-
-.agendamento-page .servico-card.selected {
-  border: 2px solid #c9a33b;
-  background: #fffaf0;
-}
-
-/* Ícone do serviço */
-
-.agendamento-page .servico-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 52px;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 2px;
-
-  box-sizing: border-box;
-  border: 1px solid #c9a33b;
-  background: #f8f5ed;
-  color: #c9a33b;
-}
-
-/* Informações do serviço */
-
-.agendamento-page .servico-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-
-  width: 100%;
-  min-width: 0;
-  line-height: 1.4;
-}
-
-.agendamento-page .servico-info strong {
-  display: block;
-  max-width: 100%;
-  font-size: 14px;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
-
-.agendamento-page .servico-info span {
-  display: block;
-  font-size: 13px;
-}
-
-/* Telas menores */
-
-@media (max-width: 900px) {
-  .agendamento-page .servicos-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-}
-
-@media (max-width: 500px) {
-  .agendamento-page .servicos-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-} 
-
-.service-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 12px;
-  text-align: center;
-}
-
-.service-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-}
-
-.service-info strong {
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.service-info span {
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-
-
-
-/* Organização dos cards de serviços */
-.services-grid .service-option {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 10px !important;
-  height: auto;
-  min-height: 135px;
-  padding: 10px !important;
-  text-align: center;
-  white-space: normal !important;
-}
-
-/* Ícone da tesoura */
-.services-grid .service-option .service-icon {
-  flex-shrink: 0;
-  margin: 0 auto 10px;
-}
-
-/* Nome e duração */
-.services-grid .service-option .service-info {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 5px !important;
-  width: 100%;
-  white-space: normal !important;
-}
-
-/* Primeira linha: nome e tempo */
-.services-grid .service-option .service-info strong {
-  display: block !important;
-  width: 100%;
-  font-weight: 500;
-  line-height: 1.4;
-  white-space: normal !important;
-}
-
-/* Segunda linha: preço */
-.services-grid .service-option .service-info span {
-  display: block !important;
-  width: 100%;
-  font-weight: 600;
-  line-height: 1.4;
-  white-space: normal !important;
-}
-
-
-/* Corrige a cor do texto do barbeiro selecionado */
-.agendamento-page .barbeiro-card.selected .barbeiro-info strong {
-  color: #ffffff !important;
-}
-
-.agendamento-page .barbeiro-card.selected .barbeiro-info span {
-  color: #d0d0d0 !important;
-}
-
-.agendamento-page .barbeiro-card.selected {
-  background-color: #171717 !important;
-}
-
-.agendamento-page .barbeiro-card.selected .barbeiro-info strong {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
 }

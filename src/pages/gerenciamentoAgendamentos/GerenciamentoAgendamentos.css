@@ -1,46 +1,89 @@
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
 
-/* =====================================================
-   HOPE BARBEARIA
-   GERENCIAMENTO DE AGENDAMENTOS - ADMINISTRADOR
-===================================================== */
+:root {
+  /* Cores Principais */
+  --cor-fundo: #080808;
+  --cor-cabecalho: #101010;
+  --cor-superficie: #ffffff;
+  --cor-tabela-cabecalho: #1b1b1b;
+  --cor-modal-cabecalho: #151515;
+
+  /* Tons de Dourado */
+  --cor-dourado: #c6a45b;
+  --cor-dourado-titulo: #d6b45b;
+  --cor-dourado-hover: #d8b76e;
+  --cor-dourado-foco: #d4af67;
+
+  /* Tons de Texto & Bordas */
+  --cor-texto-pagina: #f5f2eb;
+  --cor-texto-escuro: #1a1a1a;
+  --cor-texto-campo: #222222;
+  --cor-texto-label: #333333;
+  --cor-texto-tabela: #444444;
+  --cor-texto-secundario: #666666;
+  --cor-texto-muted: #777777;
+  --cor-borda-card: #e9e9e9;
+  --cor-borda-painel: #e8e8e8;
+  --cor-borda-linha: #ededed;
+  --cor-borda-campo: #d8d8d8;
+
+  /* Estados & Mensagens */
+  --cor-sucesso-bg: #e6f6eb;
+  --cor-sucesso-texto: #17603a;
+  --cor-sucesso-borda: #b9e2c6;
+  --cor-erro-bg: #fff0f0;
+  --cor-erro-texto: #a52222;
+  --cor-erro-borda: #edc0c0;
+  --cor-cancelar-bg: #b42318;
+  --cor-cancelar-hover: #921d14;
+
+  /* Sombras & Transições */
+  --transicao-padrao: 0.2s ease;
+  --transicao-linha: 0.15s ease;
+  --sombra-card: 0 3px 12px rgba(0, 0, 0, 0.04);
+  --sombra-painel: 0 3px 14px rgba(0, 0, 0, 0.04);
+  --sombra-modal: 0 18px 55px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================================
+   2. PÁGINA, CABEÇALHO & LOGO
+========================================================= */
 
 .ga-pagina {
   position: relative;
   isolation: isolate;
   min-height: 100vh;
-  color: #f5f2eb;
   background:
     linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.82)),
     url("../../assets/fundo das paginas.avif") center center / cover fixed no-repeat,
-    #080808;
+    var(--cor-fundo);
+  color: var(--cor-texto-pagina);
 }
-
-/* =====================================================
-   CABEÇALHO
-===================================================== */
 
 .ga-cabecalho {
   width: 100%;
   min-height: 110px;
-  background: #101010;
-  border-bottom: 3px solid #c6a45b;
+  padding: 16px 40px;
+  background: var(--cor-cabecalho);
+  border-bottom: 3px solid var(--cor-dourado);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 16px 40px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
 .ga-botao-logo {
-  background: transparent;
-  border: none;
+  flex-shrink: 0;
   padding: 0;
-  cursor: pointer;
+  border: none;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  transition: transform var(--transicao-padrao);
 }
 
 .ga-botao-logo:hover {
@@ -48,7 +91,7 @@
 }
 
 .ga-botao-logo:focus-visible {
-  outline: 2px solid #d4af67;
+  outline: 2px solid var(--cor-dourado-foco);
   outline-offset: 5px;
   border-radius: 8px;
 }
@@ -58,26 +101,27 @@
   height: 78px;
   object-fit: contain;
 }
+
 .ga-titulo-cabecalho {
   text-align: center;
 }
 
 .ga-titulo-cabecalho h1 {
-  color: #d6b45b;
-  letter-spacing: 1.3px;
+  color: var(--cor-dourado-titulo);
   font-size: 34px;
   font-weight: 700;
+  letter-spacing: 1.3px;
 }
 
 .ga-titulo-cabecalho p {
   margin: 0;
-  color: #d4af67;
+  color: var(--cor-dourado-foco);
   font-size: 14px;
 }
 
-/* =====================================================
-   CONTEÚDO PRINCIPAL
-===================================================== */
+/* =========================================================
+   3. CONTEÚDO PRINCIPAL, BOTÕES & ALERTAS
+========================================================= */
 
 .ga-conteudo {
   width: 100%;
@@ -87,35 +131,28 @@
 }
 
 .ga-topo-conteudo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
   margin-bottom: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .ga-topo-conteudo h2 {
   margin: 0 0 8px;
+  color: var(--cor-texto-escuro);
   font-size: 28px;
-  color: #1a1a1a;
 }
 
 .ga-topo-conteudo p {
   margin: 0;
+  color: var(--cor-texto-secundario);
   font-size: 15px;
-  color: #666;
 }
 
-/* =====================================================
-   BOTÕES
-===================================================== */
-
+/* Botões */
 .ga-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   padding: 11px 18px;
   border: 1px solid transparent;
   border-radius: 8px;
@@ -123,11 +160,15 @@
   font-size: 14px;
   font-weight: 600;
   text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
   transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background var(--transicao-padrao),
+    transform var(--transicao-padrao),
+    box-shadow var(--transicao-padrao);
 }
 
 .ga-btn:hover:not(:disabled) {
@@ -145,21 +186,29 @@
   transform: none;
 }
 
+.ga-btn-dourado,
+.ga-btn-editar {
+  background: var(--cor-dourado);
+}
+
 .ga-btn-dourado {
-  background: #c6a45b;
   color: #151515;
 }
 
+.ga-btn-dourado:hover:not(:disabled),
+.ga-btn-editar:hover:not(:disabled) {
+  background: var(--cor-dourado-hover);
+}
+
 .ga-btn-dourado:hover:not(:disabled) {
-  background: #d8b76e;
   box-shadow: 0 4px 12px rgba(198, 164, 91, 0.25);
 }
 
 .ga-btn-atualizar {
-  background: #242424;
-  color: #fff;
   min-height: 44px;
   align-self: end;
+  background: #242424;
+  color: var(--cor-superficie);
 }
 
 .ga-btn-atualizar:hover:not(:disabled) {
@@ -167,86 +216,78 @@
 }
 
 .ga-btn-editar {
-  background: #c6a45b;
-  color: #171717;
   padding: 8px 12px;
+  color: #171717;
   font-size: 12px;
 }
 
-.ga-btn-editar:hover:not(:disabled) {
-  background: #d8b76e;
-}
-
 .ga-btn-cancelar {
-  background: #b42318;
-  color: #fff;
   padding: 8px 12px;
+  background: var(--cor-cancelar-bg);
+  color: var(--cor-superficie);
   font-size: 12px;
 }
 
 .ga-btn-cancelar:hover:not(:disabled) {
-  background: #921d14;
+  background: var(--cor-cancelar-hover);
 }
 
 .ga-btn-secundario {
   background: #ececec;
-  color: #333;
-  border-color: #ddd;
+  color: var(--cor-texto-label);
+  border-color: #dddddd;
 }
 
 .ga-btn-secundario:hover:not(:disabled) {
   background: #dedede;
 }
 
-/* =====================================================
-   MENSAGENS
-===================================================== */
-
+/* Mensagens e Alertas */
 .ga-alerta {
+  margin-bottom: 20px;
   padding: 14px 18px;
   border-radius: 8px;
-  margin-bottom: 20px;
   font-size: 14px;
   line-height: 1.5;
 }
 
 .ga-alerta-sucesso {
-  color: #17603a;
-  background: #e6f6eb;
-  border: 1px solid #b9e2c6;
+  background: var(--cor-sucesso-bg);
+  color: var(--cor-sucesso-texto);
+  border: 1px solid var(--cor-sucesso-borda);
 }
 
 .ga-alerta-erro {
-  color: #a52222;
-  background: #fff0f0;
-  border: 1px solid #edc0c0;
+  background: var(--cor-erro-bg);
+  color: var(--cor-erro-texto);
+  border: 1px solid var(--cor-erro-borda);
 }
 
-/* =====================================================
-   CARDS DE ESTATÍSTICAS
-===================================================== */
+/* =========================================================
+   4. ESTATÍSTICAS, PAINÉIS & FILTROS
+========================================================= */
 
 .ga-estatisticas {
+  margin-bottom: 30px;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
-  margin-bottom: 30px;
 }
 
 .ga-card {
-  background: #fff;
-  border: 1px solid #e9e9e9;
-  border-top: 4px solid #c6a45b;
-  border-radius: 12px;
   padding: 24px 20px;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda-card);
+  border-top: 4px solid var(--cor-dourado);
+  border-radius: 12px;
+  box-shadow: var(--sombra-card);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
 }
 
 .ga-card span {
-  color: #666;
+  color: var(--cor-texto-secundario);
   font-size: 14px;
   font-weight: 500;
 }
@@ -257,44 +298,37 @@
   font-weight: 700;
 }
 
-/* =====================================================
-   PAINÉIS
-===================================================== */
-
 .ga-painel {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
   margin-bottom: 28px;
   overflow: hidden;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.04);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda-painel);
+  border-radius: 12px;
+  box-shadow: var(--sombra-painel);
 }
 
 .ga-painel-titulo {
   padding: 20px 24px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--cor-borda-linha);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
 .ga-painel-titulo h3 {
   margin: 0;
-  font-size: 19px;
   color: #242424;
+  font-size: 19px;
 }
 
 .ga-painel-titulo span {
+  color: var(--cor-texto-muted);
   font-size: 13px;
-  color: #777;
 }
 
-/* =====================================================
-   FILTROS
-===================================================== */
-
+/* Filtros e Campos de Formulário */
 .ga-filtros {
   padding: 24px;
   display: grid;
@@ -309,14 +343,14 @@
 }
 
 .ga-grupo-campo {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 0;
 }
 
 .ga-grupo-campo label {
-  color: #333;
+  color: var(--cor-texto-label);
   font-size: 13px;
   font-weight: 600;
 }
@@ -327,16 +361,16 @@
   width: 100%;
   min-width: 0;
   padding: 11px 12px;
-  border: 1px solid #d8d8d8;
+  outline: none;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-campo);
+  border: 1px solid var(--cor-borda-campo);
   border-radius: 7px;
-  background: #fff;
-  color: #222;
   font-family: inherit;
   font-size: 14px;
-  outline: none;
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color var(--transicao-padrao),
+    box-shadow var(--transicao-padrao);
 }
 
 .ga-grupo-campo input,
@@ -345,25 +379,25 @@
 }
 
 .ga-grupo-campo textarea {
-  resize: vertical;
   min-height: 90px;
+  resize: vertical;
 }
 
 .ga-grupo-campo input:focus,
 .ga-grupo-campo select:focus,
 .ga-grupo-campo textarea:focus {
-  border-color: #c6a45b;
+  border-color: var(--cor-dourado);
   box-shadow: 0 0 0 3px rgba(198, 164, 91, 0.14);
 }
 
 .ga-grupo-campo input::placeholder,
 .ga-grupo-campo textarea::placeholder {
-  color: #999;
+  color: #999999;
 }
 
-/* =====================================================
-   TABELA
-===================================================== */
+/* =========================================================
+   5. TABELA & STATUS DOS AGENDAMENTOS
+========================================================= */
 
 .ga-tabela-container {
   width: 100%;
@@ -372,34 +406,34 @@
 
 .ga-tabela {
   width: 100%;
-  border-collapse: collapse;
   min-width: 1050px;
-  background: #fff;
+  border-collapse: collapse;
+  background: var(--cor-superficie);
 }
 
 .ga-tabela thead {
-  background: #1b1b1b;
+  background: var(--cor-tabela-cabecalho);
 }
 
 .ga-tabela thead th {
   padding: 16px 15px;
-  text-align: left;
+  color: var(--cor-superficie);
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  text-align: left;
   white-space: nowrap;
 }
 
 .ga-tabela tbody td {
   padding: 16px 15px;
-  border-bottom: 1px solid #ededed;
-  color: #444;
+  color: var(--cor-texto-tabela);
+  border-bottom: 1px solid var(--cor-borda-linha);
   font-size: 13px;
   vertical-align: middle;
 }
 
 .ga-tabela tbody tr {
-  transition: background 0.15s ease;
+  transition: background var(--transicao-linha);
 }
 
 .ga-tabela tbody tr:hover {
@@ -412,37 +446,34 @@
 
 .ga-acoes {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
-  flex-wrap: nowrap;
 }
 
 .ga-sem-registros {
-  padding: 35px !important;
+  padding: 35px;
+  color: var(--cor-texto-muted);
   text-align: center;
-  color: #777 !important;
 }
 
 .ga-estado {
   padding: 30px;
+  color: var(--cor-texto-secundario);
   text-align: center;
-  color: #666;
 }
 
-/* =====================================================
-   STATUS DOS AGENDAMENTOS
-===================================================== */
-
+/* Status */
 .ga-status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 6px 11px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  white-space: nowrap;
   text-transform: capitalize;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ga-status-agendado {
@@ -464,23 +495,23 @@
 .ga-status-cancelado,
 .ga-status-cancelada {
   background: #fde7e7;
-  color: #b42318;
+  color: var(--cor-cancelar-bg);
 }
 
-/* =====================================================
-   MODAL
-===================================================== */
+/* =========================================================
+   6. MODAL DE AGENDAMENTO
+========================================================= */
 
 .ga-modal-fundo {
   position: fixed;
   inset: 0;
   z-index: 9999;
+  overflow-y: auto;
+  padding: 20px;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 20px;
-  overflow-y: auto;
+  justify-content: center;
 }
 
 .ga-modal {
@@ -488,43 +519,43 @@
   max-width: 680px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
-  background: #fff;
+  background: var(--cor-superficie);
   border-radius: 14px;
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--sombra-modal);
 }
 
 .ga-modal-cabecalho {
-  background: #151515;
-  border-bottom: 3px solid #c6a45b;
   padding: 22px 26px;
+  background: var(--cor-modal-cabecalho);
+  border-bottom: 3px solid var(--cor-dourado);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 15px;
 }
 
 .ga-modal-cabecalho h2 {
   margin: 0;
-  color: #fff;
+  color: var(--cor-superficie);
   font-size: 22px;
 }
 
 .ga-fechar {
-  background: transparent;
+  padding: 0 4px;
   border: none;
-  color: #fff;
+  background: transparent;
+  color: var(--cor-superficie);
   font-size: 30px;
   line-height: 1;
   cursor: pointer;
-  padding: 0 4px;
 }
 
 .ga-fechar:hover {
-  color: #d4af67;
+  color: var(--cor-dourado-foco);
 }
 
 .ga-fechar:focus-visible {
-  outline: 2px solid #d4af67;
+  outline: 2px solid var(--cor-dourado-foco);
   outline-offset: 3px;
 }
 
@@ -542,19 +573,19 @@
 }
 
 .ga-modal-acoes {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  border-top: 1px solid #eee;
-  padding-top: 22px;
   margin-top: 5px;
+  padding-top: 22px;
+  border-top: 1px solid #eeeeee;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
-/* =====================================================
-   RESPONSIVIDADE - NOTEBOOKS
-===================================================== */
+/* =========================================================
+   7. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1200px) {
   .ga-estatisticas {
@@ -569,10 +600,6 @@
     width: fit-content;
   }
 }
-
-/* =====================================================
-   RESPONSIVIDADE - TABLETS
-===================================================== */
 
 @media (max-width: 768px) {
   .ga-cabecalho {
@@ -610,12 +637,12 @@
     font-size: 27px;
   }
 
-  .ga-painel-titulo {
+  .ga-painel-titulo,
+  .ga-filtros {
     padding: 18px;
   }
 
   .ga-filtros {
-    padding: 18px;
     gap: 14px;
   }
 
@@ -623,10 +650,6 @@
     padding: 20px;
   }
 }
-
-/* =====================================================
-   RESPONSIVIDADE - CELULARES
-===================================================== */
 
 @media (max-width: 480px) {
   .ga-cabecalho {
@@ -679,7 +702,8 @@
     font-size: 25px;
   }
 
-  .ga-filtros {
+  .ga-filtros,
+  .ga-formulario-linha {
     grid-template-columns: 1fr;
   }
 
@@ -695,20 +719,13 @@
     max-height: calc(100vh - 20px);
   }
 
-  .ga-modal-cabecalho {
+  .ga-modal-cabecalho,
+  .ga-formulario {
     padding: 18px;
   }
 
   .ga-modal-cabecalho h2 {
     font-size: 19px;
-  }
-
-  .ga-formulario {
-    padding: 18px;
-  }
-
-  .ga-formulario-linha {
-    grid-template-columns: 1fr;
   }
 
   .ga-modal-acoes {

@@ -1,74 +1,85 @@
-/* =========================================
-   PÁGINA
-========================================= */
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
+
+:root {
+  /* Cores Principais */
+  --cor-preto: #111111;
+  --cor-preto-card: #171717;
+  --cor-botao-upload: #1f1f1f;
+  --cor-botao-upload-hover: #2b2b2b;
+  --cor-branco: #ffffff;
+  --cor-fundo-pagina: #f3f3f3;
+
+  /* Tons de Texto & Bordas */
+  --cor-texto-principal: #171717;
+  --cor-texto-campo: #222222;
+  --cor-label: #333333;
+  --cor-texto-secundario: #777777;
+  --cor-texto-suave: #999999;
+  --cor-borda-header: #292929;
+  --cor-borda-card: #e1e1e1;
+  --cor-borda-campo: #d6d6d6;
+  --cor-borda-divisor: #e5e5e5;
+
+  /* Tipografia, Sombras & Transições */
+  --fonte-principal: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.035);
+}
 
 * {
   box-sizing: border-box;
 }
 
+/* =========================================================
+   2. LAYOUT BASE DA PÁGINA
+========================================================= */
+
 .cadastro-produto-page {
-  min-height: 100vh;
   width: 100%;
-
-  background: #f3f3f3;
-  color: #171717;
-
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  min-height: 100vh;
+  background: var(--cor-fundo-pagina);
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
 }
 
+.cadastro-produto-content {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 36px 42px 60px;
+}
 
-/* =========================================
-   HEADER
-========================================= */
+/* =========================================================
+   3. HEADER & IDENTIFICAÇÃO DO USUÁRIO
+========================================================= */
 
 .cadastro-produto-header {
   width: 100%;
   min-height: 78px;
-
-  background: #111111;
-  color: #ffffff;
-
+  padding: 0 42px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 0 42px;
-
-  border-bottom: 1px solid #292929;
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+  border-bottom: 1px solid var(--cor-borda-header);
 }
-
-
-/* =========================================
-   LOGO
-========================================= */
 
 .cadastro-produto-logo {
   width: 220px;
-
   display: flex;
   align-items: center;
 }
 
 .cadastro-produto-logo img {
+  display: block;
   width: 145px;
   max-height: 58px;
-
   object-fit: contain;
   object-position: left center;
-
-  display: block;
 }
-
-
-/* =========================================
-   TÍTULO DO HEADER
-========================================= */
 
 .cadastro-produto-title {
   text-align: center;
@@ -76,48 +87,35 @@
 
 .cadastro-produto-title h1 {
   margin: 0;
-
   font-size: 21px;
   font-weight: 700;
 }
 
 .cadastro-produto-title p {
   margin: 4px 0 0;
-
   color: #a9a9a9;
   font-size: 12px;
 }
 
-
-/* =========================================
-   USUÁRIO
-========================================= */
-
 .cadastro-produto-user {
   min-width: 220px;
-
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 10px;
 }
 
 .user-avatar {
   width: 38px;
   height: 38px;
-
   border-radius: 50%;
-
-  background: #ffffff;
-  color: #111111;
-
+  background: var(--cor-branco);
+  color: var(--cor-preto);
+  font-size: 14px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-size: 14px;
-  font-weight: 700;
 }
 
 .user-info {
@@ -131,125 +129,79 @@
 
 .user-info span {
   margin-top: 2px;
-
-  color: #999999;
+  color: var(--cor-texto-suave);
   font-size: 11px;
 }
 
-
-/* =========================================
-   CONTEÚDO
-========================================= */
-
-.cadastro-produto-content {
-  width: 100%;
-  max-width: 1450px;
-
-  margin: 0 auto;
-
-  padding: 36px 42px 60px;
-}
-
-
-/* =========================================
-   TÍTULO DA PÁGINA
-========================================= */
+/* =========================================================
+   4. CABEÇALHO INTERNO & ESTRUTURA DO CARD
+========================================================= */
 
 .cadastro-produto-heading {
+  margin-bottom: 26px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 25px;
-
-  margin-bottom: 26px;
 }
 
 .heading-label {
   display: block;
-
-  color: #777777;
-
+  margin-bottom: 8px;
+  color: var(--cor-texto-secundario);
   font-size: 11px;
   font-weight: 800;
-
   letter-spacing: 2px;
-
-  margin-bottom: 8px;
 }
 
 .cadastro-produto-heading h2 {
   margin: 0;
-
   font-size: 30px;
-  line-height: 1.15;
-
   font-weight: 750;
+  line-height: 1.15;
 }
 
 .cadastro-produto-heading p {
   margin: 8px 0 0;
-
-  color: #777777;
+  color: var(--cor-texto-secundario);
   font-size: 14px;
 }
 
-
-/* =========================================
-   CARD
-========================================= */
-
 .cadastro-produto-card {
   width: 100%;
-
-  background: #ffffff;
-
-  border: 1px solid #e1e1e1;
-  border-radius: 12px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.035);
-
   overflow: hidden;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda-card);
+  border-radius: 12px;
+  box-shadow: var(--sombra-card);
 }
-
-
-/* HEADER DO CARD*/
 
 .card-header {
   min-height: 80px;
-
   padding: 18px 22px;
-
-  background: #171717;
-  color: #ffffff;
-
   display: flex;
   align-items: center;
+  background: var(--cor-preto-card);
+  color: var(--cor-branco);
 }
 
 .card-label {
   display: block;
-
-  color: #999999;
-
+  color: var(--cor-texto-suave);
   font-size: 10px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .card-header h3 {
   margin: 5px 0 0;
-
   font-size: 17px;
   font-weight: 600;
 }
 
-
-/* =========================================
-   FORMULÁRIO
-========================================= */
+/* =========================================================
+   5. FORMULÁRIO, CAMPOS & SELECT
+========================================================= */
 
 .cadastro-produto-form {
   padding: 28px 25px 0;
@@ -257,22 +209,18 @@
 
 .form-grid {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 22px 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-
   gap: 8px;
 }
 
 .form-group label {
-  color: #333333;
-
+  color: var(--cor-label);
   font-size: 14px;
   font-weight: 600;
 }
@@ -281,178 +229,132 @@
 .form-group select {
   width: 100%;
   height: 44px;
-
   padding: 0 13px;
-
-  border: 1px solid #d6d6d6;
+  border: 1px solid var(--cor-borda-campo);
   border-radius: 7px;
-
-  background: #ffffff;
-  color: #222222;
-
+  outline: none;
+  background: var(--cor-branco);
+  color: var(--cor-texto-campo);
   font-family: inherit;
   font-size: 14px;
-
-  outline: none;
-
-  transition: 0.2s ease;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #777777;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.04);
+  border-color: var(--cor-texto-secundario);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
 }
 
 .form-group input::placeholder {
-  color: #999999;
+  color: var(--cor-texto-suave);
 }
-
-.campo-imagem {
-    grid-column: 1 / -1;
-}
-
-.campo-imagem input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.preview-imagem {
-    margin-top: 15px;
-}
-
-.preview-imagem img {
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-}
-
-
-/* =========================================
-   SELECT
-========================================= */
 
 .form-group select {
   cursor: pointer;
 }
 
 .form-group select:invalid {
-  color: #999999;
+  color: var(--cor-texto-suave);
 }
 
+/* =========================================================
+   6. UPLOAD DE IMAGEM & PREVIEW (UNIFICADO)
+========================================================= */
 
-/* =========================================
-   RODAPÉ DO FORMULÁRIO
-========================================= */
-
-.form-footer {
-  margin-top: 30px;
-
-  padding: 20px 0;
-
-  border-top: 1px solid #e5e5e5;
-
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  gap: 10px;
+.campo-imagem {
+  grid-column: 1 / -1;
 }
 
-
-/* =========================================
-   BOTÕES
-========================================= */
+.campo-imagem input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
 .botao-upload {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-
-    padding: 12px 22px;
-
-    background: #1f1f1f;
-    color: #fff;
-
-    border: 1px solid #333;
-    border-radius: 8px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+  padding: 12px 22px;
+  border: 1px solid var(--cor-label);
+  border-radius: 8px;
+  background: var(--cor-botao-upload);
+  color: var(--cor-branco);
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition:
+    background var(--transicao-padrao),
+    transform var(--transicao-padrao),
+    box-shadow var(--transicao-padrao);
 }
 
 .botao-upload:hover {
-    background: #2b2b2b;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: var(--cor-botao-upload-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .botao-upload:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .icone-upload {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .nome-arquivo {
-    margin-top: 8px;
-    color: #666;
-    font-size: 13px;
+  margin-top: 8px;
+  color: #666666;
+  font-size: 13px;
 }
 
 .preview-imagem {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .preview-imagem img {
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
 
-    border-radius: 10px;
-    border: 1px solid #ddd;
+/* =========================================================
+   7. RODAPÉ DO FORMULÁRIO & AÇÕES
+========================================================= */
 
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+.form-footer {
+  margin-top: 30px;
+  padding: 20px 0;
+  border-top: 1px solid var(--cor-borda-divisor);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .btn-cancelar,
 .btn-cadastrar {
   min-height: 42px;
-
   padding: 0 19px;
-
   border-radius: 7px;
-
   font-family: inherit;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition: 0.2s ease;
+  transition: background var(--transicao-padrao), transform var(--transicao-padrao);
 }
 
 .btn-cancelar {
   border: 1px solid #d3d3d3;
-
-  background: #ffffff;
+  background: var(--cor-branco);
   color: #444444;
 }
 
@@ -461,15 +363,13 @@
 }
 
 .btn-cadastrar {
-  border: 1px solid #111111;
-
-  background: #111111;
-  color: #ffffff;
+  border: 1px solid var(--cor-preto);
+  background: var(--cor-preto);
+  color: var(--cor-branco);
 }
 
 .btn-cadastrar:hover {
   background: #303030;
-
   transform: translateY(-1px);
 }
 
@@ -477,13 +377,11 @@
   transform: translateY(0);
 }
 
-
-/* =========================================
-   RESPONSIVIDADE
-========================================= */
+/* =========================================================
+   8. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1100px) {
-
   .cadastro-produto-header {
     padding: 0 25px;
   }
@@ -506,18 +404,10 @@
   }
 }
 
-
-/* =========================================
-   TABLET
-========================================= */
-
 @media (max-width: 850px) {
-
   .cadastro-produto-header {
     padding: 15px 20px;
-
     flex-wrap: wrap;
-
     gap: 15px;
   }
 
@@ -527,15 +417,12 @@
 
   .cadastro-produto-title {
     order: 3;
-
     width: 100%;
-
     text-align: left;
   }
 
   .cadastro-produto-user {
     min-width: auto;
-
     margin-left: auto;
   }
 
@@ -544,10 +431,8 @@
   }
 
   .cadastro-produto-heading {
-    align-items: flex-start;
-
     flex-direction: column;
-
+    align-items: flex-start;
     gap: 15px;
   }
 
@@ -556,13 +441,7 @@
   }
 }
 
-
-/* =========================================
-   CELULAR
-========================================= */
-
 @media (max-width: 600px) {
-
   .cadastro-produto-header {
     min-height: auto;
   }
@@ -613,13 +492,7 @@
   }
 }
 
-
-/* =========================================
-   CELULAR PEQUENO
-========================================= */
-
 @media (max-width: 400px) {
-
   .cadastro-produto-content {
     padding: 20px 10px 35px;
   }

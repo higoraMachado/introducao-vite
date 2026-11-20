@@ -1,153 +1,131 @@
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
 
-/* =========================================
-   HOPE BARBEARIA
-   DASHBOARD DO CLIENTE
-========================================= */
+:root {
+  /* Cores Principais */
+  --cor-preto: #111111;
+  --cor-preto-card: #151515;
+  --cor-branco: #ffffff;
+
+  /* Tons de Dourado */
+  --cor-dourado: #d4af37;
+  --cor-dourado-hover: #e4c252;
+  --cor-dourado-claro: #dfbf68;
+  --cor-dourado-medio: #b18b1c;
+  --cor-dourado-escuro: #a17d17;
+  --cor-dourado-suave: #f4ead0;
+  --cor-dourado-borda: #e3cc8a;
+
+  /* Tons Neutros */
+  --cor-fundo-base: #f5f3ef;
+  --cor-texto-principal: #171717;
+  --cor-texto-secundario: #6f6f6f;
+  --cor-texto-suave: #999999;
+  --cor-borda-card: #ded8c9;
+  --cor-borda-lista: #eadfca;
+
+  /* Utilitários */
+  --fonte-principal: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --sombra-card: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
 
 * {
   box-sizing: border-box;
 }
 
+/* =========================================================
+   2. LAYOUT BASE DA PÁGINA
+========================================================= */
+
 .dashboard-page {
   min-height: 100vh;
   width: 100%;
   background:
-    linear-gradient(
-      rgba(245, 243, 239, 0.92),
-      rgba(245, 243, 239, 0.95)
-    ),
-    url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=2200&q=85");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  color: #171717;
-
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    linear-gradient(rgba(245, 243, 239, 0.92), rgba(245, 243, 239, 0.95)),
+    url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=2200&q=85")
+    center / cover fixed no-repeat;
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
 }
 
-/* =========================================
-   HEADER
-========================================= */
+.dashboard-content {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 42px 48px 65px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+/* =========================================================
+   3. HEADER & NAVEGAÇÃO DO USUÁRIO
+========================================================= */
 
 .dashboard-header {
+  position: relative;
+  z-index: 10;
   width: 100%;
   min-height: 138px;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      #222222 0%,
-      #141414 48%,
-      #090909 100%
-    );
-
-  color: #ffffff;
-
+  padding: 0 52px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 0 52px;
-
-  position: relative;
-  z-index: 10;
-
-  border-bottom: none;
-
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.28);
-
-  overflow: hidden;
+  background: radial-gradient(ellipse at center, #222222 0%, #141414 48%, #090909 100%);
+  color: var(--cor-branco);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
 }
 
-/* detalhe dourado no topo */
-.dashboard-header::before {
-  content: "";
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  height: 3px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #75531d 0%,
-      #b98c38 18%,
-      #efd27d 50%,
-      #b98c38 82%,
-      #75531d 100%
-    );
-}
-
-/* detalhe dourado inferior */
+.dashboard-header::before,
 .dashboard-header::after {
   content: "";
-
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
+}
 
+.dashboard-header::before {
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #75531d 0%, #b98c38 18%, #efd27d 50%, #b98c38 82%, #75531d 100%);
+}
+
+.dashboard-header::after {
+  bottom: 0;
   height: 5px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #6f4e1c 0%,
-      #b98d3e 18%,
-      #e6c56f 50%,
-      #b98d3e 82%,
-      #6f4e1c 100%
-    );
-
-  box-shadow:
-    0 -2px 12px rgba(201, 162, 77, 0.22);
+  background: linear-gradient(90deg, #6f4e1c 0%, #b98d3e 18%, #e6c56f 50%, #b98d3e 82%, #6f4e1c 100%);
+  box-shadow: 0 -2px 12px rgba(201, 162, 77, 0.22);
 }
 
 .dashboard-logo {
+  position: relative;
+  z-index: 2;
   width: 330px;
   height: 138px;
-
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
-  position: relative;
-  z-index: 2;
 }
 
 .dashboard-logo img {
-  width: 132px !important;
-  height: 124px !important;
-
-  max-width: none;
-  max-height: none;
-
-  object-fit: contain;
-  object-position: center;
-
-  display: block;
-
   position: relative;
   z-index: 3;
-
-  filter:
-    brightness(1.08)
-    contrast(1.06)
-    drop-shadow(0 4px 9px rgba(0, 0, 0, 0.55));
-
+  display: block;
+  width: 132px;
+  height: 124px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
   transform: scale(1.08);
   transform-origin: left center;
-
+  filter: brightness(1.08) contrast(1.06) drop-shadow(0 4px 9px rgba(0, 0, 0, 0.55));
   transition: transform 0.25s ease;
 }
 
@@ -155,133 +133,85 @@
   transform: scale(1.13);
 }
 
-/* =========================================
-   TÍTULO HEADER
-========================================= */
-
 .dashboard-title {
-  text-align: center;
-
   position: absolute;
-
-  left: 50%;
   top: 50%;
-
-  transform: translate(-50%, -50%);
-
+  left: 50%;
   z-index: 3;
-
   min-width: 420px;
+  text-align: center;
+  transform: translate(-50%, -50%);
 }
 
 .dashboard-title h1 {
   margin: 0;
-
-  color: #dfbf68;
-
+  color: var(--cor-dourado-claro);
   font-size: 32px;
-
   font-weight: 900;
-
   letter-spacing: 0.5px;
-
-  text-shadow:
-    0 2px 14px rgba(201, 162, 77, 0.20);
+  text-shadow: 0 2px 14px rgba(201, 162, 77, 0.2);
 }
 
 .dashboard-title h1::before,
 .dashboard-title h1::after {
   content: "";
-
   display: inline-block;
-
   width: 58px;
   height: 1px;
-
-  vertical-align: middle;
-
   margin: 0 17px;
+  vertical-align: middle;
+}
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #c9a24d
-    );
+.dashboard-title h1::before {
+  background: linear-gradient(90deg, transparent, #c9a24d);
 }
 
 .dashboard-title h1::after {
-  background:
-    linear-gradient(
-      90deg,
-      #c9a24d,
-      transparent
-    );
+  background: linear-gradient(90deg, #c9a24d, transparent);
 }
 
 .dashboard-title p {
   margin: 8px 0 0;
-
   color: #b5b5b5;
-
   font-size: 13px;
 }
 
-/* =========================================
-   USUÁRIO
-========================================= */
-
 .dashboard-user {
+  position: relative;
+  z-index: 3;
   min-width: 300px;
   height: 138px;
-
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
-  position: relative;
-  z-index: 3;
-  
-  /* Estilo do botão */
   border: none;
   background: transparent;
   color: inherit;
   font-family: inherit;
   cursor: pointer;
-  padding: 0;
 }
 
 .user-avatar {
   width: 50px;
   height: 50px;
-
   border-radius: 50%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #efd37d,
-      #b68a35
-    );
-
-  color: #111111;
-
+  background: linear-gradient(145deg, #efd37d, #b68a35);
+  border: 2px solid #f0d890;
+  color: var(--cor-preto);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 16px;
   font-weight: 800;
-
-  border: 2px solid #f0d890;
-
-  box-shadow:
-    0 4px 16px rgba(201, 162, 77, 0.22);
+  box-shadow: 0 4px 16px rgba(201, 162, 77, 0.22);
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .user-info strong {
@@ -290,208 +220,165 @@
 
 .user-info span {
   margin-top: 3px;
-
   color: #b9b9b9;
   font-size: 12px;
 }
 
-/* =========================================
-   CONTEÚDO
-========================================= */
-
-.dashboard-content {
-  width: 100%;
-  max-width: 1500px;
-
-  margin: 0 auto;
-
-  padding: 42px 48px 65px;
-}
+/* =========================================================
+   4. CABEÇALHO INTERNO & BOTÕES DE AÇÃO
+========================================================= */
 
 .dashboard-heading {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 25px;
-
   margin-bottom: 30px;
 }
 
 .heading-label {
   display: block;
-
-  color: #b18b1c;
-
+  margin-bottom: 8px;
+  color: var(--cor-dourado-medio);
   font-size: 12px;
   font-weight: 800;
-
   letter-spacing: 2.5px;
-
-  margin-bottom: 8px;
 }
 
 .dashboard-heading h2 {
   margin: 0;
-  
+  color: var(--cor-dourado-claro);
   font-size: 36px;
-  line-height: 1.15;
-
   font-weight: 800;
-  color: #dfbf68 !important;
+  line-height: 1.15;
 }
 
 .dashboard-heading p {
   margin: 10px 0 0;
-
-  color: #6f6f6f;
+  color: var(--cor-texto-secundario);
   font-size: 16px;
 }
 
-/* =========================================
-   BOTÃO AGENDAR
-========================================= */
-
 .btn-agendar {
   min-height: 52px;
-
   padding: 0 28px;
-
-  border: 1px solid #d4af37;
+  border: 1px solid var(--cor-dourado);
   border-radius: 9px;
-
-  background: #d4af37;
-  color: #111111;
-
-  cursor: pointer;
-
+  background: var(--cor-dourado);
+  color: var(--cor-preto);
   font-size: 14px;
   font-weight: 800;
-
+  cursor: pointer;
   box-shadow: 0 5px 15px rgba(180, 140, 30, 0.18);
-
-  transition: 0.2s;
+  transition: var(--transicao-padrao);
 }
 
 .btn-agendar:hover {
-  background: #e4c252;
-  border-color: #e4c252;
-
+  background: var(--cor-dourado-hover);
+  border-color: var(--cor-dourado-hover);
   transform: translateY(-2px);
-
   box-shadow: 0 7px 20px rgba(180, 140, 30, 0.28);
 }
 
-/* =========================================
-   CARDS
-========================================= */
-
-.dashboard-card {
-  background: #ffffff;
-
-  border: 1px solid #ded8c9;
-  border-radius: 14px;
-
-  box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.05);
+.btn-small {
+  min-height: 43px;
+  padding: 0 19px;
+  border: 1px solid #c9a227;
+  border-radius: 8px;
+  background: var(--cor-dourado);
+  color: var(--cor-preto);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
 }
 
-/* =========================================
-   PRÓXIMO AGENDAMENTO
-========================================= */
+.btn-small:hover {
+  background: var(--cor-dourado-hover);
+  transform: translateY(-1px);
+}
 
-.next-card {
-  overflow: hidden;
+/* =========================================================
+   5. ESTRUTURA BASE DE CARDS
+========================================================= */
 
-  margin-bottom: 24px;
+.dashboard-card {
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda-card);
+  border-radius: 14px;
+  box-shadow: var(--sombra-card);
 }
 
 .card-header {
   padding: 25px;
-
-  background: #151515;
-  color: #ffffff;
-
+  background: var(--cor-preto-card);
+  color: var(--cor-branco);
+  border-bottom: 2px solid var(--cor-dourado);
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  border-bottom: 2px solid #d4af37;
 }
 
 .card-label {
   display: block;
-
-  color: #d4af37;
-
+  color: var(--cor-dourado);
   font-size: 11px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .card-header h3,
 .section-header h3 {
   margin: 6px 0 0;
-
   font-size: 20px;
 }
 
 .card-icon {
   width: 42px;
   height: 42px;
-
-  border: 1px solid #d4af37;
-
+  border: 1px solid var(--cor-dourado);
   border-radius: 50%;
-
-  color: #d4af37;
-
+  color: var(--cor-dourado);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 18px;
 }
 
-/* =========================================
-   CONTEÚDO AGENDAMENTO
-========================================= */
+/* =========================================================
+   6. PRÓXIMO AGENDAMENTO & ESTADO VAZIO
+========================================================= */
+
+.next-card {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
 
 .next-content {
   padding: 26px;
-
   display: grid;
   grid-template-columns: 1fr 1.4fr;
-
   gap: 32px;
-
   align-items: center;
 }
 
 .appointment-date {
   display: flex;
   align-items: center;
-
   gap: 17px;
 }
 
 .date-icon {
   width: 62px;
   height: 62px;
-
+  border: 1px solid var(--cor-dourado-borda);
   border-radius: 10px;
-
-  background: #f4ead0;
-  color: #b18b1c;
-
+  background: var(--cor-dourado-suave);
+  color: var(--cor-dourado-medio);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 25px;
-
-  border: 1px solid #e3cc8a;
 }
 
 .appointment-date div:last-child {
@@ -501,12 +388,10 @@
 
 .appointment-date small,
 .appointment-info small {
-  color: #a17d17;
-
+  margin-bottom: 5px;
+  color: var(--cor-dourado-escuro);
   font-size: 11px;
   font-weight: 700;
-
-  margin-bottom: 5px;
 }
 
 .appointment-date strong {
@@ -514,22 +399,17 @@
 }
 
 .appointment-date span {
-  color: #777777;
-
-  font-size: 14px;
-
   margin-top: 4px;
+  color: #777777;
+  font-size: 14px;
 }
 
 .appointment-info {
+  padding-left: 28px;
+  border-left: 2px solid #ead9a6;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-
   gap: 22px;
-
-  padding-left: 28px;
-
-  border-left: 2px solid #ead9a6;
 }
 
 .appointment-info div {
@@ -541,37 +421,25 @@
   font-size: 14px;
 }
 
-/* =========================================
-   SEM AGENDAMENTO
-========================================= */
-
 .no-appointment {
   min-height: 125px;
-
   padding: 25px;
-
   display: flex;
   align-items: center;
-
   gap: 17px;
 }
 
 .no-appointment > span {
   width: 55px;
   height: 55px;
-
+  border: 1px solid var(--cor-dourado-borda);
   border-radius: 50%;
-
-  background: #f4ead0;
-  color: #b18b1c;
-
+  background: var(--cor-dourado-suave);
+  color: var(--cor-dourado-medio);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 23px;
-
-  border: 1px solid #e3cc8a;
 }
 
 .no-appointment div {
@@ -584,53 +452,13 @@
 
 .no-appointment p {
   margin: 6px 0 0;
-
   color: #777777;
-
   font-size: 13px;
 }
 
-.btn-small {
-  min-height: 43px;
-
-  padding: 0 19px;
-
-  border: 1px solid #c9a227;
-  border-radius: 8px;
-
-  background: #d4af37;
-  color: #111111;
-
-  cursor: pointer;
-
-  font-size: 12px;
-  font-weight: 800;
-
-  transition: 0.2s;
-}
-
-.btn-small:hover {
-  background: #e4c252;
-  transform: translateY(-1px);
-}
-
-/* =========================================
-   GRID
-========================================= */
-
-.dashboard-grid {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1.25fr)
-    minmax(0, 1fr);
-
-  gap: 24px;
-}
-
-/* =========================================
-   HEADER DAS SEÇÕES
-========================================= */
+/* =========================================================
+   7. HISTÓRICO & PROMOÇÕES
+========================================================= */
 
 .history-card,
 .promotions-card {
@@ -638,54 +466,41 @@
 }
 
 .section-header {
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  margin-bottom: 20px;
 }
 
 .section-header .card-label {
-  color: #b18b1c;
-}
-
-.section-header h3 {
-  font-size: 20px;
+  color: var(--cor-dourado-medio);
 }
 
 .view-all {
+  padding: 0;
   border: none;
-
   background: transparent;
-  color: #b18b1c;
-
-  cursor: pointer;
-
+  color: var(--cor-dourado-medio);
   font-size: 12px;
   font-weight: 800;
+  cursor: pointer;
 }
 
 .view-all:hover {
   color: #80630e;
 }
 
-/* =========================================
-   HISTÓRICO
-========================================= */
-
+/* Histórico */
 .history-list {
-  border-top: 1px solid #eadfca;
+  border-top: 1px solid var(--cor-borda-lista);
 }
 
 .history-item {
   min-height: 78px;
-
   display: flex;
   align-items: center;
-
   gap: 14px;
-
-  border-bottom: 1px solid #eadfca;
+  border-bottom: 1px solid var(--cor-borda-lista);
 }
 
 .history-item:last-child {
@@ -695,24 +510,18 @@
 .history-icon {
   width: 42px;
   height: 42px;
-
+  border: 1px solid var(--cor-dourado-borda);
   border-radius: 8px;
-
-  background: #f4ead0;
-  color: #b18b1c;
-
+  background: var(--cor-dourado-suave);
+  color: var(--cor-dourado-medio);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 17px;
-
-  border: 1px solid #e3cc8a;
 }
 
 .history-main {
   flex: 1;
-
   display: flex;
   flex-direction: column;
 }
@@ -723,57 +532,38 @@
 
 .history-main span {
   margin-top: 5px;
-
-  color: #999999;
-
+  color: var(--cor-texto-suave);
   font-size: 12px;
 }
 
 .history-price {
-  color: #b18b1c;
-
+  color: var(--cor-dourado-medio);
   font-size: 14px;
   font-weight: 800;
 }
 
-/* =========================================
-   PROMOÇÕES
-========================================= */
-
+/* Promoções */
 .promotion-list {
   display: flex;
   flex-direction: column;
-
   gap: 12px;
 }
 
 .promotion-item {
   min-height: 115px;
-
   padding: 17px;
-
   border: 1px solid #e4d5ac;
   border-radius: 10px;
-
+  background: linear-gradient(135deg, #fffdf8, #f9f1dc);
   display: flex;
   justify-content: space-between;
-
   gap: 16px;
-
-  background: linear-gradient(
-    135deg,
-    #fffdf8,
-    #f9f1dc
-  );
-
-  transition: 0.2s;
+  transition: var(--transicao-padrao);
 }
 
 .promotion-item:hover {
-  border-color: #d4af37;
-
+  border-color: var(--cor-dourado);
   transform: translateY(-2px);
-
   box-shadow: 0 5px 15px rgba(180, 140, 30, 0.12);
 }
 
@@ -782,25 +572,20 @@
 }
 
 .promotion-tag {
-  color: #b18b1c;
-
+  color: var(--cor-dourado-medio);
   font-size: 10px;
   font-weight: 900;
-
   letter-spacing: 1.5px;
 }
 
 .promotion-content h4 {
   margin: 6px 0 5px;
-
   font-size: 15px;
 }
 
 .promotion-content p {
   margin: 0;
-
   color: #777777;
-
   font-size: 11px;
   line-height: 1.45;
 }
@@ -808,98 +593,72 @@
 .promotion-price {
   display: flex;
   flex-direction: column;
-
   align-items: flex-end;
   justify-content: center;
-
   white-space: nowrap;
 }
 
 .promotion-price strong {
-  color: #a17d17;
-
+  color: var(--cor-dourado-escuro);
   font-size: 18px;
   font-weight: 900;
 }
 
 .promotion-price span {
   margin-top: 3px;
-
-  color: #999999;
-
+  color: var(--cor-texto-suave);
   font-size: 10px;
-
   text-decoration: line-through;
 }
 
-/* =========================================
-   ACESSO RÁPIDO
-========================================= */
+/* =========================================================
+   8. ACESSO RÁPIDO
+========================================================= */
 
 .quick-actions {
-  display: grid;
-
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 14px;
-
   margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
 .quick-actions button {
   min-height: 82px;
-
   padding: 16px;
-
   border: 1px solid #e0d4b7;
   border-radius: 10px;
-
-  background: #ffffff;
-  color: #171717;
-
-  cursor: pointer;
-
+  background: var(--cor-branco);
+  color: var(--cor-texto-principal);
   display: flex;
   align-items: center;
-
   gap: 13px;
-
   text-align: left;
-
-  transition: 0.2s;
+  cursor: pointer;
+  transition: var(--transicao-padrao);
 }
 
 .quick-actions button:hover {
   background: #fffaf0;
-
-  border-color: #d4af37;
-
+  border-color: var(--cor-dourado);
   transform: translateY(-2px);
 }
 
 .quick-actions button > span {
+  flex-shrink: 0;
   width: 42px;
   height: 42px;
-
-  flex-shrink: 0;
-
+  border: 1px solid var(--cor-dourado-borda);
   border-radius: 8px;
-
-  background: #f4ead0;
-  color: #b18b1c;
-
+  background: var(--cor-dourado-suave);
+  color: var(--cor-dourado-medio);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 17px;
-
-  border: 1px solid #e3cc8a;
 }
 
 .quick-actions button div {
   flex: 1;
-
   display: flex;
   flex-direction: column;
 }
@@ -910,22 +669,19 @@
 
 .quick-actions small {
   margin-top: 4px;
-
-  color: #999999;
-
+  color: var(--cor-texto-suave);
   font-size: 10px;
 }
 
 .quick-actions b {
-  color: #b18b1c;
-
+  color: var(--cor-dourado-medio);
   font-size: 23px;
   font-weight: 400;
 }
 
-/* =========================================
-   RESPONSIVIDADE
-========================================= */
+/* =========================================================
+   9. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1100px) {
   .dashboard-header {
@@ -939,8 +695,8 @@
   }
 
   .dashboard-logo img {
-    width: 115px !important;
-    height: 108px !important;
+    width: 115px;
+    height: 108px;
   }
 
   .dashboard-user {
@@ -962,46 +718,27 @@
   .dashboard-header {
     min-height: 112px;
     padding: 8px 20px;
-
     flex-wrap: nowrap;
-
     gap: 10px;
   }
 
   .dashboard-logo {
     width: 145px;
-    height: 100px;
     min-width: 145px;
+    height: 100px;
   }
 
   .dashboard-logo img {
-    width: 92px !important;
-    height: 90px !important;
-  }
-
-  .dashboard-logo::before {
     width: 92px;
-    height: 92px;
-    top: 4px;
-  }
-
-  .dashboard-logo::after {
-    width: 80px;
-    height: 80px;
-    left: 6px;
-    top: 10px;
+    height: 90px;
   }
 
   .dashboard-title {
-    position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-
     min-width: 0;
     width: auto;
-
-    text-align: center;
+    transform: translate(-50%, -50%);
   }
 
   .dashboard-title h1 {
@@ -1015,7 +752,6 @@
 
   .dashboard-user {
     min-width: auto;
-
     margin-left: auto;
   }
 
@@ -1024,10 +760,8 @@
   }
 
   .dashboard-heading {
-    align-items: flex-start;
-
     flex-direction: column;
-
+    align-items: flex-start;
     gap: 17px;
   }
 
@@ -1044,12 +778,10 @@
   }
 
   .appointment-info {
-    padding-left: 0;
-
     padding-top: 22px;
-
-    border-left: none;
+    padding-left: 0;
     border-top: 2px solid #ead9a6;
+    border-left: none;
   }
 
   .quick-actions {
@@ -1065,26 +797,13 @@
 
   .dashboard-logo {
     width: 95px;
-    height: 82px;
     min-width: 95px;
+    height: 82px;
   }
 
   .dashboard-logo img {
-    width: 76px !important;
-    height: 74px !important;
-  }
-
-  .dashboard-logo::before {
     width: 76px;
-    height: 76px;
-    top: 3px;
-  }
-
-  .dashboard-logo::after {
-    width: 64px;
-    height: 64px;
-    left: 6px;
-    top: 9px;
+    height: 74px;
   }
 
   .dashboard-user .user-info {

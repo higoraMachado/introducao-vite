@@ -1,8 +1,37 @@
 /* ==========================================================================
-   1. RESET & GLOBALS
+   1. VARIÁVEIS, FONTES & RESET
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;700&display=swap");
+
+:root {
+  /* Cores Principais */
+  --cor-fundo: #0b0b0b;
+  --cor-secao-escura: #111111;
+  --cor-card-escuro: #171717;
+  --cor-card-equipe: #181818;
+  --cor-footer: #080808;
+  --cor-branco: #ffffff;
+
+  /* Tons de Dourado */
+  --cor-dourado: #d4af37;
+  --cor-dourado-claro: #f1d46a;
+  --cor-dourado-escuro: #b8941f;
+  --cor-dourado-borda-fraca: rgba(212, 175, 55, 0.25);
+  --cor-dourado-borda-media: rgba(212, 175, 55, 0.4);
+  --cor-dourado-glow: rgba(212, 175, 55, 0.3);
+
+  /* Tons de Texto */
+  --cor-texto-principal: #ffffff;
+  --cor-texto-suave: #e0e0e0;
+  --cor-texto-secundario: #999999;
+  --cor-texto-muted: #777777;
+
+  /* Tipografia & Transições */
+  --fonte-padrao: Arial, Helvetica, sans-serif;
+  --fonte-editorial: "Cinzel", "Montserrat", serif;
+  --transicao-padrao: 0.3s ease;
+}
 
 * {
   box-sizing: border-box;
@@ -14,9 +43,9 @@ html {
 
 body {
   margin: 0;
-  background: #0b0b0b;
-  color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-padrao);
 }
 
 button,
@@ -24,60 +53,64 @@ a {
   font-family: inherit;
 }
 
-/* Base Buttons Reutilizáveis */
-/* Botão Primário (Agendar horário) - Fundo Dourado Sólido */
+/* ==========================================================================
+   2. COMPONENTES REUTILIZÁVEIS (BOTÕES & CABEÇALHOS DE SEÇÃO)
+   ========================================================================== */
+
 .btn-primary {
-  padding: 15px 28px !important;
-  border: none !important;
-  border-radius: 3px !important;
-  background: linear-gradient(135deg, #f1d46a, #b8941f) !important;
-  color: #111111 !important;
-  font-size: 13px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  padding: 15px 28px;
+  border: none;
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--cor-dourado-claro), var(--cor-dourado-escuro));
+  color: #111111;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform var(--transicao-padrao), box-shadow var(--transicao-padrao), color var(--transicao-padrao);
 }
 
 .btn-primary:hover {
-  color: #fff !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3) !important;
+  color: var(--cor-branco);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px var(--cor-dourado-glow);
 }
 
-/* Botão Secundário (Conhecer serviços) - Transparente/Borda Dourada */
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 25px !important;
-  border: 1px solid rgba(212, 175, 55, 0.45) !important;
-  border-radius: 3px !important;
-  color: #ffffff !important;
-  background: rgba(0, 0, 0, 0.25) !important;
-  text-decoration: none !important;
-  font-size: 13px !important;
-  font-weight: bold !important;
-  backdrop-filter: blur(4px) !important;
-  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease !important;
+  padding: 14px 25px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--cor-branco);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: bold;
+  backdrop-filter: blur(4px);
+  transition:
+    border-color var(--transicao-padrao),
+    color var(--transicao-padrao),
+    background var(--transicao-padrao);
 }
 
 .btn-secondary:hover {
-  border-color: #d4af37 !important;
-  color: #d4af37 !important;
-  background: rgba(0, 0, 0, 0.5) !important;
+  border-color: var(--cor-dourado);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--cor-dourado);
 }
-/* Labels de Seção Comuns */
+
 .section-header {
-  text-align: center;
   max-width: 700px;
   margin: 0 auto 60px;
+  text-align: center;
 }
 
 .section-label {
-  color: #d4af37;
+  color: var(--cor-dourado);
   font-size: 11px;
-  letter-spacing: 4px;
   font-weight: bold;
+  letter-spacing: 4px;
 }
 
 .section-header h2 {
@@ -86,29 +119,47 @@ a {
 }
 
 .section-header h2 span {
-  color: #d4af37;
+  color: var(--cor-dourado);
 }
 
 .section-header p {
-  color: #999;
+  color: var(--cor-texto-secundario);
   font-size: 14px;
   line-height: 1.7;
 }
 
-
 /* ==========================================================================
-   2. CONTAINER PRINCIPAL
+   3. CONTAINER PRINCIPAL & ANIMAÇÕES DE SCROLL
    ========================================================================== */
 
 .landing-page {
   min-height: 100vh;
-  background: #0b0b0b;
+  background: var(--cor-fundo);
   overflow-x: hidden;
 }
 
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-1 {
+  transition-delay: 0.15s;
+}
+
+.delay-2 {
+  transition-delay: 0.3s;
+}
 
 /* ==========================================================================
-   3. HEADER & NAVEGAÇÃO
+   4. HEADER & NAVEGAÇÃO
    ========================================================================== */
 
 .landing-header {
@@ -118,15 +169,15 @@ a {
   z-index: 1000;
   width: 100%;
   height: 82px;
+  padding: 0 6%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 6%;
   background: rgba(8, 8, 8, 0.72);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  border-bottom: 1px solid var(--cor-dourado-borda-fraca);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  transition: padding 0.3s ease;
+  transition: padding var(--transicao-padrao), height var(--transicao-padrao);
 }
 
 .landing-header::after {
@@ -136,14 +187,10 @@ a {
   bottom: -1px;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg,
-      transparent,
-      rgba(212, 175, 55, 0.65),
-      transparent);
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.65), transparent);
   opacity: 0.7;
 }
 
-/* Logo */
 .header-logo {
   display: flex;
   align-items: center;
@@ -151,36 +198,35 @@ a {
 }
 
 .header-logo img {
+  display: block;
   width: 125px;
   height: auto;
-  display: block;
-  transition: transform 0.3s ease;
+  transition: transform var(--transicao-padrao);
 }
 
 .header-logo img:hover {
   transform: scale(1.04);
 }
 
-/* Nav Menu */
 .landing-nav {
+  height: 100%;
   display: flex;
   align-items: center;
   gap: 38px;
-  height: 100%;
 }
 
 .landing-nav a {
   position: relative;
+  height: 100%;
   display: flex;
   align-items: center;
-  height: 100%;
   color: #d6d6d6;
   text-decoration: none;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  transition: color 0.3s ease, transform 0.3s ease;
+  transition: color var(--transicao-padrao), transform var(--transicao-padrao);
 }
 
 .landing-nav a::after {
@@ -190,13 +236,13 @@ a {
   bottom: 20px;
   width: 0;
   height: 1px;
-  background: #d4af37;
+  background: var(--cor-dourado);
   transform: translateX(-50%);
-  transition: width 0.3s ease;
+  transition: width var(--transicao-padrao);
 }
 
 .landing-nav a:hover {
-  color: #d4af37;
+  color: var(--cor-dourado);
   transform: translateY(-1px);
 }
 
@@ -204,52 +250,54 @@ a {
   width: 100%;
 }
 
-/* Botão Entrar */
 .btn-login {
   position: relative;
   min-width: 105px;
   padding: 11px 22px;
-  background: transparent;
-  color: #d4af37;
   border: 1px solid rgba(212, 175, 55, 0.75);
   border-radius: 2px;
-  cursor: pointer;
+  background: transparent;
+  color: var(--cor-dourado);
   font-size: 11px;
   font-weight: bold;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  transition:
+    background var(--transicao-padrao),
+    color var(--transicao-padrao),
+    box-shadow var(--transicao-padrao),
+    transform var(--transicao-padrao);
 }
 
 .btn-login:hover {
-  background: #d4af37;
-  color: #111;
+  background: var(--cor-dourado);
+  color: #111111;
   transform: translateY(-1px);
   box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
 }
 
-/* Botão Hambúrguer Mobile */
 .menu-mobile {
   display: none;
   width: 42px;
   height: 42px;
   padding: 8px;
-  background: transparent;
   border: 1px solid rgba(212, 175, 55, 0.5);
   border-radius: 3px;
-  cursor: pointer;
+  background: transparent;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  cursor: pointer;
 }
 
 .menu-mobile span {
   display: block;
   width: 21px;
   height: 1px;
-  background: #d4af37;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  background: var(--cor-dourado);
+  transition: transform var(--transicao-padrao), opacity var(--transicao-padrao);
 }
 
 .menu-mobile.ativo span:nth-child(1) {
@@ -264,41 +312,42 @@ a {
   transform: translateY(-6px) rotate(-45deg);
 }
 
-
 /* ==========================================================================
-   4. HERO SECTION
+   5. HERO SECTION
    ========================================================================== */
 
 .hero {
   position: relative;
   min-height: 780px;
+  padding: 120px 8% 80px;
+  overflow: hidden;
   display: flex;
   align-items: center;
-  padding: 120px 8% 80px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  overflow: hidden;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg,
-      rgba(5, 5, 5, 0.98) 0%,
-      rgba(5, 5, 5, 0.90) 30%,
-      rgba(5, 5, 5, 0.55) 55%,
-      rgba(5, 5, 5, 0.20) 100%);
   z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 5, 5, 0.98) 0%,
+    rgba(5, 5, 5, 0.9) 30%,
+    rgba(5, 5, 5, 0.55) 55%,
+    rgba(5, 5, 5, 0.2) 100%
+  );
 }
 
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg,rgba(5, 5, 5, 0.75) 0%,transparent 35%);
-  pointer-events: none;
   z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(5, 5, 5, 0.75) 0%, transparent 35%);
 }
 
 .hero-content {
@@ -310,25 +359,25 @@ a {
 .hero-subtitle {
   display: inline-block;
   margin-bottom: 18px;
-  color: #d4af37;
+  color: var(--cor-dourado);
   font-size: 12px;
-  letter-spacing: 5px;
   font-weight: bold;
+  letter-spacing: 5px;
   text-shadow: 0 2px 8px rgb(255, 200, 18);
 }
 
 .hero h1 {
   margin: 0;
-  color: #ffffff;
+  color: var(--cor-branco);
   font-size: clamp(45px, 6vw, 82px);
-  line-height: 0.95;
   font-weight: 800;
+  line-height: 0.95;
   letter-spacing: -2px;
   text-shadow: 0 3px 20px rgba(0, 0, 0, 0.5);
 }
 
 .hero h1 span {
-  color: #d4af37;
+  color: var(--cor-dourado);
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
@@ -338,7 +387,7 @@ a {
 .hero-content p {
   max-width: 500px;
   margin: 30px 0;
-  color: #e0e0e0;
+  color: var(--cor-texto-suave);
   font-size: 16px;
   line-height: 1.8;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
@@ -352,9 +401,9 @@ a {
 
 .hero-decoration {
   position: absolute;
-  z-index: 2;
   right: 7%;
   bottom: 45px;
+  z-index: 2;
   display: flex;
   gap: 25px;
   color: rgba(212, 175, 55, 0.884);
@@ -362,42 +411,36 @@ a {
   letter-spacing: 3px;
 }
 
-
 /* ==========================================================================
-   5. SERVIÇOS SECTION
+   6. SERVIÇOS SECTION
    ========================================================================== */
 
 .services-section {
   padding: 110px 7%;
-  background: #111111;
+  background: var(--cor-secao-escura);
 }
 
 .services-grid {
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
-
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
   gap: 22px;
 }
 
-/* Estrutura do card */
 .service-card {
   position: relative;
   isolation: isolate;
   min-width: 0;
   min-height: 265px;
   overflow: hidden;
-
-  background-color: #171717;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background-color: var(--cor-card-escuro);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-
-  border: 1px solid rgba(212, 175, 55, 0.3);
-
   transition:
     min-height 0.5s ease,
     border-color 0.4s ease,
@@ -411,104 +454,15 @@ a {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
   width: 100%;
   height: 3px;
-  background: #d4af37;
+  background: var(--cor-dourado);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
 }
 
-.service-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  background-color: #202020;
-  border-color: #d4af37;
-  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
-  z-index: 2;
-}
-
-.service-card:hover::before {
-  transform: scaleX(1);
-}
-
-.service-icon {
-  width: 58px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 22px;
-  border: 1px solid #d4af37;
-  color: #d4af37;
-  font-size: 24px;
-  transition: transform 0.4s ease, background-color 0.4s ease, color 0.4s ease;
-}
-
-.service-card:hover .service-icon {
-  background-color: #d4af37;
-  color: #111;
-  transform: scale(1.1);
-}
-
-.service-card h3 {
-  margin-bottom: 14px;
-  font-size: 17px;
-}
-
-.service-card p {
-  color: #888;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.service-more {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 0;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transform: translateY(12px);
-  transition: opacity 0.35s ease, max-height 0.4s ease, margin-top 0.4s ease, transform 0.35s ease;
-}
-
-.service-card:hover .service-more {
-  opacity: 1;
-  max-height: 70px;
-  margin-top: 20px;
-  transform: translateY(0);
-}
-
-.service-more-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #d4af37;
-  border-radius: 50%;
-  color: #d4af37;
-  font-size: 27px;
-  font-weight: 300;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-}
-
-.service-card:hover .service-more-icon {
-  background-color: #d4af37;
-  color: #111;
-  transform: rotate(90deg);
-}
-
-.service-more-text {
-  color: #d4af37;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
-/* Imagem de cada serviço */
 .service-corte {
   background-image: url("/images/corte-masculino.jpg");
 }
@@ -525,7 +479,6 @@ a {
   background-image: url("/images/hair-tattoo.jpg");
 }
 
-/* Camada escura para legibilidade */
 .service-overlay {
   position: absolute;
   inset: 0;
@@ -534,7 +487,6 @@ a {
   transition: background 0.45s ease;
 }
 
-/* Conteúdo do card */
 .service-content {
   position: relative;
   z-index: 1;
@@ -547,17 +499,16 @@ a {
   transition: padding 0.45s ease;
 }
 
-/* Ícone */
 .service-icon {
+  flex-shrink: 0;
   width: 60px;
   height: 60px;
-  flex-shrink: 0;
+  margin-bottom: 20px;
+  border: 1px solid var(--cor-dourado);
+  color: var(--cor-dourado);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  border: 1px solid #d4af37;
-  color: #d4af37;
   font-size: 27px;
   transition:
     transform 0.45s ease,
@@ -565,18 +516,14 @@ a {
     color 0.4s ease;
 }
 
-/* Título */
 .service-card h3 {
   margin: 0;
-  color: #ffffff;
+  color: var(--cor-branco);
   font-size: 18px;
   font-weight: 500;
-  transition:
-    transform 0.45s ease,
-    color 0.4s ease;
+  transition: transform 0.45s ease, color 0.4s ease;
 }
 
-/* Especificações escondidas inicialmente */
 .service-details {
   width: 100%;
   max-height: 0;
@@ -598,47 +545,40 @@ a {
   line-height: 1.8;
 }
 
-.service-more-text {
-  color: #d4af37;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  line-height: 1.7;
-}
-
-/* SAIBA MAIS */
 .service-more {
+  margin-top: auto;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-top: auto;
-  padding-top: 20px;
   opacity: 0;
   transform: translateY(12px);
   pointer-events: none;
-  transition:
-    opacity 0.35s ease,
-    transform 0.35s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .service-more-icon {
   width: 40px;
   height: 40px;
+  border: 1px solid var(--cor-dourado);
+  border-radius: 50%;
+  color: var(--cor-dourado);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #d4af37;
-  border-radius: 50%;
-  color: #d4af37;
   font-size: 26px;
   font-weight: 300;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    transform 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
+.service-more-text {
+  color: var(--cor-dourado);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.7;
+}
 
 @media (hover: hover) and (pointer: fine) {
   .services-grid:hover .service-card:not(:hover) {
@@ -646,12 +586,18 @@ a {
   }
 
   .service-card:hover {
+    z-index: 2;
     min-height: 390px;
-    border-color: #d4af37;
+    border-color: var(--cor-dourado);
+    background-color: #202020;
+    transform: translateY(-5px);
     box-shadow:
       0 18px 38px rgba(0, 0, 0, 0.4),
       0 0 18px rgba(212, 175, 55, 0.12);
-    transform: translateY(-5px);
+  }
+
+  .service-card:hover::before {
+    transform: scaleX(1);
   }
 
   .service-card:hover .service-overlay {
@@ -663,13 +609,13 @@ a {
   }
 
   .service-card:hover .service-icon {
-    background: #d4af37;
+    background: var(--cor-dourado);
     color: #111111;
     transform: translateY(-5px) scale(1.05);
   }
 
   .service-card:hover h3 {
-    color: #d4af37;
+    color: var(--cor-dourado);
   }
 
   .service-card:hover .service-details {
@@ -685,63 +631,58 @@ a {
   }
 
   .service-card:hover .service-more-icon {
-    background: #d4af37;
+    background: var(--cor-dourado);
     color: #111111;
     transform: rotate(90deg);
   }
 }
 
-
 /* ==========================================================================
-   6. SOBRE NÓS SECTION
+   7. SOBRE NÓS SECTION
    ========================================================================== */
 
 .about-section {
   position: relative;
   min-height: 600px;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  
-  /* Imagem de fundo pegando os dois lados com fit perfeito */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  overflow: hidden;
 }
 
-/* Camada escura sobre a imagem de fundo para dar excelente legibilidade aos textos e à logo */
 .about-section::before {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     90deg,
     rgba(11, 11, 11, 0.88) 0%,
     rgba(11, 11, 11, 0.75) 50%,
-    rgba(11, 11, 11, 0.90) 100%
+    rgba(11, 11, 11, 0.9) 100%
   );
-  z-index: 1;
 }
 
-/* Lado Esquerdo - Mantém a logo em destaque */
 .about-image {
   position: relative;
   z-index: 2;
   min-height: 100%;
+  padding: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
 }
 
 .about-image-content {
-  text-align: center;
-  color: #d4af37;
-  border: 1px solid rgba(212, 175, 55, 0.4);
   padding: 55px;
+  border: 1px solid var(--cor-dourado-borda-media);
   background: rgba(8, 8, 8, 0.5);
   backdrop-filter: blur(5px);
+  color: var(--cor-dourado);
+  text-align: center;
 }
 
 .about-image-content span {
@@ -756,42 +697,39 @@ a {
   letter-spacing: 6px;
 }
 
-/* Lado Direito - Conteúdo e textos */
 .about-content {
   position: relative;
   z-index: 2;
+  padding: 80px 10% 80px 5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 80px 10% 80px 5%;
 }
 
-/* Título: BARBEARIA no mesmo tamanho exato de MAIS QUE UMA */
 .about-content h2 {
   margin: 18px 0 25px;
+  color: var(--cor-branco);
   font-size: clamp(32px, 4.5vw, 52px);
-  color: #ffffff;
-  line-height: 1.1;
   font-weight: 700;
+  line-height: 1.1;
   text-transform: uppercase;
 }
 
 .about-content h2 span {
-  color: #d4af37;
+  display: block;
+  color: var(--cor-dourado);
   font-size: inherit;
   font-weight: inherit;
-  display: block;
 }
 
-/* Texto abaixo da frase: Fonte elegante com serifa e tamanho maior */
 .about-content p {
   max-width: 520px;
-  color: #e0e0e0;
-  font-family: 'Cinzel', 'Montserrat', serif;
+  margin-bottom: 16px;
+  color: var(--cor-texto-suave);
+  font-family: var(--fonte-editorial);
   font-size: 18px;
   line-height: 1.9;
   letter-spacing: 0.5px;
-  margin-bottom: 16px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
@@ -801,32 +739,12 @@ a {
 }
 
 /* ==========================================================================
-   EFEITO DE SCROLL REVEAL CONTÍNUO (Subir e Descer)
-   ========================================================================== */
-
-.reveal-fade-up {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-fade-up.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Atrasos individuais em cascata */
-.delay-1 { transition-delay: 0.15s; }
-.delay-2 { transition-delay: 0.3s; }
-
-/* ==========================================================================
-   7. EQUIPE SECTION
+   8. EQUIPE SECTION
    ========================================================================== */
 
 .team-section {
   padding: 110px 7%;
-  background: #111111;
+  background: var(--cor-secao-escura);
 }
 
 .team-grid {
@@ -838,8 +756,8 @@ a {
 }
 
 .team-card {
-  background: #181818;
   border: 1px solid rgba(212, 175, 55, 0.18);
+  background: var(--cor-card-equipe);
 }
 
 .team-photo {
@@ -847,12 +765,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg,
-      #252525,
-      #0c0c0c);
+  background: linear-gradient(145deg, #252525, #0c0c0c);
   color: rgba(212, 175, 55, 0.5);
-  letter-spacing: 4px;
   font-size: 11px;
+  letter-spacing: 4px;
 }
 
 .team-info {
@@ -865,23 +781,20 @@ a {
 
 .team-info p {
   margin: 0;
-  color: #d4af37;
+  color: var(--cor-dourado);
   font-size: 12px;
 }
 
-
 /* ==========================================================================
-   8. CTA SECTION
+   9. CTA SECTION
    ========================================================================== */
 
 .cta-section {
   padding: 130px 7%;
   text-align: center;
   background:
-    radial-gradient(circle,
-      rgba(212, 175, 55, 0.1),
-      transparent 45%),
-    #0b0b0b;
+    radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 45%),
+    var(--cor-fundo);
 }
 
 .cta-content h2 {
@@ -891,22 +804,21 @@ a {
 }
 
 .cta-content h2 span {
-  color: #d4af37;
+  color: var(--cor-dourado);
 }
 
 .cta-content p {
-  color: #999;
-  margin: 25px auto;
   max-width: 500px;
+  margin: 25px auto;
+  color: var(--cor-texto-secundario);
 }
 
-
 /* ==========================================================================
-   9. FOOTER SECTION
+   10. FOOTER SECTION
    ========================================================================== */
 
 .landing-footer {
-  background: #080808;
+  background: var(--cor-footer);
   border-top: 1px solid rgba(212, 175, 55, 0.2);
 }
 
@@ -924,7 +836,7 @@ a {
 }
 
 .footer-brand p {
-  color: #777;
+  color: var(--cor-texto-muted);
   font-size: 13px;
 }
 
@@ -936,20 +848,20 @@ a {
 
 .footer-column h3 {
   margin: 0 0 10px;
-  color: #d4af37;
+  color: var(--cor-dourado);
   font-size: 14px;
 }
 
 .footer-column a,
 .footer-column span {
-  color: #777;
+  color: var(--cor-texto-muted);
   text-decoration: none;
   font-size: 12px;
-  transition: color 0.3s ease;
+  transition: color var(--transicao-padrao);
 }
 
 .footer-column a:hover {
-  color: #d4af37;
+  color: var(--cor-dourado);
 }
 
 .footer-bottom {
@@ -960,13 +872,12 @@ a {
 
 .footer-bottom p {
   margin: 0;
-  color: #555;
+  color: #555555;
   font-size: 11px;
 }
 
-
 /* ==========================================================================
-   10. MEDIA QUERIES (RESPONSIVIDADE)
+   11. RESPONSIVIDADE & ACESSIBILIDADE
    ========================================================================== */
 
 @media (max-width: 1000px) {
@@ -975,7 +886,6 @@ a {
   }
 }
 
-/* Tablet (max-width: 900px) */
 @media (max-width: 900px) {
   .landing-header {
     padding: 0 25px;
@@ -990,18 +900,21 @@ a {
     top: 82px;
     left: 0;
     width: 100%;
-    display: flex;
+    height: auto;
+    padding: 20px 0;
     flex-direction: column;
     align-items: center;
     gap: 0;
-    padding: 20px 0;
     background: rgba(8, 8, 8, 0.97);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    border-bottom: 1px solid var(--cor-dourado-borda-fraca);
     backdrop-filter: blur(15px);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transition:
+      opacity var(--transicao-padrao),
+      visibility var(--transicao-padrao),
+      transform var(--transicao-padrao);
   }
 
   .landing-nav.menu-aberto {
@@ -1013,8 +926,8 @@ a {
   .landing-nav a {
     width: 100%;
     height: auto;
-    justify-content: center;
     padding: 17px 0;
+    justify-content: center;
     font-size: 12px;
   }
 
@@ -1029,10 +942,6 @@ a {
 
   .hero {
     min-height: 700px;
-  }
-
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .about-section {
@@ -1053,11 +962,14 @@ a {
   }
 }
 
-/* Mobile (max-width: 600px) */
 @media (max-width: 600px) {
   .landing-header {
     height: 72px;
     padding: 0 20px;
+  }
+
+  .landing-nav {
+    top: 72px;
   }
 
   .header-logo {
@@ -1091,8 +1003,8 @@ a {
 
   .btn-primary,
   .btn-secondary {
-    text-align: center;
     width: 100%;
+    text-align: center;
   }
 
   .hero-decoration {
@@ -1144,7 +1056,6 @@ a {
   }
 }
 
-/* Acessibilidade - Animações Reduzidas */
 @media (prefers-reduced-motion: reduce) {
   *,
   .service-card,
@@ -1156,7 +1067,7 @@ a {
   .service-details,
   .service-more,
   .service-more-icon,
-  .reveal-on-scroll {
+  .reveal-fade-up {
     transition: none !important;
     transform: none !important;
     opacity: 1 !important;

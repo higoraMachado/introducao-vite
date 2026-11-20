@@ -1,176 +1,176 @@
-/* =====================================================
-   SERVIÇOS
-   DESKTOP FIRST
-===================================================== */
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
+
+:root {
+  /* Cores Principais */
+  --cor-fundo: #080808;
+  --cor-superficie-card: rgba(8, 8, 8, 0.78);
+  --cor-superficie-header: rgba(12, 12, 12, 0.92);
+  --cor-superficie-filtros: rgba(10, 10, 10, 0.55);
+  --cor-superficie-campo: rgba(12, 12, 12, 0.85);
+  --cor-superficie-modal: #101010;
+  --cor-superficie-modal-barra: #090909;
+
+  /* Tons de Dourado */
+  --cor-dourado: #d8ad4e;
+  --cor-dourado-claro: #e2ba5d;
+  --cor-dourado-texto-campo: #e5c777;
+  --cor-dourado-acao: #e8c56d;
+  --cor-dourado-borda: rgba(199, 151, 48, 0.72);
+  --cor-dourado-borda-suave: rgba(195, 151, 57, 0.48);
+  --gradiente-dourado: linear-gradient(135deg, #e4c46c, #b9872b);
+  --gradiente-dourado-hover: linear-gradient(135deg, #f0d783, #c99a3d);
+
+  /* Tons de Texto & Bordas */
+  --cor-texto-principal: #f5f2eb;
+  --cor-texto-titulo: #fffaf0;
+  --cor-texto-secundario: #d0c8bc;
+  --cor-texto-tabela: #e9e3d8;
+  --cor-texto-escuro: #100d07;
+  --cor-borda-linha: rgba(235, 221, 191, 0.13);
+
+  /* Status */
+  --cor-ativo-bg: rgba(58, 112, 73, 0.2);
+  --cor-ativo-borda: rgba(107, 177, 120, 0.58);
+  --cor-ativo-texto: #b7e2bc;
+  --cor-inativo-bg: rgba(120, 120, 120, 0.12);
+  --cor-inativo-borda: rgba(180, 180, 180, 0.25);
+  --cor-inativo-texto: #b8b0a4;
+
+  /* Tipografia, Sombras & Transições */
+  --fonte-principal: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --transicao-linha: 0.18s ease;
+  --sombra-card: 0 18px 48px rgba(0, 0, 0, 0.38);
+  --sombra-modal: 0 22px 70px rgba(0, 0, 0, 0.58);
+}
 
 * {
   box-sizing: border-box;
 }
 
-.servicos-page {
-  min-height: 100vh;
+/* =========================================================
+   2. PÁGINA, CABEÇALHO INTERNO & BOTÃO PRINCIPAL
+========================================================= */
+
+body main.servicos-page {
+  position: relative;
+  isolation: isolate;
   width: 100%;
-
-  background: #f3f3f3;
-  color: #171717;
-
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.82)),
+    url("../../assets/fundo das paginas.avif") center center / cover fixed no-repeat;
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
 }
-
-
-/* =====================================================
-   ÁREA PRINCIPAL
-===================================================== */
 
 .servicos-content {
+  position: relative;
+  z-index: 0;
   width: 100%;
-  max-width: 1500px;
-
+  max-width: 1600px;
   margin: 0 auto;
-
-  padding: 40px 42px 70px;
+  padding: 42px 42px 70px;
 }
-
-
-/* =====================================================
-   TÍTULO DA PÁGINA
-===================================================== */
 
 .servicos-heading {
   width: 100%;
-
+  margin-bottom: 28px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
-  margin-bottom: 28px;
 }
 
 .heading-label {
   display: block;
-
   margin-bottom: 8px;
-
-  color: #777777;
-
+  color: var(--cor-dourado);
   font-size: 11px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .servicos-heading h2 {
   margin: 0;
-
-  color: #171717;
-
+  color: var(--cor-texto-titulo);
   font-size: 32px;
   font-weight: 750;
-
   line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
 .servicos-heading p {
   margin: 9px 0 0;
-
-  color: #707070;
-
+  color: var(--cor-texto-secundario);
   font-size: 15px;
 }
+
 .servicos-title {
   text-align: center;
 }
 
 .servicos-title h1 {
   color: #d6b45b;
-  letter-spacing: 1.3px;
   font-size: 34px;
   font-weight: 700;
+  letter-spacing: 1.3px;
 }
 
 .servicos-title p {
   color: #c4c4c4;
 }
 
-
-
-/* =====================================================
-   BOTÃO NOVO SERVIÇO
-===================================================== */
-
 .btn-novo-servico {
   height: 46px;
-
   padding: 0 22px;
-
-  border: none;
+  background: var(--gradiente-dourado);
+  color: var(--cor-texto-escuro);
+  border: 1px solid #d7ad4d;
   border-radius: 8px;
-
-  background: #111111;
-  color: #ffffff;
-
+  box-shadow: 0 4px 18px rgba(194, 145, 42, 0.18);
   font-family: inherit;
-
   font-size: 14px;
   font-weight: 700;
-
-  cursor: pointer;
-
   white-space: nowrap;
-
+  cursor: pointer;
   transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+    background var(--transicao-padrao),
+    box-shadow var(--transicao-padrao),
+    transform var(--transicao-padrao);
 }
 
 .btn-novo-servico:hover {
-  background: #292929;
-
-  transform: translateY(-1px);
+  background: var(--gradiente-dourado-hover);
+  box-shadow: 0 6px 22px rgba(194, 145, 42, 0.28);
+  transform: translateY(-2px);
 }
 
 .btn-novo-servico:active {
   transform: translateY(0);
 }
 
-
-/* =====================================================
-   CARD PRINCIPAL
-===================================================== */
+/* =========================================================
+   3. CARD DE SERVIÇOS, CABEÇALHO & FILTROS
+========================================================= */
 
 .servicos-card {
   width: 100%;
-
-  background: #ffffff;
-
-  border: 1px solid #dedede;
-  border-radius: 12px;
-
   overflow: hidden;
-
-  box-shadow:
-    0 3px 12px rgba(0, 0, 0, 0.045);
+  background: var(--cor-superficie-card);
+  border: 1px solid var(--cor-dourado-borda);
+  border-radius: 13px;
+  box-shadow: var(--sombra-card);
+  backdrop-filter: blur(12px);
 }
-
-
-/* =====================================================
-   CABEÇALHO DO CARD
-===================================================== */
 
 .card-header {
   min-height: 82px;
-
   padding: 18px 24px;
-
-  background: #171717;
-  color: #ffffff;
-
+  background: var(--cor-superficie-header);
+  color: var(--cor-texto-titulo);
+  border-bottom: 1px solid rgba(201, 157, 58, 0.55);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,142 +178,103 @@
 
 .card-label {
   display: block;
-
   margin-bottom: 5px;
-
-  color: #a5a5a5;
-
+  color: #d9ad4d;
   font-size: 10px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .card-header h3 {
   margin: 0;
-
-  color: #ffffff;
-
+  color: var(--cor-texto-titulo);
   font-size: 18px;
   font-weight: 600;
 }
 
 .total-servicos {
   padding: 8px 13px;
-
-  border: 1px solid #484848;
+  background: rgba(0, 0, 0, 0.3);
+  color: #f8e6b4;
+  border: 1px solid rgba(207, 164, 65, 0.55);
   border-radius: 7px;
-
-  color: #ffffff;
-
   font-size: 13px;
-
   white-space: nowrap;
 }
 
-
-/* =====================================================
-   FILTROS
-===================================================== */
-
+/* Filtros */
 .servicos-filtros {
   width: 100%;
-
   padding: 18px 22px;
-
+  background: var(--cor-superficie-filtros);
+  border-bottom: 1px solid rgba(211, 177, 101, 0.2);
   display: flex;
   align-items: center;
-
   gap: 12px;
-
-  border-bottom: 1px solid #e3e3e3;
 }
-
-
-/* PESQUISA */
 
 .campo-pesquisa {
-  height: 42px;
-
   flex: 1;
-
+  height: 42px;
+  padding: 0 13px;
+  background: var(--cor-superficie-campo);
+  border: 1px solid rgba(195, 151, 57, 0.55);
+  border-radius: 7px;
   display: flex;
   align-items: center;
-
   gap: 10px;
-
-  padding: 0 13px;
-
-  background: #ffffff;
-
-  border: 1px solid #d5d5d5;
-  border-radius: 7px;
-
-  transition: 0.2s ease;
-}
-
-.campo-pesquisa:focus-within {
-  border-color: #888888;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.035);
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
 .campo-pesquisa span {
-  color: #777777;
-
+  color: #d7ad4d;
   font-size: 20px;
 }
 
 .campo-pesquisa input {
   width: 100%;
   height: 100%;
-
   border: none;
   outline: none;
-
   background: transparent;
-
-  color: #222222;
-
+  color: var(--cor-texto-titulo);
   font-family: inherit;
-
   font-size: 14px;
 }
 
 .campo-pesquisa input::placeholder {
-  color: #999999;
+  color: #aaa092;
 }
-
-
-/* FILTRO */
 
 .servicos-filtros select {
   width: 170px;
   height: 42px;
-
   padding: 0 12px;
-
-  background: #ffffff;
-
-  border: 1px solid #d5d5d5;
-  border-radius: 7px;
-
-  color: #333333;
-
-  font-family: inherit;
-
-  font-size: 14px;
-
   outline: none;
-
+  background: var(--cor-superficie-campo);
+  color: #f7f0e2;
+  border: 1px solid rgba(195, 151, 57, 0.55);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 14px;
   cursor: pointer;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
+.campo-pesquisa:focus-within,
+.servicos-filtros select:focus {
+  border-color: #e0b64e;
+  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.14);
+}
 
-/* =====================================================
-   TABELA
-===================================================== */
+.servicos-filtros select option {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* =========================================================
+   4. TABELA, COLUNAS, STATUS & AÇÕES
+========================================================= */
 
 .tabela-container {
   width: 100%;
@@ -324,288 +285,189 @@
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
+  background: rgba(7, 7, 7, 0.55);
 }
 
-/* CABEÇALHO */
 .servicos-tabela thead {
-  background: #fafafa;
+  background: rgba(22, 20, 16, 0.92);
 }
 
 .servicos-tabela th {
   height: 48px;
   padding: 0 24px;
-  border-bottom: 1px solid #dedede;
-  color: #666666;
+  color: var(--cor-dourado-claro);
+  border-bottom: 1px solid rgba(198, 154, 57, 0.36);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 1px;
   text-align: left;
+  vertical-align: middle;
   white-space: nowrap;
-  vertical-align: middle; /* Adicionado para centralizar verticalmente */
 }
 
-/* CORPO */
 .servicos-tabela td {
   height: 70px;
   padding: 0 24px;
-  border-bottom: 1px solid #e7e7e7;
-  color: #333333;
+  color: var(--cor-texto-tabela);
+  border-bottom: 1px solid var(--cor-borda-linha);
   font-size: 15px;
-  vertical-align: middle; /* Mantém as linhas centralizadas */
+  vertical-align: middle;
 }
 
-/* =====================================================
-   COLUNAS
-===================================================== */
+.servicos-tabela tbody tr {
+  background: rgba(5, 5, 5, 0.18);
+  transition: background var(--transicao-linha);
+}
 
-/* SERVIÇO */
+.servicos-tabela tbody tr:hover {
+  background: rgba(195, 151, 57, 0.09);
+}
 
+.servicos-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Largura das colunas */
 .servicos-tabela th:nth-child(1),
 .servicos-tabela td:nth-child(1) {
   width: 34%;
 }
-
-
-/* DURAÇÃO */
 
 .servicos-tabela th:nth-child(2),
 .servicos-tabela td:nth-child(2) {
   width: 17%;
 }
 
-
-/* VALOR */
-
 .servicos-tabela th:nth-child(3),
 .servicos-tabela td:nth-child(3) {
   width: 17%;
 }
-
-
-/* STATUS */
 
 .servicos-tabela th:nth-child(4),
 .servicos-tabela td:nth-child(4) {
   width: 14%;
 }
 
-
-/* AÇÕES */
-
 .servicos-tabela th:nth-child(5),
 .servicos-tabela td:nth-child(5) {
   width: 18%;
 }
 
-
-/* =====================================================
-   NOME
-===================================================== */
-
-.nome-servico {
-  color: #222222;
-
+.nome-servico,
+.valor-servico {
+  color: var(--cor-texto-titulo);
   font-size: 15px;
   font-weight: 650;
 }
-
-
-/* =====================================================
-   DURAÇÃO
-===================================================== */
-
-.duracao-servico {
-  color: #555555;
-
-  font-size: 15px;
-}
-
-
-/* =====================================================
-   VALOR
-===================================================== */
 
 .valor-servico {
-  color: #222222;
-
-  font-size: 15px;
-  font-weight: 650;
-
   white-space: nowrap;
 }
 
+.duracao-servico {
+  color: #c8c0b4;
+  font-size: 15px;
+}
 
-/* =====================================================
-   STATUS
-===================================================== */
-
+/* Status */
 .status {
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
   min-width: 58px;
   min-height: 27px;
-
   padding: 4px 11px;
-
   border-radius: 20px;
-
   font-size: 12px;
   font-weight: 650;
-
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .status-ativo {
-  background: #eeeeee;
-
-  color: #222222;
+  background: var(--cor-ativo-bg);
+  color: var(--cor-ativo-texto);
+  border: 1px solid var(--cor-ativo-borda);
 }
 
 .status-inativo {
-  background: #f6f6f6;
-
-  border: 1px solid #d9d9d9;
-
-  color: #777777;
+  background: var(--cor-inativo-bg);
+  color: var(--cor-inativo-texto);
+  border: 1px solid var(--cor-inativo-borda);
 }
 
-
-/* =====================================================
-   AÇÕES
-===================================================== */
-
+/* Ações da Tabela */
 .acoes {
   display: flex;
   align-items: center;
-
   gap: 7px;
-
   white-space: nowrap;
 }
 
 .acoes button {
   height: 34px;
-
   padding: 0 13px;
-
-  border-radius: 6px;
-
+  background: rgba(7, 7, 7, 0.8);
+  color: var(--cor-dourado-acao);
+  border: 1px solid #c69a3a;
+  border-radius: 7px;
   font-family: inherit;
-
   font-size: 12px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition:
     background 0.15s ease,
     border-color 0.15s ease;
 }
 
-
-/* EDITAR */
-
-.acao-editar {
-  border: 1px solid #111111;
-
-  background: #111111;
-  color: #ffffff;
-}
-
-.acao-editar:hover {
-  background: #2c2c2c;
-}
-
-
-/* DESATIVAR */
-
-.acao-desativar {
-  border: 1px solid #d1d1d1;
-
-  background: #ffffff;
-  color: #555555;
-}
-
+.acao-editar:hover,
+.acao-ativar:hover,
 .acao-desativar:hover {
-  background: #f1f1f1;
+  background: rgba(198, 154, 58, 0.18);
+  border-color: #f0cf78;
 }
 
-
-/* ATIVAR */
-
-.acao-ativar {
-  border: 1px solid #222222;
-
-  background: #ffffff;
-  color: #222222;
-}
-
-.acao-ativar:hover {
-  background: #eeeeee;
-}
-
-
-/* =====================================================
-   NENHUM SERVIÇO
-===================================================== */
-
+/* Estado Vazio */
 .nenhum-servico {
   height: 260px;
-
-  text-align: center !important;
+  text-align: center;
 }
 
 .nenhum-servico > div {
   height: 100%;
-
   display: flex;
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
 }
 
 .nenhum-servico span {
   margin-bottom: 12px;
-
-  color: #777777;
-
+  color: #d7ad4d;
   font-size: 30px;
 }
 
 .nenhum-servico strong {
-  color: #333333;
-
+  color: #f5eddf;
   font-size: 16px;
 }
 
 .nenhum-servico p {
   margin: 7px 0 0;
-
-  color: #888888;
-
+  color: #b7ad9c;
   font-size: 14px;
 }
 
-
-/* =====================================================
-   MODAL
-===================================================== */
+/* =========================================================
+   5. MODAL DE CADASTRO / EDIÇÃO & CAMPOS
+========================================================= */
 
 .modal-overlay {
   position: fixed;
-
   inset: 0;
-
   z-index: 1000;
-
   padding: 30px;
-
-  background: rgba(0, 0, 0, 0.55);
-
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -614,32 +476,21 @@
 .modal {
   width: 100%;
   max-width: 700px;
-
   max-height: 90vh;
-
   overflow-y: auto;
-
-  background: #ffffff;
-
+  background: var(--cor-superficie-modal);
+  color: #f5eee0;
+  border: 1px solid rgba(199, 151, 48, 0.7);
   border-radius: 12px;
-
-  box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--sombra-modal);
 }
-
-
-/* =====================================================
-   HEADER MODAL
-===================================================== */
 
 .modal-header {
   min-height: 82px;
-
   padding: 18px 24px;
-
-  background: #171717;
-  color: #ffffff;
-
+  background: var(--cor-superficie-modal-barra);
+  color: #fff7e5;
+  border-bottom: 1px solid rgba(199, 151, 48, 0.55);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -647,9 +498,7 @@
 
 .modal-header h3 {
   margin: 0;
-
-  color: #ffffff;
-
+  color: #fff7e5;
   font-size: 19px;
   font-weight: 600;
 }
@@ -657,50 +506,56 @@
 .modal-fechar {
   width: 36px;
   height: 36px;
-
   border: none;
   border-radius: 6px;
-
   background: transparent;
-
-  color: #ffffff;
-
+  color: #e3bd60;
   font-size: 27px;
-
   cursor: pointer;
 }
 
 .modal-fechar:hover {
-  background: #2d2d2d;
+  background: rgba(199, 151, 48, 0.15);
 }
 
+.servico-form {
+  background: var(--cor-superficie-modal);
+}
 
-/* =====================================================
-   INPUT COM PREFIXO E SUFIXO
-===================================================== */
+.servico-form label {
+  color: var(--cor-dourado-texto-campo);
+  font-size: 13px;
+}
+
+.servico-form input {
+  background: var(--cor-superficie-modal-barra);
+  color: #fff8e9;
+  border-color: var(--cor-dourado-borda-suave);
+  font-size: 14px;
+}
 
 .input-com-prefixo,
 .input-com-sufixo {
   height: 45px;
+  padding: 0 12px;
+  overflow: hidden;
+  background: var(--cor-superficie-modal-barra);
+  border: 1px solid var(--cor-dourado-borda-suave);
+  border-radius: 7px;
   display: flex;
   align-items: center;
-  border: 1px solid #d2d2d2;
-  border-radius: 7px;
-  background: #ffffff;
-  overflow: hidden;
-  padding: 0 12px; /* Adiciona respiro nas bordas laterais */
-  gap: 8px; /* Cria distância segura entre o texto e o input */
+  gap: 8px;
 }
 
 .input-com-prefixo:focus-within,
 .input-com-sufixo:focus-within {
-  border-color: #777777;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
+  border-color: #e0b64e;
+  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.13);
 }
 
 .input-com-prefixo span,
 .input-com-sufixo span {
-  color: #666666;
+  color: #d9b65e;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -710,186 +565,65 @@
 .input-com-sufixo input {
   flex: 1;
   width: 100%;
-  min-width: 0; /* Essencial para o input não estourar o container flex */
+  min-width: 0;
   height: 100%;
   padding: 0;
   border: none;
   outline: none;
   background: transparent;
-  font-family: inherit;
-  font-size: 14px;
-  color: #222222;
-}
-
-/* =====================================================
-   INPUT DURAÇÃO
-===================================================== */
-
-.input-com-sufixo {
-  height: 45px;
-
-  display: flex;
-  align-items: center;
-
-  border: 1px solid #d2d2d2;
-  border-radius: 7px;
-
-  background: #ffffff;
-
-  overflow: hidden;
-}
-
-.input-com-sufixo:focus-within {
-  border-color: #777777;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.04);
-}
-
-.input-com-sufixo input {
-  flex: 1;
-
-  width: 100%;
-  height: 100%;
-
-  padding: 0 13px;
-
-  border: none;
-  outline: none;
-
+  color: #fff8e9;
   font-family: inherit;
   font-size: 14px;
 }
-
-.input-com-sufixo span {
-  padding-right: 13px;
-
-  color: #777777;
-
-  font-size: 13px;
-}
-
-
-/* =====================================================
-   INPUT VALOR
-===================================================== */
-
-.input-com-prefixo {
-  height: 45px;
-
-  display: flex;
-  align-items: center;
-
-  border: 1px solid #d2d2d2;
-  border-radius: 7px;
-
-  background: #ffffff;
-
-  overflow: hidden;
-}
-
-.input-com-prefixo:focus-within {
-  border-color: #777777;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.04);
-}
-
-.input-com-prefixo span {
-  padding-left: 13px;
-
-  color: #555555;
-
-  font-size: 14px;
-  font-weight: 650;
-}
-
-.input-com-prefixo input {
-  flex: 1;
-
-  width: 100%;
-  height: 100%;
-
-  padding: 0 10px;
-
-  border: none;
-  outline: none;
-
-  font-family: inherit;
-  font-size: 14px;
-}
-
-
-/* =====================================================
-   FOOTER DO MODAL
-===================================================== */
 
 .modal-footer {
   min-height: 76px;
-
   padding: 17px 30px;
-
-  border-top: 1px solid #e3e3e3;
-
+  background: var(--cor-superficie-modal-barra);
+  border-top: 1px solid rgba(199, 151, 48, 0.28);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 10px;
 }
-
-
-/* =====================================================
-   BOTÕES DO MODAL
-===================================================== */
 
 .btn-cancelar,
 .btn-salvar {
   height: 42px;
-
   padding: 0 19px;
-
   border-radius: 7px;
-
   font-family: inherit;
-
   font-size: 14px;
   font-weight: 650;
-
   cursor: pointer;
-
-  transition: 0.2s ease;
+  transition: var(--transicao-padrao);
 }
 
 .btn-cancelar {
-  border: 1px solid #d0d0d0;
-
-  background: #ffffff;
-  color: #444444;
+  background: #171717;
+  color: #e0d8ca;
+  border: 1px solid #66552e;
 }
 
 .btn-cancelar:hover {
-  background: #f2f2f2;
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .btn-salvar {
-  border: 1px solid #111111;
-
-  background: #111111;
-  color: #ffffff;
+  background: var(--gradiente-dourado);
+  color: var(--cor-texto-escuro);
+  border: 1px solid #d7ad4d;
 }
 
 .btn-salvar:hover {
-  background: #2d2d2d;
+  background: var(--gradiente-dourado-hover);
 }
 
-
-/* =====================================================
-   TELAS MENORES
-===================================================== */
+/* =========================================================
+   6. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1100px) {
-
   .servicos-content {
     padding-left: 30px;
     padding-right: 30px;
@@ -906,13 +640,7 @@
   }
 }
 
-
-/* =====================================================
-   TABLET
-===================================================== */
-
 @media (max-width: 850px) {
-
   .servicos-content {
     padding: 30px 20px 50px;
   }
@@ -934,12 +662,10 @@
   }
 }
 
-
-/* =====================================================
-   CELULAR
-===================================================== */
-
 @media (max-width: 600px) {
+  body main.servicos-page {
+    background-attachment: scroll;
+  }
 
   .servicos-content {
     padding: 25px 14px 40px;
@@ -947,9 +673,7 @@
 
   .servicos-heading {
     flex-direction: column;
-
     align-items: stretch;
-
     gap: 18px;
   }
 
@@ -967,12 +691,16 @@
 
   .servicos-filtros {
     flex-direction: column;
-
     align-items: stretch;
+    background: rgba(8, 8, 8, 0.66);
   }
 
   .servicos-filtros select {
     width: 100%;
+  }
+
+  .servicos-card {
+    backdrop-filter: blur(8px);
   }
 
   .modal {
@@ -985,550 +713,5 @@
 
   .form-full {
     grid-column: auto;
-  }
-}
-
-/* =====================================================
-   HOPE BARBEARIA — TEMA ESCURO PRETO E DOURADO
-   Mantém as classes e a lógica existentes.
-===================================================== */
-
-.servicos-page {
-  position: relative;
-  isolation: isolate;
-  min-height: 100vh;
-  color: #f5f2eb;
-  background:
-    linear-gradient(rgba(5, 5, 5, 0.72), rgba(5, 5, 5, 0.82)),
-    url("../../assets/fundo das paginas.avif") center center / cover fixed no-repeat,
-    #080808;
-}
-
-.servicos-content {
-  position: relative;
-  z-index: 0;
-  max-width: 1600px;
-  padding-top: 42px;
-}
-
-.heading-label {
-  color: #d8ad4e;
-}
-
-.servicos-heading h2 {
-  color: #fffaf0;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-}
-
-.servicos-heading p {
-  color: #d0c8bc;
-}
-
-.btn-novo-servico {
-  border: 1px solid #d7ad4d;
-  background: linear-gradient(135deg, #e4c46c, #b9872b);
-  color: #100d07;
-  box-shadow: 0 4px 18px rgba(194, 145, 42, 0.18);
-}
-
-.btn-novo-servico:hover {
-  background: linear-gradient(135deg, #f0d783, #c99a3d);
-  box-shadow: 0 6px 22px rgba(194, 145, 42, 0.28);
-  transform: translateY(-2px);
-}
-
-.servicos-card {
-  background: rgba(8, 8, 8, 0.78);
-  border: 1px solid rgba(199, 151, 48, 0.72);
-  border-radius: 13px;
-  box-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.38),
-    inset 0 1px 0 rgba(255, 220, 130, 0.08);
-  backdrop-filter: blur(12px);
-}
-
-.card-header {
-  min-height: 104px;
-  background: linear-gradient(110deg, rgba(5, 5, 5, 0.96), rgba(21, 18, 12, 0.84));
-  border-bottom: 1px solid rgba(201, 157, 58, 0.55);
-  box-shadow: inset 0 -3px 0 rgba(190, 143, 43, 0.55);
-}
-
-.card-label {
-  color: #d9ad4d;
-}
-
-.card-header h3 {
-  color: #fffaf0;
-}
-
-.total-servicos {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(207, 164, 65, 0.55);
-  color: #f8e6b4;
-}
-
-.servicos-filtros {
-  background: rgba(10, 10, 10, 0.48);
-  border-bottom: 1px solid rgba(211, 177, 101, 0.2);
-}
-
-.campo-pesquisa,
-.servicos-filtros select {
-  background: rgba(12, 12, 12, 0.72);
-  border: 1px solid rgba(195, 151, 57, 0.48);
-  color: #f7f0e2;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
-}
-
-.campo-pesquisa:focus-within,
-.servicos-filtros select:focus {
-  border-color: #e0b64e;
-  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.14);
-}
-
-.campo-pesquisa span {
-  color: #d7ad4d;
-}
-
-.campo-pesquisa input {
-  color: #fffaf0;
-}
-
-.campo-pesquisa input::placeholder {
-  color: #aaa092;
-}
-
-.servicos-filtros select option {
-  background: #111;
-  color: #f7f0e2;
-}
-
-.servicos-tabela {
-  background: rgba(7, 7, 7, 0.48);
-}
-
-.servicos-tabela thead {
-  background: rgba(22, 20, 16, 0.86);
-}
-
-.servicos-tabela th {
-  color: #e2ba5d;
-  border-bottom: 1px solid rgba(198, 154, 57, 0.36);
-}
-
-.servicos-tabela td {
-  color: #e9e3d8;
-  border-bottom: 1px solid rgba(235, 221, 191, 0.13);
-}
-
-.servicos-tabela tbody tr {
-  background: rgba(5, 5, 5, 0.18);
-  transition: background 0.18s ease;
-}
-
-.servicos-tabela tbody tr:hover {
-  background: rgba(195, 151, 57, 0.09);
-}
-
-.nome-servico,
-.valor-servico {
-  color: #fffaf0;
-}
-
-.duracao-servico {
-  color: #c8c0b4;
-}
-
-.status-ativo {
-  background: rgba(58, 112, 73, 0.2);
-  border: 1px solid rgba(107, 177, 120, 0.58);
-  color: #b7e2bc;
-}
-
-.status-inativo {
-  background: rgba(120, 120, 120, 0.12);
-  border: 1px solid rgba(180, 180, 180, 0.25);
-  color: #b8b0a4;
-}
-
-.acoes button {
-  border-radius: 7px;
-}
-
-.acao-editar,
-.acao-ativar {
-  border: 1px solid #c69a3a;
-  background: rgba(7, 7, 7, 0.62);
-  color: #e8c56d;
-}
-
-.acao-editar:hover,
-.acao-ativar:hover {
-  background: rgba(198, 154, 58, 0.17);
-  border-color: #f0cf78;
-}
-
-.acao-desativar {
-  border: 1px solid rgba(198, 154, 58, 0.75);
-  background: rgba(9, 9, 9, 0.7);
-  color: #e6c46c;
-}
-
-.acao-desativar:hover {
-  background: rgba(198, 154, 58, 0.16);
-  border-color: #f0cf78;
-}
-
-.nenhum-servico span {
-  color: #d7ad4d;
-}
-
-.nenhum-servico strong {
-  color: #f5eddf;
-}
-
-.nenhum-servico p {
-  color: #b7ad9c;
-}
-
-/* Modal de cadastro/edição */
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.76);
-  backdrop-filter: blur(5px);
-}
-
-.modal {
-  background: rgba(12, 12, 12, 0.96);
-  border: 1px solid rgba(199, 151, 48, 0.7);
-  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.58);
-  color: #f5eee0;
-}
-
-.modal-header {
-  background: linear-gradient(110deg, #070707, #1a160d);
-  border-bottom: 1px solid rgba(199, 151, 48, 0.55);
-}
-
-.modal-header h3 {
-  color: #fff7e5;
-}
-
-.modal-fechar {
-  color: #e3bd60;
-}
-
-.modal-fechar:hover {
-  background: rgba(199, 151, 48, 0.15);
-}
-
-.servico-form {
-  background: rgba(12, 12, 12, 0.94);
-}
-
-.form-group label {
-  color: #e5c777;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  background: rgba(5, 5, 5, 0.72);
-  border: 1px solid rgba(199, 151, 48, 0.42);
-  color: #fff8e9;
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #8f8779;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #e0b64e;
-  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.13);
-}
-
-.input-com-prefixo,
-.input-com-sufixo {
-  background: rgba(5, 5, 5, 0.72);
-  border-color: rgba(199, 151, 48, 0.48);
-}
-
-.input-com-prefixo:focus-within,
-.input-com-sufixo:focus-within {
-  border-color: #e0b64e;
-  box-shadow: 0 0 0 2px rgba(210, 166, 63, 0.13);
-}
-
-.input-com-prefixo span,
-.input-com-sufixo span {
-  color: #d9b65e;
-}
-
-.input-com-prefixo input,
-.input-com-sufixo input {
-  color: #fff8e9;
-}
-
-.modal-footer {
-  background: rgba(7, 7, 7, 0.96);
-  border-top: 1px solid rgba(199, 151, 48, 0.28);
-}
-
-.btn-cancelar {
-  background: transparent;
-  border-color: rgba(220, 204, 170, 0.32);
-  color: #e0d8ca;
-}
-
-.btn-cancelar:hover {
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.btn-salvar {
-  border: 1px solid #e0b64e;
-  background: linear-gradient(135deg, #e4c46c, #b9872b);
-  color: #100d07;
-}
-
-.btn-salvar:hover {
-  background: linear-gradient(135deg, #f0d783, #c99a3d);
-}
-
-@media (max-width: 600px) {
-  .servicos-page {
-    background-attachment: scroll;
-  }
-
-  .servicos-card {
-    backdrop-filter: blur(8px);
-  }
-
-  .servicos-filtros {
-    background: rgba(8, 8, 8, 0.66);
-  }
-}
-/* ============================================
-   CORREÇÃO DE CONFLITOS COM O GLOBAL.CSS
-   HOPE BARBEARIA — PÁGINA SERVIÇOS
-============================================ */
-
-/* Fundo escuro com imagem */
-body main.servicos-page {
-  min-height: 100vh;
-  width: 100%;
-  color: #f5f2eb;
-
-  background:
-    linear-gradient(
-      rgba(5, 5, 5, 0.72),
-      rgba(5, 5, 5, 0.82)
-    ),
-    url("../../assets/fundo das paginas.avif")
-      center center / cover fixed no-repeat !important;
-}
-
-/* Títulos da página */
-body .servicos-page .servicos-heading h2 {
-  color: #fffaf0;
-  font-size: 32px !important;
-}
-
-body .servicos-page .heading-label {
-  color: #d8ad4e;
-  font-size: 11px !important;
-}
-
-body .servicos-page .servicos-heading p {
-  color: #d0c8bc;
-  font-size: 15px !important;
-}
-
-/* Card principal transparente */
-body .servicos-page .servicos-card {
-  background: rgba(8, 8, 8, 0.78);
-  border: 1px solid rgba(199, 151, 48, 0.72);
-  border-radius: 13px;
-
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
-  backdrop-filter: blur(12px);
-}
-
-/* Cabeçalho do card */
-body .servicos-page .servicos-card .card-header {
-  min-height: 82px;
-  background: rgba(12, 12, 12, 0.92);
-  border-bottom: 1px solid rgba(201, 157, 58, 0.55);
-}
-
-body .servicos-page .card-header h3 {
-  color: #fffaf0;
-  font-size: 18px !important;
-}
-
-body .servicos-page .card-label {
-  color: #d9ad4d;
-}
-
-/* Área de filtros */
-body .servicos-page .servicos-filtros {
-  background: rgba(10, 10, 10, 0.55);
-  border-bottom: 1px solid rgba(211, 177, 101, 0.2);
-}
-
-body .servicos-page .campo-pesquisa,
-body .servicos-page .servicos-filtros select {
-  background: rgba(12, 12, 12, 0.85);
-  border: 1px solid rgba(195, 151, 57, 0.55);
-  color: #f7f0e2;
-}
-
-body .servicos-page .campo-pesquisa input {
-  color: #fffaf0;
-  font-size: 14px !important;
-}
-
-body .servicos-page .campo-pesquisa input::placeholder {
-  color: #aaa092;
-}
-
-body .servicos-page .servicos-filtros select {
-  font-size: 14px !important;
-}
-
-body .servicos-page .servicos-filtros select option {
-  background: #111111;
-  color: #ffffff;
-}
-
-/* Tabela */
-body .servicos-page .servicos-tabela {
-  background: rgba(7, 7, 7, 0.55);
-}
-
-body .servicos-page .servicos-tabela thead {
-  background: rgba(22, 20, 16, 0.92);
-}
-
-body .servicos-page .servicos-tabela th {
-  color: #e2ba5d;
-  font-size: 12px !important;
-  border-bottom: 1px solid rgba(198, 154, 57, 0.36);
-}
-
-body .servicos-page .servicos-tabela td {
-  color: #e9e3d8;
-  font-size: 15px !important;
-  border-bottom: 1px solid rgba(235, 221, 191, 0.13);
-}
-
-body .servicos-page .servicos-tabela tbody tr:hover {
-  background: rgba(195, 151, 57, 0.09);
-}
-
-body .servicos-page .nome-servico,
-body .servicos-page .valor-servico {
-  color: #fffaf0;
-  font-size: 15px !important;
-}
-
-body .servicos-page .duracao-servico {
-  color: #c8c0b4;
-  font-size: 15px !important;
-}
-
-/* Botões */
-body .servicos-page .btn-novo-servico,
-body .servicos-page .btn-salvar {
-  background: linear-gradient(135deg, #e4c46c, #b9872b);
-  border: 1px solid #d7ad4d;
-  color: #100d07;
-  font-size: 14px !important;
-}
-
-body .servicos-page .btn-novo-servico:hover,
-body .servicos-page .btn-salvar:hover {
-  background: linear-gradient(135deg, #f0d783, #c99a3d);
-}
-
-body .servicos-page .acao-editar,
-body .servicos-page .acao-ativar,
-body .servicos-page .acao-desativar {
-  border: 1px solid #c69a3a;
-  background: rgba(7, 7, 7, 0.8);
-  color: #e8c56d;
-  font-size: 12px !important;
-}
-
-body .servicos-page .acao-editar:hover,
-body .servicos-page .acao-ativar:hover,
-body .servicos-page .acao-desativar:hover {
-  background: rgba(198, 154, 58, 0.18);
-}
-
-/* Modal */
-body .servicos-page .modal {
-  background: #101010;
-  border: 1px solid rgba(199, 151, 48, 0.7);
-  color: #f5eee0;
-}
-
-body .servicos-page .modal-header {
-  background: #090909;
-  border-bottom: 1px solid rgba(199, 151, 48, 0.55);
-}
-
-body .servicos-page .modal-header h3 {
-  color: #fff7e5;
-  font-size: 19px !important;
-}
-
-body .servicos-page .servico-form {
-  background: #101010;
-}
-
-body .servicos-page .servico-form label {
-  color: #e5c777;
-  font-size: 13px !important;
-}
-
-body .servicos-page .servico-form input {
-  background: #090909;
-  color: #fff8e9;
-  border-color: rgba(199, 151, 48, 0.48);
-  font-size: 14px !important;
-}
-
-body .servicos-page .input-com-prefixo,
-body .servicos-page .input-com-sufixo {
-  background: #090909;
-  border-color: rgba(199, 151, 48, 0.48);
-}
-
-body .servicos-page .input-com-prefixo input,
-body .servicos-page .input-com-sufixo input {
-  background: transparent;
-  color: #fff8e9;
-}
-
-body .servicos-page .modal-footer {
-  background: #090909;
-  border-top: 1px solid rgba(199, 151, 48, 0.28);
-}
-
-body .servicos-page .btn-cancelar {
-  background: #171717;
-  color: #e0d8ca;
-  border-color: #66552e;
-  font-size: 14px !important;
-}
-
-/* Ajuste para telas pequenas */
-@media (max-width: 600px) {
-  body main.servicos-page {
-    background-attachment: scroll !important;
   }
 }

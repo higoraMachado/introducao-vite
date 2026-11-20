@@ -1,17 +1,41 @@
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
+
 :root {
+  /* Cores Principais */
   --bg-page: #f4f4f4;
   --panel: #ffffff;
   --panel-alt: #fafafa;
+  --header-bg: #111111;
   --line: #e8e8e8;
+  --border-field: #d9d9d9;
+
+  /* Tons de Texto & Ações */
   --text: #171717;
+  --label-color: #272727;
   --muted: #666666;
+  --muted-alt: #777777;
+  --muted-light: #aaaaaa;
+  --muted-user: #999999;
   --primary: #171717;
+  --primary-hover: #2d2d2d;
   --primary-soft: #1e1e1e;
+  --secondary-bg: #f2f2f2;
+  --secondary-hover: #e5e5e5;
+
+  /* Sombras & Transições */
+  --sombra-form: 0 10px 30px rgba(17, 17, 17, 0.06);
+  --transicao-padrao: 0.2s ease;
 }
 
 * {
   box-sizing: border-box;
 }
+
+/* =========================================================
+   2. LAYOUT BASE & CABEÇALHO
+========================================================= */
 
 .despesas-page {
   min-height: 100vh;
@@ -21,20 +45,20 @@
 }
 
 .despesas-header {
+  height: 82px;
+  padding: 0 42px;
+  background: var(--header-bg);
+  color: var(--panel);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  height: 82px;
-  padding: 0 42px;
-  background: #111111;
-  color: #ffffff;
 }
 
 .header-logo {
+  width: 220px;
   display: flex;
   align-items: center;
-  width: 220px;
 }
 
 .header-logo img {
@@ -53,8 +77,8 @@
 
 .header-title p {
   margin: 4px 0 0;
+  color: var(--muted-light);
   font-size: 13px;
-  color: #aaaaaa;
 }
 
 .header-user {
@@ -64,15 +88,15 @@
 }
 
 .user-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #ffffff;
-  color: #111111;
+  background: var(--panel);
+  color: var(--header-bg);
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .user-info {
@@ -82,14 +106,18 @@
 }
 
 .user-info strong {
+  color: var(--panel);
   font-size: 14px;
-  color: #ffffff;
 }
 
 .user-info span {
+  color: var(--muted-user);
   font-size: 12px;
-  color: #999999;
 }
+
+/* =========================================================
+   3. CONTEÚDO, TÍTULO & FORMULÁRIO DE DESPESAS
+========================================================= */
 
 .despesas-content {
   max-width: 980px;
@@ -103,31 +131,31 @@
 
 .heading-label {
   display: block;
+  margin-bottom: 8px;
+  color: var(--muted-alt);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.4px;
-  color: #777777;
-  margin-bottom: 8px;
 }
 
 .page-heading h2 {
   margin: 0;
+  color: var(--text);
   font-size: 32px;
-  color: #171717;
 }
 
 .page-heading p {
   margin: 7px 0 0;
-  color: #777777;
+  color: var(--muted-alt);
   font-size: 15px;
 }
 
 .despesas-form {
-  background: #ffffff;
+  padding: 28px 24px;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 28px 24px;
-  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.06);
+  box-shadow: var(--sombra-form);
 }
 
 .form-grid {
@@ -147,74 +175,81 @@
 }
 
 .form-group label {
+  color: var(--label-color);
   font-size: 14px;
   font-weight: 700;
-  color: #272727;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   height: 48px;
-  border: 1px solid #d9d9d9;
-  border-radius: 10px;
-  background: #ffffff;
   padding: 0 14px;
-  font-size: 15px;
+  border: 1px solid var(--border-field);
+  border-radius: 10px;
+  background: var(--panel);
   color: var(--text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 15px;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #171717;
+  border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.08);
 }
 
+/* =========================================================
+   4. AÇÕES DO FORMULÁRIO & RESPONSIVIDADE
+========================================================= */
+
 .form-actions {
+  margin-top: 28px;
   display: flex;
   justify-content: flex-end;
   gap: 14px;
-  margin-top: 28px;
 }
 
 .btn-primary,
 .btn-secondary {
-  border: none;
-  border-radius: 10px;
   height: 46px;
   padding: 0 18px;
+  border: none;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background var(--transicao-padrao),
+    color var(--transicao-padrao),
+    transform var(--transicao-padrao);
 }
 
 .btn-primary {
-  background: #171717;
-  color: #ffffff;
+  background: var(--primary);
+  color: var(--panel);
 }
 
 .btn-primary:hover {
-  background: #2d2d2d;
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background: #f2f2f2;
-  color: #171717;
+  background: var(--secondary-bg);
+  color: var(--text);
 }
 
 .btn-secondary:hover {
-  background: #e5e5e5;
+  background: var(--secondary-hover);
 }
 
 @media (max-width: 760px) {
   .despesas-header {
-    flex-wrap: wrap;
     height: auto;
     padding: 18px 20px;
+    flex-wrap: wrap;
   }
 
   .header-logo {

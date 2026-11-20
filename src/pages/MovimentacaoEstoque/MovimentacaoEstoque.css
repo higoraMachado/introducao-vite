@@ -1,46 +1,73 @@
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
+
 :root {
+  /* Cores Principais */
   --bg-page: #f4f4f4;
   --panel: #ffffff;
   --panel-alt: #fafafa;
+  --header-bg: #111111;
   --line: #e8e8e8;
+  --border-field: #d9d9d9;
+
+  /* Tons de Texto & Ações */
   --text: #171717;
+  --text-table: #333333;
   --muted: #666666;
+  --muted-alt: #777777;
+  --muted-light: #aaaaaa;
+  --muted-user: #999999;
   --primary: #171717;
+  --primary-hover: #2d2d2d;
   --primary-soft: #1e1e1e;
+  --secondary-bg: #f2f2f2;
+  --bullet-bg: #ededed;
+
+  /* Estados & Indicadores */
   --success: #1f8f5f;
   --success-soft: #e9f7f0;
   --danger: #d64545;
   --danger-soft: #fff0f0;
   --warning: #d59000;
   --warning-soft: #fff8e6;
+
+  /* Sombras & Transições */
+  --fonte-principal: Inter, Arial, sans-serif;
+  --sombra-modal: 0 24px 80px rgba(17, 17, 17, 0.18);
+  --transicao-padrao: 0.2s ease;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* =========================================================
+   2. LAYOUT BASE & CABEÇALHO
+========================================================= */
+
 .movimentacao-page {
   min-height: 100vh;
   background: var(--bg-page);
   color: var(--text);
-  font-family: Inter, Arial, sans-serif;
+  font-family: var(--fonte-principal);
 }
 
 .movimentacao-header {
+  height: 82px;
+  padding: 0 42px;
+  background: var(--header-bg);
+  color: var(--panel);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  height: 82px;
-  padding: 0 42px;
-  background: #111111;
-  color: #ffffff;
 }
 
 .header-logo {
+  width: 220px;
   display: flex;
   align-items: center;
-  width: 220px;
 }
 
 .header-logo img {
@@ -59,8 +86,8 @@
 
 .header-title p {
   margin: 4px 0 0;
+  color: var(--muted-light);
   font-size: 13px;
-  color: #aaaaaa;
 }
 
 .header-user {
@@ -70,15 +97,15 @@
 }
 
 .user-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #ffffff;
-  color: #111111;
+  background: var(--panel);
+  color: var(--header-bg);
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .user-info {
@@ -92,9 +119,13 @@
 }
 
 .user-info span {
+  color: var(--muted-user);
   font-size: 12px;
-  color: #999999;
 }
+
+/* =========================================================
+   3. CONTEÚDO, TÍTULO & CARTÕES DE RESUMO
+========================================================= */
 
 .movimentacao-content {
   max-width: 1380px;
@@ -103,157 +134,98 @@
 }
 
 .page-heading {
+  margin-bottom: 28px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 28px;
-}
-
-.new-product-button {
-  border: none;
-  border-radius: 10px;
-  background: #171717;
-  color: #ffffff;
-  height: 46px;
-  padding: 0 18px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.new-product-button:hover {
-  background: #2d2d2d;
-  transform: translateY(-1px);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(17, 17, 17, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 50;
-}
-
-.modal-card {
-  position: relative;
-  width: min(560px, 100%);
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  padding: 28px 24px 24px;
-  box-shadow: 0 24px 80px rgba(17, 17, 17, 0.18);
-}
-
-.modal-card h3 {
-  margin: 14px 0 8px;
-  font-size: 26px;
-  color: var(--text);
-}
-
-.modal-card p {
-  margin: 0 0 20px;
-  color: var(--muted);
-}
-
-.modal-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #111111;
-  color: #ffffff;
-  font-size: 32px;
-  font-weight: 700;
-}
-
-.modal-close {
-  position: absolute;
-  right: 18px;
-  top: 14px;
-  border: none;
-  background: transparent;
-  color: #666666;
-  font-size: 30px;
-  cursor: pointer;
-}
-
-.modal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 .heading-label,
 .panel-kicker {
   display: block;
+  margin-bottom: 8px;
+  color: var(--muted-alt);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.4px;
-  color: #777777;
-  margin-bottom: 8px;
 }
 
 .page-heading h2 {
   margin: 0;
+  color: var(--text);
   font-size: 32px;
-  color: #171717;
 }
 
 .page-heading p {
   margin: 7px 0 0;
-  color: #777777;
+  color: var(--muted-alt);
   font-size: 15px;
 }
 
+.new-product-button {
+  height: 46px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--panel);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background var(--transicao-padrao),
+    transform var(--transicao-padrao);
+}
+
+.new-product-button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Resumo */
 .summary-grid {
+  margin-bottom: 30px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  margin-bottom: 30px;
 }
 
 .summary-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
   min-height: 118px;
   padding: 20px 24px;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
 }
 
 .summary-card.accent {
-  background: linear-gradient(135deg, #ffffff 0%, #f6fff9 100%);
+  background: linear-gradient(135deg, var(--panel) 0%, #f6fff9 100%);
 }
 
 .summary-card.danger {
-  background: linear-gradient(135deg, #ffffff 0%, #fff7f7 100%);
+  background: linear-gradient(135deg, var(--panel) 0%, #fff7f7 100%);
 }
 
 .summary-card.neutral {
-  background: linear-gradient(135deg, #ffffff 0%, #faf7ff 100%);
+  background: linear-gradient(135deg, var(--panel) 0%, #faf7ff 100%);
 }
 
 .summary-label {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.7px;
+  text-transform: uppercase;
 }
 
 .summary-card strong {
-  font-size: 28px;
   color: var(--text);
+  font-size: 28px;
 }
 
 .summary-card small {
@@ -261,18 +233,22 @@
   font-size: 12px;
 }
 
+/* =========================================================
+   4. FORMULÁRIO DE MOVIMENTAÇÃO & PAINEL LATERAL
+========================================================= */
+
 .movement-layout {
+  margin-bottom: 24px;
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.9fr);
   gap: 24px;
-  margin-bottom: 24px;
 }
 
 .panel {
+  overflow: hidden;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 16px;
-  overflow: hidden;
 }
 
 .panel-header {
@@ -282,8 +258,8 @@
 
 .panel-header h3 {
   margin: 0;
-  font-size: 20px;
   color: var(--text);
+  font-size: 20px;
 }
 
 .movement-form {
@@ -291,27 +267,30 @@
 }
 
 .movement-type {
+  margin-bottom: 20px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  margin-bottom: 20px;
 }
 
 .movement-type button {
+  padding: 12px 16px;
   border: 1px solid var(--line);
+  border-radius: 10px;
   background: #f7f7f7;
   color: var(--text);
-  border-radius: 10px;
-  padding: 12px 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background var(--transicao-padrao),
+    color var(--transicao-padrao),
+    border-color var(--transicao-padrao);
 }
 
 .movement-type button.active {
-  border-color: var(--primary);
   background: var(--primary);
-  color: #ffffff;
+  color: var(--panel);
+  border-color: var(--primary);
 }
 
 .form-row {
@@ -321,16 +300,16 @@
 }
 
 .form-group {
+  margin-bottom: 18px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 18px;
 }
 
 .form-group label {
+  color: var(--text);
   font-size: 13px;
   font-weight: 600;
-  color: var(--text);
 }
 
 .form-group input,
@@ -338,9 +317,9 @@
   width: 100%;
   height: 44px;
   padding: 0 14px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--border-field);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--panel);
   color: var(--text);
   font-size: 14px;
 }
@@ -352,53 +331,54 @@
 }
 
 .form-actions {
+  margin-top: 8px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 8px;
 }
 
 .secondary-button,
 .primary-button {
-  border: none;
-  border-radius: 10px;
   min-width: 160px;
   height: 44px;
+  border: none;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .secondary-button {
-  background: #f2f2f2;
+  background: var(--secondary-bg);
   color: var(--text);
 }
 
 .primary-button {
   background: var(--primary);
-  color: #ffffff;
+  color: var(--panel);
 }
 
+/* Painel Lateral de Estoque */
 .info-panel {
   display: flex;
   flex-direction: column;
 }
 
 .stock-list {
+  padding: 18px 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 18px 24px 24px;
 }
 
 .stock-item {
+  padding: 12px 14px;
+  background: var(--panel-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  background: var(--panel-alt);
-  border-radius: 12px;
 }
 
 .stock-item strong {
@@ -412,9 +392,13 @@
 }
 
 .stock-item span {
-  font-weight: 700;
   color: var(--primary);
+  font-weight: 700;
 }
+
+/* =========================================================
+   5. TABELA DE MOVIMENTAÇÕES
+========================================================= */
 
 .table-panel {
   margin-bottom: 20px;
@@ -431,9 +415,9 @@
   min-width: 150px;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--border-field);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--panel);
   color: var(--text);
 }
 
@@ -444,26 +428,27 @@
 
 .table-wrapper table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 900px;
+  border-collapse: collapse;
 }
 
 .table-wrapper th {
   padding: 14px 18px;
-  text-align: left;
-  font-size: 11px;
-  letter-spacing: 0.7px;
-  text-transform: uppercase;
-  color: #777777;
-  background: #fafafa;
+  background: var(--panel-alt);
+  color: var(--muted-alt);
   border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-align: left;
+  text-transform: uppercase;
 }
 
 .table-wrapper td {
   padding: 16px 18px;
-  font-size: 14px;
-  color: #333333;
+  color: var(--text-table);
   border-bottom: 1px solid var(--line);
+  font-size: 14px;
 }
 
 .product-cell {
@@ -476,32 +461,32 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
+  background: var(--bullet-bg);
+  color: var(--text);
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  background: #ededed;
-  color: var(--text);
 }
 
-.product-cell strong {
+.product-cell strong,
+.product-cell small {
   display: block;
 }
 
 .product-cell small {
-  display: block;
   color: var(--muted);
 }
 
 .badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   min-width: 85px;
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .badge.entrada {
@@ -512,6 +497,72 @@
 .badge.saida {
   background: var(--danger-soft);
   color: var(--danger);
+}
+
+/* =========================================================
+   6. MODAL & RESPONSIVIDADE
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  padding: 20px;
+  background: rgba(17, 17, 17, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-card {
+  position: relative;
+  width: min(560px, 100%);
+  padding: 28px 24px 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--sombra-modal);
+}
+
+.modal-card h3 {
+  margin: 14px 0 8px;
+  color: var(--text);
+  font-size: 26px;
+}
+
+.modal-card p {
+  margin: 0 0 20px;
+  color: var(--muted);
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--header-bg);
+  color: var(--panel);
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 @media (max-width: 980px) {

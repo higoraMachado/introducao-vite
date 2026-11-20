@@ -1,522 +1,434 @@
-/* ========================================
-   RESET
-======================================== */
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
+
+:root {
+  /* Cores Principais */
+  --cor-fundo: #080808;
+  --cor-header: rgba(8, 8, 8, 0.92);
+  --cor-card-stat: rgba(17, 17, 17, 0.92);
+  --cor-card-produtos: rgba(13, 13, 13, 0.96);
+  --cor-modal: #141414;
+  --cor-campo: #202020;
+  --cor-campo-filtro: #191919;
+
+  /* Tons de Dourado */
+  --cor-dourado: #d6b45b;
+  --cor-dourado-claro: #f0d27a;
+  --cor-dourado-escuro: #b88a2c;
+  --cor-dourado-borda-suave: rgba(198, 160, 67, 0.25);
+  --cor-dourado-borda-media: rgba(198, 160, 67, 0.38);
+  --cor-dourado-borda-forte: rgba(214, 180, 91, 0.5);
+  --gradiente-dourado: linear-gradient(135deg, #e0bf68, #b88a2c);
+  --gradiente-dourado-hover: linear-gradient(135deg, #f0d27a, #c99b3d);
+
+  /* Tons de Texto & Bordas */
+  --cor-texto-principal: #f5f5f5;
+  --cor-texto-secundario: #c2c2c2;
+  --cor-texto-muted: #bdbdbd;
+  --cor-texto-suave: #999999;
+  --cor-texto-escuro: #17130a;
+  --cor-borda-campo-escuro: #514321;
+
+  /* Status de Estoque & Ações */
+  --cor-normal-bg: rgba(53, 130, 76, 0.18);
+  --cor-normal-texto: #8ed5a2;
+  --cor-normal-borda: rgba(92, 180, 117, 0.2);
+  --cor-baixo-bg: rgba(214, 180, 91, 0.15);
+  --cor-baixo-texto: #e7c96f;
+  --cor-baixo-borda: rgba(214, 180, 91, 0.25);
+  --cor-esgotado-bg: rgba(176, 54, 54, 0.18);
+  --cor-esgotado-texto: #ff9999;
+  --cor-esgotado-borda: rgba(176, 54, 54, 0.25);
+
+  /* Tipografia, Sombras & Transições */
+  --fonte-principal: Inter, Arial, Helvetica, sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --sombra-card: 0 12px 30px rgba(0, 0, 0, 0.3);
+  --sombra-modal: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
 
 * {
   box-sizing: border-box;
 }
 
+/* =========================================================
+   2. PÁGINA, CABEÇALHO & PERFIL DO USUÁRIO
+========================================================= */
+
 .estoque-page {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
   min-height: 100vh;
-
-  background: #f3f3f3;
-
-  color: #171717;
-
-  font-family:
-    Inter,
-    Arial,
-    Helvetica,
-    sans-serif;
+  background:
+    linear-gradient(rgba(8, 8, 8, 0.88), rgba(8, 8, 8, 0.94)),
+    url("../../assets/fundo das paginas.avif") center / cover fixed;
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
 }
-
-
-/* ========================================
-   HEADER
-======================================== */
 
 .estoque-header {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  height: 82px;
-
-  background: #111111;
-
+  height: 92px;
+  padding: 0 42px;
+  background: var(--cor-header);
+  color: var(--cor-texto-principal);
+  border-bottom: 1px solid rgba(198, 160, 67, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
   display: flex;
   align-items: center;
-
-  padding: 0 42px;
-
-  color: white;
 }
-
-
-/* LOGO */
 
 .header-logo {
   width: 220px;
-
   display: flex;
   align-items: center;
 }
 
 .header-logo img {
+  display: block;
   width: 200px;
-
+  max-height: 68px;
   height: auto;
-
   object-fit: contain;
 }
 
-
-/* TÍTULO */
-
 .header-title {
   flex: 1;
+  text-align: center;
 }
 
 .header-title h1 {
   margin: 0;
-
+  color: var(--cor-dourado);
   font-size: 22px;
-
   font-weight: 700;
+  letter-spacing: 1.3px;
 }
 
 .header-title p {
   margin: 4px 0 0;
-
-  color: #aaaaaa;
-
+  color: #c4c4c4;
   font-size: 13px;
 }
-
-
-/* USUÁRIO */
 
 .header-user {
   position: relative;
 }
 
 .user-button {
-  border: none;
-
-  background: transparent;
-
-  color: white;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 11px;
-
-  cursor: pointer;
-
   padding: 6px;
+  border: none;
+  background: transparent;
+  color: var(--cor-texto-principal);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
 }
 
 .user-avatar {
   width: 40px;
   height: 40px;
-
   border-radius: 50%;
-
-  background: #ffffff;
-
-  color: #111111;
-
+  background: linear-gradient(135deg, #f0d27a, #b88a2c);
+  color: var(--cor-texto-escuro);
+  border: 1px solid #f3d98b;
+  font-size: 16px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-weight: 700;
-
-  font-size: 16px;
 }
 
 .user-info {
   display: flex;
-
   flex-direction: column;
-
   align-items: flex-start;
 }
 
 .user-info strong {
+  color: var(--cor-texto-principal);
   font-size: 14px;
+}
+
+.user-info span,
+.user-arrow {
+  color: var(--cor-dourado);
 }
 
 .user-info span {
   margin-top: 2px;
-
-  color: #999999;
-
   font-size: 12px;
 }
 
 .user-arrow {
   margin-left: 5px;
-
-  color: #aaaaaa;
-
   font-size: 18px;
 }
 
-
-/* ========================================
-   CONTEÚDO
-======================================== */
+/* =========================================================
+   3. CONTEÚDO, CABEÇALHO INTERNO & ESTATÍSTICAS
+========================================================= */
 
 .estoque-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
-
-  max-width: 1450px;
-
+  max-width: 1500px;
   margin: 0 auto;
-
-  padding: 36px 42px 60px;
+  padding: 38px 42px 60px;
 }
 
-
-/* ========================================
-   TÍTULO DA PÁGINA
-======================================== */
-
 .page-heading {
-  display: flex;
-
-  align-items: flex-end;
-
-  justify-content: space-between;
-
-  gap: 30px;
-
   margin-bottom: 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
 }
 
 .heading-label {
   display: block;
-
   margin-bottom: 7px;
-
-  color: #777777;
-
+  color: var(--cor-dourado);
   font-size: 11px;
-
   font-weight: 700;
-
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
 }
 
 .page-heading h2 {
   margin: 0;
-
+  color: #ffffff;
   font-size: 32px;
-
-  color: #171717;
 }
 
 .page-heading p {
   margin: 7px 0 0;
-
-  color: #777777;
-
+  color: var(--cor-texto-secundario);
   font-size: 15px;
 }
 
-
-/* BOTÃO NOVO */
-
 .btn-novo-produto {
   height: 46px;
-
   padding: 0 20px;
-
-  border: none;
-
+  border: 1px solid #f1d887;
   border-radius: 8px;
-
-  background: #171717;
-
-  color: white;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
+  background: var(--gradiente-dourado);
+  color: var(--cor-texto-escuro);
   font-size: 14px;
-
   font-weight: 600;
-
+  box-shadow: 0 5px 16px rgba(184, 138, 44, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 9px;
   cursor: pointer;
-
-  transition: 0.2s;
+  transition:
+    background var(--transicao-padrao),
+    color var(--transicao-padrao),
+    transform var(--transicao-padrao);
 }
 
 .btn-novo-produto span {
   font-size: 21px;
-
   line-height: 1;
 }
 
 .btn-novo-produto:hover {
-  background: #2a2a2a;
-
-  transform: translateY(-1px);
+  background: var(--gradiente-dourado-hover);
+  color: #100e08;
+  transform: translateY(-2px);
 }
 
-
-/* ========================================
-   ESTATÍSTICAS
-======================================== */
-
+/* Estatísticas */
 .estoque-stats {
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
-  gap: 18px;
-
   margin-bottom: 22px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .stat-card {
   min-height: 105px;
-
   padding: 20px;
-
-  background: white;
-
-  border: 1px solid #e4e4e4;
-
-  border-radius: 12px;
-
+  background: var(--cor-card-stat);
+  border: 1px solid var(--cor-dourado-borda-media);
+  border-radius: 13px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
   display: flex;
-
   align-items: center;
-
   gap: 15px;
 }
 
 .stat-icon {
+  flex-shrink: 0;
   width: 48px;
   height: 48px;
-
-  flex-shrink: 0;
-
   border-radius: 10px;
-
-  background: #eeeeee;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
+  background: rgba(214, 180, 91, 0.14);
+  color: var(--cor-dourado);
+  border: 1px solid rgba(214, 180, 91, 0.24);
   font-size: 19px;
-
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .stat-icon.warning {
-  background: #fff4d6;
-
-  color: #946c00;
+  background: var(--cor-baixo-bg);
+  color: #e8c96e;
 }
 
 .stat-icon.danger {
-  background: #ffe4e4;
-
-  color: #a40000;
+  background: rgba(176, 54, 54, 0.18);
+  color: #ff9292;
 }
 
 .stat-card span {
   display: block;
-
-  color: #777777;
-
-  font-size: 12px;
-
   margin-bottom: 5px;
+  color: var(--cor-texto-muted);
+  font-size: 12px;
 }
 
 .stat-card strong {
   display: block;
-
+  color: #f4d27b;
   font-size: 23px;
-
-  color: #171717;
 }
 
-
-/* ========================================
-   CARD PRODUTOS
-======================================== */
+/* =========================================================
+   4. CARD DE PRODUTOS, FILTROS & TABELA
+========================================================= */
 
 .products-card {
-  background: white;
-
-  border: 1px solid #e1e1e1;
-
-  border-radius: 12px;
-
   overflow: hidden;
+  background: var(--cor-card-produtos);
+  border: 1px solid rgba(198, 160, 67, 0.42);
+  border-radius: 13px;
+  box-shadow: var(--sombra-card);
 }
-
-
-/* ========================================
-   CABEÇALHO DA TABELA
-======================================== */
 
 .products-header {
   min-height: 90px;
-
   padding: 20px 24px;
-
+  border-bottom: 1px solid var(--cor-dourado-borda-suave);
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 20px;
-
-  border-bottom: 1px solid #eeeeee;
 }
 
 .products-header h3 {
   margin: 0;
-
+  color: #f2d27a;
   font-size: 18px;
-
-  color: #171717;
 }
 
 .products-header p {
   margin: 5px 0 0;
-
+  color: var(--cor-texto-muted);
   font-size: 13px;
-
-  color: #888888;
 }
-
-
-/* ========================================
-   FILTROS
-======================================== */
 
 .products-filters {
   display: flex;
-
   align-items: center;
-
   gap: 10px;
 }
 
 .search-box {
   width: 240px;
   height: 40px;
-
-  border: 1px solid #d5d5d5;
-
-  border-radius: 8px;
-
-  background: white;
-
-  display: flex;
-
-  align-items: center;
-
   padding: 0 12px;
-
+  background: var(--cor-campo-filtro);
+  border: 1px solid #5d4a23;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
   gap: 8px;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
 .search-box span {
-  color: #888888;
-
+  color: var(--cor-dourado);
   font-size: 20px;
 }
 
 .search-box input {
   width: 100%;
-
   border: none;
-
   outline: none;
-
+  background: transparent;
+  color: var(--cor-texto-principal);
   font-size: 13px;
-
-  color: #222222;
 }
 
 .search-box input::placeholder {
-  color: #999999;
+  color: var(--cor-texto-suave);
 }
 
 .products-filters select {
-  height: 40px;
-
   min-width: 145px;
-
-  border: 1px solid #d5d5d5;
-
-  border-radius: 8px;
-
+  height: 40px;
   padding: 0 10px;
-
-  background: white;
-
-  color: #333333;
-
   outline: none;
-
+  background: var(--cor-campo-filtro);
+  color: var(--cor-texto-principal);
+  border: 1px solid #5d4a23;
+  border-radius: 8px;
   cursor: pointer;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
+.search-box:focus-within,
+.products-filters select:focus {
+  border-color: var(--cor-dourado);
+  box-shadow: 0 0 0 2px rgba(214, 180, 91, 0.13);
+}
 
-/* ========================================
-   TABELA
-======================================== */
-
+/* Tabela */
 .table-wrapper {
   width: 100%;
-
   overflow-x: auto;
 }
 
 table {
   width: 100%;
-
-  border-collapse: collapse;
-
   min-width: 900px;
+  border-collapse: collapse;
+  color: #eeeeee;
 }
 
 thead {
-  background: #fafafa;
+  background: #222222;
 }
 
 th {
   padding: 14px 20px;
-
-  text-align: left;
-
-  color: #777777;
-
+  background: #222222;
+  color: var(--cor-dourado);
+  border-bottom: 1px solid var(--cor-dourado-borda-media);
   font-size: 11px;
-
-  text-transform: uppercase;
-
-  letter-spacing: 0.6px;
-
   font-weight: 700;
-
-  border-bottom: 1px solid #eeeeee;
+  letter-spacing: 0.6px;
+  text-align: left;
+  text-transform: uppercase;
 }
 
 td {
   padding: 17px 20px;
-
-  border-bottom: 1px solid #eeeeee;
-
+  color: #dedede;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 14px;
+}
 
-  color: #444444;
+td strong {
+  color: var(--cor-dourado-claro);
 }
 
 tbody tr:last-child td {
@@ -524,243 +436,156 @@ tbody tr:last-child td {
 }
 
 tbody tr:hover {
-  background: #fafafa;
+  background: rgba(214, 180, 91, 0.07);
 }
 
-
-/* ========================================
-   PRODUTO
-======================================== */
-
 .product-name {
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
   min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .product-icon {
+  flex-shrink: 0;
   width: 42px;
   height: 42px;
-
   border-radius: 9px;
-
-  background: #eeeeee;
-
+  background: #242424;
+  color: var(--cor-dourado);
+  border: 1px solid rgba(214, 180, 91, 0.2);
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  flex-shrink: 0;
 }
 
 .product-name strong {
   display: block;
-
-  color: #222222;
-
+  color: #f3f3f3;
   font-size: 14px;
 }
 
 .product-name span {
   display: block;
-
-  margin-top: 4px;
-
-  color: #999999;
-
-  font-size: 11px;
-
   max-width: 220px;
+  margin-top: 4px;
+  color: #aaaaaa;
+  font-size: 11px;
 }
 
-
-/* ========================================
-   QUANTIDADE
-======================================== */
-
 .quantity {
-  color: #222222;
-
+  color: var(--cor-dourado-claro);
   font-size: 15px;
 }
 
-
-/* ========================================
-   STATUS
-======================================== */
-
+/* Status */
 .status {
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
   min-width: 72px;
-
   padding: 6px 10px;
-
   border-radius: 20px;
-
   font-size: 11px;
-
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .status.normal {
-  background: #e8f6ec;
-
-  color: #24703b;
+  background: var(--cor-normal-bg);
+  color: var(--cor-normal-texto);
+  border: 1px solid var(--cor-normal-borda);
 }
 
 .status.baixo {
-  background: #fff3d6;
-
-  color: #8a6500;
+  background: var(--cor-baixo-bg);
+  color: var(--cor-baixo-texto);
+  border: 1px solid var(--cor-baixo-borda);
 }
 
 .status.esgotado {
-  background: #ffe3e3;
-
-  color: #a00000;
+  background: var(--cor-esgotado-bg);
+  color: var(--cor-esgotado-texto);
+  border: 1px solid var(--cor-esgotado-borda);
 }
 
-
-/* ========================================
-   BOTÃO MOVIMENTAR
-======================================== */
-
-.btn-movimentar {
-  height: 34px;
-
-  padding: 0 12px;
-
-  border: 1px solid #cccccc;
-
-  border-radius: 7px;
-
-  background: white;
-
-  color: #333333;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.btn-movimentar:hover {
-  background: #171717;
-
-  border-color: #171717;
-
-  color: white;
-}
-
-
+/* Ações da Tabela */
 .table-actions {
   display: flex;
-
   align-items: center;
-
   gap: 8px;
 }
 
+.btn-movimentar,
 .btn-excluir {
   height: 34px;
-
   padding: 0 12px;
-
-  border: 1px solid #e0b4b4;
-
   border-radius: 7px;
-
-  background: white;
-
-  color: #b42318;
-
   font-size: 12px;
-
   font-weight: 600;
-
   cursor: pointer;
+  transition:
+    background var(--transicao-padrao),
+    border-color var(--transicao-padrao),
+    color var(--transicao-padrao);
+}
 
-  transition: 0.2s;
+.btn-movimentar {
+  background: #1b1b1b;
+  color: #e5c36b;
+  border: 1px solid #8b6b2d;
+}
+
+.btn-movimentar:hover {
+  background: #d0aa4f;
+  color: var(--cor-texto-escuro);
+  border-color: #e5c36b;
+}
+
+.btn-excluir {
+  background: #211616;
+  color: #ffaaaa;
+  border: 1px solid #7b3434;
 }
 
 .btn-excluir:hover {
-  background: #b42318;
-
-  border-color: #b42318;
-
-  color: white;
+  background: #a52a2a;
+  color: #ffffff;
+  border-color: #d65b5b;
 }
-
-
-/* ========================================
-   TABELA VAZIA
-======================================== */
 
 .empty-table {
   height: 150px;
-
+  color: #aaaaaa;
   text-align: center;
-
-  color: #999999;
 }
 
-
-/* ========================================
-   MODAL
-======================================== */
+/* =========================================================
+   5. MODAIS, FORMULÁRIO & MOVIMENTAÇÃO
+========================================================= */
 
 .modal-overlay {
   position: fixed;
-
   inset: 0;
-
-  background: rgba(0, 0, 0, 0.65);
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
   z-index: 1000;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal {
   position: relative;
-
   width: 100%;
-
   max-width: 560px;
-
   max-height: 90vh;
-
   overflow-y: auto;
-
-  background: white;
-
-  border-radius: 14px;
-
   padding: 30px;
-
-  box-shadow:
-    0 20px 60px
-    rgba(0, 0, 0, 0.25);
+  background: var(--cor-modal);
+  color: var(--cor-texto-principal);
+  border: 1px solid var(--cor-dourado-borda-forte);
+  border-radius: 14px;
+  box-shadow: var(--sombra-modal);
 }
 
 .modal-movimentacao {
@@ -769,84 +594,53 @@ tbody tr:hover {
 
 .modal-close {
   position: absolute;
-
   top: 14px;
-
   right: 16px;
-
   width: 32px;
-
   height: 32px;
-
   border: none;
-
   background: transparent;
-
-  color: #777777;
-
+  color: #c7a34c;
   font-size: 25px;
-
   cursor: pointer;
+  transition: color var(--transicao-padrao);
 }
 
 .modal-close:hover {
-  color: #111111;
+  color: #f2d27a;
 }
-
-
-/* ========================================
-   ÍCONE MODAL
-======================================== */
 
 .modal-icon {
   width: 52px;
   height: 52px;
-
-  border-radius: 12px;
-
-  background: #eeeeee;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
   margin-bottom: 15px;
-
+  border-radius: 12px;
+  background: rgba(214, 180, 91, 0.14);
+  color: #e3c267;
+  border: 1px solid rgba(214, 180, 91, 0.28);
   font-size: 25px;
-
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal h3 {
   margin: 0;
-
+  color: var(--cor-dourado-claro);
   font-size: 23px;
-
-  color: #171717;
 }
 
 .modal > p {
   margin: 7px 0 24px;
-
-  color: #777777;
-
+  color: var(--cor-texto-muted);
   font-size: 14px;
-
   line-height: 1.5;
 }
 
-
-/* ========================================
-   FORMULÁRIO
-======================================== */
-
 .product-form {
   display: flex;
-
   flex-direction: column;
-
   gap: 3px;
 }
 
@@ -856,210 +650,144 @@ tbody tr:hover {
 
 .form-group label {
   display: block;
-
   margin-bottom: 7px;
-
-  color: #333333;
-
+  color: #e0c16a;
   font-size: 13px;
-
   font-weight: 600;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-
   height: 44px;
-
   padding: 0 13px;
-
-  border: 1px solid #d3d3d3;
-
-  border-radius: 8px;
-
-  background: white;
-
-  color: #222222;
-
-  font-size: 14px;
-
   outline: none;
+  background: var(--cor-campo);
+  color: var(--cor-texto-principal);
+  border: 1px solid var(--cor-borda-campo-escuro);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
+}
 
-  transition: 0.2s;
+.form-group input::placeholder {
+  color: #888888;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #222222;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(0, 0, 0, 0.06);
+  border-color: var(--cor-dourado);
+  box-shadow: 0 0 0 3px rgba(214, 180, 91, 0.13);
 }
 
 .form-row {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
+.current-stock {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  background: var(--cor-campo);
+  border: 1px solid rgba(214, 180, 91, 0.2);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-/* ========================================
-   BOTÕES MODAL
-======================================== */
+.current-stock span {
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.current-stock strong {
+  color: var(--cor-dourado-claro);
+  font-size: 16px;
+}
+
+.movement-type {
+  margin-bottom: 17px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.movement-type button {
+  height: 43px;
+  background: var(--cor-campo);
+  color: #d4d4d4;
+  border: 1px solid #5c4a25;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.movement-type button.active {
+  background: #d0aa4f;
+  color: var(--cor-texto-escuro);
+  border-color: #e7c96f;
+}
 
 .modal-actions {
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 10px;
-
   margin-top: 10px;
-
   padding-top: 18px;
-
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid rgba(214, 180, 91, 0.22);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .btn-modal-secondary,
 .btn-modal-primary {
   height: 43px;
-
   padding: 0 17px;
-
   border-radius: 8px;
-
   font-size: 13px;
-
   font-weight: 600;
-
   cursor: pointer;
-
-  transition: 0.2s;
+  transition:
+    background var(--transicao-padrao),
+    border-color var(--transicao-padrao),
+    color var(--transicao-padrao);
 }
 
 .btn-modal-secondary {
-  border: 1px solid #cccccc;
-
-  background: white;
-
-  color: #333333;
+  background: #222222;
+  color: #e4c36d;
+  border: 1px solid #665126;
 }
 
 .btn-modal-secondary:hover {
-  background: #f2f2f2;
+  background: #303030;
 }
 
 .btn-modal-primary {
-  border: none;
-
-  background: #171717;
-
-  color: white;
+  background: var(--gradiente-dourado);
+  color: var(--cor-texto-escuro);
+  border: 1px solid #f1d887;
 }
 
 .btn-modal-primary:hover {
-  background: #2a2a2a;
+  background: var(--gradiente-dourado-hover);
 }
 
-
-/* ========================================
-   ESTOQUE ATUAL
-======================================== */
-
-.current-stock {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 14px 16px;
-
-  margin-bottom: 20px;
-
-  border-radius: 9px;
-
-  background: #f3f3f3;
-}
-
-.current-stock span {
-  color: #777777;
-
-  font-size: 13px;
-}
-
-.current-stock strong {
-  color: #171717;
-
-  font-size: 16px;
-}
-
-
-/* ========================================
-   TIPO DE MOVIMENTAÇÃO
-======================================== */
-
-.movement-type {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 10px;
-
-  margin-bottom: 17px;
-}
-
-.movement-type button {
-  height: 43px;
-
-  border: 1px solid #d0d0d0;
-
-  border-radius: 8px;
-
-  background: white;
-
-  color: #555555;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-.movement-type button.active {
-  background: #171717;
-
-  border-color: #171717;
-
-  color: white;
-}
-
-
-/* ========================================
-   RESPONSIVO
-======================================== */
+/* =========================================================
+   6. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1100px) {
-
   .estoque-stats {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
-
 @media (max-width: 800px) {
-
   .estoque-header {
+    height: auto;
+    min-height: 82px;
     padding: 0 20px;
   }
 
@@ -1071,6 +799,10 @@ tbody tr:hover {
     width: 120px;
   }
 
+  .header-title {
+    text-align: left;
+  }
+
   .user-info {
     display: none;
   }
@@ -1079,44 +811,32 @@ tbody tr:hover {
     padding: 28px 20px 50px;
   }
 
-  .page-heading {
-    align-items: flex-start;
-
+  .page-heading,
+  .products-header,
+  .products-filters {
     flex-direction: column;
-  }
-
-  .products-header {
     align-items: flex-start;
-
-    flex-direction: column;
   }
 
   .products-filters {
     width: 100%;
-
-    flex-direction: column;
+    align-items: stretch;
   }
 
   .search-box,
   .products-filters select {
     width: 100%;
   }
-
 }
 
-
 @media (max-width: 550px) {
-
-  .estoque-stats {
+  .estoque-stats,
+  .form-row {
     grid-template-columns: 1fr;
   }
 
   .page-heading h2 {
     font-size: 27px;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
   }
 
   .modal {
@@ -1131,272 +851,4 @@ tbody tr:hover {
   .btn-modal-primary {
     width: 100%;
   }
-
-}
-
-/* ========================================
-   TEMA HOPE BARBEARIA - PRETO E DOURADO
-   Ajustes visuais sem alterar a lógica da tela
-======================================== */
-
-.estoque-page {
-  position: relative;
-  isolation: isolate;
-  min-height: 100vh;
-  background:
-    linear-gradient(rgba(8, 8, 8, 0.88), rgba(8, 8, 8, 0.94)),
-    url("../../assets/fundo das paginas.avif") center / cover fixed;
-  color: #f5f5f5;
-}
-
-.estoque-header {
-  position: relative;
-  z-index: 1;
-  height: 92px;
-  background: rgba(8, 8, 8, 0.92);
-  border-bottom: 1px solid rgba(198, 160, 67, 0.45);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-}
-
-.header-logo img {
-  max-height: 68px;
-  object-fit: contain;
-}
-
-.header-title {
-  text-align: center;
-}
-
-.header-title h1 {
-  color: #d6b45b;
-  letter-spacing: 1.3px;
-}
-
-.header-title p {
-  color: #c4c4c4;
-}
-
-.user-avatar {
-  background: linear-gradient(135deg, #f0d27a, #b88a2c);
-  color: #17130a;
-  border: 1px solid #f3d98b;
-}
-
-.user-info strong { color: #f5f5f5; }
-.user-info span, .user-arrow { color: #d6b45b; }
-
-.estoque-content {
-  position: relative;
-  z-index: 1;
-  max-width: 1500px;
-  padding-top: 38px;
-}
-
-.heading-label {
-  color: #d6b45b;
-  letter-spacing: 2px;
-}
-
-.page-heading h2 {
-  color: #fff;
-}
-
-.page-heading p {
-  color: #c2c2c2;
-}
-
-.btn-novo-produto {
-  background: linear-gradient(135deg, #e0bf68, #b88a2c);
-  color: #17130a;
-  border: 1px solid #f1d887;
-  box-shadow: 0 5px 16px rgba(184, 138, 44, 0.2);
-}
-
-.btn-novo-produto:hover {
-  background: linear-gradient(135deg, #f0d27a, #c99b3d);
-  color: #100e08;
-  transform: translateY(-2px);
-}
-
-.estoque-stats .stat-card {
-  background: rgba(17, 17, 17, 0.92);
-  border: 1px solid rgba(198, 160, 67, 0.38);
-  border-radius: 13px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
-}
-
-.stat-icon {
-  background: rgba(214, 180, 91, 0.14);
-  color: #d6b45b;
-  border: 1px solid rgba(214, 180, 91, 0.24);
-}
-
-.stat-icon.warning {
-  background: rgba(214, 180, 91, 0.16);
-  color: #e8c96e;
-}
-.stat-icon.danger {
-  background: rgba(176, 54, 54, 0.18);
-  color: #ff9292;
-}
-
-.stat-card span { color: #bdbdbd; }
-.stat-card strong { color: #f4d27b; }
-
-.products-card {
-  background: rgba(13, 13, 13, 0.96);
-  border: 1px solid rgba(198, 160, 67, 0.42);
-  border-radius: 13px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-}
-
-.products-header {
-  border-bottom: 1px solid rgba(198, 160, 67, 0.25);
-}
-
-.products-header h3 { color: #f2d27a; }
-.products-header p { color: #bdbdbd; }
-
-.search-box,
-.products-filters select {
-  background: #191919;
-  border: 1px solid #5d4a23;
-  color: #f5f5f5;
-}
-
-.search-box span { color: #d6b45b; }
-.search-box input {
-  background: transparent;
-  color: #f5f5f5;
-}
-.search-box input::placeholder { color: #999; }
-.products-filters select:focus,
-.search-box:focus-within {
-  border-color: #d6b45b;
-  box-shadow: 0 0 0 2px rgba(214, 180, 91, 0.13);
-}
-
-.table-wrapper table { color: #eee; }
-.table-wrapper thead { background: #222; }
-.table-wrapper th {
-  color: #d6b45b;
-  background: #222;
-  border-bottom: 1px solid rgba(198, 160, 67, 0.38);
-}
-.table-wrapper td {
-  color: #dedede;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-.table-wrapper tbody tr:hover { background: rgba(214, 180, 91, 0.07); }
-.product-icon {
-  background: #242424;
-  border: 1px solid rgba(214, 180, 91, 0.2);
-  color: #d6b45b;
-}
-.product-name strong { color: #f3f3f3; }
-.product-name span { color: #aaa; }
-.quantity, td strong { color: #f0d27a; }
-.empty-table { color: #aaa; }
-
-.status.normal {
-  background: rgba(53, 130, 76, 0.18);
-  color: #8ed5a2;
-  border: 1px solid rgba(92, 180, 117, 0.2);
-}
-.status.baixo {
-  background: rgba(214, 180, 91, 0.15);
-  color: #e7c96f;
-  border: 1px solid rgba(214, 180, 91, 0.25);
-}
-.status.esgotado {
-  background: rgba(176, 54, 54, 0.18);
-  color: #ff9999;
-  border: 1px solid rgba(176, 54, 54, 0.25);
-}
-
-.btn-movimentar {
-  background: #1b1b1b;
-  border-color: #8b6b2d;
-  color: #e5c36b;
-}
-.btn-movimentar:hover {
-  background: #d0aa4f;
-  border-color: #e5c36b;
-  color: #17130a;
-}
-.btn-excluir {
-  background: #211616;
-  border-color: #7b3434;
-  color: #ffaaaa;
-}
-.btn-excluir:hover {
-  background: #a52a2a;
-  border-color: #d65b5b;
-  color: #fff;
-}
-
-/* Modais no mesmo acabamento */
-.modal {
-  background: #141414;
-  border: 1px solid rgba(214, 180, 91,  0.5);
-  color: #f5f5f5;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
-}
-.modal-close { color: #c7a34c; }
-.modal-close:hover { color: #f2d27a; }
-.modal-icon {
-  background: rgba(214, 180, 91, 0.14);
-  color: #e3c267;
-  border: 1px solid rgba(214, 180, 91, 0.28);
-}
-.modal h3 { color: #f0d27a; }
-.modal > p { color: #bdbdbd; }
-.form-group label { color: #e0c16a; }
-.form-group input,
-.form-group select {
-  background: #202020;
-  border: 1px solid #514321;
-  color: #f5f5f5;
-}
-.form-group input::placeholder { color: #888; }
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #d6b45b;
-  box-shadow: 0 0 0 3px rgba(214, 180, 91, 0.13);
-}
-.modal-actions { border-top-color: rgba(214, 180, 91, 0.22); }
-.btn-modal-secondary {
-  background: #222;
-  border-color: #665126;
-  color: #e4c36d;
-}
-.btn-modal-secondary:hover { background: #303030; }
-.btn-modal-primary {
-  background: linear-gradient(135deg, #e0bf68, #b88a2c);
-  color: #17130a;
-  border: 1px solid #f1d887;
-}
-.btn-modal-primary:hover {
-  background: linear-gradient(135deg, #f0d27a, #c99b3d);
-}
-.current-stock {
-  background: #202020;
-  border: 1px solid rgba(214, 180, 91, 0.2);
-}
-.current-stock span { color: #aaa; }
-.current-stock strong { color: #f0d27a; }
-.movement-type button {
-  background: #202020;
-  border-color: #5c4a25;
-  color: #d4d4d4;
-}
-.movement-type button.active {
-  background: #d0aa4f;
-  border-color: #e7c96f;
-  color: #17130a;
-}
-
-@media (max-width: 800px) {
-  .estoque-header { height: auto; min-height: 82px; }
-  .header-title { text-align: left; }
 }

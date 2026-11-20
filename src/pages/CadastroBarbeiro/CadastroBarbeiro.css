@@ -1,70 +1,85 @@
-/* =========================================
-   PÁGINA
-========================================= */
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
+
+:root {
+  /* Cores Principais */
+  --cor-preto: #111111;
+  --cor-preto-card: #171717;
+  --cor-branco: #ffffff;
+  --cor-fundo-pagina: #f3f3f3;
+  --cor-fundo-foto: #fafafa;
+  --cor-avatar-vazio: #e9e9e9;
+
+  /* Tons de Texto & Bordas */
+  --cor-texto-principal: #171717;
+  --cor-texto-campo: #222222;
+  --cor-label: #333333;
+  --cor-texto-secundario: #777777;
+  --cor-texto-suave: #999999;
+  --cor-borda-header: #292929;
+  --cor-borda-card: #e1e1e1;
+  --cor-borda-campo: #d6d6d6;
+  --cor-borda-divisor: #e5e5e5;
+
+  /* Tipografia, Sombras & Transições */
+  --fonte-principal: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.035);
+}
 
 * {
   box-sizing: border-box;
 }
 
+/* =========================================================
+   2. LAYOUT BASE DA PÁGINA
+========================================================= */
+
 .cadastro-barbeiro-page {
-  min-height: 100vh;
   width: 100%;
-
-  background: #f3f3f3;
-  color: #171717;
-
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  min-height: 100vh;
+  background: var(--cor-fundo-pagina);
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
 }
 
+.cadastro-barbeiro-content {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 36px 42px 60px;
+}
 
-/* =========================================
-   HEADER
-========================================= */
+/* =========================================================
+   3. HEADER & IDENTIFICAÇÃO DO USUÁRIO
+========================================================= */
 
 .cadastro-barbeiro-header {
   width: 100%;
   min-height: 78px;
-
-  background: #111111;
-  color: #ffffff;
-
+  padding: 0 42px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 0 42px;
-
-  border-bottom: 1px solid #292929;
+  background: var(--cor-preto);
+  color: var(--cor-branco);
+  border-bottom: 1px solid var(--cor-borda-header);
 }
-
-
-/* LOGO */
 
 .cadastro-barbeiro-logo {
   width: 220px;
-
   display: flex;
   align-items: center;
 }
 
 .cadastro-barbeiro-logo img {
+  display: block;
   width: 145px;
   max-height: 58px;
-
   object-fit: contain;
   object-position: left center;
-
-  display: block;
 }
-
-
-/* TÍTULO DO HEADER */
 
 .cadastro-barbeiro-title {
   text-align: center;
@@ -72,44 +87,33 @@
 
 .cadastro-barbeiro-title h1 {
   margin: 0;
-
   font-size: 21px;
   font-weight: 700;
 }
 
 .cadastro-barbeiro-title p {
   margin: 4px 0 0;
-
   color: #a9a9a9;
   font-size: 12px;
 }
 
-
-/* USUÁRIO */
-
 .cadastro-barbeiro-user {
   min-width: 220px;
-
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 10px;
 }
 
 .user-avatar {
   width: 38px;
   height: 38px;
-
   border-radius: 50%;
-
-  background: #ffffff;
-  color: #111111;
-
+  background: var(--cor-branco);
+  color: var(--cor-preto);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 14px;
   font-weight: 700;
 }
@@ -125,127 +129,79 @@
 
 .user-info span {
   margin-top: 2px;
-
-  color: #999999;
+  color: var(--cor-texto-suave);
   font-size: 11px;
 }
 
-
-/* =========================================
-   CONTEÚDO
-========================================= */
-
-.cadastro-barbeiro-content {
-  width: 100%;
-  max-width: 1450px;
-
-  margin: 0 auto;
-
-  padding: 36px 42px 60px;
-}
-
-
-/* =========================================
-   TÍTULO DA PÁGINA
-========================================= */
+/* =========================================================
+   4. CABEÇALHO INTERNO & ESTRUTURA DO CARD
+========================================================= */
 
 .cadastro-barbeiro-heading {
+  margin-bottom: 26px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 25px;
-
-  margin-bottom: 26px;
 }
 
 .heading-label {
   display: block;
-
-  color: #777777;
-
+  margin-bottom: 8px;
+  color: var(--cor-texto-secundario);
   font-size: 11px;
   font-weight: 800;
-
   letter-spacing: 2px;
-
-  margin-bottom: 8px;
 }
 
 .cadastro-barbeiro-heading h2 {
   margin: 0;
-
   font-size: 30px;
-  line-height: 1.15;
-
   font-weight: 750;
+  line-height: 1.15;
 }
 
 .cadastro-barbeiro-heading p {
   margin: 8px 0 0;
-
-  color: #777777;
+  color: var(--cor-texto-secundario);
   font-size: 14px;
 }
 
-
-/* =========================================
-   CARD
-========================================= */
-
 .cadastro-barbeiro-card {
   width: 100%;
-
-  background: #ffffff;
-
-  border: 1px solid #e1e1e1;
-  border-radius: 12px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.035);
-
   overflow: hidden;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda-card);
+  border-radius: 12px;
+  box-shadow: var(--sombra-card);
 }
-
-
-/* =========================================
-   HEADER DO CARD
-========================================= */
 
 .card-header {
   min-height: 80px;
-
   padding: 18px 22px;
-
-  background: #171717;
-  color: #ffffff;
-
   display: flex;
   align-items: center;
+  background: var(--cor-preto-card);
+  color: var(--cor-branco);
 }
 
 .card-label {
   display: block;
-
-  color: #999999;
-
+  color: var(--cor-texto-suave);
   font-size: 10px;
   font-weight: 800;
-
   letter-spacing: 2px;
 }
 
 .card-header h3 {
   margin: 5px 0 0;
-
   font-size: 17px;
   font-weight: 600;
 }
 
-
-/* =========================================
-   FORMULÁRIO
-========================================= */
+/* =========================================================
+   5. FORMULÁRIO, UPLOAD DE FOTO & AÇÕES
+========================================================= */
 
 .cadastro-barbeiro-form {
   padding: 28px 25px 0;
@@ -253,16 +209,13 @@
 
 .form-grid {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 22px 24px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-
   gap: 8px;
 }
 
@@ -271,8 +224,7 @@
 }
 
 .form-group label {
-  color: #333333;
-
+  color: var(--cor-label);
   font-size: 14px;
   font-weight: 600;
 }
@@ -280,72 +232,49 @@
 .form-group input {
   width: 100%;
   height: 44px;
-
   padding: 0 13px;
-
-  border: 1px solid #d6d6d6;
+  border: 1px solid var(--cor-borda-campo);
   border-radius: 7px;
-
-  background: #ffffff;
-  color: #222222;
-
+  outline: none;
+  background: var(--cor-branco);
+  color: var(--cor-texto-campo);
   font-family: inherit;
   font-size: 14px;
-
-  outline: none;
-
-  transition: 0.2s ease;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
 .form-group input:focus {
-  border-color: #777777;
-
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.04);
+  border-color: var(--cor-texto-secundario);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
 }
 
 .form-group input::placeholder {
-  color: #999999;
+  color: var(--cor-texto-suave);
 }
 
-
-/* =========================================
-   FOTO
-========================================= */
-
+/* Foto de Perfil */
 .foto-container {
   min-height: 105px;
-
+  padding: 16px;
   display: flex;
   align-items: center;
-
   gap: 18px;
-
-  padding: 16px;
-
   border: 1px solid #dedede;
   border-radius: 8px;
-
-  background: #fafafa;
+  background: var(--cor-fundo-foto);
 }
 
 .foto-preview {
+  flex-shrink: 0;
   width: 75px;
   height: 75px;
-
-  flex-shrink: 0;
-
   overflow: hidden;
-
   border-radius: 50%;
-
-  background: #e9e9e9;
+  background: var(--cor-avatar-vazio);
   color: #555555;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 25px;
   font-weight: 600;
 }
@@ -353,16 +282,13 @@
 .foto-preview img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
 .foto-upload {
   display: flex;
   flex-direction: column;
-
   align-items: flex-start;
-
   gap: 7px;
 }
 
@@ -372,24 +298,17 @@
 
 .btn-escolher-foto {
   min-height: 38px;
-
   padding: 0 15px;
-
-  border: 1px solid #cfcfcf;
-  border-radius: 7px;
-
-  background: #ffffff;
-  color: #333333;
-
   display: flex;
   align-items: center;
-
+  border: 1px solid #cfcfcf;
+  border-radius: 7px;
+  background: var(--cor-branco);
+  color: var(--cor-label);
   font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition: 0.2s ease;
+  transition: background var(--transicao-padrao);
 }
 
 .btn-escolher-foto:hover {
@@ -398,56 +317,35 @@
 
 .foto-upload small {
   color: #888888;
-
   font-size: 12px;
 }
 
-
-/* =========================================
-   RODAPÉ DO FORMULÁRIO
-========================================= */
-
+/* Rodapé e Botões */
 .form-footer {
   margin-top: 30px;
-
   padding: 20px 0;
-
-  border-top: 1px solid #e5e5e5;
-
+  border-top: 1px solid var(--cor-borda-divisor);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-
   gap: 10px;
 }
-
-
-/* =========================================
-   BOTÕES
-========================================= */
 
 .btn-cancelar,
 .btn-cadastrar {
   min-height: 42px;
-
   padding: 0 19px;
-
   border-radius: 7px;
-
   font-family: inherit;
-
   font-size: 14px;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition: 0.2s ease;
+  transition: background var(--transicao-padrao), transform var(--transicao-padrao);
 }
 
 .btn-cancelar {
   border: 1px solid #d3d3d3;
-
-  background: #ffffff;
+  background: var(--cor-branco);
   color: #444444;
 }
 
@@ -456,15 +354,13 @@
 }
 
 .btn-cadastrar {
-  border: 1px solid #111111;
-
-  background: #111111;
-  color: #ffffff;
+  border: 1px solid var(--cor-preto);
+  background: var(--cor-preto);
+  color: var(--cor-branco);
 }
 
 .btn-cadastrar:hover {
   background: #303030;
-
   transform: translateY(-1px);
 }
 
@@ -472,13 +368,11 @@
   transform: translateY(0);
 }
 
-
-/* =========================================
-   RESPONSIVIDADE
-========================================= */
+/* =========================================================
+   6. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1100px) {
-
   .cadastro-barbeiro-header {
     padding: 0 25px;
   }
@@ -501,36 +395,21 @@
   }
 }
 
-
-/* =========================================
-   TABLET
-========================================= */
-
 @media (max-width: 850px) {
-
   .cadastro-barbeiro-header {
     padding: 15px 20px;
-
     flex-wrap: wrap;
-
     gap: 15px;
-  }
-
-  .cadastro-barbeiro-logo {
-    min-width: auto;
   }
 
   .cadastro-barbeiro-title {
     order: 3;
-
     width: 100%;
-
     text-align: left;
   }
 
   .cadastro-barbeiro-user {
     min-width: auto;
-
     margin-left: auto;
   }
 
@@ -539,29 +418,17 @@
   }
 
   .cadastro-barbeiro-heading {
-    align-items: flex-start;
-
     flex-direction: column;
-
+    align-items: flex-start;
     gap: 15px;
   }
 
   .form-grid {
     grid-template-columns: 1fr;
   }
-
-  .form-full {
-    grid-column: auto;
-  }
 }
 
-
-/* =========================================
-   CELULAR
-========================================= */
-
 @media (max-width: 600px) {
-
   .cadastro-barbeiro-header {
     min-height: auto;
   }
@@ -603,8 +470,8 @@
   }
 
   .foto-container {
-    align-items: flex-start;
     flex-direction: column;
+    align-items: flex-start;
   }
 
   .foto-upload {
@@ -613,7 +480,6 @@
 
   .btn-escolher-foto {
     width: 100%;
-
     justify-content: center;
   }
 
@@ -627,13 +493,7 @@
   }
 }
 
-
-/* =========================================
-   CELULAR PEQUENO
-========================================= */
-
 @media (max-width: 400px) {
-
   .cadastro-barbeiro-content {
     padding: 20px 10px 35px;
   }
@@ -654,10 +514,7 @@
     padding: 20px 15px 0;
   }
 
-  .form-group label {
-    font-size: 13px;
-  }
-
+  .form-group label,
   .form-group input {
     font-size: 13px;
   }

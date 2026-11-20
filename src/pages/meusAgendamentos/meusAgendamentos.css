@@ -1,37 +1,88 @@
+/* =========================================================
+   1. VARIÁVEIS & RESET
+========================================================= */
 
-/* =====================================================
-   HOPE BARBEARIA
-   GERENCIAMENTO DE AGENDAMENTOS DO BARBEIRO
-   ===================================================== */
+:root {
+  /* Cores Principais */
+  --cor-fundo: #f5f5f5;
+  --cor-superficie: #ffffff;
+  --cor-cabecalho: #111111;
+  --cor-tabela-cabecalho: #171717;
+  --cor-modal-topo: #151515;
+  --cor-campo-desabilitado: #f1f1f1;
+
+  /* Tons de Dourado */
+  --cor-dourado: #c6a45b;
+  --cor-dourado-claro: #d8b66d;
+  --cor-dourado-hover: #d9b86e;
+  --cor-dourado-selecionado-borda: #b58f3f;
+  --cor-resumo-bg: #faf7ef;
+  --cor-resumo-borda: #e8d6aa;
+  --cor-resumo-titulo: #7b5b20;
+
+  /* Tons de Texto & Bordas */
+  --cor-texto-principal: #222222;
+  --cor-texto-escuro: #171717;
+  --cor-texto-secundario: #777777;
+  --cor-texto-muted: #888888;
+  --cor-texto-label: #333333;
+  --cor-texto-tabela: #444444;
+  --cor-borda-card: #e7e7e7;
+  --cor-borda-painel: #e8e8e8;
+  --cor-borda-linha: #ededed;
+  --cor-borda-campo: #d8d8d8;
+
+  /* Estados, Alertas & Botões */
+  --cor-sucesso-bg: #e7f6eb;
+  --cor-sucesso-borda: #a9d8b6;
+  --cor-sucesso-texto: #22683a;
+  --cor-erro-bg: #fff0f0;
+  --cor-erro-borda: #efb5b5;
+  --cor-erro-texto: #a32727;
+  --cor-editar-bg: #fff8e8;
+  --cor-editar-borda: #e7c878;
+  --cor-editar-hover: #f8e9c1;
+  --cor-editar-texto: #7a570c;
+  --cor-cancelar-bg: #fff0f0;
+  --cor-cancelar-borda: #efb4b4;
+  --cor-cancelar-hover: #fbdada;
+  --cor-cancelar-texto: #a52a2a;
+
+  /* Tipografia, Sombras & Transições */
+  --fonte-principal: Arial, Helvetica, sans-serif;
+  --transicao-padrao: 0.2s ease;
+  --sombra-card: 0 3px 12px rgba(0, 0, 0, 0.04);
+  --sombra-modal: 0 20px 65px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================================
+   2. PÁGINA & CABEÇALHO
+========================================================= */
 
 .mba-pagina {
   min-height: 100vh;
-  background: #f5f5f5;
-  color: #222;
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+  font-family: var(--fonte-principal);
 }
 
-/* =====================================================
-   CABEÇALHO
-   ===================================================== */
-
 .mba-cabecalho {
+  padding: 20px 5%;
+  background: var(--cor-cabecalho);
+  color: var(--cor-superficie);
+  border-bottom: 3px solid var(--cor-dourado);
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 20px 5%;
-  background: #111;
-  border-bottom: 3px solid #c6a45b;
-  color: #fff;
 }
 
 .mba-logo-botao {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 0;
   border: none;
   background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
@@ -39,7 +90,7 @@
   width: 85px;
   height: 85px;
   object-fit: contain;
-  transition: transform 0.2s ease;
+  transition: transform var(--transicao-padrao);
 }
 
 .mba-logo-botao:hover img {
@@ -48,20 +99,20 @@
 
 .mba-cabecalho h1 {
   margin: 0 0 7px;
+  color: var(--cor-dourado-claro);
   font-size: 27px;
   font-weight: 700;
-  color: #d8b66d;
 }
 
 .mba-cabecalho p {
   margin: 0;
+  color: #cccccc;
   font-size: 14px;
-  color: #ccc;
 }
 
-/* =====================================================
-   CONTEÚDO
-   ===================================================== */
+/* =========================================================
+   3. CONTEÚDO, BOTÕES & ALERTAS
+========================================================= */
 
 .mba-conteudo {
   width: min(1400px, 94%);
@@ -70,34 +121,27 @@
 }
 
 .mba-topo {
+  margin-bottom: 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 28px;
 }
 
 .mba-topo h2 {
   margin: 0 0 8px;
-  font-size: 27px;
   color: #202020;
+  font-size: 27px;
 }
 
 .mba-topo p {
   margin: 0;
-  color: #777;
+  color: var(--cor-texto-secundario);
   font-size: 14px;
 }
 
-/* =====================================================
-   BOTÕES
-   ===================================================== */
-
+/* Botões */
 .mba-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   min-height: 40px;
   padding: 10px 17px;
   border: 1px solid transparent;
@@ -105,12 +149,16 @@
   font-size: 13px;
   font-weight: 700;
   text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   cursor: pointer;
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+    background var(--transicao-padrao),
+    color var(--transicao-padrao),
+    border-color var(--transicao-padrao),
+    transform var(--transicao-padrao);
 }
 
 .mba-btn:hover:not(:disabled) {
@@ -123,19 +171,19 @@
 }
 
 .mba-btn-dourado {
-  background: #c6a45b;
-  border-color: #c6a45b;
-  color: #171717;
+  background: var(--cor-dourado);
+  color: var(--cor-texto-escuro);
+  border-color: var(--cor-dourado);
 }
 
 .mba-btn-dourado:hover:not(:disabled) {
-  background: #d9b86e;
+  background: var(--cor-dourado-hover);
 }
 
 .mba-btn-secundario {
-  background: #fff;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-label);
   border-color: #d5d5d5;
-  color: #333;
 }
 
 .mba-btn-secundario:hover:not(:disabled) {
@@ -143,110 +191,103 @@
 }
 
 .mba-btn-editar {
-  background: #fff8e8;
-  border-color: #e7c878;
-  color: #7a570c;
+  background: var(--cor-editar-bg);
+  color: var(--cor-editar-texto);
+  border-color: var(--cor-editar-borda);
 }
 
 .mba-btn-editar:hover:not(:disabled) {
-  background: #f8e9c1;
+  background: var(--cor-editar-hover);
 }
 
 .mba-btn-cancelar {
-  background: #fff0f0;
-  border-color: #efb4b4;
-  color: #a52a2a;
+  background: var(--cor-cancelar-bg);
+  color: var(--cor-cancelar-texto);
+  border-color: var(--cor-cancelar-borda);
 }
 
 .mba-btn-cancelar:hover:not(:disabled) {
-  background: #fbdada;
+  background: var(--cor-cancelar-hover);
 }
 
-/* =====================================================
-   MENSAGENS
-   ===================================================== */
-
+/* Mensagens e Alertas */
 .mba-alerta {
-  padding: 14px 17px;
   margin-bottom: 20px;
+  padding: 14px 17px;
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.5;
 }
 
 .mba-sucesso {
-  background: #e7f6eb;
-  border: 1px solid #a9d8b6;
-  color: #22683a;
+  background: var(--cor-sucesso-bg);
+  color: var(--cor-sucesso-texto);
+  border: 1px solid var(--cor-sucesso-borda);
 }
 
 .mba-erro {
-  background: #fff0f0;
-  border: 1px solid #efb5b5;
-  color: #a32727;
+  background: var(--cor-erro-bg);
+  color: var(--cor-erro-texto);
+  border: 1px solid var(--cor-erro-borda);
 }
 
-/* =====================================================
-   CARTÕES DE ESTATÍSTICAS
-   ===================================================== */
+/* =========================================================
+   4. ESTATÍSTICAS, PAINÉIS & FILTROS
+========================================================= */
 
 .mba-estatisticas {
+  margin-bottom: 25px;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
-  margin-bottom: 25px;
 }
 
 .mba-card {
+  padding: 23px 20px;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda-card);
+  border-top: 4px solid var(--cor-dourado);
+  border-radius: 12px;
+  box-shadow: var(--sombra-card);
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 23px 20px;
-  background: #fff;
-  border: 1px solid #e7e7e7;
-  border-top: 4px solid #c6a45b;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
 }
 
 .mba-card span {
-  color: #777;
+  color: var(--cor-texto-secundario);
   font-size: 14px;
   font-weight: 600;
 }
 
 .mba-card strong {
-  color: #222;
+  color: var(--cor-texto-principal);
   font-size: 31px;
   font-weight: 800;
 }
 
-/* =====================================================
-   PAINÉIS
-   ===================================================== */
-
 .mba-painel {
   margin-bottom: 25px;
   padding: 24px;
-  background: #fff;
-  border: 1px solid #e8e8e8;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda-painel);
   border-radius: 12px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--sombra-card);
 }
 
 .mba-painel h3 {
   margin: 0 0 20px;
-  color: #222;
+  color: var(--cor-texto-principal);
   font-size: 18px;
   font-weight: 700;
 }
 
 .mba-tabela-titulo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
 }
 
 .mba-tabela-titulo h3 {
@@ -254,14 +295,11 @@
 }
 
 .mba-tabela-titulo span {
-  color: #777;
+  color: var(--cor-texto-secundario);
   font-size: 13px;
 }
 
-/* =====================================================
-   FILTROS
-   ===================================================== */
-
+/* Filtros e Campos */
 .mba-filtros {
   display: grid;
   grid-template-columns:
@@ -274,14 +312,14 @@
 }
 
 .mba-campo {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 0;
 }
 
 .mba-campo label {
-  color: #333;
+  color: var(--cor-texto-label);
   font-size: 13px;
   font-weight: 700;
 }
@@ -289,45 +327,43 @@
 .mba-campo input,
 .mba-campo select,
 .mba-campo textarea {
+  box-sizing: border-box;
   width: 100%;
   min-height: 43px;
   padding: 10px 12px;
-  background: #fff;
-  border: 1px solid #d8d8d8;
-  border-radius: 8px;
+  outline: none;
+  background: var(--cor-superficie);
   color: #252525;
+  border: 1px solid var(--cor-borda-campo);
+  border-radius: 8px;
   font-family: inherit;
   font-size: 14px;
-  box-sizing: border-box;
-  outline: none;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
 .mba-campo textarea {
   min-height: 90px;
-  resize: vertical;
   line-height: 1.5;
+  resize: vertical;
 }
 
 .mba-campo input:focus,
 .mba-campo select:focus,
 .mba-campo textarea:focus {
-  border-color: #c6a45b;
+  border-color: var(--cor-dourado);
   box-shadow: 0 0 0 3px rgba(198, 164, 91, 0.15);
 }
 
 .mba-campo input:disabled,
 .mba-campo select:disabled,
 .mba-campo textarea:disabled {
-  background: #f1f1f1;
+  background: var(--cor-campo-desabilitado);
   cursor: not-allowed;
 }
 
-/* =====================================================
-   TABELA
-   ===================================================== */
+/* =========================================================
+   5. TABELA & STATUS DOS AGENDAMENTOS
+========================================================= */
 
 .mba-tabela-rolagem {
   width: 100%;
@@ -342,8 +378,8 @@
 }
 
 .mba-tabela thead {
-  background: #171717;
-  color: #fff;
+  background: var(--cor-tabela-cabecalho);
+  color: var(--cor-superficie);
 }
 
 .mba-tabela th {
@@ -355,8 +391,8 @@
 
 .mba-tabela td {
   padding: 15px 13px;
-  border-bottom: 1px solid #ededed;
-  color: #444;
+  color: var(--cor-texto-tabela);
+  border-bottom: 1px solid var(--cor-borda-linha);
   font-size: 13px;
   vertical-align: middle;
 }
@@ -382,25 +418,22 @@
 }
 
 .mba-vazio {
-  padding: 28px !important;
-  color: #888 !important;
-  text-align: center;
+  padding: 28px;
+  color: var(--cor-texto-muted);
   font-size: 14px;
+  text-align: center;
 }
 
-/* =====================================================
-   STATUS
-   ===================================================== */
-
+/* Status */
 .mba-status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 7px 11px;
   border-radius: 30px;
   font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mba-status-agendado {
@@ -425,20 +458,20 @@
   color: #a72c2c;
 }
 
-/* =====================================================
-   MODAL
-   ===================================================== */
+/* =========================================================
+   6. MODAL, HORÁRIOS & RESUMO DO ATENDIMENTO
+========================================================= */
 
 .mba-modal-fundo {
   position: fixed;
   inset: 0;
   z-index: 1000;
+  box-sizing: border-box;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.7);
-  box-sizing: border-box;
 }
 
 .mba-modal {
@@ -446,49 +479,49 @@
   max-width: 620px;
   max-height: 92vh;
   overflow-y: auto;
-  background: #fff;
+  background: var(--cor-superficie);
   border-radius: 14px;
-  box-shadow: 0 20px 65px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--sombra-modal);
 }
 
 .mba-modal-topo {
   position: sticky;
   top: 0;
   z-index: 2;
+  padding: 22px 26px;
+  background: var(--cor-modal-topo);
+  border-bottom: 3px solid var(--cor-dourado);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  padding: 22px 26px;
-  background: #151515;
-  border-bottom: 3px solid #c6a45b;
 }
 
 .mba-modal-topo h2 {
   margin: 0;
-  color: #d8b66d;
+  color: var(--cor-dourado-claro);
   font-size: 20px;
   font-weight: 700;
 }
 
 .mba-fechar {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: transparent;
+  color: var(--cor-superficie);
+  border: 1px solid #555555;
+  border-radius: 7px;
+  font-size: 26px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  padding: 0;
-  background: transparent;
-  border: 1px solid #555;
-  border-radius: 7px;
-  color: #fff;
-  font-size: 26px;
-  cursor: pointer;
 }
 
 .mba-fechar:hover:not(:disabled) {
-  background: #333;
+  background: #333333;
 }
 
 .mba-fechar:disabled {
@@ -497,16 +530,13 @@
 }
 
 .mba-formulario {
+  padding: 26px;
   display: flex;
   flex-direction: column;
   gap: 19px;
-  padding: 26px;
 }
 
-/* =====================================================
-   HORÁRIOS DISPONÍVEIS
-   ===================================================== */
-
+/* Horários Disponíveis */
 .mba-horarios {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -516,26 +546,29 @@
 .mba-horario {
   min-height: 43px;
   padding: 10px 6px;
-  background: #fff;
-  border: 1px solid #d8d8d8;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-label);
+  border: 1px solid var(--cor-borda-campo);
   border-radius: 8px;
-  color: #333;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background var(--transicao-padrao),
+    border-color var(--transicao-padrao),
+    color var(--transicao-padrao);
 }
 
 .mba-horario:hover:not(:disabled) {
   background: #fff8e9;
-  border-color: #c6a45b;
+  border-color: var(--cor-dourado);
 }
 
 .mba-horario-selecionado,
 .mba-horario-selecionado:hover:not(:disabled) {
-  background: #c6a45b;
-  border-color: #b58f3f;
-  color: #171717;
+  background: var(--cor-dourado);
+  color: var(--cor-texto-escuro);
+  border-color: var(--cor-dourado-selecionado-borda);
 }
 
 .mba-horario:disabled {
@@ -547,32 +580,29 @@
   margin: 0;
   padding: 12px;
   background: #f7f7f7;
+  color: var(--cor-texto-secundario);
   border-radius: 8px;
-  color: #777;
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* =====================================================
-   RESUMO DO ATENDIMENTO
-   ===================================================== */
-
+/* Resumo do Atendimento */
 .mba-resumo {
   padding: 18px;
-  background: #faf7ef;
-  border: 1px solid #e8d6aa;
+  background: var(--cor-resumo-bg);
+  border: 1px solid var(--cor-resumo-borda);
   border-radius: 10px;
 }
 
 .mba-resumo h3 {
   margin: 0 0 15px;
-  color: #7b5b20;
+  color: var(--cor-resumo-titulo);
   font-size: 15px;
 }
 
 .mba-resumo p {
   margin: 0 0 10px;
-  color: #444;
+  color: var(--cor-texto-tabela);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -585,25 +615,22 @@
   color: #252525;
 }
 
-/* =====================================================
-   BOTÕES DO MODAL
-   ===================================================== */
-
+/* Ações do Modal */
 .mba-modal-acoes {
+  padding-top: 10px;
+  border-top: 1px solid var(--cor-borda-linha);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 10px;
-  border-top: 1px solid #ededed;
 }
 
 .mba-modal-acoes .mba-btn {
   min-width: 135px;
 }
 
-/* =====================================================
-   RESPONSIVIDADE - TABLETS
-   ===================================================== */
+/* =========================================================
+   7. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
 
 @media (max-width: 1100px) {
   .mba-estatisticas {
@@ -618,10 +645,6 @@
     width: 100%;
   }
 }
-
-/* =====================================================
-   RESPONSIVIDADE - CELULARES
-   ===================================================== */
 
 @media (max-width: 650px) {
   .mba-cabecalho {
@@ -689,8 +712,8 @@
   }
 
   .mba-tabela-titulo {
-    align-items: flex-start;
     flex-direction: column;
+    align-items: flex-start;
   }
 
   .mba-modal-fundo {
