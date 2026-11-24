@@ -1,34 +1,10 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import logoHope from '../../assets/logo_login.png';
 
 const API_URL = 'http://localhost:3333';
-
-/* =========================================================
-   PROMOÇÕES
-   Continua fixo por enquanto, pois ainda não temos
-   uma integração específica de promoções.
-========================================================= */
-
-const promocoes = [
-  {
-    id: 1,
-    titulo: 'Corte + Barba',
-    descricao:
-      'Aproveite o combo completo por um preço especial.',
-    preco: 'R$ 45,00',
-    anterior: 'R$ 50,00',
-  },
-  {
-    id: 2,
-    titulo: 'Indique um amigo',
-    descricao:
-      'Indique um amigo e ganhe desconto no próximo corte.',
-    preco: '10% OFF',
-    anterior: '',
-  },
-];
 
 /* =========================================================
    COMPONENTE
@@ -38,14 +14,15 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState(null);
-
   const [agendamento, setAgendamento] = useState(null);
-
   const [historico, setHistorico] = useState([]);
+  const [servicos, setServicos] = useState([]);
 
   const [carregando, setCarregando] = useState(true);
+  const [carregandoServicos, setCarregandoServicos] = useState(true);
 
   const [erro, setErro] = useState('');
+  const [erroServicos, setErroServicos] = useState('');
 
   /* =======================================================
      PEGAR TOKEN
@@ -61,14 +38,14 @@ function Dashboard() {
 
   function pegarUsuarioSalvo() {
     try {
-      const usuarioSalvo =
-        localStorage.getItem('usuario');
+      const usuarioSalvo = localStorage.getItem('usuario');
 
       if (!usuarioSalvo) {
         return null;
       }
 
       return JSON.parse(usuarioSalvo);
+
     } catch (error) {
       console.error(
         'Erro ao ler usuário do localStorage:',
@@ -83,10 +60,7 @@ function Dashboard() {
      REQUISIÇÃO API
   ======================================================= */
 
-  async function requisicaoAPI(
-    caminho,
-    opcoes = {}
-  ) {
+  async function requisicaoAPI(caminho, opcoes = {}) {
     const token = pegarToken();
 
     if (!token) {
@@ -94,9 +68,7 @@ function Dashboard() {
         replace: true,
       });
 
-      throw new Error(
-        'Usuário não autenticado.'
-      );
+      throw new Error('Usuário não autenticado.');
     }
 
     const resposta = await fetch(
@@ -105,12 +77,8 @@ function Dashboard() {
         ...opcoes,
 
         headers: {
-          'Content-Type':
-            'application/json',
-
-          Authorization:
-            `Bearer ${token}`,
-
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
           ...(opcoes.headers || {}),
         },
       }
@@ -124,10 +92,7 @@ function Dashboard() {
       dados = null;
     }
 
-    if (
-      resposta.status === 401 ||
-      resposta.status === 403
-    ) {
+    if (resposta.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('usuario');
 
@@ -135,17 +100,15 @@ function Dashboard() {
         replace: true,
       });
 
-      throw new Error(
-        'Sua sessão expirou.'
-      );
+      throw new Error('Sua sessão expirou.');
     }
 
     if (!resposta.ok) {
       throw new Error(
         dados?.mensagem ||
-          dados?.message ||
-          dados?.erro ||
-          'Erro ao comunicar com a API.'
+        dados?.message ||
+        dados?.erro ||
+        'Erro ao comunicar com a API.'
       );
     }
 
@@ -170,8 +133,7 @@ function Dashboard() {
           ? texto.split(' ')[0]
           : texto.substring(0, 10);
 
-    const partes =
-      somenteData.split('-');
+    const partes = somenteData.split('-');
 
     if (partes.length !== 3) {
       return somenteData;
@@ -194,15 +156,11 @@ function Dashboard() {
     const texto = String(dataHora);
 
     if (texto.includes('T')) {
-      return texto
-        .split('T')[1]
-        .substring(0, 5);
+      return texto.split('T')[1].substring(0, 5);
     }
 
     if (texto.includes(' ')) {
-      return texto
-        .split(' ')[1]
-        .substring(0, 5);
+      return texto.split(' ')[1].substring(0, 5);
     }
 
     return '';
@@ -213,15 +171,24 @@ function Dashboard() {
   ======================================================= */
 
   function formatarValor(valor) {
-    const numero = Number(valor) || 0;
+    if (
+      valor === null ||
+      valor === undefined ||
+      valor === ''
+    ) {
+      return 'Não informado';
+    }
 
-    return numero.toLocaleString(
-      'pt-BR',
-      {
-        style: 'currency',
-        currency: 'BRL',
-      }
-    );
+    const numero = Number(valor);
+
+    if (!Number.isFinite(numero)) {
+      return 'Não informado';
+    }
+
+    return numero.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
   }
 
   /* =======================================================
@@ -243,8 +210,8 @@ function Dashboard() {
   function pegarUsuarioId(usuarioAtual) {
     return Number(
       usuarioAtual?.usuario_id ||
-        usuarioAtual?.id ||
-        0
+      usuarioAtual?.id ||
+      0
     );
   }
 
@@ -280,11 +247,11 @@ function Dashboard() {
   ======================================================= */
 
   function pegarValor(item) {
-    return Number(
-      item.servico_preco ||
-        item.valor ||
-        item.preco ||
-        0
+    return (
+      item.servico_preco ??
+      item.valor ??
+      item.preco ??
+      null
     );
   }
 
@@ -292,19 +259,31 @@ function Dashboard() {
      IDENTIFICAR AGENDAMENTO DO CLIENTE
   ======================================================= */
 
-  function pertenceAoCliente(
-    item,
-    usuarioId
-  ) {
-    const idCliente =
-      Number(
-        item.usuario_id ||
-          item.cliente_id ||
-          item.usuario_cliente_id ||
-          0
-      );
+  function pertenceAoCliente(item, usuarioId) {
+    const idCliente = Number(
+      item.usuario_id ||
+      item.cliente_id ||
+      item.usuario_cliente_id ||
+      0
+    );
 
     return idCliente === usuarioId;
+  }
+
+  /* =======================================================
+     IDENTIFICAR STATUS
+  ======================================================= */
+
+  function pegarStatus(item) {
+    return String(
+      item.agendamento_status ||
+      item.status ||
+      ''
+    )
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
 
   /* =======================================================
@@ -312,13 +291,12 @@ function Dashboard() {
   ======================================================= */
 
   function estaCancelado(item) {
-    const status = String(
-      item.agendamento_status ||
-        item.status ||
-        ''
-    ).toLowerCase();
+    const status = pegarStatus(item);
 
-    return status === 'cancelado';
+    return (
+      status === 'cancelado' ||
+      status === 'cancelada'
+    );
   }
 
   /* =======================================================
@@ -326,81 +304,42 @@ function Dashboard() {
   ======================================================= */
 
   function estaConcluido(item) {
-    const status = String(
-      item.agendamento_status ||
-        item.status ||
-        ''
-    ).toLowerCase();
-
-    if (
-      status === 'concluido' ||
-      status === 'concluído' ||
-      status === 'finalizado'
-    ) {
-      return true;
-    }
-
-    const data =
-      pegarDataAgendamento(item);
-
-    if (!data) {
-      return false;
-    }
-
-    const dataAgendamento =
-      new Date(data);
-
-    if (
-      Number.isNaN(
-        dataAgendamento.getTime()
-      )
-    ) {
-      return false;
-    }
+    const status = pegarStatus(item);
 
     return (
-      dataAgendamento < new Date()
+      status === 'concluido' ||
+      status === 'finalizado'
     );
   }
 
   /* =======================================================
-     FORMATAR ITEM PARA A TELA
+     FORMATAR AGENDAMENTO
   ======================================================= */
 
   function formatarAgendamento(item) {
-    const dataHora =
-      pegarDataAgendamento(item);
+    const dataHora = pegarDataAgendamento(item);
 
     return {
-      id:
-        item.agendamento_id ||
-        item.id,
+      id: item.agendamento_id || item.id,
 
-      data:
-        formatarData(dataHora),
+      data: formatarData(dataHora),
 
-      dataOriginal:
-        dataHora,
+      dataOriginal: dataHora,
 
-      horario:
-        extrairHorario(dataHora),
+      horario: extrairHorario(dataHora),
 
-      servico:
-        pegarNomeServico(item),
+      servico: pegarNomeServico(item),
 
-      barbeiro:
-        pegarNomeBarbeiro(item),
+      barbeiro: pegarNomeBarbeiro(item),
 
-      valor:
-        pegarValor(item),
+      valor: pegarValor(item),
 
       status:
         item.agendamento_status ||
         item.status ||
-        'Agendado',
+        'Não informado',
 
-      original:
-        item,
+      original: item,
     };
   }
 
@@ -409,46 +348,40 @@ function Dashboard() {
   ======================================================= */
 
   async function carregarPerfil() {
-    const usuarioLocal =
-      pegarUsuarioSalvo();
+    const usuarioLocal = pegarUsuarioSalvo();
 
     if (usuarioLocal) {
       setUsuario(usuarioLocal);
     }
 
     try {
-      const resposta =
-        await requisicaoAPI(
-          '/usuarios/perfil'
-        );
+      const resposta = await requisicaoAPI(
+        '/usuarios/perfil'
+      );
 
       if (resposta?.dados) {
-        const usuarioAPI =
-          resposta.dados;
+        const usuarioAPI = {
+          ...(usuarioLocal || {}),
+          ...resposta.dados,
+        };
 
         setUsuario(usuarioAPI);
 
         localStorage.setItem(
           'usuario',
-          JSON.stringify({
-            ...(usuarioLocal || {}),
-            ...usuarioAPI,
-          })
+          JSON.stringify(usuarioAPI)
         );
 
         return usuarioAPI;
       }
+
     } catch (error) {
       console.error(
         'Erro ao carregar perfil:',
         error
       );
 
-      /*
-       * Se já temos os dados salvos pelo login,
-       * o dashboard ainda pode mostrar o nome.
-       */
-      if (usuarioLocal) {
+      if (usuarioLocal && pegarToken()) {
         return usuarioLocal;
       }
 
@@ -462,11 +395,8 @@ function Dashboard() {
      CARREGAR AGENDAMENTOS
   ======================================================= */
 
-  async function carregarAgendamentos(
-    usuarioAtual
-  ) {
-    const usuarioId =
-      pegarUsuarioId(usuarioAtual);
+  async function carregarAgendamentos(usuarioAtual) {
+    const usuarioId = pegarUsuarioId(usuarioAtual);
 
     if (!usuarioId) {
       setAgendamento(null);
@@ -474,28 +404,17 @@ function Dashboard() {
       return;
     }
 
-    const resposta =
-      await requisicaoAPI(
-        '/agendamentos'
-      );
+    const resposta = await requisicaoAPI(
+      '/agendamentos'
+    );
 
-    const lista =
-      Array.isArray(resposta?.dados)
-        ? resposta.dados
-        : [];
+    const lista = Array.isArray(resposta?.dados)
+      ? resposta.dados
+      : [];
 
-    /*
-     * A rota pode retornar os agendamentos
-     * gerais. Por isso filtramos pelo cliente
-     * que está logado.
-     */
-    const meusAgendamentos =
-      lista.filter((item) =>
-        pertenceAoCliente(
-          item,
-          usuarioId
-        )
-      );
+    const meusAgendamentos = lista.filter(
+      (item) => pertenceAoCliente(item, usuarioId)
+    );
 
     /* =====================================================
        PRÓXIMO AGENDAMENTO
@@ -503,46 +422,33 @@ function Dashboard() {
 
     const agora = new Date();
 
-    const futuros =
-      meusAgendamentos
-        .filter(
-          (item) =>
-            !estaCancelado(item)
-        )
-        .filter((item) => {
-          const data =
-            new Date(
-              pegarDataAgendamento(
-                item
-              )
-            );
+    const futuros = meusAgendamentos
+      .filter(
+        (item) =>
+          !estaCancelado(item) &&
+          !estaConcluido(item)
+      )
+      .filter((item) => {
+        const data = new Date(
+          pegarDataAgendamento(item)
+        );
 
-          if (
-            Number.isNaN(
-              data.getTime()
-            )
-          ) {
-            return false;
-          }
+        if (Number.isNaN(data.getTime())) {
+          return false;
+        }
 
-          return data >= agora;
-        })
-        .sort((a, b) => {
-          return (
-            new Date(
-              pegarDataAgendamento(a)
-            ) -
-            new Date(
-              pegarDataAgendamento(b)
-            )
-          );
-        });
+        return data >= agora;
+      })
+      .sort((a, b) => {
+        return (
+          new Date(pegarDataAgendamento(a)) -
+          new Date(pegarDataAgendamento(b))
+        );
+      });
 
     if (futuros.length > 0) {
       setAgendamento(
-        formatarAgendamento(
-          futuros[0]
-        )
+        formatarAgendamento(futuros[0])
       );
     } else {
       setAgendamento(null);
@@ -552,30 +458,63 @@ function Dashboard() {
        HISTÓRICO
     ===================================================== */
 
-    const anteriores =
-      meusAgendamentos
-        .filter(
-          (item) =>
-            !estaCancelado(item)
-        )
-        .filter((item) =>
+    const anteriores = meusAgendamentos
+      .filter(
+        (item) =>
+          !estaCancelado(item) &&
           estaConcluido(item)
-        )
-        .sort((a, b) => {
-          return (
-            new Date(
-              pegarDataAgendamento(b)
-            ) -
-            new Date(
-              pegarDataAgendamento(a)
-            )
-          );
-        })
-        .map(
-          formatarAgendamento
+      )
+      .sort((a, b) => {
+        return (
+          new Date(pegarDataAgendamento(b)) -
+          new Date(pegarDataAgendamento(a))
         );
+      })
+      .map(formatarAgendamento);
 
     setHistorico(anteriores);
+  }
+
+  /* =======================================================
+     CARREGAR SERVIÇOS DA API
+  ======================================================= */
+
+  async function carregarServicos() {
+    try {
+      setCarregandoServicos(true);
+      setErroServicos('');
+
+      const resposta = await requisicaoAPI(
+        '/servicos'
+      );
+
+      const lista = Array.isArray(resposta?.dados)
+        ? resposta.dados
+        : [];
+
+      const servicosAtivos = lista.filter(
+        (servico) =>
+          Number(servico.servico_ativo) === 1
+      );
+
+      setServicos(servicosAtivos);
+
+    } catch (error) {
+      console.error(
+        'Erro ao carregar serviços:',
+        error
+      );
+
+      setServicos([]);
+
+      setErroServicos(
+        error?.message ||
+        'Não foi possível carregar os serviços.'
+      );
+
+    } finally {
+      setCarregandoServicos(false);
+    }
   }
 
   /* =======================================================
@@ -587,8 +526,7 @@ function Dashboard() {
       setCarregando(true);
       setErro('');
 
-      const token =
-        pegarToken();
+      const token = pegarToken();
 
       if (!token) {
         navigate('/login', {
@@ -598,8 +536,7 @@ function Dashboard() {
         return;
       }
 
-      const usuarioAtual =
-        await carregarPerfil();
+      const usuarioAtual = await carregarPerfil();
 
       if (!usuarioAtual) {
         throw new Error(
@@ -607,9 +544,11 @@ function Dashboard() {
         );
       }
 
-      await carregarAgendamentos(
-        usuarioAtual
-      );
+      await Promise.all([
+        carregarAgendamentos(usuarioAtual),
+        carregarServicos(),
+      ]);
+
     } catch (error) {
       console.error(
         'Erro ao carregar dashboard:',
@@ -618,8 +557,9 @@ function Dashboard() {
 
       setErro(
         error?.message ||
-          'Erro ao carregar o dashboard.'
+        'Erro ao carregar o dashboard.'
       );
+
     } finally {
       setCarregando(false);
     }
@@ -634,16 +574,12 @@ function Dashboard() {
   }, []);
 
   /* =======================================================
-     IR PARA AGENDAMENTO
+     NAVEGAÇÃO
   ======================================================= */
 
   function irParaAgendamento() {
     navigate('/agendamento');
   }
-
-  /* =======================================================
-     IR PARA PERFIL
-  ======================================================= */
 
   function irParaPerfil() {
     navigate('/perfil');
@@ -665,9 +601,7 @@ function Dashboard() {
   return (
     <main className="dashboard-page">
 
-      {/* =================================================
-          HEADER
-      ================================================= */}
+      {/* HEADER */}
 
       <header className="dashboard-header">
 
@@ -680,13 +614,9 @@ function Dashboard() {
 
         <div className="dashboard-title">
 
-          <h1>
-            Área do Cliente
-          </h1>
+          <h1>Área do Cliente</h1>
 
-          <p>
-            Bem-vindo à Hope Barbearia
-          </p>
+          <p>Bem-vindo à Hope Barbearia</p>
 
         </div>
 
@@ -696,22 +626,14 @@ function Dashboard() {
         >
 
           <div className="user-avatar">
-
-            {nomeUsuario
-              .charAt(0)
-              .toUpperCase()}
-
+            {nomeUsuario.charAt(0).toUpperCase()}
           </div>
 
           <div className="user-info">
 
-            <strong>
-              {nomeUsuario}
-            </strong>
+            <strong>{nomeUsuario}</strong>
 
-            <span>
-              Ver meu perfil
-            </span>
+            <span>Ver meu perfil</span>
 
           </div>
 
@@ -719,15 +641,11 @@ function Dashboard() {
 
       </header>
 
-      {/* =================================================
-          CONTEÚDO
-      ================================================= */}
+      {/* CONTEÚDO */}
 
       <section className="dashboard-content">
 
-        {/* ===============================================
-            SAUDAÇÃO
-        =============================================== */}
+        {/* SAUDAÇÃO */}
 
         <div className="dashboard-heading">
 
@@ -737,32 +655,25 @@ function Dashboard() {
               ÁREA DO CLIENTE
             </span>
 
-            <h2>
-              Olá, {nomeUsuario}!
-            </h2>
+            <h2>Olá, {nomeUsuario}!</h2>
 
             <p>
-              Confira seus próximos
-              atendimentos e o histórico
-              da sua conta.
+              Confira seus próximos atendimentos
+              e o histórico da sua conta.
             </p>
 
           </div>
 
           <button
             className="btn-agendar"
-            onClick={
-              irParaAgendamento
-            }
+            onClick={irParaAgendamento}
           >
             + Agendar Horário
           </button>
 
         </div>
 
-        {/* ===============================================
-            ERRO
-        =============================================== */}
+        {/* ERRO */}
 
         {erro && (
 
@@ -770,28 +681,21 @@ function Dashboard() {
 
             <div className="no-appointment">
 
-              <span>
-                ⚠
-              </span>
+              <span>⚠</span>
 
               <div>
 
                 <strong>
-                  Não foi possível carregar
-                  todos os dados
+                  Não foi possível carregar todos os dados
                 </strong>
 
-                <p>
-                  {erro}
-                </p>
+                <p>{erro}</p>
 
               </div>
 
               <button
                 className="btn-small"
-                onClick={
-                  carregarDashboard
-                }
+                onClick={carregarDashboard}
               >
                 Tentar novamente
               </button>
@@ -802,9 +706,7 @@ function Dashboard() {
 
         )}
 
-        {/* ===============================================
-            PRÓXIMO AGENDAMENTO
-        =============================================== */}
+        {/* PRÓXIMO AGENDAMENTO */}
 
         <section className="dashboard-card next-card">
 
@@ -816,9 +718,7 @@ function Dashboard() {
                 PRÓXIMO AGENDAMENTO
               </span>
 
-              <h3>
-                Seu próximo corte
-              </h3>
+              <h3>Seu próximo corte</h3>
 
             </div>
 
@@ -832,20 +732,13 @@ function Dashboard() {
 
             <div className="no-appointment">
 
-              <span>
-                ⏳
-              </span>
+              <span>⏳</span>
 
               <div>
 
-                <strong>
-                  Carregando...
-                </strong>
+                <strong>Carregando...</strong>
 
-                <p>
-                  Buscando seus
-                  agendamentos.
-                </p>
+                <p>Buscando seus agendamentos.</p>
 
               </div>
 
@@ -863,17 +756,14 @@ function Dashboard() {
 
                 <div>
 
-                  <small>
-                    Data e horário
-                  </small>
+                  <small>Data e horário</small>
 
                   <strong>
                     {agendamento.data}
                   </strong>
 
                   <span>
-                    às{' '}
-                    {agendamento.horario}
+                    às {agendamento.horario}
                   </span>
 
                 </div>
@@ -884,9 +774,7 @@ function Dashboard() {
 
                 <div>
 
-                  <small>
-                    Serviço
-                  </small>
+                  <small>Serviço</small>
 
                   <strong>
                     {agendamento.servico}
@@ -896,9 +784,7 @@ function Dashboard() {
 
                 <div>
 
-                  <small>
-                    Barbeiro
-                  </small>
+                  <small>Barbeiro</small>
 
                   <strong>
                     {agendamento.barbeiro}
@@ -908,14 +794,10 @@ function Dashboard() {
 
                 <div>
 
-                  <small>
-                    Valor
-                  </small>
+                  <small>Valor</small>
 
                   <strong>
-                    {formatarValor(
-                      agendamento.valor
-                    )}
+                    {formatarValor(agendamento.valor)}
                   </strong>
 
                 </div>
@@ -928,9 +810,7 @@ function Dashboard() {
 
             <div className="no-appointment">
 
-              <span>
-                ✂
-              </span>
+              <span>✂</span>
 
               <div>
 
@@ -939,18 +819,15 @@ function Dashboard() {
                 </strong>
 
                 <p>
-                  Agende seu próximo
-                  corte e mantenha seu
-                  visual em dia.
+                  Agende seu próximo corte
+                  e mantenha seu visual em dia.
                 </p>
 
               </div>
 
               <button
                 className="btn-small"
-                onClick={
-                  irParaAgendamento
-                }
+                onClick={irParaAgendamento}
               >
                 Agendar agora
               </button>
@@ -961,15 +838,11 @@ function Dashboard() {
 
         </section>
 
-        {/* ===============================================
-            GRID
-        =============================================== */}
+        {/* GRID */}
 
         <div className="dashboard-grid">
 
-          {/* =============================================
-              HISTÓRICO
-          ============================================= */}
+          {/* HISTÓRICO */}
 
           <section className="dashboard-card history-card">
 
@@ -981,9 +854,7 @@ function Dashboard() {
                   HISTÓRICO
                 </span>
 
-                <h3>
-                  Histórico de cortes
-                </h3>
+                <h3>Histórico de cortes</h3>
 
               </div>
 
@@ -1005,9 +876,7 @@ function Dashboard() {
 
                 <div className="no-appointment">
 
-                  <span>
-                    ⏳
-                  </span>
+                  <span>⏳</span>
 
                   <div>
 
@@ -1019,14 +888,11 @@ function Dashboard() {
 
                 </div>
 
-              ) : historico.length ===
-                0 ? (
+              ) : historico.length === 0 ? (
 
                 <div className="no-appointment">
 
-                  <span>
-                    ✂
-                  </span>
+                  <span>✂</span>
 
                   <div>
 
@@ -1035,9 +901,8 @@ function Dashboard() {
                     </strong>
 
                     <p>
-                      Seus atendimentos
-                      realizados aparecerão
-                      aqui.
+                      Seus atendimentos realizados
+                      aparecerão aqui.
                     </p>
 
                   </div>
@@ -1075,9 +940,7 @@ function Dashboard() {
 
                       <strong className="history-price">
 
-                        {formatarValor(
-                          corte.valor
-                        )}
+                        {formatarValor(corte.valor)}
 
                       </strong>
 
@@ -1091,9 +954,7 @@ function Dashboard() {
 
           </section>
 
-          {/* =============================================
-              PROMOÇÕES
-          ============================================= */}
+          {/* SERVIÇOS DISPONÍVEIS */}
 
           <section className="dashboard-card promotions-card">
 
@@ -1102,12 +963,10 @@ function Dashboard() {
               <div>
 
                 <span className="card-label">
-                  OFERTAS
+                  NOSSOS SERVIÇOS
                 </span>
 
-                <h3>
-                  Promoções
-                </h3>
+                <h3>Serviços disponíveis</h3>
 
               </div>
 
@@ -1115,49 +974,112 @@ function Dashboard() {
 
             <div className="promotion-list">
 
-              {promocoes.map(
-                (promocao) => (
+              {carregandoServicos ? (
+
+                <div className="no-appointment">
+
+                  <span>⏳</span>
+
+                  <div>
+
+                    <strong>
+                      Carregando serviços...
+                    </strong>
+
+                  </div>
+
+                </div>
+
+              ) : erroServicos ? (
+
+                <div className="no-appointment">
+
+                  <span>⚠</span>
+
+                  <div>
+
+                    <strong>
+                      Erro ao carregar serviços
+                    </strong>
+
+                    <p>{erroServicos}</p>
+
+                  </div>
+
+                  <button
+                    className="btn-small"
+                    onClick={carregarServicos}
+                  >
+                    Tentar novamente
+                  </button>
+
+                </div>
+
+              ) : servicos.length === 0 ? (
+
+                <div className="no-appointment">
+
+                  <span>✂</span>
+
+                  <div>
+
+                    <strong>
+                      Nenhum serviço disponível
+                    </strong>
+
+                    <p>
+                      Novos serviços aparecerão aqui.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              ) : (
+
+                servicos.map((servico) => (
 
                   <div
                     className="promotion-item"
-                    key={promocao.id}
+                    key={servico.servico_id}
                   >
 
                     <div className="promotion-content">
 
                       <span className="promotion-tag">
-                        OFERTA
+                        DISPONÍVEL
                       </span>
 
                       <h4>
-                        {promocao.titulo}
+                        {servico.servico_nome}
                       </h4>
 
-                      <p>
-                        {promocao.descricao}
-                      </p>
+                      {servico.servico_descricao && (
+
+                        <p>
+                          {servico.servico_descricao}
+                        </p>
+
+                      )}
 
                     </div>
 
                     <div className="promotion-price">
 
                       <strong>
-                        {promocao.preco}
+
+                        {formatarValor(
+                          servico.servico_preco
+                        )}
+
                       </strong>
-
-                      {promocao.anterior && (
-
-                        <span>
-                          {promocao.anterior}
-                        </span>
-
-                      )}
 
                     </div>
 
                   </div>
 
-                )
+                ))
+
               )}
 
             </div>
@@ -1166,38 +1088,27 @@ function Dashboard() {
 
         </div>
 
-        {/* ===============================================
-            ACESSO RÁPIDO
-        =============================================== */}
+        {/* ACESSO RÁPIDO */}
 
         <section className="quick-actions">
 
           <button
-            onClick={
-              irParaAgendamento
-            }
+            onClick={irParaAgendamento}
           >
 
-            <span>
-              📅
-            </span>
+            <span>📅</span>
 
             <div>
 
-              <strong>
-                Agendar horário
-              </strong>
+              <strong>Agendar horário</strong>
 
               <small>
-                Escolha seu próximo
-                atendimento
+                Escolha seu próximo atendimento
               </small>
 
             </div>
 
-            <b>
-              ›
-            </b>
+            <b>›</b>
 
           </button>
 
@@ -1205,9 +1116,7 @@ function Dashboard() {
             type="button"
             onClick={() => {
               const elemento =
-                document.querySelector(
-                  '.history-card'
-                );
+                document.querySelector('.history-card');
 
               elemento?.scrollIntoView({
                 behavior: 'smooth',
@@ -1215,15 +1124,11 @@ function Dashboard() {
             }}
           >
 
-            <span>
-              ✂
-            </span>
+            <span>✂</span>
 
             <div>
 
-              <strong>
-                Meus cortes
-              </strong>
+              <strong>Meus cortes</strong>
 
               <small>
                 Confira seu histórico
@@ -1231,9 +1136,7 @@ function Dashboard() {
 
             </div>
 
-            <b>
-              ›
-            </b>
+            <b>›</b>
 
           </button>
 
@@ -1241,9 +1144,7 @@ function Dashboard() {
             type="button"
             onClick={() => {
               const elemento =
-                document.querySelector(
-                  '.promotions-card'
-                );
+                document.querySelector('.promotions-card');
 
               elemento?.scrollIntoView({
                 behavior: 'smooth',
@@ -1251,25 +1152,19 @@ function Dashboard() {
             }}
           >
 
-            <span>
-              🎁
-            </span>
+            <span>✂</span>
 
             <div>
 
-              <strong>
-                Promoções
-              </strong>
+              <strong>Nossos serviços</strong>
 
               <small>
-                Veja ofertas disponíveis
+                Confira os serviços disponíveis
               </small>
 
             </div>
 
-            <b>
-              ›
-            </b>
+            <b>›</b>
 
           </button>
 

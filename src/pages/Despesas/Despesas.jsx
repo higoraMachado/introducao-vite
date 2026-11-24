@@ -1,6 +1,10 @@
+
 import { useState } from 'react';
 import './Despesas.css';
 import logoHope from '../../assets/logo-hope.png';
+
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:3333';
 
 const categorias = [
   'Compra de produtos',
@@ -19,33 +23,102 @@ const formasPagamento = [
   'Cartão de crédito',
 ];
 
+const formularioInicial = () => ({
+  descricao: '',
+  categoria: 'Compra de produtos',
+  valor: '',
+  data: new Date().toLocaleDateString('en-CA'),
+  formaPagamento: 'Dinheiro',
+});
+
 function Despesas() {
-  const [form, setForm] = useState({
-    descricao: '',
-    categoria: 'Compra de produtos',
-    valor: '',
-    data: new Date().toISOString().slice(0, 10),
-    formaPagamento: 'Dinheiro',
-  });
+  const [form, setForm] = useState(formularioInicial);
+  const [carregando, setCarregando] = useState(false);
 
   function alterarCampo(event) {
     const { name, value } = event.target;
 
-    setForm((estadoAtual) => ({
-      ...estadoAtual,
+    setForm((atual) => ({
+      ...atual,
       [name]: value,
     }));
   }
 
-  function registrarDespesa(event) {
+  function cancelar() {
+    setForm(formularioInicial());
+  }
+
+  async function registrarDespesa(event) {
     event.preventDefault();
 
-    if (!form.descricao || !form.valor) {
-      alert('Preencha a descrição e o valor da despesa.');
+    if (
+      !form.descricao.trim() ||
+      !form.valor ||
+      !form.data
+    ) {
+      alert('Preencha todos os campos obrigatórios.');
       return;
     }
 
-    alert(`Despesa registrada: ${form.descricao}`);
+    const valor = Number(form.valor);
+
+    if (!Number.isFinite(valor) || valor <= 0) {
+      alert('Informe um valor válido para a despesa.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('Sua sessão expirou. Entre novamente no sistema.');
+      return;
+    }
+
+    const dadosDespesa = {
+      despesa_nome: form.descricao.trim(),
+      despesa_descricao:
+        `Categoria: ${form.categoria} | Forma de pagamento: ${form.formaPagamento}`,
+      despesa_valor: valor,
+      despesa_data: form.data,
+      despesa_comprovante: null,
+    };
+
+    try {
+      setCarregando(true);
+
+      const resposta = await fetch(`${API_URL}/despesas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(dadosDespesa),
+      });
+
+      const resultado = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          resultado.message ||
+          resultado.mensagem ||
+          resultado.dados ||
+          'Não foi possível cadastrar a despesa.'
+        );
+      }
+
+      alert('Despesa cadastrada com sucesso!');
+
+      setForm(formularioInicial());
+    } catch (erro) {
+      console.error('Erro ao cadastrar despesa:', erro);
+
+      alert(
+        erro.message ||
+        'Erro ao conectar com o servidor. Verifique se a API está funcionando.'
+      );
+    } finally {
+      setCarregando(false);
+    }
   }
 
   return (
@@ -74,11 +147,17 @@ function Despesas() {
           <div>
             <span className="heading-label">DESPESAS</span>
             <h2>Cadastro de despesas</h2>
-            <p>Registre os gastos e mantenha o controle financeiro do negócio.</p>
+            <p>
+              Registre os gastos e mantenha o controle
+              financeiro do negócio.
+            </p>
           </div>
         </div>
 
-        <form className="despesas-form" onSubmit={registrarDespesa}>
+        <form
+          className="despesas-form"
+          onSubmit={registrarDespesa}
+        >
           <div className="form-grid">
             <div className="form-group full-width">
               <label htmlFor="descricao">Descrição</label>
@@ -89,6 +168,8 @@ function Despesas() {
                 value={form.descricao}
                 onChange={alterarCampo}
                 placeholder="Ex: Compra de produtos"
+                maxLength={100}
+                required
               />
             </div>
 
@@ -114,11 +195,12 @@ function Despesas() {
                 id="valor"
                 name="valor"
                 type="number"
-                min="0"
+                min="0.01"
                 step="0.01"
                 value={form.valor}
                 onChange={alterarCampo}
                 placeholder="0.00"
+                required
               />
             </div>
 
@@ -130,11 +212,15 @@ function Despesas() {
                 type="date"
                 value={form.data}
                 onChange={alterarCampo}
+                required
               />
             </div>
 
             <div className="form-group full-width">
-              <label htmlFor="formaPagamento">Forma de pagamento</label>
+              <label htmlFor="formaPagamento">
+                Forma de pagamento
+              </label>
+
               <select
                 id="formaPagamento"
                 name="formaPagamento"
@@ -151,11 +237,21 @@ function Despesas() {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn-secondary">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={cancelar}
+              disabled={carregando}
+            >
               Cancelar
             </button>
-            <button type="submit" className="btn-primary">
-              Salvar despesa
+
+            <button
+              type="submit"
+              className="btn-primary"
+              disabled={carregando}
+            >
+              {carregando ? 'Salvando...' : 'Salvar despesa'}
             </button>
           </div>
         </form>
