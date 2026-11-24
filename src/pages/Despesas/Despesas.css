@@ -1,221 +1,176 @@
 /* =========================================================
-   1. VARIÁVEIS & RESET
+   1. VARIÁVEIS (com escopo na página)
+   Ficam na raiz da página, e não em :root, para não
+   sobrescrever variáveis de mesmo nome de outras telas.
 ========================================================= */
 
-:root {
-  /* Cores Principais */
-  --bg-page: #f4f4f4;
-  --panel: #ffffff;
-  --panel-alt: #fafafa;
-  --header-bg: #111111;
-  --line: #e8e8e8;
-  --border-field: #d9d9d9;
+.despesas-page {
+  /* Superfícies */
+  --panel: rgba(8, 8, 8, 0.82);
+  --panel-field: #171717;
+  --panel-hover: #2b2b2b;
 
-  /* Tons de Texto & Ações */
-  --text: #171717;
-  --label-color: #272727;
-  --muted: #666666;
-  --muted-alt: #777777;
-  --muted-light: #aaaaaa;
-  --muted-user: #999999;
-  --primary: #171717;
-  --primary-hover: #2d2d2d;
-  --primary-soft: #1e1e1e;
-  --secondary-bg: #f2f2f2;
-  --secondary-hover: #e5e5e5;
+  /* Dourado */
+  --gold: #d6ad54;
+  --gold-light: #e1c477;
+  --gold-border-weak: rgba(214, 173, 84, 0.25);
+  --gold-border-mid: rgba(214, 173, 84, 0.45);
+  --gold-border-strong: rgba(214, 173, 84, 0.55);
+  --gold-hover: rgba(214, 173, 84, 0.12);
+
+  /* Textos */
+  --text: #f5f2eb;
+  --text-soft: #d0cbc1;
+  --placeholder: #aaa49a;
+  --white: #ffffff;
+  --dark-on-gold: #151515;
 
   /* Sombras & Transições */
-  --sombra-form: 0 10px 30px rgba(17, 17, 17, 0.06);
+  --sombra-form: 0 18px 48px rgba(0, 0, 0, 0.38);
   --transicao-padrao: 0.2s ease;
 }
 
-* {
+.despesas-page,
+.despesas-page * {
   box-sizing: border-box;
 }
 
 /* =========================================================
    2. LAYOUT BASE & CABEÇALHO
+   (o global.css já define fundo, faixas douradas e o título
+   centralizado do header)
 ========================================================= */
 
 .despesas-page {
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
-  background: var(--bg-page);
+  background:
+    linear-gradient(rgba(8, 8, 8, 0.88), rgba(8, 8, 8, 0.94)),
+    url("../../assets/fundo das paginas.avif") center / cover fixed;
   color: var(--text);
   font-family: Inter, Arial, sans-serif;
 }
 
-.despesas-header {
-  height: 82px;
-  padding: 0 42px;
-  background: var(--header-bg);
-  color: var(--panel);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.despesas-page .despesas-header {
   gap: 24px;
 }
 
-.header-logo {
-  width: 220px;
-  display: flex;
-  align-items: center;
-}
-
-.header-logo img {
-  width: 90px;
-  height: auto;
-}
-
-.header-title {
-  flex: 1;
-}
-
-.header-title h1 {
-  margin: 0;
-  font-size: 22px;
-}
-
-.header-title p {
-  margin: 4px 0 0;
-  color: var(--muted-light);
-  font-size: 13px;
-}
-
-.header-user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--panel);
-  color: var(--header-bg);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.user-info strong {
-  color: var(--panel);
-  font-size: 14px;
-}
-
-.user-info span {
-  color: var(--muted-user);
-  font-size: 12px;
+.despesas-page .header-title p {
+  color: #cfcfcf;
 }
 
 /* =========================================================
    3. CONTEÚDO, TÍTULO & FORMULÁRIO DE DESPESAS
 ========================================================= */
 
-.despesas-content {
+.despesas-page .despesas-content {
   max-width: 980px;
   margin: 0 auto;
   padding: 36px 42px 60px;
 }
 
-.page-heading {
+.despesas-page .page-heading {
   margin-bottom: 28px;
 }
 
-.heading-label {
+.despesas-page .heading-label {
   display: block;
   margin-bottom: 8px;
-  color: var(--muted-alt);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.4px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
 }
 
-.page-heading h2 {
+.despesas-page .page-heading h2 {
   margin: 0;
-  color: var(--text);
+  color: var(--white);
   font-size: 32px;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
 }
 
-.page-heading p {
+.despesas-page .page-heading p {
   margin: 7px 0 0;
-  color: var(--muted-alt);
+  color: var(--text-soft);
   font-size: 15px;
 }
 
-.despesas-form {
+.despesas-page .despesas-form {
   padding: 28px 24px;
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid var(--gold-border-mid);
   border-radius: 16px;
+  color: var(--text);
   box-shadow: var(--sombra-form);
+  backdrop-filter: blur(12px);
 }
 
-.form-grid {
+.despesas-page .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
-.form-group {
+.despesas-page .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.full-width {
+.despesas-page .full-width {
   grid-column: 1 / -1;
 }
 
-.form-group label {
-  color: var(--label-color);
+.despesas-page .form-group label {
+  color: var(--white);
   font-size: 14px;
   font-weight: 700;
 }
 
-.form-group input,
-.form-group select {
+.despesas-page .form-group input,
+.despesas-page .form-group select {
   width: 100%;
   height: 48px;
   padding: 0 14px;
-  border: 1px solid var(--border-field);
+  border: 1px solid var(--gold-border-strong);
   border-radius: 10px;
-  background: var(--panel);
-  color: var(--text);
+  background: var(--panel-field);
+  color: var(--white);
+  color-scheme: dark; /* ícone do calendário e setas do select ficam claros */
   font-size: 15px;
   transition: border-color var(--transicao-padrao), box-shadow var(--transicao-padrao);
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.despesas-page .form-group input::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+
+.despesas-page .form-group input:focus,
+.despesas-page .form-group select:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.08);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(214, 173, 84, 0.14);
 }
 
 /* =========================================================
    4. AÇÕES DO FORMULÁRIO & RESPONSIVIDADE
 ========================================================= */
 
-.form-actions {
+.despesas-page .form-actions {
   margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--gold-border-weak);
   display: flex;
   justify-content: flex-end;
   gap: 14px;
 }
 
-.btn-primary,
-.btn-secondary {
+.despesas-page .btn-primary,
+.despesas-page .btn-secondary {
   height: 46px;
-  padding: 0 18px;
-  border: none;
+  padding: 0 20px;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
@@ -223,57 +178,71 @@
   transition:
     background var(--transicao-padrao),
     color var(--transicao-padrao),
+    border-color var(--transicao-padrao),
     transform var(--transicao-padrao);
 }
 
-.btn-primary {
-  background: var(--primary);
-  color: var(--panel);
+/* Botão principal: dourado */
+.despesas-page .btn-primary {
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: var(--dark-on-gold);
 }
 
-.btn-primary:hover {
-  background: var(--primary-hover);
+.despesas-page .btn-primary:hover {
+  background: var(--gold-light);
   transform: translateY(-1px);
 }
 
-.btn-secondary {
-  background: var(--secondary-bg);
-  color: var(--text);
+/* Botão secundário: escuro com borda dourada */
+.despesas-page .btn-secondary {
+  border: 1px solid var(--gold-border-strong);
+  background: var(--panel-field);
+  color: var(--white);
 }
 
-.btn-secondary:hover {
-  background: var(--secondary-hover);
+.despesas-page .btn-secondary:hover {
+  background: var(--gold-hover);
+  border-color: var(--gold);
+}
+
+@media (max-width: 850px) {
+  /* Título volta para o fluxo normal (embaixo da logo/usuário) e continua centralizado */
+  .despesas-page .despesas-header {
+    flex-wrap: wrap;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .despesas-page .despesas-header .header-title {
+    position: static;
+    transform: none;
+    order: 3;
+    width: 100%;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .despesas-page .despesas-header .header-title h1 {
+    font-size: 22px;
+  }
 }
 
 @media (max-width: 760px) {
-  .despesas-header {
-    height: auto;
-    padding: 18px 20px;
-    flex-wrap: wrap;
-  }
-
-  .header-logo {
-    width: auto;
-  }
-
-  .header-title {
-    min-width: 0;
-  }
-
-  .despesas-content {
+  .despesas-page .despesas-content {
     padding: 24px 18px 40px;
   }
 
-  .form-grid {
+  .despesas-page .form-grid {
     grid-template-columns: 1fr;
   }
 
-  .form-actions {
+  .despesas-page .form-actions {
     flex-direction: column-reverse;
   }
 
-  .btn-primary,
-  .btn-secondary {
+  .despesas-page .btn-primary,
+  .despesas-page .btn-secondary {
     width: 100%;
   }
 }

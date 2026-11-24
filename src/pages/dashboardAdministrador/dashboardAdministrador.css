@@ -11,16 +11,28 @@
   --cor-branco: #ffffff;
   --cor-hover-claro: #f3f3f3;
 
+  /* Tons de Dourado */
+  --cor-dourado: #d6ad54;
+  --cor-dourado-claro: #e1c477;
+  --cor-hover-ouro-escuro: rgba(214, 173, 84, 0.12);
+  --cor-hover-ouro-claro: #faf3df;
+
+  /* Cards pretos */
+  --cor-card: #101010;
+  --cor-card-borda: rgba(214, 173, 84, 0.4);
+
   /* Tons de Texto & Bordas */
   --cor-texto-claro: #f5f5f5;
+  --cor-texto-suave-escuro: #d0cbc1; /* textos secundários sobre fundo escuro */
   --cor-texto-menu: #bdbdbd;
-  --cor-texto-secundario: #777777;
-  --cor-texto-muted: #999999;
+  --cor-texto-secundario: #d0cbc1;   /* textos secundários sobre os cards pretos */
+  --cor-texto-muted: #999999;        /* só para fundos escuros (header/sidebar) */
+  --cor-texto-muted-claro: #b8b2a6;  /* textos auxiliares sobre os cards pretos */
   --cor-borda-header: #292929;
   --cor-borda-sidebar: #303030;
   --cor-borda-card: #e1e1e1;
   --cor-borda-atalho: #e0e0e0;
-  --cor-borda-linha: #eeeeee;
+  --cor-borda-linha: #2e2e2e;
 
   /* Tipografia, Sombras & Transições */
   --transicao-padrao: 0.2s ease;
@@ -33,6 +45,7 @@
 
 /* =========================================================
    2. LAYOUT BASE & CABEÇALHO
+   (o global.css já centraliza o título do header)
 ========================================================= */
 
 .admin-page {
@@ -84,7 +97,7 @@
 
 .admin-header-title p {
   margin: 4px 0 0;
-  color: #a9a9a9;
+  color: #b5b5b5;
   font-size: 12px;
 }
 
@@ -119,8 +132,8 @@
 
 .admin-user-info span {
   margin-top: 2px;
-  color: var(--cor-texto-muted);
-  font-size: 11px;
+  color: var(--cor-texto-suave-escuro);
+  font-size: 12px;
 }
 
 /* =========================================================
@@ -148,8 +161,8 @@
 }
 
 .sidebar-title span {
-  color: #929292;
-  font-size: 9px;
+  color: var(--cor-dourado);
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 2px;
 }
@@ -181,9 +194,10 @@
   color: var(--cor-texto-menu);
 }
 
+/* Hover dourado suave e translúcido */
 .sidebar-item:hover,
 .logout-button:hover {
-  background: var(--cor-hover-escuro);
+  background: var(--cor-hover-ouro-escuro);
   color: var(--cor-branco);
 }
 
@@ -209,7 +223,7 @@
 
 .logout-button {
   padding: 12px 15px;
-  color: var(--cor-texto-muted);
+  color: var(--cor-texto-suave-escuro);
 }
 
 /* =========================================================
@@ -228,25 +242,28 @@
   margin-bottom: 26px;
 }
 
+/* Textos sobre o fundo escuro: dourado / branco / bege claro */
 .admin-label {
   display: block;
   margin-bottom: 7px;
-  color: var(--cor-texto-secundario);
-  font-size: 10px;
+  color: var(--cor-dourado);
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 2px;
 }
 
 .admin-page-heading h2 {
   margin: 0;
+  color: var(--cor-branco);
   font-size: 30px;
   font-weight: 750;
   line-height: 1.15;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
 }
 
 .admin-page-heading p {
   margin: 8px 0 0;
-  color: var(--cor-texto-secundario);
+  color: var(--cor-texto-suave-escuro);
   font-size: 14px;
 }
 
@@ -261,9 +278,9 @@
   position: relative;
   min-height: 115px;
   padding: 22px;
-  background: var(--cor-branco);
-  color: var(--cor-superficie-escura);
-  border: 1px solid var(--cor-borda-card);
+  background: var(--cor-card);
+  color: var(--cor-branco);
+  border: 1px solid var(--cor-card-borda);
   border-radius: 12px;
   box-shadow: var(--sombra-card);
   display: flex;
@@ -276,8 +293,8 @@
   width: 43px;
   height: 43px;
   border-radius: 8px;
-  background: var(--cor-superficie-escura);
-  color: var(--cor-branco);
+  background: var(--cor-dourado);
+  color: #151515;
   font-size: 17px;
   font-weight: 700;
   display: flex;
@@ -293,19 +310,29 @@
 
 .stat-info span {
   color: var(--cor-texto-secundario);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .stat-info strong {
   font-size: 21px;
 }
 
+/* Números e títulos fortes dentro dos cards sempre brancos.
+   O !important e a especificidade extra garantem que nenhuma regra
+   de outro CSS (cor escura herdada de card claro) sobreponha. */
+body .admin-stat-card .stat-info strong,
+body .admin-card strong,
+body .admin-card h3,
+body .quick-grid button strong {
+  color: var(--cor-branco) !important;
+}
+
 .admin-stat-card small {
   position: absolute;
   right: 18px;
   bottom: 12px;
-  color: var(--cor-texto-muted);
-  font-size: 9px;
+  color: var(--cor-texto-muted-claro);
+  font-size: 10px;
 }
 
 /* =========================================================
@@ -322,9 +349,9 @@
 
 .admin-card {
   padding: 25px;
-  background: var(--cor-branco);
-  color: var(--cor-superficie-escura);
-  border: 1px solid var(--cor-borda-card);
+  background: var(--cor-card);
+  color: var(--cor-branco);
+  border: 1px solid var(--cor-card-borda);
   border-radius: 12px;
   box-shadow: var(--sombra-card);
 }
@@ -337,24 +364,44 @@
   gap: 15px;
 }
 
+/* O global.css aplica estilo de "header de página" (fundo escuro, 138px de altura,
+   faixas douradas) a qualquer classe terminada em "-header". Este reset impede que
+   o título dentro do card branco fique escuro sobre escuro. */
+body .admin-card .admin-card-header {
+  min-height: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  position: static;
+  overflow: visible;
+  box-shadow: none;
+  z-index: auto;
+}
+
+body .admin-card .admin-card-header::before,
+body .admin-card .admin-card-header::after {
+  display: none;
+}
+
 .admin-card-label {
   display: block;
   margin-bottom: 5px;
   color: var(--cor-texto-secundario);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 2px;
 }
 
 .admin-card-header h3 {
   margin: 0;
+  color: var(--cor-branco);
   font-size: 17px;
 }
 
 .admin-link {
   border: none;
   background: transparent;
-  color: #555555;
+  color: var(--cor-dourado-claro);
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
@@ -362,7 +409,7 @@
 }
 
 .admin-link:hover {
-  color: var(--cor-header);
+  color: var(--cor-branco);
 }
 
 /* Agendamentos */
@@ -390,8 +437,8 @@
 }
 
 .appointment-time span {
-  color: var(--cor-texto-muted);
-  font-size: 9px;
+  color: var(--cor-texto-muted-claro);
+  font-size: 11px;
 }
 
 .appointment-client {
@@ -406,24 +453,24 @@
 
 .appointment-client span {
   color: var(--cor-texto-secundario);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .status {
   padding: 7px 8px;
   border-radius: 6px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   text-align: center;
 }
 
 .status.confirmed {
-  background: var(--cor-borda-linha);
-  color: #333333;
+  background: rgba(214, 173, 84, 0.18);
+  color: var(--cor-dourado-claro);
 }
 
 .status.pending {
-  background: var(--cor-superficie-escura);
+  background: #2b2b2b;
   color: var(--cor-branco);
 }
 
@@ -446,7 +493,7 @@
 
 .summary-item span {
   color: var(--cor-texto-secundario);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .summary-item strong {
@@ -470,9 +517,9 @@
 .quick-grid button {
   min-height: 125px;
   padding: 18px 12px;
-  background: var(--cor-branco);
-  color: var(--cor-superficie-escura);
-  border: 1px solid var(--cor-borda-atalho);
+  background: var(--cor-card);
+  color: var(--cor-branco);
+  border: 1px solid var(--cor-card-borda);
   border-radius: 9px;
   display: flex;
   flex-direction: column;
@@ -483,17 +530,17 @@
   transition: background var(--transicao-padrao), border-color var(--transicao-padrao);
 }
 
+/* Hover dourado suave e translúcido (a borda dourada vem do global.css) */
 .quick-grid button:hover {
-  background: var(--cor-hover-claro);
-  border-color: var(--cor-superficie-escura);
+  background: var(--cor-hover-ouro-escuro);
 }
 
 .quick-grid button span {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--cor-superficie-escura);
-  color: var(--cor-branco);
+  background: var(--cor-dourado);
+  color: #151515;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -501,12 +548,12 @@
 }
 
 .quick-grid button strong {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .quick-grid button small {
-  color: #888888;
-  font-size: 9px;
+  color: var(--cor-texto-secundario);
+  font-size: 11px;
   text-align: center;
 }
 
@@ -554,7 +601,7 @@
   .admin-header-title {
     order: 3;
     width: 100%;
-    text-align: left;
+    text-align: center;
   }
 
   .admin-header-user {

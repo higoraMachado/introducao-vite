@@ -29,6 +29,14 @@
   --cor-borda-linha: #ededed;
   --cor-borda-campo: #d8d8d8;
 
+  /* Tema escuro: superfícies e textos legíveis */
+  --cor-painel: #151515;
+  --cor-campo-fundo: #1d1d1d;
+  --cor-texto-claro: #f5f2eb;
+  --cor-texto-suave: #cfcabd;
+  --cor-borda-escura: #2e2e2e;
+  --cor-borda-campo-escura: #484848;
+
   /* Estados & Mensagens */
   --cor-sucesso-bg: #e6f6eb;
   --cor-sucesso-texto: #17603a;
@@ -69,12 +77,15 @@
   background: var(--cor-cabecalho);
   border-bottom: 3px solid var(--cor-dourado);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 24px;
 }
 
 .ga-botao-logo {
+  grid-column: 1;
+  justify-self: start;
   flex-shrink: 0;
   padding: 0;
   border: none;
@@ -97,16 +108,19 @@
 }
 
 .ga-logo {
-  width: 78px;
-  height: 78px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
 }
 
 .ga-titulo-cabecalho {
+  grid-column: 2;
+  min-width: 0;
   text-align: center;
 }
 
 .ga-titulo-cabecalho h1 {
+  margin: 0 0 4px;
   color: var(--cor-dourado-titulo);
   font-size: 34px;
   font-weight: 700;
@@ -141,13 +155,13 @@
 
 .ga-topo-conteudo h2 {
   margin: 0 0 8px;
-  color: var(--cor-texto-escuro);
+  color: var(--cor-dourado-titulo);
   font-size: 28px;
 }
 
 .ga-topo-conteudo p {
   margin: 0;
-  color: var(--cor-texto-secundario);
+  color: var(--cor-texto-suave);
   font-size: 15px;
 }
 
@@ -207,12 +221,14 @@
 .ga-btn-atualizar {
   min-height: 44px;
   align-self: end;
-  background: #242424;
-  color: var(--cor-superficie);
+  background: transparent;
+  color: var(--cor-dourado-titulo);
+  border-color: var(--cor-dourado);
 }
 
 .ga-btn-atualizar:hover:not(:disabled) {
-  background: #414141;
+  background: var(--cor-dourado);
+  color: #151515;
 }
 
 .ga-btn-editar {
@@ -233,13 +249,13 @@
 }
 
 .ga-btn-secundario {
-  background: #ececec;
-  color: var(--cor-texto-label);
-  border-color: #dddddd;
+  background: #2a2a2a;
+  color: var(--cor-texto-claro);
+  border-color: var(--cor-borda-campo-escura);
 }
 
 .ga-btn-secundario:hover:not(:disabled) {
-  background: #dedede;
+  background: #3a3a3a;
 }
 
 /* Mensagens e Alertas */
@@ -276,8 +292,8 @@
 
 .ga-card {
   padding: 24px 20px;
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda-card);
+  background: var(--cor-painel);
+  border: 1px solid var(--cor-borda-escura);
   border-top: 4px solid var(--cor-dourado);
   border-radius: 12px;
   box-shadow: var(--sombra-card);
@@ -287,13 +303,13 @@
 }
 
 .ga-card span {
-  color: var(--cor-texto-secundario);
+  color: var(--cor-texto-suave);
   font-size: 14px;
   font-weight: 500;
 }
 
 .ga-card strong {
-  color: #191919;
+  color: var(--cor-texto-claro);
   font-size: 32px;
   font-weight: 700;
 }
@@ -301,15 +317,15 @@
 .ga-painel {
   margin-bottom: 28px;
   overflow: hidden;
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda-painel);
+  background: var(--cor-painel);
+  border: 1px solid var(--cor-borda-escura);
   border-radius: 12px;
   box-shadow: var(--sombra-painel);
 }
 
 .ga-painel-titulo {
   padding: 20px 24px;
-  border-bottom: 1px solid var(--cor-borda-linha);
+  border-bottom: 1px solid var(--cor-borda-escura);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -319,12 +335,12 @@
 
 .ga-painel-titulo h3 {
   margin: 0;
-  color: #242424;
+  color: var(--cor-dourado-titulo);
   font-size: 19px;
 }
 
 .ga-painel-titulo span {
-  color: var(--cor-texto-muted);
+  color: var(--cor-texto-suave);
   font-size: 13px;
 }
 
@@ -350,7 +366,7 @@
 }
 
 .ga-grupo-campo label {
-  color: var(--cor-texto-label);
+  color: var(--cor-texto-claro);
   font-size: 13px;
   font-weight: 600;
 }
@@ -362,9 +378,10 @@
   min-width: 0;
   padding: 11px 12px;
   outline: none;
-  background: var(--cor-superficie);
-  color: var(--cor-texto-campo);
-  border: 1px solid var(--cor-borda-campo);
+  color-scheme: dark; /* ícone do calendário e setas ficam claros */
+  background: var(--cor-campo-fundo);
+  color: var(--cor-texto-claro);
+  border: 1px solid var(--cor-borda-campo-escura);
   border-radius: 7px;
   font-family: inherit;
   font-size: 14px;
@@ -392,7 +409,7 @@
 
 .ga-grupo-campo input::placeholder,
 .ga-grupo-campo textarea::placeholder {
-  color: #999999;
+  color: #8c8c8c;
 }
 
 /* =========================================================
@@ -408,7 +425,7 @@
   width: 100%;
   min-width: 1050px;
   border-collapse: collapse;
-  background: var(--cor-superficie);
+  background: var(--cor-painel);
 }
 
 .ga-tabela thead {
@@ -417,7 +434,7 @@
 
 .ga-tabela thead th {
   padding: 16px 15px;
-  color: var(--cor-superficie);
+  color: var(--cor-dourado-titulo);
   font-size: 13px;
   font-weight: 600;
   text-align: left;
@@ -426,8 +443,8 @@
 
 .ga-tabela tbody td {
   padding: 16px 15px;
-  color: var(--cor-texto-tabela);
-  border-bottom: 1px solid var(--cor-borda-linha);
+  color: var(--cor-texto-claro);
+  border-bottom: 1px solid var(--cor-borda-escura);
   font-size: 13px;
   vertical-align: middle;
 }
@@ -437,7 +454,7 @@
 }
 
 .ga-tabela tbody tr:hover {
-  background: #faf8f3;
+  background: rgba(198, 164, 91, 0.08);
 }
 
 .ga-tabela tbody tr:last-child td {
@@ -453,13 +470,13 @@
 
 .ga-sem-registros {
   padding: 35px;
-  color: var(--cor-texto-muted);
+  color: var(--cor-texto-suave);
   text-align: center;
 }
 
 .ga-estado {
   padding: 30px;
-  color: var(--cor-texto-secundario);
+  color: var(--cor-texto-suave);
   text-align: center;
 }
 
@@ -519,7 +536,7 @@
   max-width: 680px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
-  background: var(--cor-superficie);
+  background: var(--cor-painel);
   border-radius: 14px;
   box-shadow: var(--sombra-modal);
 }
@@ -575,7 +592,7 @@
 .ga-modal-acoes {
   margin-top: 5px;
   padding-top: 22px;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid var(--cor-borda-escura);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -605,6 +622,7 @@
   .ga-cabecalho {
     padding: 16px 22px;
     gap: 16px;
+    grid-template-columns: 65px minmax(0, 1fr) 65px;
   }
 
   .ga-logo {
@@ -655,6 +673,7 @@
   .ga-cabecalho {
     padding: 14px;
     gap: 12px;
+    grid-template-columns: 55px minmax(0, 1fr) 55px;
   }
 
   .ga-logo {

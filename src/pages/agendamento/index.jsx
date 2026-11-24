@@ -2152,16 +2152,6 @@ function AppAgendamento() {
         
 <div className="barbeiro-info">
   <strong
-    style={{
-      color:
-        Number(barbeiroSelecionado) === Number(barbeiro.id)
-          ? '#ffffff'
-          : '#171717',
-      WebkitTextFillColor:
-        Number(barbeiroSelecionado) === Number(barbeiro.id)
-          ? '#ffffff'
-          : '#171717',
-    }}
   >
     {barbeiro.nome}
   </strong>

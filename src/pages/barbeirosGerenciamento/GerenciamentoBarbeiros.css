@@ -1,44 +1,50 @@
 /* =========================================================
-   1. VARIÁVEIS & RESET LOCAL
+   1. VARIÁVEIS (com escopo na página)
+   As variáveis ficam na raiz da página, e não em :root, para
+   não sobrescrever as variáveis de mesmo nome de outras telas.
 ========================================================= */
 
-:root {
-  /* Cores Principais */
-  --cor-fundo-escuro: #080808;
+.gerenciamento-barbeiros-page {
+  /* Superfícies */
   --cor-superficie-escura: #171717;
   --cor-superficie-elevada: #242424;
+  --cor-card: #101010;
+  --cor-card-tabela: rgba(8, 8, 8, 0.82);
+  --cor-card-topo: rgba(12, 12, 12, 0.96);
+  --cor-filtros: rgba(12, 12, 12, 0.88);
+  --cor-tabela-topo: #1b1b1b;
   --cor-branco: #ffffff;
-  --cor-fundo-tabela-topo: #f8f9fb;
 
   /* Tons de Dourado */
-  --cor-dourado: #d4af37;
-  --cor-dourado-hover: #e6c65c;
-  --cor-dourado-escuro: #97751b;
-  --cor-dourado-texto: #80610c;
-  --cor-dourado-suave: #fff5d8;
-  --cor-dourado-hover-suave: #fff8e6;
+  --cor-dourado: #d6ad54;
+  --cor-dourado-claro: #e1c477;
+  --cor-dourado-borda-fraca: rgba(214, 173, 84, 0.25);
+  --cor-dourado-borda-media: rgba(214, 173, 84, 0.45);
+  --cor-dourado-borda-forte: rgba(214, 173, 84, 0.55);
+  --cor-hover-ouro: rgba(214, 173, 84, 0.12);
 
-  /* Tons de Texto & Bordas */
-  --cor-texto-claro: #f5f5f5;
-  --cor-texto-principal: #222222;
-  --cor-texto-secundario: #666666;
-  --cor-placeholder: #818791;
-  --cor-borda-card: #e2e4e8;
-  --cor-borda-campo: #d8dce2;
-  --cor-borda-linha: #e8eaed;
+  /* Textos */
+  --cor-texto-claro: #f5f2eb;
+  --cor-texto-tabela: #f1eee7;
+  --cor-texto-secundario: #d0cbc1;
+  --cor-texto-muted: #c9c3b8;
+  --cor-placeholder: #aaa49a;
+  --cor-linha: rgba(255, 255, 255, 0.2);
 
   /* Status & Ações */
-  --cor-ativo-bg: #e0f6e7;
-  --cor-ativo-texto: #16713b;
-  --cor-inativo-bg: #fde8e8;
-  --cor-inativo-texto: #a52a2a;
-  --cor-acao-editar: #96700b;
-  --cor-acao-inativar: #bd7324;
-  --cor-acao-excluir: #c0392b;
+  --cor-ativo-bg: rgba(46, 160, 90, 0.18);
+  --cor-ativo-texto: #6fdc9a;
+  --cor-ativo-borda: rgba(111, 220, 154, 0.45);
+  --cor-inativo-bg: rgba(220, 70, 70, 0.16);
+  --cor-inativo-texto: #ff9a9a;
+  --cor-inativo-borda: rgba(255, 154, 154, 0.4);
+  --cor-acao-editar: #e1c477;
+  --cor-acao-inativar: #f0a84f;
+  --cor-acao-excluir: #ff7b6b;
 
-  /* Sombras & Transições */
+  /* Transições & Sombras */
   --transicao-padrao: 0.2s ease;
-  --sombra-card: 0 4px 16px rgba(0, 0, 0, 0.04);
+  --sombra-card: 0 18px 48px rgba(0, 0, 0, 0.38);
 }
 
 /* =========================================================
@@ -55,7 +61,7 @@
   color: var(--cor-texto-claro);
 }
 
-.gerenciamento-content {
+.gerenciamento-barbeiros-page .gerenciamento-content {
   width: 100%;
   max-width: 1500px;
   margin: 0 auto;
@@ -64,19 +70,14 @@
 
 /* =========================================================
    3. CABEÇALHO & USUÁRIO
+   (o global.css já define fundo e faixas douradas do header)
 ========================================================= */
 
-.gerenciamento-header {
-  min-height: 100px;
-  padding: 18px 45px;
-  display: flex;
-  align-items: center;
+.gerenciamento-barbeiros-page .gerenciamento-header {
   gap: 24px;
-  background: var(--cor-superficie-escura);
-  border-bottom: 3px solid var(--cor-dourado);
 }
 
-.gerenciamento-logo {
+.gerenciamento-barbeiros-page .gerenciamento-logo {
   flex-shrink: 0;
   margin: 0;
   padding: 0;
@@ -92,49 +93,59 @@
   cursor: pointer;
 }
 
-.gerenciamento-logo:hover,
-.gerenciamento-logo:focus,
-.gerenciamento-logo:active {
+.gerenciamento-barbeiros-page .gerenciamento-logo:hover,
+.gerenciamento-barbeiros-page .gerenciamento-logo:focus,
+.gerenciamento-barbeiros-page .gerenciamento-logo:active {
   background: transparent;
   border: none;
   box-shadow: none;
 }
 
-.gerenciamento-logo:focus-visible {
+.gerenciamento-barbeiros-page .gerenciamento-logo:focus-visible {
   outline: 2px solid var(--cor-dourado);
   outline-offset: 4px;
 }
 
-.gerenciamento-logo img {
+.gerenciamento-barbeiros-page .gerenciamento-logo img {
   display: block;
-  width: 75px;
-  height: 75px;
   object-fit: contain;
   background: transparent;
   border: none;
   box-shadow: none;
 }
 
-.gerenciamento-title {
+/* Título centralizado no header */
+.gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
   min-width: 0;
+  text-align: center;
 }
 
-.gerenciamento-title h1 {
+.gerenciamento-barbeiros-page .gerenciamento-title h1 {
   margin: 0;
-  color: var(--cor-dourado);
-  font-size: 25px;
+  color: #dfbf68;
+  font-size: 30px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-shadow: 0 2px 14px rgba(201, 162, 77, 0.2);
 }
 
-.gerenciamento-title p {
+.gerenciamento-barbeiros-page .gerenciamento-title p {
   margin: 7px 0 0;
-  color: #cccccc;
+  color: #cfcfcf;
   font-size: 14px;
 }
 
-.gerenciamento-user {
+.gerenciamento-barbeiros-page .gerenciamento-user {
+  position: relative;
+  z-index: 3;
   margin-left: auto;
   padding: 8px 12px;
-  border: 1px solid #444444;
+  border: 1px solid var(--cor-dourado-borda-media);
   border-radius: 8px;
   background: var(--cor-superficie-elevada);
   color: var(--cor-branco);
@@ -144,7 +155,7 @@
   cursor: pointer;
 }
 
-.gerenciamento-avatar {
+.gerenciamento-barbeiros-page .gerenciamento-avatar {
   flex-shrink: 0;
   width: 45px;
   height: 45px;
@@ -157,17 +168,17 @@
   justify-content: center;
 }
 
-.gerenciamento-user strong,
-.gerenciamento-user span {
+.gerenciamento-barbeiros-page .gerenciamento-user strong,
+.gerenciamento-barbeiros-page .gerenciamento-user span {
   display: block;
   text-align: left;
 }
 
-.gerenciamento-user strong {
+.gerenciamento-barbeiros-page .gerenciamento-user strong {
   color: var(--cor-branco);
 }
 
-.gerenciamento-user span {
+.gerenciamento-barbeiros-page .gerenciamento-user span {
   margin-top: 4px;
   color: #dddddd;
   font-size: 13px;
@@ -177,7 +188,7 @@
    4. CABEÇALHO INTERNO & ESTATÍSTICAS
 ========================================================= */
 
-.gerenciamento-heading {
+.gerenciamento-barbeiros-page .gerenciamento-heading {
   margin-bottom: 28px;
   display: flex;
   align-items: center;
@@ -185,84 +196,91 @@
   gap: 20px;
 }
 
-.gerenciamento-heading span {
-  color: var(--cor-dourado-escuro);
+.gerenciamento-barbeiros-page .gerenciamento-heading span {
+  color: var(--cor-dourado);
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 800;
+  letter-spacing: 2px;
 }
 
-.gerenciamento-heading h2 {
+.gerenciamento-barbeiros-page .gerenciamento-heading h2 {
   margin: 8px 0;
-  color: var(--cor-texto-principal);
+  color: var(--cor-branco);
   font-size: 32px;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
 }
 
-.gerenciamento-heading p {
+.gerenciamento-barbeiros-page .gerenciamento-heading p {
   margin: 0;
   color: var(--cor-texto-secundario);
   line-height: 1.5;
 }
 
-.btn-voltar {
+.gerenciamento-barbeiros-page .btn-voltar {
   flex-shrink: 0;
-  padding: 12px 18px;
-  border: 1px solid #d5d5d5;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 1px solid var(--cor-dourado-borda-forte);
   border-radius: 8px;
-  background: var(--cor-branco);
-  color: #333333;
-  font-weight: 600;
+  background: var(--cor-superficie-escura);
+  color: var(--cor-branco);
+  font-weight: 700;
   cursor: pointer;
-  transition: var(--transicao-padrao);
+  transition:
+    background var(--transicao-padrao),
+    border-color var(--transicao-padrao),
+    transform var(--transicao-padrao);
 }
 
-.btn-voltar:hover {
+.gerenciamento-barbeiros-page .btn-voltar:hover {
   border-color: var(--cor-dourado);
-  background: #fff8e3;
+  background: #2b2b2b;
+  transform: translateY(-1px);
 }
 
-.barbeiro-stats {
+.gerenciamento-barbeiros-page .barbeiro-stats {
   margin-bottom: 25px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
-.barbeiro-stat {
+.gerenciamento-barbeiros-page .barbeiro-stat {
   min-width: 0;
   padding: 24px;
-  border: 1px solid var(--cor-borda-card);
+  border: 1px solid var(--cor-dourado-borda-media);
   border-radius: 12px;
-  background: var(--cor-branco);
+  background: var(--cor-card);
+  color: var(--cor-branco);
   box-shadow: var(--sombra-card);
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.stat-icon {
+.gerenciamento-barbeiros-page .stat-icon {
   flex-shrink: 0;
   width: 50px;
   height: 50px;
   border-radius: 10px;
-  background: var(--cor-dourado-suave);
-  color: var(--cor-dourado-escuro);
+  background: var(--cor-dourado);
+  color: #151515;
   font-size: 23px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.barbeiro-stat span {
+.gerenciamento-barbeiros-page .barbeiro-stat span {
   display: block;
   color: var(--cor-texto-secundario);
   font-size: 13px;
 }
 
-.barbeiro-stat strong {
+.gerenciamento-barbeiros-page .barbeiro-stat strong {
   display: block;
   margin-top: 7px;
-  color: var(--cor-texto-principal);
+  color: var(--cor-branco);
   font-size: 27px;
 }
 
@@ -270,55 +288,58 @@
    5. CARD PRINCIPAL, BUSCA & FILTROS
 ========================================================= */
 
-.gerenciamento-card {
+.gerenciamento-barbeiros-page .gerenciamento-card {
   overflow: hidden;
-  border: 1px solid var(--cor-borda-card);
+  border: 1px solid var(--cor-dourado-borda-media);
   border-radius: 14px;
-  background: var(--cor-branco);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+  background: var(--cor-card-tabela);
+  color: var(--cor-texto-claro);
+  box-shadow: var(--sombra-card);
+  backdrop-filter: blur(12px);
 }
 
-.card-top {
+.gerenciamento-barbeiros-page .card-top {
   padding: 25px 28px;
-  background: var(--cor-superficie-escura);
-  border-bottom: 1px solid #e8e8e8;
+  background: var(--cor-card-topo);
+  border-bottom: 1px solid var(--cor-dourado-borda-fraca);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
 }
 
-.card-top > div span {
+.gerenciamento-barbeiros-page .card-top > div span {
   color: var(--cor-dourado);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 800;
+  letter-spacing: 2px;
 }
 
-.card-top h3 {
+.gerenciamento-barbeiros-page .card-top h3 {
   margin: 8px 0 0;
   color: var(--cor-branco);
   font-size: 21px;
 }
 
-.btn-novo-barbeiro {
+.gerenciamento-barbeiros-page .btn-novo-barbeiro {
   padding: 13px 20px;
   border: none;
   border-radius: 8px;
   background: var(--cor-dourado);
-  color: var(--cor-superficie-escura);
+  color: #151515;
   font-weight: 700;
   cursor: pointer;
   transition: var(--transicao-padrao);
 }
 
-.btn-novo-barbeiro:hover {
-  background: var(--cor-dourado-hover);
+.gerenciamento-barbeiros-page .btn-novo-barbeiro:hover {
+  background: var(--cor-dourado-claro);
 }
 
-.barra-filtros {
+.gerenciamento-barbeiros-page .barra-filtros {
   padding: 22px 28px;
-  border-bottom: 1px solid #e8e8e8;
+  background: var(--cor-filtros);
+  border-bottom: 1px solid var(--cor-dourado-borda-fraca);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -326,29 +347,29 @@
   gap: 16px;
 }
 
-.campo-busca {
+.gerenciamento-barbeiros-page .campo-busca {
   flex: 1 1 320px;
   max-width: 570px;
   height: 46px;
   padding: 0 15px;
-  border: 1px solid var(--cor-borda-campo);
+  border: 1px solid var(--cor-dourado-borda-forte);
   border-radius: 8px;
-  background: var(--cor-branco);
+  background: var(--cor-superficie-escura);
   display: flex;
   align-items: center;
   gap: 10px;
   transition: border-color var(--transicao-padrao);
 }
 
-.campo-busca:focus-within {
+.gerenciamento-barbeiros-page .campo-busca:focus-within {
   border-color: var(--cor-dourado);
 }
 
-.campo-busca span {
-  color: var(--cor-dourado-escuro);
+.gerenciamento-barbeiros-page .campo-busca span {
+  color: var(--cor-dourado);
 }
 
-.campo-busca input {
+.gerenciamento-barbeiros-page .campo-busca input {
   width: 100%;
   min-width: 0;
   padding: 0;
@@ -357,165 +378,179 @@
   outline: none;
   box-shadow: none;
   background: transparent;
-  color: var(--cor-texto-principal);
+  color: var(--cor-branco);
   font-size: 13px;
   opacity: 1;
 }
 
-.campo-busca input::placeholder {
+.gerenciamento-barbeiros-page .campo-busca input::placeholder {
   color: var(--cor-placeholder);
   opacity: 1;
 }
 
-.filtros-status {
+.gerenciamento-barbeiros-page .filtros-status {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
 
-.filtros-status button {
+.gerenciamento-barbeiros-page .filtros-status button {
   padding: 10px 16px;
-  border: 1px solid var(--cor-borda-campo);
+  border: 1px solid var(--cor-dourado-borda-forte);
   border-radius: 8px;
-  background: var(--cor-branco);
-  color: #333333;
+  background: var(--cor-superficie-escura);
+  color: var(--cor-branco);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transicao-padrao);
 }
 
-.filtros-status button:hover {
-  background: var(--cor-dourado-hover-suave);
+.gerenciamento-barbeiros-page .filtros-status button:hover {
+  background: var(--cor-hover-ouro);
 }
 
-.filtros-status button.filtro-ativo {
+.gerenciamento-barbeiros-page .filtros-status button.filtro-ativo {
   border-color: var(--cor-dourado);
   background: var(--cor-dourado);
-  color: var(--cor-superficie-escura);
+  color: #151515;
 }
 
 /* =========================================================
    6. TABELA, LINHAS, STATUS & AÇÕES
 ========================================================= */
 
-.tabela-container {
+.gerenciamento-barbeiros-page .tabela-container {
   width: 100%;
   overflow-x: auto;
 }
 
-.tabela-container table {
+.gerenciamento-barbeiros-page .tabela-container table {
   width: 100%;
   min-width: 850px;
   border-collapse: collapse;
 }
 
-.tabela-container th {
+.gerenciamento-barbeiros-page .tabela-container th {
   padding: 17px 20px;
-  background: var(--cor-fundo-tabela-topo);
-  color: #555e6b;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.7px;
+  background: var(--cor-tabela-topo);
+  border-bottom: 1px solid var(--cor-dourado-borda-media);
+  color: var(--cor-dourado-claro);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
   text-align: left;
+  text-transform: uppercase;
+  vertical-align: middle;
   white-space: nowrap;
 }
 
-.tabela-container td {
+.gerenciamento-barbeiros-page .tabela-container tbody tr {
+  background: rgba(8, 8, 8, 0.5);
+  transition: background 0.15s ease;
+}
+
+/* Hover dourado suave e translúcido */
+.gerenciamento-barbeiros-page .tabela-container tbody tr:hover {
+  background: var(--cor-hover-ouro);
+}
+
+.gerenciamento-barbeiros-page .tabela-container td {
   padding: 18px 20px;
-  border-top: 1px solid var(--cor-borda-linha);
-  color: #292929;
+  border-top: 1px solid var(--cor-linha);
+  color: var(--cor-texto-tabela);
   vertical-align: middle;
 }
 
-.tabela-container tbody tr:hover {
-  background: #fffaf0;
-}
-
-.barbeiro-info {
+.gerenciamento-barbeiros-page .barbeiro-info {
   min-width: 170px;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.barbeiro-avatar {
+.gerenciamento-barbeiros-page .barbeiro-avatar {
   flex-shrink: 0;
   width: 43px;
   height: 43px;
   border-radius: 50%;
   background: var(--cor-dourado);
-  color: var(--cor-superficie-escura);
+  color: #151515;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.barbeiro-info strong {
+.gerenciamento-barbeiros-page .barbeiro-info strong {
   display: block;
-  color: var(--cor-texto-principal);
+  color: var(--cor-branco);
   overflow-wrap: anywhere;
 }
 
-.barbeiro-info span {
+.gerenciamento-barbeiros-page .barbeiro-info span {
   display: block;
   margin-top: 5px;
-  color: #777777;
+  color: var(--cor-texto-muted);
   font-size: 12px;
 }
 
-.contato-info span {
+.gerenciamento-barbeiros-page .contato-info span {
   display: block;
-  color: #333333;
+  color: var(--cor-texto-tabela);
   overflow-wrap: anywhere;
 }
 
-.contato-info small {
+.gerenciamento-barbeiros-page .contato-info small {
   display: block;
   margin-top: 6px;
-  color: #68717e;
+  color: var(--cor-texto-muted);
 }
 
-.especialidade {
-  color: var(--cor-dourado-texto);
+.gerenciamento-barbeiros-page .especialidade {
+  color: var(--cor-dourado-claro);
   font-weight: 600;
 }
 
-.status {
+.gerenciamento-barbeiros-page .status {
   display: inline-flex;
   align-items: center;
   padding: 7px 12px;
+  border: 1px solid transparent;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
 }
 
-.status.ativo {
+.gerenciamento-barbeiros-page .status.ativo {
   background: var(--cor-ativo-bg);
+  border-color: var(--cor-ativo-borda);
   color: var(--cor-ativo-texto);
 }
 
-.status.inativo {
+.gerenciamento-barbeiros-page .status.inativo {
   background: var(--cor-inativo-bg);
+  border-color: var(--cor-inativo-borda);
   color: var(--cor-inativo-texto);
 }
 
-.acoes {
+.gerenciamento-barbeiros-page .acoes {
   display: flex;
   align-items: center;
   gap: 8px;
   white-space: nowrap;
 }
 
-.acoes button {
+.gerenciamento-barbeiros-page .acoes button {
   flex-shrink: 0;
   width: 37px;
   height: 37px;
-  border: 1px solid #dddddd;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--cor-dourado-borda-forte);
   border-radius: 8px;
-  background: var(--cor-branco);
+  background: var(--cor-superficie-escura);
   font-size: 17px;
   display: flex;
   align-items: center;
@@ -524,25 +559,25 @@
   transition: var(--transicao-padrao);
 }
 
-.acao-editar {
+.gerenciamento-barbeiros-page .acoes .acao-editar {
   color: var(--cor-acao-editar);
 }
 
-.acao-inativar {
+.gerenciamento-barbeiros-page .acoes .acao-inativar {
   color: var(--cor-acao-inativar);
 }
 
-.acao-excluir {
+.gerenciamento-barbeiros-page .acoes .acao-excluir {
   color: var(--cor-acao-excluir);
 }
 
-.acoes button:hover {
-  border-color: var(--cor-dourado);
-  background: var(--cor-dourado-hover-suave);
+.gerenciamento-barbeiros-page .acoes button:hover {
+  border-color: var(--cor-dourado-claro);
+  background: var(--cor-hover-ouro);
   transform: translateY(-2px);
 }
 
-.estado-tabela {
+.gerenciamento-barbeiros-page .estado-tabela {
   min-height: 240px;
   padding: 30px;
   color: var(--cor-texto-secundario);
@@ -552,4 +587,70 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+/* =========================================================
+   7. RESPONSIVIDADE (DESKTOP-FIRST)
+========================================================= */
+
+@media (max-width: 1000px) {
+  .gerenciamento-barbeiros-page .gerenciamento-content {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .gerenciamento-barbeiros-page .barbeiro-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  /* Título volta para o fluxo normal (embaixo da logo/usuário) e continua centralizado */
+  .gerenciamento-barbeiros-page .gerenciamento-header {
+    flex-wrap: wrap;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .gerenciamento-barbeiros-page .gerenciamento-header .gerenciamento-title {
+    position: static;
+    transform: none;
+    order: 3;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .gerenciamento-barbeiros-page .gerenciamento-title h1 {
+    font-size: 22px;
+    white-space: normal;
+  }
+
+  .gerenciamento-barbeiros-page .gerenciamento-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .gerenciamento-barbeiros-page .gerenciamento-content {
+    padding: 24px 14px 40px;
+  }
+
+  .gerenciamento-barbeiros-page .barbeiro-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .gerenciamento-barbeiros-page .gerenciamento-heading h2 {
+    font-size: 26px;
+  }
+
+  .gerenciamento-barbeiros-page .card-top,
+  .gerenciamento-barbeiros-page .barra-filtros {
+    padding: 18px;
+  }
+
+  .gerenciamento-barbeiros-page .card-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
