@@ -1138,13 +1138,13 @@ function AppAgendamento() {
      HORÁRIO
   ======================================================= */
 
-  function selecionarHorario(
-    horario
-  ) {
-    setHorarioSelecionado(
-      horario
-    );
-  }
+  function selecionarHorario(horario) {
+    if (!horario) return;
+
+    const horaFormatada = String(horario).slice(0, 5);
+
+    setHorarioSelecionado(horaFormatada);
+}
 
   /* =======================================================
      BARBEIRO SERVIÇO ID
