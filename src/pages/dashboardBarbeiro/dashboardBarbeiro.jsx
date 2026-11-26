@@ -481,8 +481,8 @@ function DashboardBarbeiro() {
     }
   }
 
-  const fotoUsuario =
-    localStorage.getItem('hope-foto-usuario');
+  const inicialUsuario = String(usuario?.usuario_nome || 'B')
+    .trim().charAt(0).toUpperCase() || 'B';
 
   if (carregando) {
     return (
@@ -518,18 +518,7 @@ function DashboardBarbeiro() {
           title="Abrir meu perfil"
         >
           <div className="user-avatar">
-            {fotoUsuario ? (
-              <img
-                src={fotoUsuario}
-                alt={usuario?.usuario_nome || 'Usuário'}
-              />
-            ) : (
-              String(
-                usuario?.usuario_nome || 'B'
-              )
-                .charAt(0)
-                .toUpperCase()
-            )}
+            {inicialUsuario}
           </div>
 
           <div className="user-info">

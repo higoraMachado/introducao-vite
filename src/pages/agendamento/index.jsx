@@ -294,14 +294,20 @@ function AppAgendamento() {
      USUÁRIO
   ======================================================= */
 
-  const [
-    fotoUsuario,
-    setFotoUsuario,
-  ] = useState(
-    localStorage.getItem(
-      'hope-foto-usuario'
-    ) || null
-  );
+  function chaveFotoUsuario() {
+    const usuario = obterUsuarioLogado();
+    const id = usuario?.usuario_id ?? usuario?.id;
+    return id ? `hope-foto-usuario:${id}` : null;
+  }
+
+  const [fotoUsuario, setFotoUsuario] = useState(() => {
+    try {
+      const chave = chaveFotoUsuario();
+      return chave ? localStorage.getItem(chave) : null;
+    } catch {
+      return null;
+    }
+  });
 
   const [
     menuUsuario,
@@ -1025,6 +1031,13 @@ function AppAgendamento() {
       return;
     }
 
+    const chave = chaveFotoUsuario();
+
+    if (!chave) {
+      alert('Faça login novamente para alterar sua foto.');
+      return;
+    }
+
     const leitor =
       new FileReader();
 
@@ -1032,14 +1045,14 @@ function AppAgendamento() {
       const imagem =
         leitor.result;
 
-      setFotoUsuario(
-        imagem
-      );
+      if (chaveFotoUsuario() !== chave) return;
 
-      localStorage.setItem(
-        'hope-foto-usuario',
-        imagem
-      );
+      try {
+        localStorage.setItem(chave, imagem);
+        setFotoUsuario(imagem);
+      } catch {
+        alert('Não foi possível salvar a foto. Escolha uma imagem menor.');
+      }
     };
 
     leitor.readAsDataURL(

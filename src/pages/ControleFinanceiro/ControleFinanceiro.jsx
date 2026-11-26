@@ -116,6 +116,18 @@ function TooltipFinanceiro({ active, payload, label }) {
 }
 
 function ControleFinanceiro() {
+  let usuario = null;
+  try {
+    usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+  } catch {
+    usuario = null;
+  }
+
+  const nomeUsuario = usuario?.usuario_nome || usuario?.nome || 'Usuário';
+  const inicialUsuario = nomeUsuario.trim().charAt(0).toUpperCase() || 'U';
+  const tipoUsuario = Number(usuario?.usuario_tipo);
+  const cargoUsuario = ({ 1: 'Administrador', 2: 'Barbeiro', 3: 'Cliente' })[tipoUsuario] || 'Usuário';
+
   const [periodo, setPeriodo] = useState('6');
   const [periodoRelatorio, setPeriodoRelatorio] = useState('mensal');
   const [filtroTipo, setFiltroTipo] = useState('Todos');
@@ -578,11 +590,11 @@ function ControleFinanceiro() {
         </div>
 
         <div className="financeiro-user">
-          <div className="financeiro-avatar">A</div>
+          <div className="financeiro-avatar">{inicialUsuario}</div>
 
           <div className="financeiro-user-info">
-            <strong>Administrador</strong>
-            <span>Painel financeiro</span>
+            <strong>{nomeUsuario}</strong>
+            <span>{cargoUsuario}</span>
           </div>
         </div>
       </header>

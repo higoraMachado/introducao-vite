@@ -1,12 +1,16 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CadastroCliente.css";
 import logoHope from "../../assets/logo-hope.png";
 
-function CadastroCliente() {
+function CadastroCliente({ modoPublico = false }) {
   const navigate = useNavigate();
 
+  const API_URL = "http://localhost:3333";
+
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
   const [formulario, setFormulario] = useState({
     nome: "",
@@ -16,7 +20,37 @@ function CadastroCliente() {
     dataNascimento: "",
   });
 
-  const [carregando, setCarregando] = useState(false);
+  // =====================================================
+  // USUÁRIO AUTENTICADO
+  // =====================================================
+
+  function pegarUsuarioLogado() {
+    try {
+      const usuarioSalvo = localStorage.getItem("usuario");
+
+      return usuarioSalvo
+        ? JSON.parse(usuarioSalvo)
+        : null;
+    } catch {
+      return null;
+    }
+  }
+
+  const usuario = pegarUsuarioLogado();
+
+  const nomeUsuario =
+    usuario?.usuario_nome ||
+    usuario?.nome ||
+    "Administrador";
+
+  const inicialUsuario = nomeUsuario
+    .trim()
+    .charAt(0)
+    .toUpperCase();
+
+  // =====================================================
+  // ALTERAR FORMULÁRIO
+  // =====================================================
 
   function alterarFormulario(event) {
     const { name, value } = event.target;
@@ -27,12 +61,20 @@ function CadastroCliente() {
     }));
   }
 
+  // =====================================================
+  // CADASTRAR CLIENTE
+  // =====================================================
+
   async function cadastrarCliente(event) {
     event.preventDefault();
 
+    if (carregando) {
+      return;
+    }
+
     if (
-      !formulario.nome ||
-      !formulario.email ||
+      !formulario.nome.trim() ||
+      !formulario.email.trim() ||
       !formulario.senha ||
       !formulario.telefone ||
       !formulario.dataNascimento
@@ -52,9 +94,12 @@ function CadastroCliente() {
       alert("A senha deve possuir pelo menos 8 caracteres.");
       return;
     }
+
+    // O cadastro público não precisa de token.
+
     const token = localStorage.getItem("token");
 
-    if (!token) {
+    if (!modoPublico && !token) {
       alert("Sessão expirada. Faça login novamente.");
       navigate("/login");
       return;
@@ -63,23 +108,28 @@ function CadastroCliente() {
     setCarregando(true);
 
     try {
-      const token = localStorage.getItem("token");
+      // Selecionar a rota de acordo com o tipo de cadastro.
 
-      if (!token) {
-        alert("Sessão expirada. Faça login novamente.");
-        navigate("/login");
-        return;
+      const rota = modoPublico
+        ? "/cadastro/cliente"
+        : "/clientes";
+
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      // Enviar token somente no cadastro administrativo.
+
+      if (!modoPublico && token) {
+        headers.Authorization = `Bearer ${token}`;
       }
 
-      const resposta = await fetch("http://localhost:3333/clientes", {
+      const resposta = await fetch(`${API_URL}${rota}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers,
         body: JSON.stringify({
-          usuario_nome: formulario.nome,
-          usuario_email: formulario.email,
+          usuario_nome: formulario.nome.trim(),
+          usuario_email: formulario.email.trim(),
           usuario_senha: formulario.senha,
           usuario_telefone: telefone,
           usuario_dt_nascimento: formulario.dataNascimento,
@@ -88,16 +138,13 @@ function CadastroCliente() {
 
       const textoResposta = await resposta.text();
 
-      console.log("Status da API:", resposta.status);
-      console.log("Resposta da API:", textoResposta);
-
       let dados;
 
       try {
         dados = JSON.parse(textoResposta);
       } catch {
         throw new Error(
-          `A API retornou uma resposta inválida. Status: ${resposta.status}`,
+          `A API retornou uma resposta inválida. Status: ${resposta.status}`
         );
       }
 
@@ -106,11 +153,21 @@ function CadastroCliente() {
           dados.message ||
             dados.mensagem ||
             dados.erro ||
-            "Não foi possível cadastrar o cliente.",
+            "Não foi possível cadastrar o cliente."
         );
       }
 
-      alert("Cliente cadastrado com sucesso!");
+      // Mensagem de sucesso.
+
+      if (modoPublico) {
+        alert(
+          "Conta criada com sucesso! Faça login para acessar o sistema."
+        );
+      } else {
+        alert("Cliente cadastrado com sucesso!");
+      }
+
+      // Limpar formulário.
 
       setFormulario({
         nome: "",
@@ -120,26 +177,46 @@ function CadastroCliente() {
         dataNascimento: "",
       });
 
-      navigate("/GerenciamentoCliente");
+      // Redirecionamento de acordo com o tipo de cadastro.
+
+      if (modoPublico) {
+        navigate("/login", { replace: true });
+      } else {
+        navigate("/GerenciamentoCliente");
+      }
     } catch (error) {
       console.error("Erro ao cadastrar cliente:", error);
 
       alert(
         error.message ||
-          "Erro ao cadastrar cliente. Verifique se a API está funcionando.",
+          "Erro ao cadastrar cliente. Verifique se a API está funcionando."
       );
     } finally {
       setCarregando(false);
     }
   }
 
+  // =====================================================
+  // CANCELAR CADASTRO
+  // =====================================================
+
   function cancelarCadastro() {
-    navigate("/GerenciamentoCliente");
+    if (modoPublico) {
+      navigate("/login");
+    } else {
+      navigate("/GerenciamentoCliente");
+    }
   }
+
+  // =====================================================
+  // INTERFACE
+  // =====================================================
 
   return (
     <main className="cadastro-cliente-page">
+
       {/* HEADER */}
+
       <header className="cadastro-cliente-header">
         <div className="cadastro-cliente-header-left">
           <div className="cadastro-cliente-logo-area">
@@ -151,44 +228,89 @@ function CadastroCliente() {
           </div>
 
           <div className="cadastro-cliente-titulo-area">
-            <h1>Cadastro de cliente</h1>
-            <p>Gerenciamento de clientes</p>
+            <h1>
+              {modoPublico
+                ? "Criar conta"
+                : "Cadastro de cliente"}
+            </h1>
+
+            <p>
+              {modoPublico
+                ? "Hope Barbearia"
+                : "Gerenciamento de clientes"}
+            </p>
           </div>
         </div>
 
-        <div className="cadastro-cliente-usuario">
-          <div className="cadastro-cliente-avatar">B</div>
+        {/* Mostrar administrador somente no modo administrativo */}
 
-          <div className="cadastro-cliente-usuario-info">
-            <strong>Bruno</strong>
-            <span>Administrador</span>
+        {!modoPublico && (
+          <div className="cadastro-cliente-usuario">
+            <div className="cadastro-cliente-avatar">
+              {inicialUsuario}
+            </div>
+
+            <div className="cadastro-cliente-usuario-info">
+              <strong>{nomeUsuario}</strong>
+              <span>Administrador</span>
+            </div>
           </div>
-        </div>
+        )}
       </header>
 
       {/* CONTEÚDO */}
+
       <section className="cadastro-cliente-content">
         <div className="cadastro-cliente-heading">
-          <span>ÁREA DO CLIENTE</span>
+          <span>
+            {modoPublico
+              ? "ÁREA DO CLIENTE"
+              : "GERENCIAMENTO DE CLIENTES"}
+          </span>
 
-          <h2>Cadastrar cliente</h2>
+          <h2>
+            {modoPublico
+              ? "Crie sua conta"
+              : "Cadastrar cliente"}
+          </h2>
 
-          <p>Preencha os dados abaixo para cadastrar um novo cliente.</p>
+          <p>
+            {modoPublico
+              ? "Preencha seus dados para criar sua conta na Hope Barbearia."
+              : "Preencha os dados abaixo para cadastrar um novo cliente."}
+          </p>
         </div>
 
         {/* CARD */}
+
         <div className="cadastro-cliente-card">
           <div className="cadastro-cliente-card-header">
             <div>
-              <h3>NOVO CLIENTE</h3>
-              <p>Dados do cliente</p>
+              <h3>
+                {modoPublico
+                  ? "NOVA CONTA"
+                  : "NOVO CLIENTE"}
+              </h3>
+
+              <p>
+                {modoPublico
+                  ? "Seus dados"
+                  : "Dados do cliente"}
+              </p>
             </div>
           </div>
 
-          <form className="cadastro-cliente-form" onSubmit={cadastrarCliente}>
+          <form
+            className="cadastro-cliente-form"
+            onSubmit={cadastrarCliente}
+          >
+
             {/* NOME */}
+
             <div className="cadastro-cliente-form-group">
-              <label htmlFor="nome">Nome completo</label>
+              <label htmlFor="nome">
+                Nome completo
+              </label>
 
               <input
                 id="nome"
@@ -203,8 +325,11 @@ function CadastroCliente() {
             </div>
 
             {/* EMAIL */}
+
             <div className="cadastro-cliente-form-group">
-              <label htmlFor="email">E-mail</label>
+              <label htmlFor="email">
+                E-mail
+              </label>
 
               <input
                 id="email"
@@ -219,8 +344,11 @@ function CadastroCliente() {
             </div>
 
             {/* SENHA */}
+
             <div className="cadastro-cliente-form-group">
-              <label htmlFor="senha">Senha</label>
+              <label htmlFor="senha">
+                Senha
+              </label>
 
               <div className="campo-senha-input">
                 <input
@@ -231,26 +359,42 @@ function CadastroCliente() {
                   onChange={alterarFormulario}
                   placeholder="Digite sua senha"
                   autoComplete="new-password"
+                  minLength={8}
                   required
                 />
 
                 <button
                   type="button"
                   className="botao-olho"
-                  onClick={() => setMostrarSenha((anterior) => !anterior)}
-                  aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
-                  title={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                  onClick={() =>
+                    setMostrarSenha((anterior) => !anterior)
+                  }
+                  aria-label={
+                    mostrarSenha
+                      ? "Ocultar senha"
+                      : "Mostrar senha"
+                  }
+                  title={
+                    mostrarSenha
+                      ? "Ocultar senha"
+                      : "Mostrar senha"
+                  }
                 >
                   {mostrarSenha ? "🙈" : "👁️"}
                 </button>
               </div>
 
-              <small>A senha deve possuir pelo menos 8 caracteres.</small>
+              <small>
+                A senha deve possuir pelo menos 8 caracteres.
+              </small>
             </div>
 
             {/* TELEFONE */}
+
             <div className="cadastro-cliente-form-group">
-              <label htmlFor="telefone">Telefone</label>
+              <label htmlFor="telefone">
+                Telefone
+              </label>
 
               <input
                 id="telefone"
@@ -266,8 +410,11 @@ function CadastroCliente() {
             </div>
 
             {/* DATA DE NASCIMENTO */}
+
             <div className="cadastro-cliente-form-group">
-              <label htmlFor="dataNascimento">Data de nascimento</label>
+              <label htmlFor="dataNascimento">
+                Data de nascimento
+              </label>
 
               <input
                 id="dataNascimento"
@@ -280,20 +427,29 @@ function CadastroCliente() {
             </div>
 
             {/* INFORMAÇÃO */}
+
             <div className="cadastro-cliente-info">
-              <div className="cadastro-cliente-info-icon">i</div>
+              <div className="cadastro-cliente-info-icon">
+                i
+              </div>
 
               <div>
-                <strong>Cadastro de cliente</strong>
+                <strong>
+                  {modoPublico
+                    ? "Criação de conta"
+                    : "Cadastro de cliente"}
+                </strong>
 
                 <p>
-                  Ao cadastrar, o cliente será registrado automaticamente no
-                  sistema da Hope Barbearia.
+                  {modoPublico
+                    ? "Após criar sua conta, você poderá acessar o sistema e realizar seus agendamentos."
+                    : "Ao cadastrar, o cliente será registrado automaticamente no sistema da Hope Barbearia."}
                 </p>
               </div>
             </div>
 
             {/* FOOTER */}
+
             <div className="cadastro-cliente-form-footer">
               <button
                 type="button"
@@ -301,7 +457,9 @@ function CadastroCliente() {
                 onClick={cancelarCadastro}
                 disabled={carregando}
               >
-                Cancelar
+                {modoPublico
+                  ? "Voltar ao login"
+                  : "Cancelar"}
               </button>
 
               <button
@@ -309,9 +467,14 @@ function CadastroCliente() {
                 className="cadastro-cliente-btn cadastro-cliente-btn-cadastrar"
                 disabled={carregando}
               >
-                {carregando ? "Cadastrando..." : "Cadastrar cliente"}
+                {carregando
+                  ? "Cadastrando..."
+                  : modoPublico
+                    ? "Criar conta"
+                    : "Cadastrar cliente"}
               </button>
             </div>
+
           </form>
         </div>
       </section>

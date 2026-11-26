@@ -24,7 +24,6 @@ function Login() {
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [lembrar, setLembrar] = useState(false);
-  const [mostrarOpcoesCadastro, setMostrarOpcoesCadastro] = useState(false);
 
   // =====================================================
   // LOGIN
@@ -173,7 +172,7 @@ function Login() {
   // =====================================================
 
   function criarConta() {
-    setMostrarOpcoesCadastro(true);
+    navigate("/CriarConta");
   }
   // =====================================================
   // TELA
@@ -432,57 +431,7 @@ function Login() {
             </svg>
             Criar nova conta
           </button>
-          {mostrarOpcoesCadastro && (
-            <div className="cadastro-modal-overlay">
-              <div
-                className="cadastro-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="titulo-cadastro"
-              >
-                <button
-                  type="button"
-                  className="cadastro-modal-fechar"
-                  onClick={() => setMostrarOpcoesCadastro(false)}
-                  aria-label="Fechar janela"
-                >
-                  ×
-                </button>
 
-                <div className="cadastro-modal-icone">✂</div>
-
-                <h2 id="titulo-cadastro">Criar nova conta</h2>
-
-                <p>Como você deseja se cadastrar?</p>
-
-                <button
-                  type="button"
-                  className="cadastro-opcao"
-                  onClick={() => navigate("/CriarConta")}
-                >
-                  <span className="cadastro-opcao-icone">👤</span>
-                  <span>
-                    <strong>Sou Cliente</strong>
-                    <small>Quero agendar meus horários</small>
-                  </span>
-                  <span className="cadastro-seta">›</span>
-                </button>
-
-                <button
-                  type="button"
-                  className="cadastro-opcao"
-                  onClick={() => navigate("/cadastroBarbeiro")}
-                >
-                  <span className="cadastro-opcao-icone">💈</span>
-                  <span>
-                    <strong>Sou Barbeiro</strong>
-                    <small>Quero fazer parte da Hope Barbearia</small>
-                  </span>
-                  <span className="cadastro-seta">›</span>
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* =================================================
               RODAPÉ
