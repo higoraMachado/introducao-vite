@@ -25,8 +25,6 @@ const menu = [
     rota: "/RegistrarPagamentos",
   },
   { nome: "Despesas", icone: "📋", rota: "/Despesas" },
-  { nome: "Relatórios", icone: "▤", rota: null },
-  { nome: "Configurações", icone: "⚙", rota: null },
   { nome: "Minha Conta", icone: "👤", rota: "/perfil" },
 ];
 
