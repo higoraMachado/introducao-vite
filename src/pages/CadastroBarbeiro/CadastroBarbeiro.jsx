@@ -181,7 +181,7 @@ function CadastroBarbeiro() {
           usuario_nome: nome.trim(),
           usuario_email: email.trim().toLowerCase(),
           usuario_senha: senha,
-          usuario_tipo: 1,
+          usuario_tipo: 2,
           usuario_telefone: telefoneLimpo,
           usuario_dt_nascimento: dataNascimento,
         },
