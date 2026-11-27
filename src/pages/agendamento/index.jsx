@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Agendamento.css';
-import logoHope from '../../assets/logo-hope.png';
+import logoHope from '../../assets/logo_login.png';
 
 const API_URL = 'http://localhost:3333';
 

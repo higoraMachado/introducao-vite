@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./dashboardAdministrador.css";
-import logo from "../../assets/logo-hope.png";
+import logo from "../../assets/logo_login.png";
 
 const API_URL = "http://localhost:3333";
 

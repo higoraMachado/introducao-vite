@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo-hope.png";
+import logo from "../../assets/logo_login.png";
 import heroImage from "../../assets/hero-barbershop.jpg";
 import fotoLanding from "../../assets/foto-landing.jpg";
 import "./landing.css";

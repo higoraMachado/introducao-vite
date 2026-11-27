@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CadastroCliente.css";
-import logoHope from "../../assets/logo-hope.png";
+import logoHope from "../../assets/logo_login.png";
 
 function CadastroCliente({ modoPublico = false }) {
   const navigate = useNavigate();

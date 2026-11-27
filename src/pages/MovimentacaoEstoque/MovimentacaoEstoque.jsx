@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MovimentacaoEstoque.css';
-import logoHope from '../../assets/logo-hope.png';
+import logoHope from '../../assets/logo_login.png';
 
 const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:3333';
