@@ -399,7 +399,7 @@ function GerenciamentoBarbeiros() {
             <button
               type="button"
               className="btn-novo-barbeiro"
-              onClick={abrirCadastro}
+              onClick={() => navigate('/CadastroBarbeiro')}
             >
               + Novo barbeiro
             </button>

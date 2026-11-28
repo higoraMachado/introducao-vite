@@ -539,7 +539,7 @@ function AppAgendamento() {
         respostaVinculos,
       ] = await Promise.all([
         fetch(
-          `${API_URL}/barbeiros`,
+          `${API_URL}/barbeiros?ativos=true`,
           {
             method: 'GET',
             headers,
@@ -648,24 +648,23 @@ function AppAgendamento() {
           : [];
 
       setBarbeiros(
-        listaBarbeiros.map(
-          (barbeiro) => ({
-            id: Number(
-              barbeiro.usuario_id
-            ),
+        listaBarbeiros
+          .filter(
+            (barbeiro) =>
+              Number(barbeiro.usuario_ativo) === 1
+          )
+          .map((barbeiro) => ({
+            id: Number(barbeiro.usuario_id),
 
-            nome:
-              barbeiro.usuario_nome,
+            nome: barbeiro.usuario_nome,
 
             especialidade:
               barbeiro.barbeiro_especialidade ||
               'Barbeiro',
 
             foto:
-              barbeiro.barbeiro_foto ||
-              null,
-          })
-        )
+              barbeiro.barbeiro_foto || null,
+          }))
       );
 
       setServicos(
@@ -1157,7 +1156,7 @@ function AppAgendamento() {
     const horaFormatada = String(horario).slice(0, 5);
 
     setHorarioSelecionado(horaFormatada);
-}
+  }
 
   /* =======================================================
      BARBEIRO SERVIÇO ID
@@ -1170,15 +1169,15 @@ function AppAgendamento() {
           Number(
             item.usuario_id
           ) ===
-            Number(
-              barbeiroSelecionado
-            ) &&
+          Number(
+            barbeiroSelecionado
+          ) &&
           Number(
             item.servico_id
           ) ===
-            Number(
-              servicoSelecionado
-            )
+          Number(
+            servicoSelecionado
+          )
       );
 
     if (!vinculo) {
@@ -2078,15 +2077,13 @@ function AppAgendamento() {
                             key={
                               dataString
                             }
-                            className={`calendar-day ${
-                              selecionado
-                                ? 'selected'
-                                : ''
-                            } ${
-                              desabilitado
+                            className={`calendar-day ${selecionado
+                              ? 'selected'
+                              : ''
+                              } ${desabilitado
                                 ? 'disabled'
                                 : ''
-                            }`}
+                              }`}
                             disabled={
                               desabilitado
                             }
@@ -2114,133 +2111,131 @@ function AppAgendamento() {
               =========================================== */}
 
 
-<div className="barbeiros-grid">
-  {barbeiros.map((barbeiro) => (
-    <button
-      type="button"
-      key={barbeiro.id}
-      className={`barbeiro-card ${
-        Number(barbeiroSelecionado) === Number(barbeiro.id)
-          ? "selected"
-          : ""
-      }`}
-      onClick={() => selecionarBarbeiro(barbeiro.id)}
-    >
-      <div className="barbeiro-avatar">
-        <img
-          src={
-            barbeiro.foto
-              ? barbeiro.foto.startsWith("http")
-                ? barbeiro.foto
-                : `${API_URL}/${barbeiro.foto.replace(/^\/+/, "")}`
-              : ""
-          }
-          alt={barbeiro.nome || "Foto do barbeiro"}
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
+              <div className="barbeiros-grid">
+                {barbeiros.map((barbeiro) => (
+                  <button
+                    type="button"
+                    key={barbeiro.id}
+                    className={`barbeiro-card ${Number(barbeiroSelecionado) === Number(barbeiro.id)
+                      ? "selected"
+                      : ""
+                      }`}
+                    onClick={() => selecionarBarbeiro(barbeiro.id)}
+                  >
+                    <div className="barbeiro-avatar">
+                      <img
+                        src={
+                          barbeiro.foto
+                            ? barbeiro.foto.startsWith("http")
+                              ? barbeiro.foto
+                              : `${API_URL}/${barbeiro.foto.replace(/^\/+/, "")}`
+                            : ""
+                        }
+                        alt={barbeiro.nome || "Foto do barbeiro"}
+                        onError={(event) => {
+                          event.currentTarget.style.display = "none";
 
-            const avatar = event.currentTarget.parentElement;
+                          const avatar = event.currentTarget.parentElement;
 
-            if (avatar) {
-              avatar.textContent =
-                barbeiro.nome?.charAt(0).toUpperCase() || "?";
-            }
-          }}
-          style={{
-            display: barbeiro.foto ? "block" : "none",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            borderRadius: "50%",
-          }}
-        />
+                          if (avatar) {
+                            avatar.textContent =
+                              barbeiro.nome?.charAt(0).toUpperCase() || "?";
+                          }
+                        }}
+                        style={{
+                          display: barbeiro.foto ? "block" : "none",
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
 
-        {!barbeiro.foto && (
-          <span>
-            {barbeiro.nome?.charAt(0).toUpperCase() || "?"}
-          </span>
-        )}
-      </div>
-
-        
-<div className="barbeiro-info">
-  <strong
-  >
-    {barbeiro.nome}
-  </strong>
-
-  <span>{barbeiro.especialidade || 'Barbeiro'}</span>
-</div>
+                      {!barbeiro.foto && (
+                        <span>
+                          {barbeiro.nome?.charAt(0).toUpperCase() || "?"}
+                        </span>
+                      )}
+                    </div>
 
 
-      <div className="check">
-        {Number(barbeiroSelecionado) === Number(barbeiro.id) && "✓"}
-      </div>
-    </button>
-  ))}
-</div>
+                    <div className="barbeiro-info">
+                      <strong
+                      >
+                        {barbeiro.nome}
+                      </strong>
+
+                      <span>{barbeiro.especialidade || 'Barbeiro'}</span>
+                    </div>
 
 
-         
-{/* ===========================================
+                    <div className="check">
+                      {Number(barbeiroSelecionado) === Number(barbeiro.id) && "✓"}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+
+
+              {/* ===========================================
     ETAPA 3 - SERVIÇO
 =========================================== */}
 
-<section className="card">
-  <div className="card-title">
-    <div className="step-number">3</div>
+              <section className="card">
+                <div className="card-title">
+                  <div className="step-number">3</div>
 
-    <div>
-      <h3>Escolha o serviço</h3>
-      <p>Selecione o serviço que deseja realizar.</p>
-    </div>
-  </div>
+                  <div>
+                    <h3>Escolha o serviço</h3>
+                    <p>Selecione o serviço que deseja realizar.</p>
+                  </div>
+                </div>
 
-  {!barbeiroSelecionado ? (
-    <div className="empty-state">
-      <strong>Escolha um barbeiro</strong>
-      <p>Primeiro selecione um profissional.</p>
-    </div>
-  ) : servicosDoBarbeiro.length === 0 ? (
-    <div className="empty-state">
-      <strong>Nenhum serviço disponível</strong>
-      <p>
-        Este barbeiro ainda não possui serviços
-        vinculados.
-      </p>
-    </div>
-  ) : (
-    <div className="services-grid">
-      {servicosDoBarbeiro.map((servico) => (
-        <button
-          type="button"
-          key={servico.id}
-          className={`service-option ${
-            Number(servicoSelecionado) ===
-            Number(servico.id)
-              ? 'selected'
-              : ''
-          }`}
-          onClick={() => selecionarServico(servico.id)}
-        >
-          <div className="service-icon">✂</div>
+                {!barbeiroSelecionado ? (
+                  <div className="empty-state">
+                    <strong>Escolha um barbeiro</strong>
+                    <p>Primeiro selecione um profissional.</p>
+                  </div>
+                ) : servicosDoBarbeiro.length === 0 ? (
+                  <div className="empty-state">
+                    <strong>Nenhum serviço disponível</strong>
+                    <p>
+                      Este barbeiro ainda não possui serviços
+                      vinculados.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="services-grid">
+                    {servicosDoBarbeiro.map((servico) => (
+                      <button
+                        type="button"
+                        key={servico.id}
+                        className={`service-option ${Number(servicoSelecionado) ===
+                          Number(servico.id)
+                          ? 'selected'
+                          : ''
+                          }`}
+                        onClick={() => selecionarServico(servico.id)}
+                      >
+                        <div className="service-icon">✂</div>
 
-          <div className="service-info">
-            
-            <div className="service-name">
-              {servico.nome} - {servico.duracao} min
-            </div>
+                        <div className="service-info">
 
-            <div className="service-price">
-              {formatarPreco(servico.preco)}
-            </div>
+                          <div className="service-name">
+                            {servico.nome} - {servico.duracao} min
+                          </div>
 
-          </div>
-        </button>
-      ))}
-    </div>
-  )}
-</section>
+                          <div className="service-price">
+                            {formatarPreco(servico.preco)}
+                          </div>
+
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </section>
 
               {/* ===========================================
                   ETAPA 4 - HORÁRIO
@@ -2270,7 +2265,7 @@ function AppAgendamento() {
                 </div>
 
                 {!barbeiroSelecionado ||
-                !servicoSelecionado ? (
+                  !servicoSelecionado ? (
 
                   <div className="empty-state">
 
@@ -2331,12 +2326,11 @@ function AppAgendamento() {
                           <button
                             type="button"
                             key={`${horario.horario_disponivel_id}-${horario.inicio}-${index}`}
-                            className={`time-button ${
-                              horarioSelecionado ===
+                            className={`time-button ${horarioSelecionado ===
                               horario.inicio
-                                ? 'selected'
-                                : ''
-                            }`}
+                              ? 'selected'
+                              : ''
+                              }`}
                             onClick={() =>
                               selecionarHorario(
                                 horario.inicio
@@ -2427,8 +2421,8 @@ function AppAgendamento() {
 
                         {dataSelecionada
                           ? formatarData(
-                              dataSelecionada
-                            )
+                            dataSelecionada
+                          )
                           : 'Não selecionada'}
 
                       </strong>
@@ -2518,8 +2512,8 @@ function AppAgendamento() {
 
                     {servicoAtual
                       ? formatarPreco(
-                          servicoAtual.preco
-                        )
+                        servicoAtual.preco
+                      )
                       : 'R$ 0,00'}
 
                   </strong>
@@ -2809,8 +2803,8 @@ function AppAgendamento() {
 
                   {servicoAtual
                     ? formatarPreco(
-                        servicoAtual.preco
-                      )
+                      servicoAtual.preco
+                    )
                     : 'R$ 0,00'}
 
                 </strong>
@@ -2850,8 +2844,8 @@ function AppAgendamento() {
                 {salvandoAgendamento
                   ? 'Salvando...'
                   : modoReagendamento
-                  ? 'Confirmar reagendamento'
-                  : 'Confirmar'}
+                    ? 'Confirmar reagendamento'
+                    : 'Confirmar'}
 
               </button>
 

@@ -299,10 +299,22 @@ body {
 }
 
 .login-page input:-webkit-autofill,
-.login-page input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--cor-texto-claro);
+.login-page input:-webkit-autofill:hover,
+.login-page input:-webkit-autofill:focus,
+.login-page input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--cor-texto-claro) !important;
   caret-color: var(--cor-texto-claro);
-  box-shadow: 0 0 0 1000px var(--cor-campo) inset;
+  -webkit-box-shadow: 0 0 0 1000px var(--cor-campo) inset !important;
+  box-shadow: 0 0 0 1000px var(--cor-campo) inset !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+.login-page input:-webkit-autofill:focus {
+  -webkit-box-shadow:
+    0 0 0 1000px var(--cor-campo) inset,
+    0 0 0 3px var(--cor-dourado-focus) !important;
+  box-shadow:
+    0 0 0 1000px var(--cor-campo) inset,
+    0 0 0 3px var(--cor-dourado-focus) !important;
 }
 
 .login-page .email-icon,
@@ -316,6 +328,7 @@ body {
   align-items: center;
   color: var(--cor-texto-muted);
   transform: translateY(-50%);
+  transition: color var(--transicao-padrao);
 }
 
 .login-page .input-wrapper:focus-within .input-icon,
