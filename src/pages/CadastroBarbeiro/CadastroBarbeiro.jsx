@@ -46,7 +46,14 @@ function CadastroBarbeiro() {
 
     if (!arquivo) return;
 
-    if (!arquivo.type.startsWith('image/')) {
+    const formatosPermitidos = [
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/webp',
+    ];
+
+    if (!formatosPermitidos.includes(arquivo.type)) {
       setErro('Selecione um arquivo de imagem válido.');
       event.target.value = '';
       return;
@@ -85,21 +92,32 @@ function CadastroBarbeiro() {
     });
   }
 
+
   async function enviarRequisicao(rota, dados, token) {
     let resposta;
+
+    const multipart = dados instanceof FormData;
 
     try {
       resposta = await fetch(`${API_URL}${rota}`, {
         method: 'POST',
+
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+
+          ...(!multipart && {
+            'Content-Type': 'application/json',
+          }),
         },
-        body: JSON.stringify(dados),
+
+        body: multipart
+          ? dados
+          : JSON.stringify(dados),
       });
+
     } catch {
       throw new Error(
-        'Não foi possível conectar à API. Verifique se o servidor está rodando na porta 3333.'
+        'Não foi possível conectar à API.'
       );
     }
 
@@ -124,6 +142,7 @@ function CadastroBarbeiro() {
 
     return resultado;
   }
+
 
   async function cadastrarBarbeiro(event) {
     event.preventDefault();
@@ -198,19 +217,29 @@ function CadastroBarbeiro() {
 
       usuarioCriadoId = usuarioId;
 
-      // 2. Prepara a foto
-      const fotoBase64 = await converterFotoParaBase64(foto);
+
+      // 2. Prepara os dados do barbeiro
+      const formData = new FormData();
+
+      formData.append('usuario_id', usuarioId);
+
+      formData.append(
+        'barbeiro_especialidade',
+        especialidade.trim()
+      );
+
+      // Envia a foto como arquivo
+      if (foto) {
+        formData.append('foto', foto);
+      }
 
       // 3. Vincula o usuário à tabela barbeiros
       await enviarRequisicao(
         '/barbeiros',
-        {
-          usuario_id: usuarioId,
-          barbeiro_especialidade: especialidade.trim(),
-          barbeiro_foto: fotoBase64,
-        },
+        formData,
         token
       );
+
 
       setMensagem('Barbeiro cadastrado com sucesso!');
       setFormulario({ ...formularioInicial });
@@ -468,7 +497,7 @@ function CadastroBarbeiro() {
                     <input
                       id="foto"
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/png,image/webp"
                       onChange={alterarFoto}
                       disabled={carregando}
                     />
